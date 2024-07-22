@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: black; /* Default to night mode */
+            color: white;
+        }
+        .circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .u {
+            font-size: 97px; /* Increased by 61.8% */
+            font-weight: bold;
+            color: black;
+        }
+        .title, .subtitle {
+            margin: 10px 0;
+        }
+        .enter-btn {
+            font-family: 'Courier', monospace;
+            font-size: 48px; /* Ultra large */
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .enter-btn.day-mode {
+            color: black;
+        }
+        .mode-toggle {
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .footer {
+            text-align: center;
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body class="night-mode"> <!-- Default to night mode -->
+    <div class="container">
+        <div class="logo">
+            <div class="circle">
+                <span class="u">U</span>
+            </div>
+        </div>
+        <h1 class="title">Universitas AI</h1>
+        <h2 class="subtitle">A Cognitive Universe</h2>
+        <button class="enter-btn" onclick="launchApp()"> //enter here </button>
+        <div class="mode-toggle" onclick="toggleMode()">
+            <span id="mode-text">night</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Coming Fall 2024.</p>
+        <p>&copy; 2024 NeuralCloud</p>
+    </div>
+
+    <script>
+        function toggleMode() {
+            const body = document.body;
+            const modeText = document.getElementById('mode-text');
+            body.classList.toggle('night-mode');
+            body.classList.toggle('day-mode');
+            if (body.classList.contains('night-mode')) {
+                body.style.backgroundColor = 'black';
+                body.style.color = 'white';
+                modeText.innerText = 'night';
+                document.querySelector('.enter-btn').style.color = 'white';
+            } else {
+                body.style.backgroundColor = 'white';
+                body.style.color = 'black';
+                modeText.innerText = 'day';
+                document.querySelector('.enter-btn').style.color = 'black';
+            }
+        }
+
+        function launchApp() {
+            // Add the functionality to launch the app here
+            alert('Launching the app...');
+        }
+    </script>
+</body>
+</html>
