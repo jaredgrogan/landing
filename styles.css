@@ -31,7 +31,7 @@ body {
 }
 
 .title {
-    font-size: 3rem;
+    font-size: 5rem;
 }
 
 .subtitle {
@@ -40,6 +40,7 @@ body {
 
 .enter-btn {
     font-size: 2rem;
+    font-family: 'Courier New'
     margin-top: 20px;
     padding: 10px 20px;
     cursor: pointer;
@@ -68,12 +69,12 @@ body {
     margin: 5px 0;
 }
 
-.day-mode {
-    background-color: var(--background-color-day);
-    color: var(--text-color-day);
-}
-
 .night-mode {
     background-color: var(--background-color-night);
     color: var(--text-color-night);
+}
+
+.day-mode {
+    background-color: var(--background-color-day);
+    color: var(--text-color-day);
 }
