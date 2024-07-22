@@ -47,7 +47,12 @@ body {
     padding: 10px 20px;
     border: none; /* Remove border */
     cursor: pointer;
-    transition: transform 0.3s;
+    transition: transform 0.3s, color 0.3s; /* Add transition for color change */
+    color: black; /* Default text color for day mode */
+}
+
+.night-mode .enter-btn {
+    color: white; /* Text color for night mode */
 }
 
 .enter-btn:hover {
