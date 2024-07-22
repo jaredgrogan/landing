@@ -41,12 +41,11 @@ body {
 
 .enter-btn {
     font-size: 2rem;
-    font-family: 'Courier New'
-    background-color-day: white;
-    background-color-night: black;
+    font-family: 'Courier New', monospace; /* Ensure proper fallback */
+    background-color: transparent; /* Remove background color */
     margin-top: 20px;
     padding: 10px 20px;
-    border: 0px solid currentColor;
+    border: none; /* Remove border */
     cursor: pointer;
     transition: transform 0.3s;
 }
