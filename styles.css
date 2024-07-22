@@ -75,7 +75,9 @@ body {
 
 .footer p {
     margin: 5px 0;
+    font-size: 2em;
 }
+
 
 .night-mode {
     background-color: var(--background-color-night);
