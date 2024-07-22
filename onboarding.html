@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Onboarding</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+        }
+        .container {
+            text-align: center;
+        }
+        input {
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid white;
+            color: white;
+            font-size: 48px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 600px;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        input:focus {
+            outline: none;
+        }
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 60px;
+            background-color: white;
+            animation: blink 0.7s infinite;
+            margin-left: 5px;
+        }
+        @keyframes blink {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="nameInput" placeholder="Enter your name">
+        <input type="email" id="emailInput" placeholder="Enter your email">
+        <div class="cursor"></div>
+    </div>
+</body>
+</html>
