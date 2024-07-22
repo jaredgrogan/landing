@@ -27,11 +27,11 @@ body {
     border-radius: 50%;
     line-height: 100px;
     text-align: center;
-    font-size: 3rem;
+    font-size: 4rem;
 }
 
 .title {
-    font-size: 5rem;
+    font-size: 4rem;
 }
 
 .subtitle {
@@ -43,6 +43,7 @@ body {
     font-family: 'Courier New'
     margin-top: 20px;
     padding: 10px 20px;
+    border: 0px solid currentColor;
     cursor: pointer;
     transition: transform 0.3s;
 }
