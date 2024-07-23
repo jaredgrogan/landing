@@ -26,20 +26,17 @@
         input[type="email"] {
             font-size: 3.15rem; /* 70% smaller than 10.5rem */
             font-family: 'Courier New', Courier, monospace;
-            color: #222222;
-            background-color: #ffffff;
+            color: white;
+            background: none;
             border: none;
             outline: none;
             text-align: center;
             width: 80%;
-            max-width: 800px;
-            min-width: 240px;
             margin-bottom: 20px;
             position: relative;
-            border-radius: 10px; /* Rounded corners */
         }
         input[type="email"]::placeholder {
-            color: #333333;
+            color: white;
             animation: blink 1s step-end infinite;
         }
         @keyframes blink {
@@ -47,7 +44,7 @@
                 border-right: 0.15em solid transparent;
             }
             50% {
-                border-right: 0.15em solid #222222;
+                border-right: 0.15em solid white;
             }
         }
         .join-button {
@@ -95,8 +92,8 @@
 <body>
 
     <form id="emailForm" action="/submit-email" method="POST">
-        <label for="email" class="email-label">Enter your email</label><br>
-        <input type="email" id="email" name="email" placeholder="//youremailhere@example.com" required><br>
+        <label for="email" class="email-label">Enter your email</label>
+        <input type="email" id="email" name="email" placeholder="//youremailhere@example.com" required>
         <button type="submit" class="join-button" onclick="location.href='login.html'">Join the Waitlist</button>
     </form>
 
