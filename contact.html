@@ -26,17 +26,18 @@
         input[type="email"] {
             font-size: 3.15rem; /* 70% smaller than 10.5rem */
             font-family: 'Courier New', Courier, monospace;
-            color: darkgrey;
-            background-color: white;
+            color: #111111;
+            background-color: #ffffff;
             border: none;
             outline: none;
             text-align: center;
             width: 80%;
             margin-bottom: 20px;
             position: relative;
+            border-radius: 10px; /* Rounded corners */
         }
         input[type="email"]::placeholder {
-            color: darkgrey;
+            color: #111111;
             animation: blink 1s step-end infinite;
         }
         @keyframes blink {
@@ -44,7 +45,7 @@
                 border-right: 0.15em solid transparent;
             }
             50% {
-                border-right: 0.15em solid darkgrey;
+                border-right: 0.15em solid #111111;
             }
         }
         .join-button {
