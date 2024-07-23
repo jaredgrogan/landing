@@ -52,7 +52,7 @@ h1 {
 .nav-links {
   display: flex;
   gap: 1rem;
- font-family: 'Courier New', monospace;
+  font-family: 'Courier New', monospace;
 }
 
 .nav-link {
@@ -60,7 +60,7 @@ h1 {
   border: none;
   color: #000;
   font-size: 1rem;
-  font-family: 'roboto';
+  font-family: 'Courier New', Roboto;
   cursor: pointer;
   padding: 0.5rem;
 }
