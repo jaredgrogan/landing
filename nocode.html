@@ -3,148 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universitas AI Code Editor</title>
-    <link rel="stylesheet" href="style-uni.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <title>Herakles Page</title>
     <style>
-        #app {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        #editor-container {
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Courier, monospace;
+            text-align: center;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 40px);
+            justify-content: center;
+            align-items: center;
+            font-size: 10.5rem; /* 50% larger than previous 7rem */
         }
-        header {
-            flex-shrink: 0;
+        .email-label {
+            font-size: 5.25rem; /* 100% smaller than 10.5rem */
+            margin-bottom: 10px;
         }
-        .tabs {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
+        input[type="email"] {
+            font-size: 3.15rem; /* 70% smaller than 10.5rem */
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            background: none;
+            border: none;
+            outline: none;
+            text-align: center;
+            width: 80%;
+            margin-bottom: 20px;
+            position: relative;
         }
-        .tab-content {
-            flex-grow: 1;
-            overflow: auto;
+        input[type="email"]::placeholder {
+            color: white;
+            animation: blink 1s step-end infinite;
         }
-        .code-area, .output-area, .ai-response {
-            height: 100%;
+        @keyframes blink {
+            0%, 100% {
+                border-right: 0.15em solid transparent;
+            }
+            50% {
+                border-right: 0.15em solid white;
+            }
+        }
+        .join-button {
+            font-size: 5.25rem; /* 3 font sizes larger than previous 2.25rem */
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 40px; /* Space above the footer */
+            transition: transform 0.3s;
+        }
+        .join-button:hover {
+            transform: scale(1.3); /* Enlarge 30% on hover */
         }
         footer {
-            flex-shrink: 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            font-size: 2rem; /* 100% larger than original 1rem */
         }
-        @media (min-width: 1024px) {
-            .flex-desktop {
-                display: flex;
-            }
-            .flex-grow-desktop {
-                flex-grow: 1;
-            }
-            .space-x-4-desktop > * + * {
-                margin-left: 1rem;
-            }
+        footer nav {
+            margin: 0;
+            font-size: 5.25rem; /* 3 font sizes larger than previous 3rem */
+            margin-bottom: 60px; /* 3 lines of space buffer */
+        }
+        .symbol {
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .symbol:hover {
+            transform: scale(1.2); /* Enlarge on hover */
         }
     </style>
 </head>
 <body>
-    <div id="app" class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        <div id="editor-container" class="container">
-            <header>
-                <div class="flex-desktop items-center justify-between">
-                    <div class="logo">
-                        <div class="logo-icon">U</div>
-                        <div>
-                            <div class="title">Universitas AI</div>
-                        </div>
-                    </div>
-                    <div id="current-date-time"></div>
-                    <div class="flex items-center space-x-2">
-                        <button id="theme-toggle" class="btn btn-icon" title="Toggle theme">
-                            <i data-lucide="moon"></i>
-                        </button>
-                        <button id="save-btn" class="btn">
-                            <i data-lucide="save"></i> Save
-                        </button>
-                        <button id="share-btn" class="btn">
-                            <i data-lucide="share"></i> Share
-                        </button>
-                    </div>
-                </div>
-            </header>
-            <div class="flex-desktop space-x-4-desktop mb-4">
-                <select id="language-select" class="select flex-grow-desktop">
-                    <option value="" disabled selected>Select language</option>
-                    <!-- Options will be populated by JavaScript -->
-                </select>
-                <div class="popover">
-                    <button id="frameworks-btn" class="btn btn-outline">
-                        Frameworks <i data-lucide="plus"></i>
-                    </button>
-                    <div id="frameworks-popover" class="popover-content hidden">
-                        <h4>Select Frameworks</h4>
-                        <!-- Frameworks will be populated by JavaScript -->
-                    </div>
-                </div>
-                <select id="font-size-select" class="select">
-                    <option value="" disabled selected>Font size</option>
-                    <!-- Options will be populated by JavaScript -->
-                </select>
-                <button id="minimap-toggle" class="btn btn-icon" title="Toggle minimap">
-                    <i data-lucide="folder-open"></i>
-                </button>
-            </div>
-            <div class="tabs">
-                <div class="tab-list">
-                    <button class="tab active" data-tab="code">Code</button>
-                    <button class="tab" data-tab="output">Output</button>
-                    <button class="tab" data-tab="ai">AI Engineer</button>
-                </div>
-                <div id="code-tab" class="tab-content active">
-                    <textarea id="code-editor" class="code-area"></textarea>
-                    <pre id="code-content" class="code-highlight"></pre>
-                    <div id="minimap" class="minimap hidden"></div>
-                </div>
-                <div id="output-tab" class="tab-content">
-                    <pre id="output-area" class="output-area"></pre>
-                </div>
-                <div id="ai-tab" class="tab-content">
-                    <div class="flex flex-col h-full">
-                        <div class="flex space-x-2 mb-2">
-                            <input id="ai-input" type="text" class="input flex-grow" placeholder="Natural Language Programming with Herakles AI...">
-                            <button id="ai-chat-btn" class="btn btn-gradient">
-                                <i data-lucide="message-square"></i> Chat
-                            </button>
-                        </div>
-                        <pre id="ai-response" class="ai-response"></pre>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-between items-center mt-4">
-                <button id="run-btn" class="btn btn-green">
-                    <i data-lucide="play"></i> Run Code
-                </button>
-                <div class="popover">
-                    <button id="settings-btn" class="btn btn-outline">
-                        <i data-lucide="settings"></i> Settings
-                    </button>
-                    <div id="settings-popover" class="popover-content hidden">
-                        <h4>Editor Settings</h4>
-                        <div class="flex items-center space-x-2">
-                            <input type="checkbox" id="auto-save" class="switch">
-                            <label for="auto-save">Auto-save</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <footer>
-                © 2024 Universitas AI.
-            </footer>
+
+    <form id="emailForm" action="/submit-email" method="POST">
+        <label for="email" class="email-label">Enter your email</label>
+        <input type="email" id="email" name="email" placeholder="youremailhere@example.com" required>
+        <button type="submit" class="join-button" onclick="location.href='nocode.html'">Join the Waitlist</button>
+    </form>
+
+    <footer>
+        <nav>
+            <a href="index.html" class="symbol">&lt;</a>
+            <a href="nocode.html" class="symbol">&gt;</a>
+        </nav>
+        <div>
+            © 2024 Universitas AI
         </div>
-    </div>
-    <script src="script2.js"></script>
+    </footer>
+    <script src="bundle.js"></script> <!-- Adjust path as needed for your bundled JS file -->
 </body>
 </html>
