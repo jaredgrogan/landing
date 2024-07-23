@@ -4,74 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UniversitasAI</title>
-  <link rel="stylesheet" a href="style-uni.css">
+  <link rel="stylesheet" href="note.css">
 </head>
 <body>
   <header>
     <nav>
-      <div>
+      <div class="logo-container">
         <div class="logo">U</div>
         <h1>Universitas AI</h1>
       </div>
-      <div>
-        <button>Notes</button>
-        <button>Tasks</button>
-        <button>Projects</button>
-        <button>Calendar</button>
+      <div class="nav-links">
+        <button class="nav-link">Notes</button>
+        <button class="nav-link">Tasks</button>
+        <button class="nav-link">Projects</button>
+        <button class="nav-link">Calendar</button>
       </div>
     </nav>
   </header>
 
-  <div class="main-content">
+  <main>
     <div class="sidebar">
-      <div class="search">
-        <input type="text" placeholder="Search...">
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
       </div>
       <div class="actions">
         <button class="new-note-button">New Note</button>
-        <button>New Task</button>
-        <button>New Project</button>
+        <button class="new-task-button">New Task</button>
+        <button class="new-project-button">New Project</button>
       </div>
       <div class="projects-folders">
         <h2>Projects &amp; Folders</h2>
-        <!-- Project and folder items -->
+        <div class="project-folder-list"></div>
       </div>
       <div class="notes">
         <h2>Notes</h2>
-        <!-- Note items -->
+        <div class="notes-list"></div>
       </div>
     </div>
 
     <div class="note-area">
-      <!-- Note content -->
+      <div class="note-title-container">
+        <input type="text" id="note-title" placeholder="Note Title">
+        <button id="expand-note-button">Expand</button>
+      </div>
+      <div class="note-tags">
+        <input type="text" id="tag-input" placeholder="Add tag...">
+      </div>
+      <textarea id="note-content" placeholder="Write your note here..."></textarea>
+      <button id="save-note-button">Save</button>
     </div>
 
     <div class="details-sidebar">
       <div class="tasks">
         <h2>Tasks</h2>
-        <!-- Task items -->
+        <div class="task-list"></div>
       </div>
       <div class="events">
         <h2>Upcoming Events</h2>
-        <!-- Event items -->
+        <div class="event-list"></div>
+        <button id="view-calendar-button">View Full Calendar</button>
       </div>
     </div>
-  </div>
+  </main>
 
   <div class="chat-area">
-    <div class="chat-history">
-      <!-- Chat messages -->
-    </div>
-    <div class="chat-input">
-      <input type="text" placeholder="Ask Herakles AI...">
-      <button>Chat</button>
+    <div class="chat-history"></div>
+    <div class="chat-input-container">
+      <input type="text" id="chat-input" placeholder="Ask Herakles AI...">
+      <button id="send-message-button">Chat</button>
     </div>
   </div>
- <div id="root"></div>
 
-  <script src="script.js"></script>
   <footer>
     &copy; 2024 Universitas AI
   </footer>
+
+  <script src="note.js"></script>
 </body>
 </html>
