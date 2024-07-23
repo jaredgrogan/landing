@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 class UniversitasAICodeEditor {
     constructor() {
-        this.code = '// Enter your code here';
+        this.code = '';
         this.output = '';
         this.theme = 'light';
         this.language = 'javascript';
