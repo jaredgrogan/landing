@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Code Editor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="prism.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">U</div>
+                <div class="title">Universitas AI</div>
+            </div>
+            <div id="current-date-time"></div>
+            <div class="header-controls">
+                <button id="theme-toggle" class="btn btn-icon" title="Toggle theme">
+                    <i data-lucide="moon"></i>
+                </button>
+                <button id="save-btn" class="btn btn-primary">
+                    <i data-lucide="save"></i> Save
+                </button>
+                <button id="share-btn" class="btn btn-primary">
+                    <i data-lucide="share"></i> Share
+                </button>
+            </div>
+        </header>
+        <div class="main-content">
+            <div class="controls">
+                <select id="language-select" class="select">
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                </select>
+                <button id="frameworks-btn" class="btn btn-outline">
+                    Frameworks <i data-lucide="plus"></i>
+                </button>
+                <select id="font-size-select" class="select">
+                    <option value="12px">12px</option>
+                    <option value="14px" selected>14px</option>
+                    <option value="16px">16px</option>
+                    <option value="18px">18px</option>
+                </select>
+                <button id="minimap-toggle" class="btn btn-icon" title="Toggle minimap">
+                    <i data-lucide="folder-open"></i>
+                </button>
+            </div>
+            <div class="editor-container">
+                <div class="gutter"></div>
+                <div class="line-numbers"></div>
+                <textarea id="code-editor" class="code-area"></textarea>
+                <pre id="code-content" class="code-highlight"></pre>
+                <div id="minimap" class="minimap hidden"></div>
+            </div>
+            <div class="output-container">
+                <pre id="output-area"></pre>
+            </div>
+            <div class="ai-container">
+                <input id="ai-input" type="text" class="input" placeholder="Ask AI Engineer...">
+                <button id="ai-chat-btn" class="btn btn-primary">
+                    <i data-lucide="message-square"></i> Chat
+                </button>
+                <div id="ai-response"></div>
+            </div>
+            <div class="bottom-controls">
+                <button id="run-btn" class="btn btn-primary">
+                    <i data-lucide="play"></i> Run Code
+                </button>
+                <button id="settings-btn" class="btn btn-outline">
+                    <i data-lucide="settings"></i> Settings
+                </button>
+            </div>
+        </div>
+        <footer>
+            © 2024 Universitas AI.
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <script src="prism.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
