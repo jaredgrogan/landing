@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to NeuralCloud.ai</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Courier, monospace;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 10.5rem; /* 50% larger than previous 7rem */
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 2.25rem; /* 50% larger than previous 1.5rem */
+            color: lightgrey;
+            margin: 10px 0;
+        }
+        .typing-animation {
+            display: inline-block;
+            border-right: 0.15em solid white; /* Cursor effect */
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 14s steps(40, end) infinite, blink-caret 0.75s step-end infinite;
+            font-size: 5.25rem; /* 50% smaller than 10.5rem */
+        }
+        @keyframes typing {
+            0% { content: "Hello, I am Herakles..."; width: 0; }
+            25% { content: "Hello, I am Herakles..."; width: 100%; }
+            50% { content: "I'm your AI Assistant."; width: 100%; }
+            75% { content: "I'm your AI Assistant."; width: 100%; }
+            100% { content: "Welcome to Universitas AI."; width: 100%; }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: white; }
+        }
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            font-size: 2rem; /* 100% larger than original 1rem */
+        }
+        footer nav {
+            margin: 0;
+            font-size: 3rem; /* Font size for symbols */
+        }
+        .symbol {
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .symbol:hover {
+            transform: scale(1.2); /* Enlarge on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="typing-animation">
+       Hello, I'm Herakles...
+    </div>
+    <footer>
+        <nav>
+            <a href="index.html" class="symbol">&lt;</a>
+            <a href="contact.html" class="symbol">&gt;</a>
+        </nav>
+        <div>
+            © 2024 Universitas AI
+        </div>
+    </footer>
+    <script src="bundle.js"></script> <!-- Adjust path as needed for your bundled JS file -->
+</body>
+</html>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const texts = [
+        "Hello, I am Herakles...",
+        "Your AI Assistant.",
+        "Welcome to Universitas AI.",
+        "Let's get started..."
+    ];
+    let index = 0;
+    let charIndex = 0;
+    const typingElement = document.querySelector('.typing-animation');
+
+    function type() {
+        if (charIndex < texts[index].length) {
+            typingElement.innerHTML += texts[index].charAt(charIndex);
+            charIndex++;
+            setTimeout(type, 100);
+        } else {
+            charIndex = 0;
+            index++;
+            if (index < texts.length) {
+                setTimeout(() => {
+                    typingElement.innerHTML = "";
+                    type();
+                }, 2500);
+            } else {
+                displayOnboarding();
+            }
+        }
+    }
+
+    function displayOnboarding() {
+        typingElement.innerHTML = '<div>Email: <span id="emailInput" contenteditable="true" class="blinking-cursor"></span></div>';
+        document.getElementById('emailInput').focus();
+        document.getElementById('emailInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                localStorage.setItem('email', this.textContent.trim());
+                this.contentEditable = false;
+                displayNameInput();
+            }
+        });
+    }
+
+    function displayNameInput() {
+        typingElement.innerHTML = '<div>Name: <span id="nameInput" contenteditable="true" class="blinking-cursor"></span></div>';
+        document.getElementById('nameInput').focus();
+        document.getElementById('nameInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                localStorage.setItem('name', this.textContent.trim());
+                this.contentEditable = false;
+                window.location.href = 'profile.html';
+            }
+        });
+    }
+
+    type();
+});
+</script>
