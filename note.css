@@ -52,6 +52,7 @@ h1 {
 .nav-links {
   display: flex;
   gap: 1rem;
+ font-family: 'Courier New', monospace;
 }
 
 .nav-link {
@@ -199,6 +200,7 @@ main {
 .tasks,
 .events {
   margin-bottom: 1rem;
+ font-family: 'Courier New', monospace;
 }
 
 .task-list,
@@ -248,5 +250,6 @@ footer {
   background-color: #f5f5f5;
   padding: 1rem;
   text-align: center;
+ font-family: 'Courier New', monospace;
   color: #666;
 }
