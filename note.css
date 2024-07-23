@@ -15,6 +15,7 @@ header {
   background-color: #fff;
   color: #000;
   padding: 1rem;
+  font-family: 'Courier New', monospace;
 }
 
 nav {
@@ -44,6 +45,7 @@ nav {
 
 h1 {
   color: #000;
+  font-family: 'Courier New', monospace;
 }
 
 .nav-links {
