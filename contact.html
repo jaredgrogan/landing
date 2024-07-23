@@ -33,9 +33,22 @@
             text-align: center;
             width: 80%;
             margin-bottom: 20px;
+            position: relative;
+        }
+        input[type="email"]::placeholder {
+            color: white;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% {
+                border-right: 0.15em solid transparent;
+            }
+            50% {
+                border-right: 0.15em solid white;
+            }
         }
         .join-button {
-            font-size: 2.25rem; /* Larger font size */
+            font-size: 5.25rem; /* 3 font sizes larger than previous 2.25rem */
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             color: white;
@@ -45,9 +58,10 @@
             text-decoration: none;
             display: inline-block;
             margin-bottom: 40px; /* Space above the footer */
+            transition: transform 0.3s;
         }
         .join-button:hover {
-            opacity: 0.8; /* Slightly dim on hover */
+            transform: scale(1.3); /* Enlarge 30% on hover */
         }
         footer {
             position: absolute;
@@ -62,6 +76,7 @@
         footer nav {
             margin: 0;
             font-size: 3rem; /* Font size for symbols */
+            margin-bottom: 60px; /* 3 lines of space buffer */
         }
         .symbol {
             color: white;
@@ -78,7 +93,7 @@
 
     <form id="emailForm" action="/submit-email" method="POST">
         <label for="email" class="email-label">Enter your email</label>
-        <input type="email" id="email" name="email" placeholder="yourname@example.com" required>
+        <input type="email" id="email" name="email" placeholder="youremailhere@example.com" required>
         <button type="submit" class="join-button" onclick="location.href='nocode.html'">Join the Waitlist</button>
     </form>
 
