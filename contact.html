@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to NeuralCloud.ai</title>
+    <title>Onboarding</title>
     <style>
         body {
             margin: 0;
@@ -17,24 +17,51 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 10.5rem;
+            font-size: 10.5rem; /* 50% larger than previous 7rem */
         }
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 2.25rem;
-            color: lightgrey;
-            margin: 10px 0;
+        .email-label {
+            font-size: 5.25rem; /* 100% smaller than 10.5rem */
+            margin-bottom: 10px;
         }
-        .typing-animation {
-            display: inline-block;
-            border-right: 0.15em solid white;
-            white-space: nowrap;
-            overflow: hidden;
-            font-size: 5.25rem;
-            text-decoration: none;
+        input[type="email"] {
+            font-size: 3.15rem; /* 70% smaller than 10.5rem */
+            font-family: 'Courier New', Courier, monospace;
             color: white;
+            background: none;
+            border: none;
+            outline: none;
+            text-align: center;
+            width: 80%;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        input[type="email"]::placeholder {
+            color: white;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% {
+                border-right: 0.15em solid transparent;
+            }
+            50% {
+                border-right: 0.15em solid white;
+            }
+        }
+        .join-button {
+            font-size: 5.25rem; /* 3 font sizes larger than previous 2.25rem */
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 40px; /* Space above the footer */
+            transition: transform 0.3s;
+        }
+        .join-button:hover {
+            transform: scale(1.3); /* Enlarge 30% on hover */
         }
         footer {
             position: absolute;
@@ -44,11 +71,12 @@
             padding: 10px;
             background-color: black;
             color: white;
-            font-size: 2rem;
+            font-size: 2rem; /* 100% larger than original 1rem */
         }
         footer nav {
-            margin: 0 0 10px 0;
-            font-size: 2rem;
+            margin: 0;
+            font-size: 5.25rem; /* 3 font sizes larger than previous 3rem */
+            margin-bottom: 60px; /* 3 lines of space buffer */
         }
         .symbol {
             color: white;
@@ -57,100 +85,23 @@
             transition: transform 0.3s;
         }
         .symbol:hover {
-            transform: scale(1.2);
-        }
-        .footer-nav a {
-            color: white;
-            text-decoration: none;
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0 10px;
+            transform: scale(1.2); /* Enlarge on hover */
         }
     </style>
 </head>
 <body>
 
-    <a href="contact.html" class="typing-animation" id="typingAnimation">
-       Hello, I'm Herakles...
-    </a>
+    <form id="emailForm" action="/submit-email" method="POST">
+        <label for="email" class="email-label">Enter your email</label>
+        <input type="email" id="email" name="email" placeholder="//youremailhere@example.com" required>
+        <button type="submit" class="join-button" onclick="location.href='login.html'">Join the Waitlist</button>
+    </form>
+
     <footer>
-        <nav class="footer-nav">
-            <a href="login.html">Login</a> |
-            <a href="contact.html">Waitlist</a> |
-            <a href="note.html">Try</a>
-        </nav>
-        <nav>
-            <a href="index.html" class="symbol">&lt;</a>
-            <a href="contact.html" class="symbol">&gt;</a>
-        </nav>
         <div>
             © 2024 Universitas AI
         </div>
     </footer>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const texts = [
-            "Hello, I'm Herakles...",
-            "Your AI Assistant at",
-            "Universitas AI.",
-            "Let's get started..."
-        ];
-        let index = 0;
-        const typingElement = document.getElementById('typingAnimation');
-
-        function typeText(text, callback) {
-            let i = 0;
-            typingElement.textContent = '';
-            function addChar() {
-                if (i < text.length) {
-                    typingElement.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(addChar, 50);
-                } else {
-                    setTimeout(callback, 1500);
-                }
-            }
-            addChar();
-        }
-
-        function nextText() {
-            if (index < texts.length) {
-                typeText(texts[index], () => {
-                    index++;
-                    nextText();
-                });
-            } else {
-                displayOnboarding();
-            }
-        }
-
-        function displayOnboarding() {
-            typingElement.innerHTML = '<div>Email: <span id="emailInput" contenteditable="true" style="border-right: 0.15em solid white;"></span></div>';
-            document.getElementById('emailInput').focus();
-            document.getElementById('emailInput').addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    localStorage.setItem('email', this.textContent.trim());
-                    this.contentEditable = false;
-                    displayNameInput();
-                }
-            });
-        }
-
-        function displayNameInput() {
-            typingElement.innerHTML = '<div>Name: <span id="nameInput" contenteditable="true" style="border-right: 0.15em solid white;"></span></div>';
-            document.getElementById('nameInput').focus();
-            document.getElementById('nameInput').addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    localStorage.setItem('name', this.textContent.trim());
-                    this.contentEditable = false;
-                    window.location.href = 'profile.html';
-                }
-            });
-        }
-
-        nextText();
-    });
-    </script>
+    <script src="bundle.js"></script> <!-- Adjust path as needed for your bundled JS file -->
 </body>
 </html>
