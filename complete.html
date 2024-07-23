@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universitas AI</title>
+  <style>
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark-mode {
+      background-color: black;
+      color: #d4d4d4;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(to right, #ffd700, #ffA500);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 10px;
+    }
+
+    .logo-letter {
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .toggle-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .tagline-container {
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      height: 24px;
+    }
+
+    .tagline {
+      font-size: 18px;
+      font-weight: bold;
+      font-family: 'Roboto', sans-serif;
+      transition: color 0.3s ease;
+      position: absolute;
+      right: 0;
+      white-space: nowrap;
+    }
+
+    p {
+      font-family: 'Roboto', sans-serif;
+      font-size: 1em;
+      line-height: 1.5;
+    }
+
+    .join-section {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    input[type="email"],
+    input[type="text"] {
+      padding: 8px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    button {
+      background: linear-gradient(to right, #8A2BE2, #4169E1);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1em;
+      font-weight: normal;
+      transition: transform 0.3s ease;
+      border-radius: 5px;
+    }
+
+    .chat-section {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .copyright {
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-container">
+        <div class="logo-circle">
+          <span class="logo-letter">U</span>
+        </div>
+        <span class="logo-text">Universitas AI</span>
+      </div>
+      <button class="toggle-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-icon"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="moon-icon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </header>
+    <main>
+      <h1>Let's Get Started</h1>
+      <div class="tagline-container">
+        <span class="tagline">info@universitas.ai</span>
+      </div>
+      <p>This is a sample paragraph showcasing the brand's typography and color scheme. Universitas AI is dedicated to advancing AI education and research, fostering innovation and ethical AI development.</p>
+      <div class="join-section">
+        <input type="email" placeholder="Enter your email">
+        <button class="join-button">Join</button>
+      </div>
+      <div class="chat-section">
+        <input type="text" placeholder="Ask Herakles" style="flex: 1;">
+        <button class="chat-button">Chat</button>
+      </div>
+    </main>
+    <footer>
+      <p class="copyright">&copy; 2024 Universitas AI</p>
+    </footer>
+  </div>
+
+  <script>
+    const toggleButton = document.querySelector('.toggle-button');
+    const body = document.body;
+    const tagline = document.querySelector('.tagline');
+    const logoText = document.querySelector('.logo-text');
+    const sunIcon = document.querySelector('.sun-icon');
+    const moonIcon = document.querySelector('.moon-icon');
+
+    let darkMode = false;
+    let taglinePosition = 0;
+
+    toggleButton.addEventListener('click', toggleDarkMode);
+
+    function toggleDarkMode() {
+      darkMode = !darkMode;
+      body.classList.toggle('dark-mode');
+      tagline.style.color = darkMode ? 'white' : 'black';
+      logoText.style.color = darkMode ? 'white' : 'black';
+      sunIcon.style.display = darkMode ? 'inline' : 'none';
+      moonIcon.style.display = darkMode ? 'none' : 'inline';
+    }
+
+    function animateTagline() {
+      taglinePosition = taglinePosition <= -100 ? 0 : taglinePosition - 0.05;
+      tagline.style.right = `${taglinePosition}%`;
+      requestAnimationFrame(animateTagline);
+    }
+
+    animateTagline();
+
+    const joinButton = document.querySelector('.join-button');
+    const chatButton = document.querySelector('.chat-button');
+
+    joinButton.addEventListener('mouseenter', () => {
+      joinButton.style.transform = 'scale(1.3)';
+    });
+
+    joinButton.addEventListener('mouseleave', () => {
+      joinButton.style.transform = 'scale(1)';
+    });
+
+    chatButton.addEventListener('mouseenter', () => {
+      chatButton.style.transform = 'scale(1.3)';
+    });
+
+    chatButton.addEventListener('mouseleave', () => {
+      chatButton.style.transform = 'scale(1)';
+    });
+  </script>
+</body>
+</html>
