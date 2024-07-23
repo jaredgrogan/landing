@@ -19,8 +19,12 @@
             align-items: center;
             font-size: 10.5rem; /* 50% larger than previous 7rem */
         }
+        .email-label {
+            font-size: 5.25rem; /* 100% smaller than 10.5rem */
+            margin-bottom: 10px;
+        }
         input[type="email"] {
-            font-size: 8.4rem; /* Ultra large font size */
+            font-size: 3.15rem; /* 70% smaller than 10.5rem */
             font-family: 'Courier New', Courier, monospace;
             color: white;
             background: none;
@@ -33,10 +37,10 @@
         .join-button {
             font-size: 2.25rem; /* Larger font size */
             font-family: 'Courier New', Courier, monospace;
-            color: black;
-            background: linear-gradient(to right, silver, gray);
+            font-weight: bold;
+            color: white;
+            background: none;
             border: none;
-            padding: 15px 30px;
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
@@ -73,14 +77,15 @@
 <body>
 
     <form id="emailForm" action="/submit-email" method="POST">
-        <input type="email" name="email" placeholder="Enter your email" required>
-        <button type="submit" class="join-button" onclick="location.href='dashboard.html'">Join</button>
+        <label for="email" class="email-label">Enter your email</label>
+        <input type="email" id="email" name="email" placeholder="yourname@example.com" required>
+        <button type="submit" class="join-button" onclick="location.href='nocode.html'">Join the Waitlist</button>
     </form>
 
     <footer>
         <nav>
             <a href="index.html" class="symbol">&lt;</a>
-            <a href="dashboard.html" class="symbol">&gt;</a>
+            <a href="nocode.html" class="symbol">&gt;</a>
         </nav>
         <div>
             © 2024 Universitas AI
