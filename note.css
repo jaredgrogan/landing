@@ -60,13 +60,13 @@ h1 {
   border: none;
   color: #000;
   font-size: 1rem;
-  font-family: 'Courier New', monospace;
+  font-family: 'roboto';
   cursor: pointer;
   padding: 0.5rem;
 }
 
 .nav-link:hover {
-  text-decoration: underline;
+  text-decoration: bold;
 }
 
 main {
