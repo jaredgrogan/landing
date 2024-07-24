@@ -1,0 +1,93 @@
+:root {
+    --background-color-day: white;
+    --background-color-night: black;
+    --text-color-day: black;
+    --text-color-night: white;
+    --font-family: 'Courier New', Courier, monospace;
+    --footer-font-family: 'Roboto', sans-serif;
+    --typing-border-color-day: black;
+    --typing-border-color-night: white;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.container {
+    text-align: center;
+    margin-top: 20%;
+}
+
+.logo .circle {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    line-height: 100px;
+    text-align: center;
+    font-size: 5rem;
+}
+
+.title {
+    font-size: 4rem;
+}
+
+.enter-btn {
+    font-size: 2.34rem; /* 3.6rem * 0.65 */
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    background-color: transparent;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s, color 0.3s;
+    color: black;
+}
+
+.night-mode .enter-btn {
+    color: white;
+}
+
+.enter-btn:hover {
+    transform: scale(1.25); /* Increase by 25% */
+}
+
+.mode-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.footer {
+    text-align: center;
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    font-family: var(--footer-font-family);
+}
+
+.footer p {
+    margin: 5px 0;
+    font-size: 1.5em;
+}
+
+.coming-soon {
+    font-size: 2rem;
+    margin: 10px 0;
+}
+
+.night-mode {
+    background-color: var(--background-color-night);
+    color: var(--text-color-night);
+}
+
+.day-mode {
+    background-color: var(--background-color-day);
+    color: var(--text-color-day);
+}
