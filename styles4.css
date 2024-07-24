@@ -38,6 +38,7 @@ body {
 .banner {
     font-size: 2rem;
     font-weight: bold;
+    padding: 20px 10px;
 }
 
 .enter-btn {
