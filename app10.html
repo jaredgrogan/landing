@@ -15,9 +15,17 @@
             font-size: 24px;
         }
         .typing-animation {
-            font-size: 24px;
+            font-size: 36px; /* Increased from 24px to 36px (150% increase) */
             margin: 20px 0;
-            min-height: 100px; /* Ensure space for multiple lines */
+            min-height: 150px; /* Increased to accommodate larger font */
+        }
+        .typing-animation span {
+            border-right: 0.08em solid; /* Reduced cursor width to match new font size */
+            animation: blink-caret 0.75s step-end infinite;
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: currentColor; }
         }
     </style>
 </head>
@@ -43,7 +51,6 @@
             const modeText = document.getElementById('mode-text');
             modeText.textContent = document.body.classList.contains('day-mode') ? '☀️' : '🌙';
         }
-
         // Animated typing function
         function typeWriter(text, i, fnCallback) {
             if (i < text.length) {
@@ -55,7 +62,6 @@
                 setTimeout(fnCallback, 700);
             }
         }
-
         // Start the animation
         function startTyping() {
             let textArray = [
@@ -64,7 +70,6 @@
                 "How can I help you today?"
             ];
             let textIndex = 0;
-
             function typeNextText() {
                 if (textIndex < textArray.length) {
                     typeWriter(textArray[textIndex], 0, function() {
@@ -76,10 +81,8 @@
                     });
                 }
             }
-
             typeNextText();
         }
-
         // Start typing animation when the page loads
         window.onload = startTyping;
     </script>
