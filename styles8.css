@@ -1,0 +1,167 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Courier, monospace;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 10.5rem;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.day-mode {
+    background-color: white;
+    color: black;
+}
+
+.night-mode {
+    background-color: black;
+    color: white;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 2.25rem;
+    margin: 10px 0;
+}
+
+.day-mode nav {
+    color: grey;
+}
+
+.night-mode nav {
+    color: lightgrey;
+}
+
+.typing-animation {
+    display: inline-block;
+    border-right: 0.15em solid;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 5.25rem;
+    text-decoration: none;
+}
+
+.day-mode .typing-animation {
+    color: black;
+    border-color: black;
+}
+
+.night-mode .typing-animation {
+    color: white;
+    border-color: white;
+}
+
+#emailForm {
+    margin-top: 20px;
+}
+
+#emailInput {
+    font-size: 2.25rem;
+    padding: 10px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+}
+
+.email-link {
+    font-family: Courier, monospace;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+    font-size: 2.25rem;
+    display: block;
+    margin: 20px auto 0;
+    cursor: pointer;
+}
+
+.day-mode .email-link {
+    color: white;
+    background-color: black;
+    border-color: lightgrey;
+}
+
+.night-mode .email-link {
+    color: black;
+    background-color: white;
+    border-color: grey;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 2rem;
+}
+
+.footer-nav a {
+    text-decoration: none;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0 10px;
+}
+
+.day-mode .footer-nav a {
+    color: black;
+}
+
+.night-mode .footer-nav a {
+    color: white;
+}
+
+.symbol {
+    font-family: 'Courier New', Courier, monospace;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+
+.day-mode .symbol {
+    color: black;
+}
+
+.night-mode .symbol {
+    color: white;
+}
+
+.symbol:hover {
+    transform: scale(1.2);
+}
+
+/* New styles for logo and title hover effects */
+.logo-link {
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.logo-link:hover {
+    transform: scale(1.3);
+}
+
+.logo-link .logo,
+.logo-link .title {
+    transition: transform 0.3s ease;
+}
+
+.day-mode .logo-link {
+    color: black;
+}
+
+.night-mode .logo-link {
+    color: white;
+}
+
+/* Updated styles for the "A Cognitive Universe" button */
+.enter-btn {
+    transition: transform 0.3s ease;
+}
+
+.enter-btn:hover {
+    transform: scale(1.3);
+}
