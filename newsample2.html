@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducing Universitas Pro</title>
+    <link rel="stylesheet" href="styles5.css">
+    <link rel="icon" href="/favicon3.svg" type="image/svg+xml">
+    <style>
+        .mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .day-mode {
+            background-color: white;
+            color: black;
+        }
+        .night-mode {
+            background-color: black;
+            color: white;
+        }
+        .typing-animation {
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <div class="mode-toggle" onclick="toggleMode()">
+        <span id="mode-text">☀</span>
+    </div>
+    <div id="typingAnimation" class="typing-animation"></div>
+    <form id="emailForm">
+        <input type="email" id="emailInput" placeholder="Enter your email" required>
+        <button type="submit" class="email-link">Submit</button>
+    </form>
+    <footer>
+        <div>
+            © 2024 Universitas AI
+        </div>
+    </footer>
+    <script src="script5.js"></script>
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle('day-mode');
+            document.body.classList.toggle('night-mode');
+            const modeText = document.getElementById('mode-text');
+            modeText.textContent = document.body.classList.contains('day-mode') ? '☀' : '☾';
+        }
+
+        class SmoothTyper {
+            constructor(element, texts, typingSpeed = 83, pauseBetweenTexts = 1000) {
+                this.element = element;
+                this.texts = texts;
+                this.typingSpeed = typingSpeed; // Increased by 40% (from 50 to 83)
+                this.pauseBetweenTexts = pauseBetweenTexts;
+                this.currentTextIndex = 0;
+                this.currentCharIndex = 0;
+                this.isTyping = true;
+                this.lastUpdateTime = 0;
+            }
+
+            start() {
+                this.animate();
+            }
+
+            animate(currentTime) {
+                if (!this.lastUpdateTime) this.lastUpdateTime = currentTime;
+                const deltaTime = currentTime - this.lastUpdateTime;
+
+                if (deltaTime >= this.typingSpeed) {
+                    if (this.isTyping) {
+                        this.type();
+                    } else {
+                        this.erase();
+                    }
+                    this.lastUpdateTime = currentTime;
+                }
+
+                requestAnimationFrame((time) => this.animate(time));
+            }
+
+            type() {
+                const currentText = this.texts[this.currentTextIndex];
+                if (this.currentCharIndex < currentText.length) {
+                    this.element.textContent = currentText.substring(0, this.currentCharIndex + 1);
+                    this.currentCharIndex++;
+                } else {
+                    this.isTyping = false;
+                    setTimeout(() => {
+                        this.isTyping = false;
+                        this.lastUpdateTime = 0;
+                    }, this.pauseBetweenTexts);
+                }
+            }
+
+            erase() {
+                if (this.currentCharIndex > 0) {
+                    this.element.textContent = this.texts[this.currentTextIndex].substring(0, this.currentCharIndex - 1);
+                    this.currentCharIndex--;
+                } else {
+                    this.currentTextIndex = (this.currentTextIndex + 1) % this.texts.length;
+                    this.isTyping = true;
+                    this.lastUpdateTime = 0;
+                }
+            }
+        }
+
+        function startTyping() {
+            const textArray = [
+                "Hi, I'm Herakles",
+                "Your Engineer",
+                "Welcome to Universitas.",
+                "Your Cognitive Computer.",
+                "Let's get building!"
+            ];
+            const typingElement = document.querySelector("#typingAnimation");
+            const typer = new SmoothTyper(typingElement, textArray);
+            typer.start();
+        }
+
+        window.onload = startTyping;
+    </script>
+</body>
+</html>
