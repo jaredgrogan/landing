@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universitas AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      background-color: white;
+      color: black;
+    }
+
+    body.dark-mode {
+      background-color: black;
+      color: white;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 20px 0;
+    }
+
+    .date-time {
+      font-family: 'Roboto', sans-serif;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    .day-night {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(to right, #ffd700, #ffA500);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 10px;
+    }
+
+    .logo-letter {
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .tagline {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      color: #808080;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .login-section {
+      margin-top: 20px;
+    }
+
+    .login-form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 0 1px #d3d3d3;
+      width: 300px;
+      margin: 0 auto;
+    }
+
+    body.dark-mode .login-form {
+      background-color: #333;
+      box-shadow: 0 0 0 1px #666;
+    }
+
+    .login-form input {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    body.dark-mode .login-form input {
+      background-color: #444;
+      color: white;
+      border-color: #666;
+    }
+
+    button {
+      background: linear-gradient(to right, #8A2BE2, #4169E1);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1em;
+      font-weight: normal;
+      border-radius: 5px;
+      width: 100%;
+    }
+
+    .create-account, .email {
+      font-family: 'Roboto', sans-serif;
+      color: blue;
+      font-size: 0.9em;
+      text-decoration: none;
+      cursor: pointer;
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    body.dark-mode .create-account, body.dark-mode .email {
+      color: #6495ED;
+    }
+
+    .email {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .email-icon {
+      margin-right: 5px;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      border-top: 1px solid #d3d3d3;
+      padding-top: 20px;
+    }
+
+    body.dark-mode footer {
+      border-top-color: #666;
+    }
+
+    .copyright {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9em;
+      margin-bottom: 10px;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav a {
+      font-family: 'Roboto', sans-serif;
+      color: grey;
+      text-decoration: none;
+      margin: 0 10px;
+      transition: font-size 0.3s ease;
+    }
+
+    .nav a:hover {
+      font-size: 120%;
+    }
+
+    body.dark-mode .nav a {
+      color: #d3d3d3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="date-time" id="dateTime"></div>
+      <div class="logo-section">
+        <div class="logo-container">
+          <div class="logo-circle">
+            <span class="logo-letter">U</span>
+          </div>
+        </div>
+        <span class="logo-text">Universitas AI</span>
+      </div>
+      <div class="day-night" id="dayNight"></div>
+    </div>
+    
+    <div class="tagline">A Cognitive Universe</div>
+    
+    <div class="login-section">
+      <div class="login-form">
+        <input type="email" placeholder="Enter your email">
+        <input type="password" placeholder="Password">
+        <button>Log In</button>
+      </div>
+      <a class="create-account">Create an Account</a>
+      <a class="email" href="mailto:info@universitas.pro">
+        <svg class="email-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+        info@universitas.pro
+      </a>
+    </div>
+    
+    <footer>
+      <p class="copyright">&copy; 2024 Universitas AI</p>
+      <nav class="nav">
+        <a href="contact.html">Waitlist</a>
+        <a href="note.html">Product</a>
+        <a href="support.html">Support</a>
+        <a href="Community.html">Community</a>
+        <a href="login.html">Account</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>
+    const dateTimeElement = document.getElementById('dateTime');
+    const dayNightElement = document.getElementById('dayNight');
+    const body = document.body;
+
+    function updateDateTime() {
+      const now = new Date();
+      const dateOptions = { 
+        weekday: 'short', 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric'
+      };
+      const timeOptions = {
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      };
+      dateTimeElement.innerHTML = now.toLocaleDateString('en-US', dateOptions) + '<br>' + now.toLocaleTimeString('en-US', timeOptions);
+      
+      const hours = now.getHours();
+      const isDayTime = hours >= 6 && hours < 18;
+      updateDayNightIcon(isDayTime);
+      body.classList.toggle('dark-mode', !isDayTime);
+    }
+
+    function updateDayNightIcon(isDayTime) {
+      const sunIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/></svg>`;
+      const moonIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z"/></svg>`;
+      
+      dayNightElement.innerHTML = isDayTime ? sunIcon : moonIcon;
+    }
+
+    function toggleDarkMode() {
+      body.classList.toggle('dark-mode');
+      const isDarkMode = body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', isDarkMode);
+      updateDayNightIcon(!isDarkMode);
+    }
+
+    dayNightElement.addEventListener('click', toggleDarkMode);
+
+    // Check localStorage on page load
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    body.classList.toggle('dark-mode', isDarkMode);
+    updateDayNightIcon(!isDarkMode);
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000); // Update every second
+  </script>
+</body>
+</html>
