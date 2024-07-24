@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">U</div>
+                <div class="title">Universitas AI</div>
+                <div class="tagline">A Cognitive Universe</div>
+            </div>
+            <button id="theme-toggle"></button>
+        </header>
+
+        <div id="calendar-container">
+            <div class="calendar-header">
+                <button id="prev-month"></button>
+                <h2 id="current-month"></h2>
+                <button id="next-month"></button>
+            </div>
+            <div id="calendar-grid"></div>
+        </div>
+
+        <div id="briefing-container">
+            <h2>Daily Briefing - <span id="selected-date"></span></h2>
+            <p>Today's actions and preparations for tomorrow will be summarized here.</p>
+            <p>Key deliverables and deadlines will be highlighted.</p>
+        </div>
+
+        <div id="outlook-container">
+            <div class="outlook-card">
+                <h2>14-Day Outlook</h2>
+                <p>A summary of the next 14 days, including upcoming actions and deadlines.</p>
+            </div>
+            <div class="outlook-card">
+                <h2>30-Day Outlook</h2>
+                <p>An overview of the next 30 days, highlighting major events, travel plans, and long-term goals.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
