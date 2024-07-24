@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducing Universitas Pro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .day-mode {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .night-mode {
+            background-color: #333;
+            color: #f0f0f0;
+        }
+        .mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        #typingAnimation {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #emailForm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #emailInput {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 250px;
+        }
+        .email-link {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        footer {
+            position: absolute;
+            bottom: 20px;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <div class="mode-toggle" onclick="toggleMode()">
+        <span id="mode-text">&#9728;</span> <!-- Sun icon -->
+    </div>
+    <div id="typingAnimation" class="typing-animation"></div>
+    <form id="emailForm">
+        <input type="email" id="emailInput" placeholder="Enter your email" required>
+        <button type="submit" class="email-link">Submit</button>
+    </form>
+    <footer>
+        <div>
+            © 2024 Universitas AI
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const texts = [
+                "Hi, I'm Herakles",
+                "Your AI Assistant",
+                "Let's get started",
+                "with Universitas Pro"
+            ];
+            let index = 0;
+            const typingElement = document.getElementById('typingAnimation');
+
+            function typeText(text, callback) {
+                let i = 0;
+                typingElement.textContent = '';
+                function addChar() {
+                    if (i < text.length) {
+                        typingElement.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(addChar, 50);
+                    } else {
+                        setTimeout(callback, 1500);
+                    }
+                }
+                addChar();
+            }
+
+            function nextText() {
+                if (index < texts.length) {
+                    typeText(texts[index], () => {
+                        index++;
+                        nextText();
+                    });
+                }
+            }
+
+            nextText();
+
+            const emailForm = document.getElementById('emailForm');
+            emailForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const email = document.getElementById('emailInput').value;
+                const response = await fetch('/submit_email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email }),
+                });
+                if (response.ok) {
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Failed to submit email. Please try again.');
+                }
+            });
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'd') {
+                    toggleMode();
+                }
+            });
+        });
+
+        function toggleMode() {
+            const body = document.body;
+            const modeText = document.getElementById('mode-text');
+            if (body.classList.contains('night-mode')) {
+                body.classList.remove('night-mode');
+                body.classList.add('day-mode');
+                modeText.textContent = '\u263C'; // Sun icon
+            } else {
+                body.classList.remove('day-mode');
+                body.classList.add('night-mode');
+                modeText.textContent = '\u263E'; // Moon icon
+            }
+        }
+    </script>
+</body>
+</html>
