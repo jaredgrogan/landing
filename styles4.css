@@ -35,6 +35,11 @@ body {
     font-size: 4rem;
 }
 
+.banner {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
 .enter-btn {
     font-size: 2.34rem; /* 3.6rem * 0.65 */
     font-family: 'Courier New', monospace;
