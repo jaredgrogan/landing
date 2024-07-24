@@ -22,11 +22,20 @@
             background-color: black;
             color: white;
         }
+        .typing-animation {
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3s steps(40, end);
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
     </style>
 </head>
 <body class="day-mode">
     <div class="mode-toggle" onclick="toggleMode()">
-        <span id="mode-text">☀️</span>
+        <span id="mode-text">☀</span>
     </div>
     <div id="typingAnimation" class="typing-animation"></div>
     <form id="emailForm">
@@ -44,7 +53,7 @@
             document.body.classList.toggle('day-mode');
             document.body.classList.toggle('night-mode');
             const modeText = document.getElementById('mode-text');
-            modeText.textContent = document.body.classList.contains('day-mode') ? '☀️' : '🌙';
+            modeText.textContent = document.body.classList.contains('day-mode') ? '☀' : '☾';
         }
         // Animated typing function
         function typeWriter(text, i, fnCallback) {
@@ -52,7 +61,7 @@
                 document.querySelector("#typingAnimation").innerHTML = text.substring(0, i+1) + '<span aria-hidden="true"></span>';
                 setTimeout(function() {
                     typeWriter(text, i + 1, fnCallback)
-                }, 100);
+                }, 50);
             } else if (typeof fnCallback == 'function') {
                 setTimeout(fnCallback, 700);
             }
