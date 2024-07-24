@@ -19,6 +19,15 @@
             © 2024 Universitas AI
         </div>
     </footer>
-    <script src="script5.js"></script>
+    <script src="script5.js">
+
+        function toggleMode() {
+            document.body.classList.toggle('day-mode');
+            document.body.classList.toggle('night-mode');
+            const modeText = document.getElementById('mode-text');
+            modeText.textContent = document.body.classList.contains('day-mode') ? '☀' : '☾';
+        }
+
+    </script>
 </body>
 </html>
