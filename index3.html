@@ -4,46 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universitas AI</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            margin: 100px auto;
-            width: 300px;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .link {
-            display: block;
-            margin: 20px 0;
-            color: #1a73e8;
-            text-decoration: none;
-        }
-        .link:hover {
-            text-decoration: underline;
-        }
-        .footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #555;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="night-mode">
     <div class="container">
-        <h1>Universitas AI</h1>
-        <a href="app.html" class="link">A Cognitive Universe</a>
-        <a href="enter.html" class="link">Enter Here</a>
-        <div class="footer">
-            <p>&copy; 2024 Universitas AI</p>
-            <p>info@universitas.pro</p>
+        <div class="logo">
+            <div class="circle">
+                <span class="u">U</span>
+            </div>
+        </div>
+        <h1 class="title">Universitas AI</h1>
+        <h2 class="subtitle"><a href="app.html" class="link">A Cognitive Universe</a></h2>
+        <button class="enter-btn" onclick="launchApp()">enter here</button>
+        <div class="mode-toggle" onclick="toggleMode()">
+            <span id="mode-text">day</span>
         </div>
     </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Universitas AI</p>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
