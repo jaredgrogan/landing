@@ -84,6 +84,11 @@ body {
     font-family: 'Courier New';
 }
 
+  }
+        .content {
+            padding-bottom: 40px;
+        }
+
 .coming-soon {
     font-size: 2rem;
     margin: 10px 0;
