@@ -5,7 +5,7 @@
     --text-color-night: white;
     --font-family: 'Courier New', Courier, monospace;
     --footer-font-family: 'Roboto', sans-serif;
-    --typing-border-color-day: black;
+    --typing-border-color-day: #111111;
     --typing-border-color-night: white;
 }
 
