@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universitas AI - Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: white;
+      --text-color: black;
+      --form-bg: white;
+      --form-border: #d3d3d3;
+      --link-color: blue;
+      --nav-color: grey;
+      --bubble-bg: #e6f3ff;
+      --bubble-border: #b3d9ff;
+      --button-gradient: linear-gradient(to right, #6a5acd, #4169E1);
+      --logo-gradient: linear-gradient(to right, #ffd700, #ffA500);
+      --transition-speed: 0.3s;
+    }
+
+    .dark-mode {
+      --bg-color: black;
+      --text-color: white;
+      --form-bg: #333;
+      --form-border: #666;
+      --link-color: #6495ED;
+      --nav-color: #d3d3d3;
+      --bubble-bg: #1a3d5c;
+      --bubble-border: #2a5f8f;
+    }
+
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+      transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 20px 0;
+      position: relative;
+    }
+
+    .date-time {
+      font-family: 'Roboto', sans-serif;
+      font-size: 12px;
+      text-align: right;
+      line-height: 1.4;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .day-night {
+      font-size: 24px;
+      cursor: pointer;
+      margin-left: 20px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--logo-gradient);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 10px;
+    }
+
+    .logo-letter {
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .tagline {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      color: #808080;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .chat-section {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-messages {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 20px;
+      border: 1px solid var(--form-border);
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .chat-bubble {
+      background-color: var(--bubble-bg);
+      border: 2px solid var(--bubble-border);
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      max-width: 80%;
+      position: relative;
+    }
+
+    .chat-bubble.ai {
+      align-self: flex-start;
+      border-bottom-left-radius: 0;
+    }
+
+    .chat-bubble.ai::before {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: -2px;
+      width: 20px;
+      height: 20px;
+      background-color: var(--bubble-bg);
+      border-left: 2px solid var(--bubble-border);
+      border-bottom: 2px solid var(--bubble-border);
+      border-bottom-left-radius: 18px;
+    }
+
+    .chat-bubble.user {
+      align-self: flex-end;
+      background-color: var(--form-bg);
+      border-color: var(--form-border);
+      border-bottom-right-radius: 0;
+    }
+
+    .chat-bubble.user::before {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 20px;
+      height: 20px;
+      background-color: var(--form-bg);
+      border-right: 2px solid var(--form-border);
+      border-bottom: 2px solid var(--form-border);
+      border-bottom-right-radius: 18px;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input input {
+      flex-grow: 1;
+      padding: 10px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1em;
+      border: 1px solid var(--form-border);
+      border-radius: 5px;
+      background-color: var(--form-bg);
+      color: var(--text-color);
+    }
+
+    .chat-input button, .create-note button {
+      padding: 10px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background: var(--button-gradient);
+      color: white;
+      cursor: pointer;
+      transition: opacity var(--transition-speed) ease;
+    }
+
+    .chat-input button:hover, .create-note button:hover {
+      opacity: 0.8;
+    }
+
+    .create-note {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      border-top: 1px solid var(--form-border);
+      padding-top: 20px;
+    }
+
+    .copyright {
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.9em;
+      margin-bottom: 20px;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .nav a {
+      font-family: 'Roboto', sans-serif;
+      color: var(--nav-color);
+      text-decoration: none;
+      margin: 0 10px;
+      transition: font-size var(--transition-speed) ease;
+    }
+
+    .nav a:hover {
+      font-size: 120%;
+    }
+
+    .mic-icon, .save-icon {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .note-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .note-container {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 50%;
+      height: 80%;
+      background-color: var(--bg-color);
+      border: 1px solid var(--form-border);
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .note-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .note-title {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .note-content {
+      width: 100%;
+      height: calc(100% - 40px);
+      border: 1px solid var(--form-border);
+      border-radius: 5px;
+      padding: 10px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1em;
+      resize: none;
+      background-color: var(--form-bg);
+      color: var(--text-color);
+    }
+
+    @media (max-width: 768px) {
+      .note-container {
+        width: 90%;
+        height: 70%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo-section">
+        <div class="logo-container">
+          <div class="logo-circle">
+            <span class="logo-letter">U</span>
+          </div>
+        </div>
+        <span class="logo-text">Universitas AI</span>
+      </div>
+      <div class="date-time" id="dateTime"></div>
+      <div class="day-night" id="dayNight" aria-label="Toggle dark mode"></div>
+    </header>
+    
+    <div class="tagline">A Cognitive Universe</div>
+    
+    <main class="chat-section">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-bubble ai">Hi, I'm Herakles.</div>
+        <div class="chat-bubble ai">What are you working on?</div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Ask Herakles..." aria-label="Chat input">
+        <button id="sendButton" aria-label="Send message">Chat</button>
+        <button id="micButton" aria-label="Voice input">
+          <svg class="mic-icon" viewBox="0 0 24 24">
+            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1 2v2c0 .55.45 1 1 1s1-.45 1-1v-2h2c.55 0 1-.45 1-1s-.45-1-1-1h-2v-1c0-.55-.45-1-1-1s-1 .45-1 1v1H9c-.55 0-1 .45-1 1s.45 1 1 1h2z"/>
+          </svg>
+        </button>
+      </div>
+    </main>
+
+    <div class="create-note">
+      <button id="createNoteButton">Note +</button>
+    </div>
+    
+    <footer>
+      <p class="copyright">&copy; 2024 Universitas AI</p>
+      <nav class="nav">
+        <a href="contact.html">Waitlist</a>
+        <a href="note.html">Product</a>
+        <a href="support.html">Support</a>
+        <a href="Community.html">Community</a>
+        <a href="login.html">Account</a>
+      </nav>
+    </footer>
+  </div>
+
+  <div class="note-overlay" id="noteOverlay">
+    <div class="note-container">
+      <div class="note-header">
+        <span class="note-title">New Note</span>
+        <svg class="save-icon" id="saveNote" viewBox="0 0 24 24" aria-label="Save note">
+          <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+        </svg>
+      </div>
+      <textarea class="note-content" id="noteContent" placeholder="Start typing your note..." aria-label="Note content"></textarea>
+    </div>
+  </div>
+
+  <script>
+    const dateTimeElement = document.getElementById('dateTime');
+    const dayNightElement = document.getElementById('dayNight');
+    const body = document.body;
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendButton = document.getElementById('sendButton');
+    const micButton = document.getElementById('micButton');
+    const createNoteButton = document.getElementById('createNoteButton');
+    const noteOverlay = document.getElementById('noteOverlay');
+    const saveNoteButton = document.getElementById('saveNote');
+    const noteContent = document.getElementById('noteContent');
+
+    const updateDateTime = () => {
+      const now = new Date();
+      const dateOptions = { 
+        weekday: 'short', 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric'
+      };
+      const timeOptions = {
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      };
+      const dateStr = now.toLocaleDateString('en-US', dateOptions);
+      const timeStr = now.toLocaleTimeString('en-US', timeOptions);
+      dateTimeElement.innerHTML = `${dateStr}<br>${timeStr}`;
+    };
+
+    // Update time every second
+    setInterval(updateDateTime, 1000);
+
+    // Initial update
+    updateDateTime();
+
+    // The rest of your JavaScript code here (unchanged)
+    // ...
+
+  </script>
+</body>
+</html>
