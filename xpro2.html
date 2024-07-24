@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Pro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400&display=swap');
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: white;
+            color: black;
+            text-align: center;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        .toggle-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            outline: none;
+        }
+
+        input[type="email"] {
+            padding: 10px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            background-color: #000;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            position: relative;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(90deg, purple, blue);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(128, 0, 128, 0.5), 0 0 10px rgba(0, 0, 255, 0.5);
+            animation: load 3s ease-in-out forwards;
+        }
+
+        .progress-text {
+            font-family: 'Berkeley Mono', monospace;
+            margin-top: 10px;
+        }
+
+        @keyframes load {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: black;
+                color: white;
+            }
+
+            input[type="email"] {
+                border: 1px solid #fff;
+                background-color: #333;
+                color: #fff;
+            }
+
+            input[type="submit"] {
+                background-color: #fff;
+                color: #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-button" onclick="toggleTheme()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C12.5523 2 13 2.44772 13 3V5C13 5.55228 12.5523 6 12 6C11.4477 6 11 5.55228 11 5V3C11 2.44772 11.4477 2 12 2Z" fill="currentColor"/>
+            <path d="M12 18C12.5523 18 13 18.4477 13 19V21C13 21.5523 12.5523 22 12 22C11.4477 22 11 21.5523 11 21V19C11 18.4477 11.4477 18 12 18Z" fill="currentColor"/>
+            <path d="M4.22182 4.22182C4.60431 3.83934 5.22061 3.83934 5.6031 4.22182L7.05025 5.66998C7.43274 6.05247 7.43274 6.66877 7.05025 7.05126C6.66776 7.43375 6.05146 7.43375 5.66998 7.05126L4.22182 5.6031C3.83934 5.22061 3.83934 4.60431 4.22182 4.22182Z" fill="currentColor"/>
+            <path d="M18 7.05126C18.3825 6.66877 18.9988 6.66877 19.3813 7.05126L20.8284 8.49842C21.2109 8.8809 21.2109 9.49721 20.8284 9.87969C20.4459 10.2622 19.8296 10.2622 19.4471 9.87969L18 8.43154C17.6175 8.04905 17.6175 7.43275 18 7.05126Z" fill="currentColor"/>
+            <path d="M21 12C21.5523 12 22 12.4477 22 13V15C22 15.5523 21.5523 16 21 16C20.4477 16 20 15.5523 20 15V13C20 12.4477 20.4477 12 21 12Z" fill="currentColor"/>
+            <path d="M3 12C3 11.4477 3.44772 11 4 11H6C6.55228 11 7 11.4477 7 12C7 12.5523 6.55228 13 6 13H4C3.44772 13 3 12.5523 3 12Z" fill="currentColor"/>
+            <path d="M18 18.7484C18.3825 18.3659 18.9988 18.3659 19.3813 18.7484L20.8284 20.1955C21.2109 20.578 21.2109 21.1943 20.8284 21.5768C20.4459 21.9593 19.8296 21.9593 19.4471 21.5768L18 20.1287C17.6175 19.7462 17.6175 19.1299 18 18.7484Z" fill="currentColor"/>
+            <path d="M5.66998 18C6.05247 18.3825 6.66877 18.3825 7.05126 18L8.49842 19.4471C8.8809 19.8296 8.8809 20.4459 8.49842 20.8284C8.11593 21.2109 7.49963 21.2109 7.11714 20.8284L5.66998 19.3813C5.28749 18.9988 5.28749 18.3825 5.66998 18Z" fill="currentColor"/>
+        </svg>
+    </button>
+    <h1>with Universitas Pro</h1>
+    <form action="#">
+        <input type="email" placeholder="Enter your email" required>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    <div class="progress-container">
+        <div class="progress-bar"></div>
+        <div class="progress-text">Loading...</div>
+    </div>
+    <footer>
+        <p>© 2024 Universitas AI</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            if (document.documentElement.hasAttribute('data-theme')) {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        }
+    </script>
+</body>
+</html>
