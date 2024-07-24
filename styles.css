@@ -39,7 +39,7 @@ body {
 }
 
 .enter-btn {
-    font-size: 2.6rem; /* Increase font size by 80% (2rem * 1.8) */
+    font-size: 3.6rem; /* Increase font size by 80% (2rem * 1.8) */
     font-family: 'Courier New', monospace; /* Ensure proper fallback */
     font-weight: bold; /* Make the text bold */
     background-color: transparent; /* Remove background color */
@@ -56,7 +56,7 @@ body {
 }
 
 .enter-btn:hover {
-    transform: scale(1.25;
+    transform: scale(1.3);
 }
 
 .mode-toggle {
