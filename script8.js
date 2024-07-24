@@ -1,6 +1,7 @@
+
 const DateTime = luxon.DateTime;
 
-let isLightMode = true;
+let isDarkMode = true;
 let currentDateTime = DateTime.now();
 let selectedDate = DateTime.now();
 let currentMonth = DateTime.now();
@@ -14,18 +15,14 @@ const calendarGrid = document.getElementById('calendar-grid');
 const selectedDateElement = document.getElementById('selected-date');
 
 function updateTheme() {
-    app.className = isLightMode ? 'dark-mode' : 'light-mode';
+    app.className = isDarkMode ? 'dark-mode' : 'light-mode';
     themeToggle.innerHTML = isDarkMode ? '☀️' : '🌙';
 }
 
 function toggleTheme() {
-        this.theme = this.theme === 'light' ? 'dark' : 'light';
-        document.body.classList.toggle('dark-mode');
-        this.themeToggle.innerHTML = this.theme === 'light' 
-            ? '<i data-lucide="moon"></i>' 
-            : '<i data-lucide="sun"></i>';
-        lucide.createIcons();
-    }
+    isDarkMode = !isDarkMode;
+    updateTheme();
+}
 
 function updateDateTime() {
     currentDateTime = DateTime.now();
