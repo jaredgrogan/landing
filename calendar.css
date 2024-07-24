@@ -1,129 +1,51 @@
-body {
-    font-family: 'Courier New', Courier, monospace;
-    margin: 0;
-    padding: 0;
-    transition: all 0.3s ease;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">U</div>
+                <div class="title">Universitas AI</div>
+                <div class="tagline">A Cognitive Universe</div>
+            </div>
+            <button id="theme-toggle"></button>
+        </header>
 
-#app {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
+        <div id="calendar-container">
+            <div class="calendar-header">
+                <button id="prev-month"></button>
+                <h2 id="current-month"></h2>
+                <button id="next-month"></button>
+            </div>
+            <div id="calendar-grid"></div>
+        </div>
 
-.dark-mode {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
-    color: #e0e0e0;
-}
+        <div id="briefing-container">
+            <h2>Daily Briefing - <span id="selected-date"></span></h2>
+            <p>Today's actions and preparations for tomorrow will be summarized here.</p>
+            <p>Key deliverables and deadlines will be highlighted.</p>
+        </div>
 
-.light-mode {
-    background: linear-gradient(135deg, #e6e6e6 0%, #ffffff 50%, #e6e6e6 100%);
-    color: #333;
-}
+        <div id="outlook-container">
+            <div class="outlook-card">
+                <h2>14-Day Outlook</h2>
+                <p>A summary of the next 14 days, including upcoming actions and deadlines.</p>
+            </div>
+            <div class="outlook-card">
+                <h2>30-Day Outlook</h2>
+                <p>An overview of the next 30 days, highlighting major events, travel plans, and long-term goals.</p>
+            </div>
+        </div>
+    </div>
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-}
-
-.logo-icon {
-    width: 50px;
-    height: 50px;
-    background-image: linear-gradient(45deg, #ffd700, #ffA500);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    margin-right: 10px;
-}
-
-.title {
-    font-size: 24px;
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-.tagline {
-    font-size: 16px;
-    font-style: italic;
-    white-space: nowrap;
-    margin-left: 20px;
-}
-
-button {
-    padding: 10px 15px;
-    background: linear-gradient(45deg, #8A2BE2, #4169E1);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-#calendar-container, #briefing-container, .outlook-card {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-.light-mode #calendar-container,
-.light-mode #briefing-container,
-.light-mode .outlook-card {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-#calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-}
-
-.calendar-day {
-    padding: 10px;
-    text-align: center;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-}
-
-.light-mode .calendar-day {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-.calendar-day.active {
-    background-color: #4169E1;
-    color: white;
-}
-
-.light-mode .calendar-day.active {
-    background-color: #8A2BE2;
-}
-
-#outlook-container {
-    display: flex;
-    gap: 20px;
-}
-
-.outlook-card {
-    flex: 1;
-}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
