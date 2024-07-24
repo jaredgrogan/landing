@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to NeuralCloud.ai</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: black;
+            font-family: Courier, monospace;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 10.5rem;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 2.25rem;
+            color: grey;
+            margin: 10px 0;
+        }
+        .typing-animation {
+            display: inline-block;
+            border-right: 0.15em solid black;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 5.25rem;
+            text-decoration: none;
+            color: black;
+        }
+        .email-link {
+            font-family: Courier, monospace;
+            color: white;
+            background-color: black;
+            border: 1px solid lightgrey;
+            border-radius: 5px;
+            padding: 5px 10px;
+            text-decoration: none;
+            font-size: 2.25rem;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: white;
+            color: black;
+            font-size: 2rem;
+        }
+        footer nav {
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+        }
+        .symbol {
+            color: black;
+            font-family: 'Courier New', Courier, monospace;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .symbol:hover {
+            transform: scale(1.2);
+        }
+        .footer-nav a {
+            color: black;
+            text-decoration: none;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <a href="contact.html" class="typing-animation" id="typingAnimation">
+       Hello, I'm Herakles
+    </a>
+    <form id="emailForm">
+        <input type="email" id="emailInput" placeholder="Enter your email" required style="font-size: 2.25rem; padding: 10px; margin-top: 20px; border: 1px solid lightgrey; border-radius: 5px;">
+        <button type="submit" class="email-link">Submit</button>
+    </form>
+    <footer>
+        <nav class="footer-nav">
+            <a href="login.html">Login</a>
+            <a href="contact.html">Waitlist</a>
+        </nav>
+        <nav>
+            <a href="index.html" class="symbol">&lt;</a>
+            <a href="contact.html" class="symbol">&gt;</a>
+        </nav>
+        <div>
+            © 2024 Universitas AI
+        </div>
+    </footer>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const emailForm = document.getElementById('emailForm');
+        emailForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            const response = await fetch('/submit_email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email }),
+            });
+            if (response.ok) {
+                window.location.href = 'login.html';
+            } else {
+                alert('Failed to submit email. Please try again.');
+            }
+        });
+    });
+    </script>
+</body>
+</html>
+2. Backend with Flask
+Create a Flask backend to handle the email submission and store the data in an Excel file and JSON files.
+
+app.py (Flask backend)
+python
+Copy code
+from flask import Flask, request, jsonify
+import pandas as pd
+import json
+import os
+
+app = Flask(__name__)
+
+USER_DATA_FOLDER = './user-data'
+
+# Ensure the user data folder exists
+os.makedirs(USER_DATA_FOLDER, exist_ok=True)
+
+@app.route('/submit_email', methods=['POST'])
+def submit_email():
+    data = request.get_json()
+    email = data.get('email')
+
+    if not email:
+        return jsonify({'error': 'Email is required'}), 400
+
+    # Save email to Excel
+    excel_file = os.path.join(USER_DATA_FOLDER, 'user_emails.xlsx')
+    if os.path.exists(excel_file):
+        df = pd.read_excel(excel_file)
+    else:
+        df = pd.DataFrame(columns=['email'])
+
+    if email in df['email'].values:
+        return jsonify({'error': 'Email already exists'}), 400
+
+    new_row = {'email': email}
+    df = df.append(new_row, ignore_index=True)
+    df.to_excel(excel_file, index=False)
+
+    # Save user data to JSON
+    user_data = {'email': email}
+    json_file = os.path.join(USER_DATA_FOLDER, f'{email}.json')
+    with open(json_file, 'w') as f:
+        json.dump(user_data, f)
+
+    return jsonify({'message': 'Email submitted successfully'}), 200
+
+if __name__ == '__main__':
+    app.run(debug=True)
