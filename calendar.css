@@ -13,14 +13,14 @@ body {
     transition: all 0.3s ease;
 }
 
-.light-mode {
-    background: linear-gradient(135deg, #e6e6e6 0%, #ffffff 50%, #e6e6e6 100%);
-    color: #333;
-}
-
 .dark-mode {
     background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
     color: #e0e0e0;
+}
+
+.light-mode {
+    background: linear-gradient(135deg, #e6e6e6 0%, #ffffff 50%, #e6e6e6 100%);
+    color: #333;
 }
 
 header {
