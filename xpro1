@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Pro</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: white;
+            color: black;
+            text-align: center;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        .toggle-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        input[type="email"] {
+            padding: 10px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            background-color: #000;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            width: 80%;
+            height: 20px;
+            background: linear-gradient(90deg, yellow, gold);
+            border-radius: 10px;
+            margin: 20px auto;
+            animation: load 3s ease-in-out forwards;
+        }
+
+        @keyframes load {
+            0% { width: 0; }
+            100% { width: 80%; }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: black;
+                color: white;
+            }
+
+            input[type="email"] {
+                border: 1px solid #fff;
+                background-color: #333;
+                color: #fff;
+            }
+
+            input[type="submit"] {
+                background-color: #fff;
+                color: #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-button" onclick="toggleTheme()">☀️</button>
+    <h1>with Universitas Pro</h1>
+    <form action="#">
+        <input type="email" placeholder="Enter your email" required>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    <div class="progress-bar"></div>
+    <footer>
+        <p>© 2024 Universitas AI</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            if (document.documentElement.hasAttribute('data-theme')) {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        }
+    </script>
+</body>
+</html>
