@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducing Universitas Pro</title>
+    <link rel="stylesheet" href="styles5.css">
+    <link rel="icon" href="/favicon3.svg" type="image/svg+xml">
+    <style>
+        .mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .typing-animation {
+            font-size: 24px;
+            margin: 20px 0;
+            min-height: 100px; /* Ensure space for multiple lines */
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <div class="mode-toggle" onclick="toggleMode()">
+        <span id="mode-text">&#9728;</span> <!-- Sun icon -->
+    </div>
+    <div id="typingAnimation" class="typing-animation"></div>
+    <form id="emailForm">
+        <input type="email" id="emailInput" placeholder="Enter your email" required>
+        <button type="submit" class="email-link">Submit</button>
+    </form>
+    <footer>
+        <div>
+            © 2024 Universitas AI
+        </div>
+    </footer>
+    <script src="script5.script"></script>
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle('day-mode');
+            document.body.classList.toggle('night-mode');
+            const modeText = document.getElementById('mode-text');
+            modeText.textContent = document.body.classList.contains('day-mode') ? '☀️' : '🌙';
+        }
+
+        // Animated typing function
+        function typeWriter(text, i, fnCallback) {
+            if (i < text.length) {
+                document.querySelector("#typingAnimation").innerHTML = text.substring(0, i+1) + '<span aria-hidden="true"></span>';
+                setTimeout(function() {
+                    typeWriter(text, i + 1, fnCallback)
+                }, 100);
+            } else if (typeof fnCallback == 'function') {
+                setTimeout(fnCallback, 700);
+            }
+        }
+
+        // Start the animation
+        function startTyping() {
+            let textArray = [
+                "Hi, I'm Herakles",
+                "Your AI assistant",
+                "How can I help you today?"
+            ];
+            let textIndex = 0;
+
+            function typeNextText() {
+                if (textIndex < textArray.length) {
+                    typeWriter(textArray[textIndex], 0, function() {
+                        setTimeout(function() {
+                            document.querySelector("#typingAnimation").innerHTML = '';
+                            textIndex++;
+                            typeNextText();
+                        }, 1000);
+                    });
+                }
+            }
+
+            typeNextText();
+        }
+
+        // Start typing animation when the page loads
+        window.onload = startTyping;
+    </script>
+</body>
+</html>
