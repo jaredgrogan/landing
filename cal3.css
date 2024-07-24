@@ -1,0 +1,150 @@
+:root {
+    --light-bg: linear-gradient(135deg, #e6e6e6 0%, #ffffff 50%, #e6e6e6 100%);
+    --dark-bg: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+    --light-color: #333;
+    --dark-color: #e0e0e0;
+    --light-element-bg: rgba(0, 0, 0, 0.05);
+    --dark-element-bg: rgba(255, 255, 255, 0.1);
+    --button-bg: linear-gradient(45deg, #8A2BE2, #4169E1);
+    --logo-bg: linear-gradient(45deg, #ffd700, #ffA500);
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+body.light-mode {
+    background: var(--light-bg);
+    color: var(--light-color);
+}
+
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-color);
+}
+
+#app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    width: 50px;
+    height: 50px;
+    background-image: var(--logo-bg);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin-right: 10px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.tagline {
+    font-size: 16px;
+    font-style: italic;
+    white-space: nowrap;
+    margin-left: 20px;
+}
+
+button {
+    padding: 10px 15px;
+    background: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#date-time {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+#calendar-container, #briefing-container, .outlook-card {
+    background-color: var(--light-element-bg);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.dark-mode #calendar-container,
+.dark-mode #briefing-container,
+.dark-mode .outlook-card {
+    background-color: var(--dark-element-bg);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day {
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: var(--light-element-bg);
+    cursor: pointer;
+}
+
+.dark-mode .calendar-day {
+    background-color: var(--dark-element-bg);
+}
+
+.calendar-day.active {
+    background-color: #8A2BE2;
+    color: white;
+}
+
+.dark-mode .calendar-day.active {
+    background-color: #4169E1;
+}
+
+#outlook-container {
+    display: flex;
+    gap: 20px;
+}
+
+.outlook-card {
+    flex: 1;
+}
+
+#copyright {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
