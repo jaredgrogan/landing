@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to NeuralCloud.ai</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white; /* Changed to day mode */
+            color: black; /* Changed to black for day mode */
+            font-family: Courier, monospace;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 10.5rem;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 2.25rem;
+            color: grey; /* Adjusted for day mode */
+            margin: 10px 0;
+        }
+        .typing-animation {
+            display: inline-block;
+            border-right: 0.15em solid black; /* Changed to black for day mode */
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 5.25rem;
+            text-decoration: none;
+            color: black; /* Changed to black for day mode */
+        }
+        .email-link {
+            font-family: Courier, monospace;
+            color: white;
+            background-color: black;
+            border: 1px solid lightgrey;
+            border-radius: 5px;
+            padding: 5px 10px;
+            text-decoration: none;
+            font-size: 2.25rem;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: white; /* Adjusted for day mode */
+            color: black; /* Adjusted for day mode */
+            font-size: 2rem;
+        }
+        footer nav {
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+        }
+        .symbol {
+            color: black; /* Adjusted for day mode */
+            font-family: 'Courier New', Courier, monospace;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .symbol:hover {
+            transform: scale(1.2);
+        }
+        .footer-nav a {
+            color: black; /* Adjusted for day mode */
+            text-decoration: none;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body class="day-mode"> <!-- Added day-mode class by default -->
+    <a href="contact.html" class="typing-animation" id="typingAnimation">
+       Hello, I'm Herakles
+    </a>
+    <a href="mailto:contact@neuralcloud.ai" class="email-link">Email</a> <!-- Added email link -->
+    <footer>
+        <nav class="footer-nav">
+            <a href="login.html">Login</a>
+            <a href="contact.html">Waitlist</a>
+        </nav>
+        <nav>
+            <a href="index.html" class="symbol">&lt;</a>
+            <a href="contact.html" class="symbol">&gt;</a>
+        </nav>
+        <div>
+            © 2024 Universitas AI
+        </div>
+    </footer>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const texts = [
+            "Hi, I'm Herakles",
+            "Your AI Assistant",
+            "Let's get started",
+            "with Universitas Pro"
+        ];
+        let index = 0;
+        const typingElement = document.getElementById('typingAnimation');
+
+        function typeText(text, callback) {
+            let i = 0;
+            typingElement.textContent = '';
+            function addChar() {
+                if (i < text.length) {
+                    typingElement.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(addChar, 50);
+                } else {
+                    setTimeout(callback, 1500);
+                }
+            }
+            addChar();
+        }
+
+        function nextText() {
+            if (index < texts.length) {
+                typeText(texts[index], () => {
+                    index++;
+                    nextText();
+                });
+            } else {
+                displayOnboarding();
+            }
+        }
+
+        function displayOnboarding() {
+            typingElement.innerHTML = '<div>Email: <span id="emailInput" contenteditable="true" style="border-right: 0.15em solid black;"></span></div>';
+            document.getElementById('emailInput').focus();
+            document.getElementById('emailInput').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    localStorage.setItem('email', this.textContent.trim());
+                    this.contentEditable = false;
+                    displayNameInput();
+                }
+            });
+        }
+
+        function displayNameInput() {
+            typingElement.innerHTML = '<div>Name: <span id="nameInput" contenteditable="true" style="border-right: 0.15em solid black;"></span></div>';
+            document.getElementById('nameInput').focus();
+            document.getElementById('nameInput').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    localStorage.setItem('name', this.textContent.trim());
+                    this.contentEditable = false;
+                    window.location.href = 'profile.html';
+                }
+            });
+        }
+
+        nextText();
+    });
+    </script>
+</body>
+</html>
