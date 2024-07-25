@@ -469,56 +469,57 @@
         weekday: 'short', 
         year: 'numeric', 
         month: 'short', 
-
         day: 'numeric'
       };
       const timeOptions = {
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit',
         hour12: true
       };
-      const dateString = now.toLocaleDateString('en-US', dateOptions);
-      const timeString = now.toLocaleTimeString('en-US', timeOptions);
-      dateTimeElement.textContent = `${dateString}\n${timeString}`;
+      const dateStr = now.toLocaleDateString('en-US', dateOptions);
+      const timeStr = now.toLocaleTimeString('en-US', timeOptions);
+      dateTimeElement.innerHTML = `${dateStr}<br>${timeStr}`;
     };
 
-    updateDateTime();
     setInterval(updateDateTime, 1000);
+    updateDateTime();
 
     dayNightElement.addEventListener('click', () => {
       body.classList.toggle('dark-mode');
-      const isDarkMode = body.classList.contains('dark-mode');
-      dayNightElement.innerHTML = isDarkMode ? '<i class="lucide-moon"></i>' : '<i class="lucide-sun"></i>';
-    });
-
-    sendButton.addEventListener('click', () => {
-      const message = chatInput.value;
-      if (message.trim() !== '') {
-        const userMessage = document.createElement('div');
-        userMessage.classList.add('chat-message', 'user');
-        userMessage.textContent = message;
-        chatMessages.appendChild(userMessage);
-        chatInput.value = '';
-
-        // Simulating AI response
-        setTimeout(() => {
-          const aiMessage = document.createElement('div');
-          aiMessage.classList.add('chat-message', 'ai');
-          aiMessage.textContent = 'This is an AI response to your message.';
-          chatMessages.appendChild(aiMessage);
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        }, 500);
+      const icon = dayNightElement.querySelector('i');
+      if (body.classList.contains('dark-mode')) {
+        icon.classList.remove('lucide-sun');
+        icon.classList.add('lucide-moon');
+      } else {
+        icon.classList.remove('lucide-moon');
+        icon.classList.add('lucide-sun');
       }
     });
 
-    chatInput.addEventListener('keypress', (event) => {
-      if (event.key === 'Enter') {
-        sendButton.click();
-      }
+    const greetings = {
+      en: "Hi, I'm Herakles. What are you working on?",
+      ar: "مرحبًا، أنا هيراكليس. على ماذا تعمل؟",
+      da: "Hej, jeg er Herakles. Hvad arbejder du på?",
+      nl: "Hallo, ik ben Herakles. Waar werk je aan?",
+      fr: "Bonjour, je suis Héraclès. Sur quoi travaillez-vous ?",
+      de: "Hallo, ich bin Herakles. Woran arbeitest du?",
+      he: "שלום, אני הרקלס. על מה אתה עובד?",
+      it: "Ciao, sono Eracle. A cosa stai lavorando?",
+      ja: "こんにちは、ヘラクレスです。何に取り組んでいますか？",
+      ko: "안녕하세요, 저는 헤라클레스입니다. 무슨 일을 하고 계신가요?",
+      es: "Hola, soy Heracles. ¿En qué estás trabajando?",
+      sv: "Hej, jag är Herakles. Vad jobbar du med?"
+    };
+
+    languageSelect.addEventListener('change', (event) => {
+      const selectedLanguage = event.target.value;
+      chatMessages.innerHTML = `<div class="chat-message ai">${greetings[selectedLanguage]}</div>`;
     });
 
-    // Implement the functionality for the remaining buttons and features
+    // Add event listeners and implement functionality for other buttons and features
+    // This part would require more extensive JavaScript implementation
+
   </script>
 </body>
 </html>
