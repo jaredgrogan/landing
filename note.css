@@ -71,7 +71,7 @@ h1 {
   border: none;
   color: #000;
   font-size: 1rem;
-  font-family: 'Courier New', Roboto;
+  font-family: 'Roboto', monospace;
   cursor: pointer;
   padding: 0.5rem;
 }
@@ -90,7 +90,7 @@ main {
   background-color: #fdfdfd;
   padding: 1rem;
   width: 20%;
-  font-family: 'Courier New', monospace;
+  font-family: 'Roboto', monospace;
 }
 
 .search-container {
@@ -152,7 +152,7 @@ main {
   padding: 1rem;
   display: flex;
   flex-direction: column;
-    background-color: #f5f5f5;
+    background-color: #fdfdfd;
 }
 
 .note-title-container {
@@ -160,7 +160,7 @@ main {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
-  background-color: #f5f5f5;
+  background-color: #fdfdfd;
 }
 
 #note-title {
@@ -214,7 +214,7 @@ main {
 .tasks,
 .events {
   margin-bottom: 1rem;
- font-family: 'Courier New', monospace;
+ font-family: 'Roboto', monospace;
 }
 
 .task-list,
