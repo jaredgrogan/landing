@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const texts = [
         "Hi, I'm Herakles",
         "Your AI Assistant",
-        "Let's get started",
-        "with Universitas Pro"
+        "Let's get started!"
+        "Universitas Pro"
     ];
     let index = 0;
     const typingElement = document.getElementById('typingAnimation');
