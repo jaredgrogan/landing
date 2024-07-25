@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducing Universitas Pro</title>
+    <link rel="stylesheet" href="styles5.css">
+    <link rel="icon" href="/favicon3.svg" type="image/svg+xml">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .day-mode {
+            background-color: white;
+            color: black;
+        }
+        .night-mode {
+            background-color: black;
+            color: white;
+        }
+        nav {
+            background-color: #333;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <div id="typingAnimation" class="typing-animation"></div>
+    <nav>
+        <a href="chat.html">Chat</a>
+        <a href="login.html">Login</a>
+        <a href="#">AI Lab</a>
+        <a href="note.html">Product</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="arabic.html">Languages</a>
+    </nav>
+    <footer>
+        <div>
+            © 2024 Universitas AI
+        </div>
+    </footer>
+    <script src="script5.js"></script>
+</body>
+</html>
