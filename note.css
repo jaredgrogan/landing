@@ -214,7 +214,7 @@ main {
 .tasks,
 .events {
   margin-bottom: 1rem;
- font-family: 'Courier New', monospace;
+ font-family: 'monospace';
 }
 
 .task-list,
