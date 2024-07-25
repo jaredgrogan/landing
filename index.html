@@ -46,9 +46,12 @@
             font-size: 5rem;
         }
         .u {
-            color: #000; /* Update as needed */
+            color: #000; /* Default color for day mode */
             font-size: 5rem;
             font-family: 'Courier New', Courier, monospace;
+        }
+        .night-mode .u {
+            color: #fff; /* Change to white in night mode */
         }
     </style>
 </head>
@@ -78,5 +81,10 @@
         <p>&copy; 2024 UNIVERSITAS AI</p>
     </div>
     <script src="script4.js"></script>
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle('night-mode');
+        }
+    </script>
 </body>
 </html>
