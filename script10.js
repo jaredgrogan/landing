@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
         "Hi, I'm Herakles",
         "Your AI Assistant",
         "Let's get started!",
-        "Universitas Pro"
+        "Universitas Pro",
+        "A Cognitive Universe."
     ];
     let index = 0;
     const typingElement = document.getElementById('typingAnimation');
