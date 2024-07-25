@@ -78,7 +78,7 @@ h1 {
 .nav-link:hover {
   text-decoration: bold;
   transform: scale(1.25);
-  transform: color(#ffffff);
+  transform: color(ffffff);
 }
 
 main {
