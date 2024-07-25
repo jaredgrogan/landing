@@ -39,8 +39,8 @@ body {
     font-size: 2rem;
     font-weight: bold;
     position: absolute;
-    top: 40px;
-    left: 50px; /* Positioned to the right of the logo with a 20px buffer */
+    top: 30px;
+    left: 70px; /* Positioned to the right of the logo with a 20px buffer */
     font-size: 24px;
     font-weight: bold;
 }
