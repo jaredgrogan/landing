@@ -87,7 +87,7 @@ main {
 }
 
 .sidebar {
-  background-color: #ffffff;
+  background-color: #fdfdfd;
   padding: 1rem;
   width: 20%;
   font-family: 'Courier New', monospace;
@@ -206,7 +206,7 @@ main {
 }
 
 .details-sidebar {
-  background-color: #ffffff;
+  background-color: #fdfdfd;
   padding: 1rem;
   width: 20%;
 }
