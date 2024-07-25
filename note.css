@@ -24,14 +24,15 @@ header {
   left: 0;
   width: 100%;
   height: 10px;
-  background-color: #000;
+  background-color: #000000;
 }
 
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'Courier New', monospace;
+  font-family: 'Roboto', monospace;
+  font-weight: bold;
 }
 
 .logo-container {
@@ -60,8 +61,8 @@ h1 {
 
 .nav-links {
   display: flex;
-  gap: 1rem;
-  font-family: 'Courier New', monospace;
+  gap: 1.5rem;
+  font-family: 'Roboto', monospace;
 }
 
 .nav-link {
@@ -76,6 +77,7 @@ h1 {
 
 .nav-link:hover {
   text-decoration: bold;
+  transform: scale(1.25);
 }
 
 main {
@@ -256,9 +258,9 @@ main {
 }
 
 footer {
-  background-color: #f5f5f5;
+  background-color: #111111;
   padding: 1rem;
   text-align: center;
- font-family: 'Courier New', monospace;
+ font-family: 'Courier New', 'Roboto' monospace;
   color: #666;
 }
