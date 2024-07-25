@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI SaaS</title>
+  <link rel="stylesheet" href="note.css">
+<link rel="icon" href="/favicon8.svg" type="image/svg+xml">
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo-container">
+        <div class="logo">U</div>
+        <h1>Universitas Pro</h1>
+      </div>
+<div class="nav-links">
+        <button class="nav-link">Note +</button>
+        <button class="nav-link">Task + </button>
+        <button class="nav-link">Project +</button>
+        <button class="nav-link">Calendar +</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="sidebar">
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+      </div>
+      <div class="actions">
+        <button class="new-note-button">Note +</button>
+        <button class="new-task-button">Task +</button>
+        <button class="new-project-button">Project +</button>
+      </div>
+      <div class="projects-folders">
+        <h2>Projects &amp; Folders</h2>
+        <div class="project-folder-list"></div>
+      </div>
+      <div class="notes">
+        <h2>Notes</h2>
+        <div class="notes-list"></div>
+      </div>
+    </div>
+
+    <div class="note-area">
+      <div class="note-title-container">
+        <input type="text" id="note-title" placeholder="Note Title">
+        <button id="expand-note-button">Expand</button>
+      </div>
+      <div class="note-tags">
+        <input type="text" id="tag-input" placeholder="Add tag #...">
+      </div>
+      <textarea id="note-content" placeholder="// Write your note here..."></textarea>
+      <button id="save-note-button">Save</button>
+    </div>
+
+    <div class="details-sidebar">
+      <div class="tasks">
+        <h2>Tasks</h2>
+        <div class="task-list"></div>
+      </div>
+      <div class="events">
+        <h2>Upcoming Events</h2>
+        <div class="event-list"></div>
+        <button id="view-calendar-button">View Full Calendar</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="chat-area">
+    <div class="chat-history"></div>
+    <div class="chat-input-container">
+      <input type="text" id="chat-input" placeholder="Ask Herakles AI...">
+      <button id="send-message-button">Chat</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <script src="note.js"></script>
+</body>
+</html>
