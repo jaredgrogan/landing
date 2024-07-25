@@ -1,0 +1,67 @@
+/* note.css */
+body {
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+header {
+  background-color: #fff;
+  color: #000;
+  padding: 1rem;
+  font-family: 'Courier New', monospace;
+  position: relative;
+}
+.header-stripe {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-color: #000;
+}
+.date-time {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.8rem;
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Courier New', monospace;
+}
+/* Rest of the CSS remains the same */
+
+.nav-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f5f5f5;
+}
+.nav-link {
+  background: none;
+  border: none;
+  color: #000;
+  font-size: 1rem;
+  font-family: 'Roboto', sans-serif;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin: 0 1rem;
+  transition: transform 0.3s ease;
+}
+.nav-link:hover {
+  transform: scale(1.3);
+}
+footer {
+  background-color: #f5f5f5;
+  padding: 1rem;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  color: #666;
+  text-transform: uppercase;
+}
