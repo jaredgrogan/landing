@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducing Universitas Pro</title>
+    <link rel="stylesheet" href="styles5.css">
+    <link rel="icon" href="/favicon3.svg" type="image/svg+xml">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .day-mode {
+            background-color: white;
+            color: black;
+        }
+        .night-mode {
+            background-color: black;
+            color: white;
+        }
+        #typingAnimation {
+            font-family: 'Courier New', monospace;
+            padding-bottom: 50px;
+        }
+        .progress-container {
+            width: 80%;
+            margin: 20px auto;
+            text-align: center;
+            padding-bottom: 50px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(90deg, purple, blue);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(128, 0, 128, 0.5), 0 0 10px rgba(0, 0, 255, 0.5);
+            animation: load 3s ease-in-out forwards;
+        }
+        .progress-text {
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+        }
+        @keyframes load {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: black;
+                color: white;
+            }
+        }
+        nav {
+            background-color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            position: absolute;
+            bottom: 60px;
+            width: 100%;
+            box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            color: black;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: transform 0.3s ease;
+        }
+        nav a:hover {
+            transform: scale(1.3);
+        }
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <div id="typingAnimation" class="typing-animation"></div>
+    <div class="progress-container">
+        <div class="progress-bar"></div>
+        <div class="progress-text">Loading...</div>
+    </div>
+    <nav>
+        <a href="chat.html">Chat</a>
+        <a href="login.html">Login</a>
+        <a href="no-code.html">AI Lab</a>
+        <a href="note.html">Product</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="arabic.html">Languages</a>
+    </nav>
+    <footer>
+        <div>
+            © 2024 Universitas AI
+        </div>
+    </footer>
+    <script src="script10.js"></script>
+</body>
+</html>
