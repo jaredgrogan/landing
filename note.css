@@ -78,6 +78,7 @@ h1 {
 .nav-link:hover {
   text-decoration: bold;
   transform: scale(1.25);
+  transform: color(#ffffff);
 }
 
 main {
@@ -86,7 +87,7 @@ main {
 }
 
 .sidebar {
-  background-color: #e2e2e2;
+  background-color: #f5f5f5;
   padding: 1rem;
   width: 20%;
   font-family: 'Courier New', monospace;
@@ -203,7 +204,7 @@ main {
 }
 
 .details-sidebar {
-  background-color: #e2e2e2;
+  background-color: #f5f5f5;
   padding: 1rem;
   width: 20%;
 }
@@ -262,5 +263,5 @@ footer {
   padding: 1rem;
   text-align: center;
  font-family: 'Courier New', monospace;
-  color: #333333;
+  color: #ffffff;
 }
