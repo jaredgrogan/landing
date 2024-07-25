@@ -150,3 +150,33 @@ document.addEventListener('DOMContentLoaded', function() {
   renderEvents();
   renderMessages();
 });
+
+  function renderDateTime() {
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    const dateTimeString = now.toLocaleDateString('en-US', options);
+    document.querySelector('.date-time').textContent = dateTimeString;
+  }
+
+  function initNavLinks() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('mouseenter', function() {
+        const guide = this.dataset.guide;
+        const tooltip = document.createElement('div');
+        tooltip.classList.add('nav-tooltip');
+        tooltip.textContent = guide;
+        this.appendChild(tooltip);
+      });
+      link.addEventListener('mouseleave', function() {
+        const tooltip = this.querySelector('.nav-tooltip');
+        if (tooltip) {
+          tooltip.remove();
+        }
+      });
+    });
+  }
+
+  renderDateTime();
+  initNavLinks();
+});
