@@ -37,6 +37,7 @@ body {
 
 .banner {
     font-size: 2rem;
+    font-family: 'Berkeley mono', 'courier new';
     font-weight: bold;
     position: absolute;
     top: 30px;
