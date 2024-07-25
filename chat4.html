@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universitas AI - Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon8.svg" type="image/svg+xml">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Berkeley Mono';
+      src: url('path-to-berkeley-mono-font.woff2') format('woff2');
+    }
+
+    :root {
+      --bg-color: #f5f5f5;
+      --lighter-accent: #fdfdfd;
+      --text-color: black;
+      --form-bg: white;
+      --form-border: #d3d3d3;
+      --link-color: blue;
+      --nav-color: grey;
+      --button-gradient: linear-gradient(to right, #6a5acd, #4169E1);
+      --logo-gradient: linear-gradient(to right, #ffd700, #ffA500);
+      --transition-speed: 0.3s;
+    }
+
+    .dark-mode {
+      --bg-color: #1a1a1a;
+      --lighter-accent: #2a2a2a;
+      --text-color: white;
+      --form-bg: #333;
+      --form-border: #666;
+      --link-color: #6495ED;
+      --nav-color: #d3d3d3;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 5px 0; /* Reduced padding by 15px */
+      position: relative;
+    }
+
+    .date-time {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      text-align: right;
+      line-height: 1.4;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .day-night {
+      font-size: 24px;
+      cursor: pointer;
+      margin-left: 20px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .logo-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--logo-gradient);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-circle:hover {
+      transform: scale(1.5);
+    }
+
+    .logo-letter {
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+    }
+
+    .tagline {
+      font-size: 16px;
+      color: #808080;
+      text-align: center;
+      margin-bottom: 20px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .main-content {
+      display: flex;
+      flex-grow: 1;
+    }
+
+    .side-panel {
+      width: 200px;
+      padding: 10px;
+      background-color: var(--lighter-accent);
+      border-radius: 5px;
+      margin-right: 20px;
+    }
+
+    .chat-section {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-messages {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 20px;
+      border: 1px solid var(--form-border);
+      border-radius: 5px;
+      margin-bottom: 20px;
+      background-color: white;
+    }
+
+    .chat-message {
+      margin-bottom: 10px;
+    }
+
+    .chat-message.ai {
+      color: #1e3799;
+      font-family: 'Berkeley Mono', 'Courier New', monospace;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input input {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid var(--form-border);
+      border-radius: 5px;
+      background-color: var(--form-bg);
+      color: var(--text-color);
+    }
+
+    .chat-input button, .side-panel button, .right-panel button {
+      padding: 10px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background: var(--button-gradient);
+      color: white;
+      cursor: pointer;
+      transition: opacity var(--transition-speed) ease;
+    }
+
+    .chat-input button:hover, .side-panel button:hover, .right-panel button:hover {
+      opacity: 0.8;
+    }
+
+    .language-selector {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .transcription-display {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid var(--form-border);
+      border-radius: 5px;
+      background-color: var(--form-bg);
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      border-top: 1px solid var(--form-border);
+      padding-top: 20px;
+    }
+
+    .copyright {
+      font-size: 0.9em;
+      margin-bottom: 20px;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .nav a {
+      color: var(--nav-color);
+      text-decoration: none;
+      margin: 0 10px;
+      transition: font-size var(--transition-speed) ease;
+    }
+
+    .nav a:hover {
+      font-size: 130%;
+    }
+
+    .mic-icon, .save-icon, .upload-icon {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .file-structure {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .file-structure h3 {
+      margin-bottom: 10px;
+    }
+
+    .file-structure ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .file-structure li {
+      margin-bottom: 5px;
+    }
+
+    .right-panel button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .tooltip {
+      visibility: hidden;
+      width: 200px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -100px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .right-panel button:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column;
+      }
+
+      .side-panel {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo-section">
+        <a href="index.html" class="logo-container">
+          <div class="logo-circle">
+            <span class="logo-letter">U</span>
+          </div>
+        </a>
+        <span class="logo-text">// Discover the Universe</span>
+      </div>
+      <div class="date-time" id="dateTime"></div>
+      <div class="day-night" id="dayNight">
+        <i class="lucide-sun"></i>
+      </div>
+    </header>
+    
+    <main class="main-content">
+      <aside class="side-panel">
+        <button id="createNoteButton">Note +</button>
+        <button id="createTaskButton">Task +</button>
+        <div class="file-structure">
+          <h3>My Documents</h3>
+          <ul>
+            <li>My Notes</li>
+            <li>My Tasks</li>
+            <li>My Projects</li>
+            <li>My Calendars</li>
+            <li>My Library</li>
+          </ul>
+        </div>
+        <button id="uploadButton">
+          <i class="lucide-upload"></i> Upload
+        </button>
+      </aside>
+      
+      <section class="chat-section">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-message ai">Hi, I'm Herakles. What are you working on?</div>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="Ask Herakles..." aria-label="Chat input">
+          <button id="sendButton" aria-label="Send message">Chat</button>
+          <button id="micButton" aria-label="Voice input">
+            <i class="lucide-mic"></i>
+          </button>
+        </div>
+      </section>
+      
+      <aside class="side-panel right-panel">
+        <button id="autoTaskButton">
+          Auto Task
+          <span class="tooltip">Auto Extract Tasks from Notes and Calendar</span>
+        </button>
+        <button id="extractButton">
+          Extract
+          <select>
+            <option>Task</option>
+            <option>Names</option>
+            <option>Meta Data</option>
+            <option>Topic</option>
+            <option>Key Word</option>
+            <option>Citations</option>
+          </select>
+        </button>
+        <button id="summarizeButton">
+          Summarize
+          <span class="tooltip">Auto Summarize your Notes</span>
+        </button>
+        <button id="briefingButton">
+          Briefing
+          <span class="tooltip">Generate a personal briefing based on your calendar</span>
+        </button>
+      </aside>
+    </main>
+
+    <div class="language-selector">
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="it">Italian</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+        <option value="ar">Arabic</option>
+        <option value="he">Hebrew</option>
+        <option value="ko">Korean</option>
+        <option value="ja">Japanese</option>
+      </select>
+    </div>
+
+    <div class="transcription-display" id="transcriptionDisplay">
+      <!-- Transcription/translation will be displayed here -->
+    </div>
+    
+    <footer>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="app.html">About</a>
+        <a href="nocode.html">AI Lab</a>
+        <a href="calendar.html">Mobile</a>
+        <a href="learn.html">Learn</a>
+        <a href="pricing.html">Plans</a>
+        <a href="login.html">Login</a>
+      </nav>
+      <p class="copyright">&copy; 2024 Universitas AI</p>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+  <script>
+    const dateTimeElement = document.getElementById('dateTime');
+    const dayNightElement = document.getElementById('dayNight');
+    const body = document.body;
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendButton = document.getElementById('sendButton');
+    const micButton = document.getElementById('micButton');
+    const createNoteButton = document.getElementById('createNoteButton');
+    const createTaskButton = document.getElementById('createTaskButton');
+    const languageSelect = document.getElementById('languageSelect');
+    const transcriptionDisplay = document.getElementById('transcriptionDisplay');
+
+    const updateDateTime = () => {
+      const now = new Date();
+      const timeOptions = {
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      };
+      const timeStr = now.toLocaleTimeString('en-US', timeOptions);
+      dateTimeElement.textContent = timeStr;
+    };
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    dayNightElement.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      const icon = dayNightElement.querySelector('i');
+      if (body.classList.contains('dark-mode')) {
+        icon.classList.remove('lucide-sun');
+        icon.classList.add('lucide-moon');
+      } else {
+        icon.classList.remove('lucide-moon');
+        icon.classList.add('lucide-sun');
+      }
+    });
+
+    // Add event listeners and implement functionality for new buttons and features
+    // This part would require more extensive JavaScript implementation
+
+  </script>
+</body>
+</html>
