@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
         "creates new avenues",
         "to learn and grow.",
         "// Discover the Universe",
-        "Your Cognitive Computer",
+        "Universitas Pro",
         "Coming 09.09.2024",
-        "Universitas Pro"
+        "Your Cognitive Computer."
     ];
     let index = 0;
     const typingElement = document.getElementById('typingAnimation');
