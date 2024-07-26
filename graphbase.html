@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universitas Pro — AI and Deep Learning</title>
     <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="graph.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -18,9 +18,9 @@
     <main>
         <aside class="side-panel">
             <div class="button-group">
-                <button>Note +</button>
-                <button>Task +</button>
-                <button>Project +</button>
+                <button class="gradient-button">Note +</button>
+                <button class="gradient-button">Task +</button>
+                <button class="gradient-button">Project +</button>
             </div>
             <h2>Key Concepts</h2>
             <ul>
@@ -40,15 +40,16 @@
                     <div class="definition">A field of AI that trains computers to interpret and understand visual information from the world, enabling machines to extract high-level understanding from digital images or videos.</div>
                 </li>
             </ul>
+            <div class="spacer"></div>
             <div class="search-bar">
                 <input type="text" placeholder="Search...">
                 <button class="gradient-button">Search</button>
             </div>
             <div class="upload-panel">
-                <div class="upload-box">Assets Here</div>
-                <button class="gradient-button upload-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                </button>
+                <div class="upload-box">
+                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <span>Assets Here</span>
+                </div>
             </div>
         </aside>
         
@@ -66,6 +67,7 @@
                 <span><strong>Gradient Descent:</strong> <span class="definition">An optimization algorithm used to minimize the loss function by iteratively moving in the direction of steepest descent.</span></span>
                 <span><strong>Overfitting:</strong> <span class="definition">A modeling error that occurs when a function is too closely fit to a limited set of data points, potentially reducing its generalization capability.</span></span>
             </div>
+            <div class="spacer"></div>
             <div class="chat-section">
                 <textarea class="chat-prompt" rows="3" placeholder="Ask Herakles about Deep Learning..."></textarea>
                 <button class="chat-button gradient-button">Chat</button>
@@ -80,11 +82,12 @@
         <aside class="side-panel">
             <h2>Resources</h2>
             <ul>
-                <li class="expandable-item">Research Papers</li>
-                <li class="expandable-item">Online Courses</li>
-                <li class="expandable-item">Textbooks</li>
+                <li class="expandable-item">Universitas.Wiki</li>
+                <li class="expandable-item">Math for AI</li>
                 <li class="expandable-item">Tutorials</li>
                 <li class="expandable-item">Datasets</li>
+                <li class="expandable-item">Data Visualization</li>
+                <li class="expandable-item">Knowledge Graph</li>
             </ul>
             <h2>Citations</h2>
             <div class="citations-list">
