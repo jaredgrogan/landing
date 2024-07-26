@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universitas Pro — AI and Deep Learning</title>
     <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="graph.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -55,31 +55,64 @@
         
         <section class="main-workspace">
             <div class="concept-animation">
-                <span><strong>Attention Mechanism:</strong> <span class="definition">A technique in neural networks that allows the model to focus on different parts of the input when producing each element of the output.</span></span>
-                <span><strong>Transformers:</strong> <span class="definition">Advanced neural network architecture that uses self-attention mechanisms to process sequential data, revolutionizing natural language processing and other sequence-based tasks.</span></span>
-                <span><strong>Convolutional Neural Networks (CNNs):</strong> <span class="definition">Deep learning architecture specialized for processing grid-like data, particularly effective for image and video analysis tasks.</span></span>
-                <span><strong>Recurrent Neural Networks (RNNs):</strong> <span class="definition">Neural networks designed to work with sequential data by maintaining an internal state or memory.</span></span>
-                <span><strong>Long Short-Term Memory (LSTM):</strong> <span class="definition">A type of RNN architecture designed to learn long-term dependencies in sequential data.</span></span>
-                <span><strong>Generative Adversarial Networks (GANs):</strong> <span class="definition">A class of machine learning framework where two neural networks compete to generate new, synthetic instances of data.</span></span>
-                <span><strong>Reinforcement Learning:</strong> <span class="definition">A type of machine learning where an agent learns to make decisions by taking actions in an environment to maximize a reward.</span></span>
-                <span><strong>Transfer Learning:</strong> <span class="definition">A machine learning method where a model developed for a task is reused as the starting point for a model on a second task.</span></span>
-                <span><strong>Backpropagation:</strong> <span class="definition">The primary algorithm for training neural networks, which calculates the gradient of the loss function with respect to the network's weights.</span></span>
-                <span><strong>Gradient Descent:</strong> <span class="definition">An optimization algorithm used to minimize the loss function by iteratively moving in the direction of steepest descent.</span></span>
-                <span><strong>Overfitting:</strong> <span class="definition">A modeling error that occurs when a function is too closely fit to a limited set of data points, potentially reducing its generalization capability.</span></span>
+                <div class="concept">
+                    <strong>Attention Mechanism:</strong> 
+                    <span class="definition">A technique in neural networks that allows the model to focus on different parts of the input when producing each element of the output.</span>
+                </div>
+                <div class="concept">
+                    <strong>Transformers:</strong> 
+                    <span class="definition">Advanced neural network architecture that uses self-attention mechanisms to process sequential data, revolutionizing natural language processing and other sequence-based tasks.</span>
+                </div>
+                <div class="concept">
+                    <strong>Convolutional Neural Networks (CNNs):</strong> 
+                    <span class="definition">Deep learning architecture specialized for processing grid-like data, particularly effective for image and video analysis tasks.</span>
+                </div>
+                <div class="concept">
+                    <strong>Recurrent Neural Networks (RNNs):</strong> 
+                    <span class="definition">Neural networks designed to work with sequential data by maintaining an internal state or memory.</span>
+                </div>
+                <div class="concept">
+                    <strong>Long Short-Term Memory (LSTM):</strong> 
+                    <span class="definition">A type of RNN architecture designed to learn long-term dependencies in sequential data.</span>
+                </div>
+                <div class="concept">
+                    <strong>Generative Adversarial Networks (GANs):</strong> 
+                    <span class="definition">A class of machine learning framework where two neural networks compete to generate new, synthetic instances of data.</span>
+                </div>
+                <div class="concept">
+                    <strong>Reinforcement Learning:</strong> 
+                    <span class="definition">A type of machine learning where an agent learns to make decisions by taking actions in an environment to maximize a reward.</span>
+                </div>
+                <div class="concept">
+                    <strong>Transfer Learning:</strong> 
+                    <span class="definition">A machine learning method where a model developed for a task is reused as the starting point for a model on a second task.</span>
+                </div>
+                <div class="concept">
+                    <strong>Backpropagation:</strong> 
+                    <span class="definition">The primary algorithm for training neural networks, which calculates the gradient of the loss function with respect to the network's weights.</span>
+                </div>
+                <div class="concept">
+                    <strong>Gradient Descent:</strong> 
+                    <span class="definition">An optimization algorithm used to minimize the loss function by iteratively moving in the direction of steepest descent.</span>
+                </div>
+                <div class="concept">
+                    <strong>Overfitting:</strong> 
+                    <span class="definition">A modeling error that occurs when a function is too closely fit to a limited set of data points, potentially reducing its generalization capability.</span>
+                </div>
             </div>
-            <div class="spacer"></div>
+            <div class="spacer large"></div>
             <div class="chat-section">
                 <textarea class="chat-prompt" rows="3" placeholder="Ask Herakles about Deep Learning..."></textarea>
                 <button class="chat-button gradient-button">Chat</button>
             </div>
+        </section>
+        
+        <aside class="side-panel">
             <div class="generate-buttons">
                 <button class="gradient-button">Generate Quiz</button>
                 <button class="gradient-button">Generate Interview</button>
                 <button class="gradient-button">Generate Citation</button>
             </div>
-        </section>
-        
-        <aside class="side-panel">
             <h2>Resources</h2>
             <ul>
                 <li class="expandable-item">Universitas.Wiki</li>
@@ -118,13 +151,13 @@
     </div>
 
     <script>
-        const concepts = document.querySelectorAll('.concept-animation span');
+        const concepts = document.querySelectorAll('.concept-animation .concept');
         let currentIndex = 0;
 
         function animateConcepts() {
             concepts[currentIndex].style.display = 'none';
             currentIndex = (currentIndex + 1) % concepts.length;
-            concepts[currentIndex].style.display = 'inline-block';
+            concepts[currentIndex].style.display = 'block';
         }
 
         setInterval(animateConcepts, 4000);
