@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "to learn and grow.",
         "// Discover the Universe",
         "Join Pro.",
-        "Your Cognitive Computer."
+        "Coming 09.09.2024"
     ];
     let index = 0;
     const typingElement = document.getElementById('typingAnimation');
