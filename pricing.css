@@ -11,13 +11,10 @@
     --form-border: #d3d3d3;
     --link-color: blue;
     --nav-color: grey;
-    --button-color: #7d7d7d;
-    --button-hover-color: #000000;
     --button-gradient: linear-gradient(to right, #6a5acd, #4169E1);
     --logo-gradient: linear-gradient(to right, #ffd700, #ffA500);
     --transition-speed: 0.3s;
 }
-
 
 body {
     font-family: 'Roboto', 'Courier New', sans-serif;
@@ -25,18 +22,6 @@ body {
     padding: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
-}
-
-body.dark-mode {
-  --bg-color: #333;
-  --text-color: white;
-  --form-bg: #444;
-  --form-border: #555;
-}
-
-body.dark-mode #googleSignInButton {
-  background-color: #333 !important;
-  border-color: #555;
 }
 
 .container {
@@ -136,7 +121,7 @@ h1 {
 
 .plan {
     flex: 1;
-    min-width: 250px;
+    min-width: 300px;
     background-color: var(--form-bg);
     border: 1px solid var(--form-border);
     border-radius: 5px;
@@ -179,18 +164,18 @@ h1 {
 
 .btn {
     width: 100%;
-    max-width: 240px; /* Standard width based on Apple button */
-    height: 40px; /* Standard height based on Apple button */
-    padding: 0 16px;
+    max-width: 240px;
+    height: 40px;
+    padding: 0;
     font-size: 14px;
     border: none;
     border-radius: 4px;
-    background-color: var(--button-color);
+    background-color: black;
     color: white;
     cursor: pointer;
-    transition: background-color var(--transition-speed) ease;
+    transition: opacity var(--transition-speed) ease;
     font-family: 'Roboto', sans-serif;
-    margin: 8px auto;
+    margin: 10px auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,7 +183,7 @@ h1 {
 }
 
 .btn:hover {
-    background-color: var(--button-hover-color);
+    opacity: 0.8;
 }
 
 .get-started-btn, 
@@ -207,39 +192,33 @@ h1 {
     background: var(--button-gradient);
 }
 
-.get-started-btn:hover, 
-.plan:nth-child(2) .btn:hover, 
-.plan:nth-child(3) .btn:hover {
-    opacity: 0.9;
-}
-
 .signin-buttons {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 16px;
+    margin-top: 20px;
 }
 
 .auth-btn {
-    background-color: var(--button-color);
+    background-color: black;
+    margin: 10px 0;
 }
 
-.auth-btn:hover {
-    background-color: var(--button-hover-color);
-}
-
-.auth-btn i {
-    margin-right: 8px;
+.auth-btn img {
+    max-width: 24px;
+    max-height: 24px;
+    margin-right: 10px;
 }
 
 #googleSignInButton {
     background-color: white !important;
-    border: 1px solid var(--button-color);
+    border: 1px solid #d3d3d3;
 }
 
 #googleSignInButton:hover {
-    border-color: var(--button-hover-color);
+    border-color: #a0a0a0;
 }
+
 footer {
     margin-top: auto;
     text-align: center;
@@ -257,8 +236,7 @@ footer {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .nav a {
