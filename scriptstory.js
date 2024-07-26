@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
         "to the Information Age",
         "Now AI is everywhere",
         "A universal language.",
-        "Are you bi-lingual?",
-        "//",
+        "Are you AI bilingual?",
+        "Discover the Universe",
         "Universitas Pro"
     ];
     let index = 0;
