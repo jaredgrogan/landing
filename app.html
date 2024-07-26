@@ -4,156 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universitas Pro — Join Pro</title>
-    <link rel="stylesheet" href="preview.css">
-    <link rel="icon" href="/favicon8.svg" type="image/svg+xml">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo {
-            width: 50px;
-            height: 50px;
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.1);
-        }
-
-        .tagline {
-            font-family: 'Courier Prime', monospace;
-            margin-left: 20px;
-            font-size: 1.2rem;
-        }
-
-        .mode-toggle {
-            cursor: pointer;
-            font-size: 24px;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        #typingAnimation {
-            font-family: 'Courier Prime', monospace;
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        nav {
-            background-color: #111111;
-            padding: 10px;
-            width: 100%;
-            box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            transition: transform 0.3s ease;
-        }
-
-        nav a:hover {
-            transform: scale(1.1);
-        }
-
-        footer {
-            background-color: #111111;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            font-family: 'Courier Prime', monospace;
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .tagline {
-                margin-left: 0;
-                margin-top: 10px;
-            }
-
-            .mode-toggle {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-            }
-
-            #typingAnimation {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Courier+Prime&display=swap" rel="stylesheet">
 </head>
 <body class="day-mode">
     <header class="header">
         <div class="logo-container">
-            <a href="index.html">
-                <img src="favicon5.svg" alt="Logo" class="logo">
+            <a href="index.html" class="logo-link">
+                <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="48" fill="black" />
+                    <text x="50" y="70" font-family="Courier Prime, monospace" font-size="60" fill="white" text-anchor="middle">U</text>
+                </svg>
             </a>
             <div class="tagline">// Discover the Universe</div>
         </div>
-        <div class="mode-toggle" id="modeToggle">☀️</div>
+        <button class="mode-toggle" id="modeToggle" aria-label="Toggle dark mode">
+            <svg class="sun-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
     </header>
 
     <main class="main-content">
         <div id="typingAnimation" class="typing-animation"></div>
     </main>
 
-    <nav>
+    <nav class="main-nav">
         <a href="index.html">Home</a>
         <a href="chat.html">Chat</a>
-        <a href="product.html">Product</a>
-        <a href="pricing">Plans</a>
+        <a href="Product.html">Product</a>
+        <a href="pricing.html">Plans</a>
         <a href="program.html">App</a>
         <a href="login.html">Login</a>
     </nav>
 
-    <footer>
+    <footer class="main-footer">
         <div>© 2024 UNIVERSITAS AI</div>
     </footer>
 
-    <script src="scriptstory3.js"></script>
-    <script>
-        const modeToggle = document.getElementById('modeToggle');
-        const body = document.body;
-
-        modeToggle.addEventListener('click', () => {
-            body.classList.toggle('night-mode');
-            modeToggle.textContent = body.classList.contains('night-mode') ? '🌙' : '☀️';
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
