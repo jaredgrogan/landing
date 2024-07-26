@@ -2,10 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const texts = [
-        "Hi, I'm Herakles",
-        "Your Assistant.",
+        "Hi, I'm Herakles — your assistant.",
         "The Age of AI",
-        "creates new avenues",
+        "Offers new avenues",
         "to learn and grow.",
         "// Discover the Universe",
         "Universitas Pro",
