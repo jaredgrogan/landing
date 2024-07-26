@@ -193,15 +193,24 @@ h1 {
     align-items: center;
     justify-content: center;
     text-decoration: none;
+    color: white;
+    transition: opacity 0.3s ease;
+}
+
+.auth-btn:hover {
+    opacity: 0.9;
+}
+
+.auth-btn i {
+    margin-right: 8px;
 }
 
 .meta-btn {
-    background-color: #1877f2;
-    color: white;
+    background: linear-gradient(to right, #2851A3, #316FF6, #45A1FF);
 }
 
-.meta-btn i {
-    margin-right: 8px;
+.x-btn {
+    background: linear-gradient(to right, #1DA1F2, #14171A);
 }
 
 footer {
