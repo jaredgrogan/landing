@@ -145,17 +145,34 @@ main {
 }
 
 .concept-animation {
-    /* ... (previous styles remain) ... */
+    font-size: 1.5rem;
+    text-align: center;
+    color: #000000;
     margin-bottom: 60px;
+}
+
+.night-mode .concept-animation {
+    color: #ffffff;
+}
+
+.concept-animation .concept {
+    margin-bottom: 20px;
 }
 
 .concept-animation strong {
     font-family: 'Courier New', monospace;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .concept-animation .definition {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: 'Berkeley Mono', 'Courier New', monospace;
     font-weight: normal;
+    font-size: 1rem;
+    display: block;
+}
+
 }
 
 .chat-section {
