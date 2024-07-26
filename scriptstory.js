@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "to the Information Age",
         "Now AI is Universal.",
         "It's the lingua franca.",
-        "Are you bi-lingual in AI?".
+        "Are you bi-lingual in AI?"
     ];
     let index = 0;
     const typingElement = document.getElementById('typingAnimation');
