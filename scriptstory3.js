@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const texts = [
         "The Age of AI",
         "creates new avenues",
-        "to learn and grow.",
+        "to learn and thrive.",
         "// Discover the Universe",
         "Universitas Pro",
         "Coming 09.09.2024",
