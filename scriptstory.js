@@ -3,8 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
         "Universities gave rise",
         "to the Information Age",
         "Now AI is everywhere",
-        "Universal language.",
-        "Are you bi-lingual?"
+        "A universal language.",
+        "Are you bi-lingual?",
+        "//",
+        "Universitas Pro"
     ];
     let index = 0;
     const typingElement = document.getElementById('typingAnimation');
