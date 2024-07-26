@@ -2,12 +2,14 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const texts = [
-        "the information age",
-        "the knowledege economy",
-        "requires new knowledge",
-        "a new way to compute",
-        "to learn and grow.",
-        "Join Pro."
+        "The Information Age",
+        "requires a new way.",
+        "The knowledege economy",
+        "requires new knowledge.",
+        "A new way",
+        "to learn, work and grow.",
+        "Join Pro.",
+        "Your Cognitive Computer."
     ];
     let index = 0;
     const typingElement = document.getElementById('typingAnimation');
