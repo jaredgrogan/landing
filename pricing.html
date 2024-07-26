@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" href="/favicon8.svg" type="image/svg+xml">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="pricing.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
@@ -44,13 +43,16 @@
                     <button class="btn get-started-btn" onclick="handlePlanSelection('free')">Get Started</button>
                     <div class="signin-buttons">
                         <div id="googleSignInButton" class="btn auth-btn"></div>
-                        <div id="appleid-signin" class="btn auth-btn" data-color="black" data-border="true" data-type="sign in"></div>
+                        <button id="appleid-signin" class="btn auth-btn">
+                            <img src="path-to-apple-logo.png" alt="Apple logo">
+                            <span>Sign in with Apple</span>
+                        </button>
                         <button id="meta-signin-button" class="btn auth-btn">
-                            <i class="fab fa-facebook-f"></i>
+                            <img src="path-to-facebook-logo.png" alt="Facebook logo">
                             <span>Continue with Facebook</span>
                         </button>
                         <button id="x-signin-button" class="btn auth-btn">
-                            <i class="fab fa-twitter"></i>
+                            <img src="path-to-twitter-logo.png" alt="X logo">
                             <span>Continue with X</span>
                         </button>
                     </div>
