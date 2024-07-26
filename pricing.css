@@ -176,3 +176,33 @@ footer {
         margin-bottom: 20px;
     }
 }
+
+.auth-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 210px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.auth-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.meta-btn {
+    background-color: #1877f2;
+    color: white;
+}
+
+/* Update existing button styles to match */
+#googleSignInButton, #appleid-signin {
+    width: 210px;
+    height: 40px;
+}
