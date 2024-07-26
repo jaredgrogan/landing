@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const texts = [
         "The Age of AI",
-        "Creates new avenues and rewards.",
+        "Creates new avenues.",
         "To learn and grow",
         "// Discover the Universe",
         "Join Pro.",
