@@ -1,11 +1,11 @@
 :root {
     --background-color-day: #f5f5f5;
-    --background-color-night: #222222;
+    --background-color-night: #111111;
     --text-color-day: black;
     --text-color-night: white;
     --font-family: 'Courier New', Courier, monospace;
     --footer-font-family: 'Roboto', sans-serif;
-    --typing-border-color-day: #111111;
+    --typing-border-color-day: #000000;
     --typing-border-color-night: white;
 }
 
