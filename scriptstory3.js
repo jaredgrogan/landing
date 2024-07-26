@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "The knowledege economy",
         "Invites a new way.",
         "To learn and grow",
-        "Discovery the Universe.",
+        "// Discovery the Universe",
         "Join Pro.",
         "Your Cognitive Computer."
     ];
