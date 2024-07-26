@@ -105,6 +105,10 @@ body {
     align-items: center;
 }
 
+h1 {
+    font-family: 'Courier New', monospace;
+}
+
 .plans-container {
     display: flex;
     justify-content: space-between;
@@ -206,20 +210,4 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10px;
-}
-
-.signin-buttons > div {
-    margin: 5px 0;
-}
-
-#appleid-signin {
-    width: 210px;
-    height: 40px;
-}
-
-@media (max-width: 768px) {
-    .plans-container {
-        flex-direction: column;
-    }
-}
+    margin-top: 10
