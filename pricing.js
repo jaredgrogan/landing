@@ -201,3 +201,27 @@ window.onload = function() {
     initAppleSignIn();
     initMetaSignIn();
 };
+
+// Update the initMetaSignIn function in pricing.js
+function initMetaSignIn() {
+    document.getElementById('meta-signin-button').addEventListener('click', function(e) {
+        e.preventDefault();
+        FB.login(function(response) {
+            if (response.authResponse) {
+                console.log('Welcome! Fetching your information...');
+                FB.api('/me', {fields: 'name, email'}, function(response) {
+                    handleMetaSignIn(response);
+                });
+            } else {
+                console.error('Meta Sign-In failed: User cancelled login or did not fully authorize.');
+            }
+        }, {scope: 'public_profile,email'});
+    });
+}
+
+// Ensure this is called when the page loads
+window.onload = function() {
+    initGoogleSignIn();
+    initAppleSignIn();
+    initMetaSignIn();
+};
