@@ -1,9 +1,11 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universitas Pro — AI and Deep Learning</title>
+    <title>Universitas Pro — Product</title>
     <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
@@ -18,11 +20,7 @@
             --header-height: 80px;
             --footer-height: 60px;
             --main-font: 'Roboto', sans-serif;
-            --mono-font: 'Courier New', monospace;
-            --main-bg-color: #f5f5f5;
-            --panel-bg-color: #ffffff;
-            --text-color: #333333;
-            --accent-color: #4a90e2;
+            --mono-font: 'Berkeley Mono', monospace;
         }
 
         * {
@@ -33,35 +31,37 @@
 
         body {
             font-family: var(--main-font);
-            background-color: var(--main-bg-color);
-            color: var(--text-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .day-mode {
+            background-color: white;
+            color: black;
         }
 
         .night-mode {
             background-color: #111111;
-            color: #ffffff;
-        }
-
-        .night-mode .side-panel,
-        .night-mode .main-workspace {
-            background-color: #222222;
-            color: #ffffff;
+            color: white;
         }
 
         header {
-            background-color: var(--panel-bg-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             height: var(--header-height);
             display: flex;
             align-items: center;
             padding: 0 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.9);
         }
 
         .night-mode header {
-            background-color: #222222;
+            background-color: rgba(17, 17, 17, 0.9);
         }
 
         .logo {
@@ -77,121 +77,129 @@
         .slogan {
             margin-left: 20px;
             font-size: 1.5rem;
-            font-family: var(--mono-font);
+            font-family: 'Courier New', monospace;
             font-weight: bold;
+        }
+
+        .summary-section {
+            padding: 20px;
+            background-color: white;
+            margin-top: var(--header-height);
+        }
+
+        .night-mode .summary-section {
+            background-color: #111111;
+        }
+
+        .summary-section h1 {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #111111;
+            text-align: center;
+        }
+
+        .night-mode .summary-section h1 {
+            color: white;
+        }
+
+        .summary-section p {
+            font-family: var(--main-font);
+            font-size: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #222222;
+            text-align: left;
+            overflow: hidden;
+            border-right: .15em solid orange;
+            white-space: nowrap;
+            letter-spacing: .15em;
+            animation: 
+                typing 3.5s steps(40, end),
+                blink-caret .75s step-end infinite;
+        }
+
+        .night-mode .summary-section p {
+            color: #dddddd;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: orange; }
         }
 
         main {
             flex-grow: 1;
-            display: flex;
-            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
             gap: 20px;
+            padding: 20px 20px calc(var(--footer-height) + 80px);
         }
 
-        .side-panel {
-            flex: 1;
-            background-color: var(--panel-bg-color);
+        .quadrant {
+            background-color: #ffffff;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            max-height: calc(100vh - var(--header-height) - var(--footer-height) - 40px);
-        }
-
-        .main-workspace {
-            flex: 2;
-            background-color: var(--panel-bg-color);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-        }
-
-        .concept-animation {
-            font-size: 2rem;
-            font-weight: bold;
+            align-items: center;
             text-align: center;
-            font-family: var(--mono-font);
-            color: #000000;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
 
-        .night-mode .concept-animation {
-            color: #ffffff;
-        }
-
-        footer {
+        .night-mode .quadrant {
             background-color: #111111;
-            color: white;
-            height: var(--footer-height);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--mono-font);
-        }
-
-        h2 {
-            margin-bottom: 15px;
-            font-family: var(--mono-font);
-            color: var(--accent-color);
-        }
-
-        ul {
-            list-style-type: none;
-        }
-
-        li {
-            margin-bottom: 10px;
-            font-family: var(--main-font);
-        }
-
-        .expandable-item {
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .expandable-item .definition {
-            display: none;
-            font-weight: normal;
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .button-group button {
-            background-color: #000000;
             color: #ffffff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
+        }
+
+        .quadrant:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .night-mode .quadrant:hover {
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .quadrant h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .night-mode .quadrant h2 {
+            color: #ffffff;
+        }
+
+        .quadrant p, .quadrant li {
+            font-size: 1rem;
+            margin-bottom: 15px;
             font-family: var(--main-font);
-            transition: background-color 0.3s ease;
         }
 
-        .button-group button:hover {
-            background-color: #333333;
+        .night-mode .quadrant p, 
+        .night-mode .quadrant li {
+            color: #ffffff;
         }
 
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
+        .quadrant ul {
+            list-style-type: none;
+            padding: 0;
         }
 
-        .concept-animation span {
-            display: none;
-            animation: fadeInOut 4s ease-in-out;
-        }
-
-        .concept-animation span:first-child {
-            display: inline-block;
+        .quadrant li {
+            margin-bottom: 5px;
         }
 
         nav {
@@ -217,6 +225,22 @@
             transform: scale(1.1);
         }
 
+        footer {
+            background-color: #111111;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--footer-height);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+        }
+
         .mode-toggle {
             position: fixed;
             top: 10px;
@@ -234,11 +258,8 @@
 
         @media (max-width: 768px) {
             main {
-                flex-direction: column;
-            }
-
-            .side-panel, .main-workspace {
-                max-height: none;
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(4, 1fr);
             }
 
             nav {
@@ -248,63 +269,69 @@
             nav a {
                 margin: 5px;
             }
+
+            .summary-section p {
+                white-space: normal;
+                animation: none;
+                border-right: none;
+            }
         }
     </style>
 </head>
-<body>
+<body class="day-mode">
+    <!-- The rest of the HTML remains unchanged -->
     <header>
         <a href="index.html">
             <img src="favicon5.svg" alt="Logo" class="logo">
         </a>
         <div class="slogan">// Discover the Universe.</div>
     </header>
-    
+
+    <div class="summary-section">
+        <h1>Product</h1>
+        <p>Universitas Pro offers a suite of AI-powered cognitive computing tools to enhance productivity, learning, and technical skills. Integrate natural language processing with advanced AI assistance in completing complex tasks. Integrate AI into your workflow. Change how you research and learn. Universitas Pro empowers individuals and teams to unlock their full potential.</p>
+    </div>
+
     <main>
-        <aside class="side-panel">
-            <div class="button-group">
-                <button>Note +</button>
-                <button>Task +</button>
-                <button>Project +</button>
-            </div>
-            <h2>Key Concepts</h2>
+        <a href="nocode.html" class="quadrant" id="aiLab">
+            <h2>AI Engineer</h2>
+            <p>Empower your creativity with our No Code Programming solutions.</p>
             <ul>
-                <li class="expandable-item">Neural Networks
-                    <div class="definition">Brain-inspired computing</div>
-                </li>
-                <li class="expandable-item">Machine Learning
-                    <div class="definition">Algorithms learn from data</div>
-                </li>
-                <li class="expandable-item">Deep Learning
-                    <div class="definition">Multi-layer neural nets</div>
-                </li>
-                <li class="expandable-item">Natural Language Processing
-                    <div class="definition">AI understands human text</div>
-                </li>
-                <li class="expandable-item">Computer Vision
-                    <div class="definition">AI interprets images</div>
-                </li>
+                <li>Visual Programming Interface</li>
+                <li>AI-Assisted Code Generation</li>
+                <li>Drag-and-Drop Functionality</li>
             </ul>
-        </aside>
-        
-        <section class="main-workspace">
-            <div class="concept-animation">
-                <span>Transformers: Advanced NLP model</span>
-                <span>Attention: Focus on relevance</span>
-            </div>
-        </section>
-        
-        <aside class="side-panel">
-            <h2>Resources</h2>
+        </a>
+        <a href="chat.html" class="quadrant" id="chat">
+            <h2>Voice & Language Assistant</h2>
+            <p>Experience seamless communication with our Multi-Language Lab.</p>
             <ul>
-                <li>Research Papers</li>
-                <li>Online Courses</li>
-                <li>Textbooks</li>
-                <li>Tutorials</li>
-                <li>Datasets</li>
+                <li>Voice User Interface</li>
+                <li>Voice to Text Conversion</li>
+                <li>Foreign Document Search</li>
             </ul>
-        </aside>
+        </a>
+        <a href="note.html" class="quadrant" id="office">
+            <h2>AI Research & Task Assistant</h2>
+            <p>Boost your productivity with our AI Integrated Workspace.</p>
+            <ul>
+                <li>Auto Summaries</li>
+                <li>Task Extraction</li>
+                <li>Cognitive Search</li>
+            </ul>
+        </a>
+        <a href="calendar.html" class="quadrant" id="app">
+            <h2>The Platform</h2>
+            <p>Access Universitas Pro anywhere through the web. Coming Soon you will be able to download the stand alone app.</p>
+            <ul>
+                <li>Mobile App (iOS & Android)</li>
+                <li>Tablet-Optimized Interface</li>
+                <li>Desktop Application</li>
+                <li>Standalone Version</li>
+            </ul>
+        </a>
     </main>
-    
+
     <nav>
         <a href="index.html">Home</a>
         <a href="chat.html">Chat</a>
@@ -327,17 +354,6 @@
     </div>
 
     <script>
-        const concepts = document.querySelectorAll('.concept-animation span');
-        let currentIndex = 0;
-
-        function animateConcepts() {
-            concepts[currentIndex].style.display = 'none';
-            currentIndex = (currentIndex + 1) % concepts.length;
-            concepts[currentIndex].style.display = 'inline-block';
-        }
-
-        setInterval(animateConcepts, 4000);
-
         // Mode toggle
         const modeToggle = document.getElementById('modeToggle');
         const body = document.body;
@@ -345,32 +361,14 @@
         const moonIcon = modeToggle.querySelector('.moon-icon');
 
         modeToggle.addEventListener('click', () => {
+            body.classList.toggle('day-mode');
             body.classList.toggle('night-mode');
-            sunIcon.style.display = body.classList.contains('night-mode') ? 'none' : 'block';
+            sunIcon.style.display = body.classList.contains('day-mode') ? 'block' : 'none';
             moonIcon.style.display = body.classList.contains('night-mode') ? 'block' : 'none';
         });
 
         // Dynamic copyright year
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
-
-        // Expandable items
-        const expandableItems = document.querySelectorAll('.expandable-item');
-        expandableItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const definition = item.querySelector('.definition');
-                definition.style.display = definition.style.display === 'block' ? 'none' : 'block';
-            });
-
-            item.addEventListener('mouseenter', () => {
-                const definition = item.querySelector('.definition');
-                definition.style.display = 'block';
-            });
-
-            item.addEventListener('mouseleave', () => {
-                const definition = item.querySelector('.definition');
-                definition.style.display = 'none';
-            });
-        });
     </script>
 </body>
 </html>
