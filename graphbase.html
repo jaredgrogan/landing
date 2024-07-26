@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universitas Pro — AI and Deep Learning</title>
     <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="graph.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -22,6 +22,7 @@
                 <button class="gradient-button">Task +</button>
                 <button class="gradient-button">Project +</button>
             </div>
+            <div class="spacer small"></div>
             <h2>Key Topics</h2>
             <ul>
                 <li class="expandable-item">Neural Networks
@@ -57,7 +58,7 @@
             <div class="concept-display">
                 <div class="concept">
                     <strong class="concept-title"></strong>
-                    <span class="definition"></span>
+                    <p class="definition"></p>
                 </div>
             </div>
             <div class="spacer large"></div>
@@ -73,6 +74,7 @@
                 <button class="gradient-button">Generate Interview</button>
                 <button class="gradient-button">Generate Citation</button>
             </div>
+            <div class="spacer small"></div>
             <h2>Resources</h2>
             <ul>
                 <li class="expandable-item">Universitas.Wiki</li>
@@ -102,7 +104,12 @@
     </footer>
 
     <div class="mode-toggle" id="modeToggle">
-        <!-- Sun and Moon icons remain unchanged -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+            <path d="M12 7a5 5 0 100 10 5 5 0 000-10zM2 13h2a1 1 0 100-2H2a1 1 0 100 2zm18 0h2a1 1 0 100-2h-2a1 1 0 100 2zM11 2v2a1 1 0 102 0V2a1 1 0 10-2 0zm0 18v2a1 1 0 102 0v-2a1 1 0 10-2 0zM5.99 4.58a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon" style="display:none;">
+            <path d="M21.64 13a1 1 0 00-1.05-.14 8.05 8.05 0 01-3.37.73 8.15 8.15 0 01-8.14-8.14 8.59 8.59 0 01.25-2A1 1 0 008 2.36a10.14 10.14 0 1014 11.69 1 1 0 00-.36-1.05zM20 12a8 8 0 01-11.83 7 9.45 9.45 0 001.63-5.18 9.45 9.45 0 005.18-1.63A8 8 0 0120 12z"/>
+        </svg>
     </div>
 
     <script>
