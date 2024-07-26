@@ -179,17 +179,18 @@ h1 {
 
 .btn {
     width: 100%;
-    max-width: 250px;
-    padding: 10px 20px;
-    font-size: 1em;
+    max-width: 240px; /* Standard width based on Apple button */
+    height: 40px; /* Standard height based on Apple button */
+    padding: 0 16px;
+    font-size: 14px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     background-color: var(--button-color);
     color: white;
     cursor: pointer;
-    transition: opacity var(--transition-speed) ease;
+    transition: background-color var(--transition-speed) ease;
     font-family: 'Roboto', sans-serif;
-    margin: 5px auto;
+    margin: 8px auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -197,33 +198,48 @@ h1 {
 }
 
 .btn:hover {
-    opacity: 0.8;
+    background-color: var(--button-hover-color);
 }
 
-.get-started-btn {
-    margin-top: auto;
+.get-started-btn, 
+.plan:nth-child(2) .btn, 
+.plan:nth-child(3) .btn {
+    background: var(--button-gradient);
+}
+
+.get-started-btn:hover, 
+.plan:nth-child(2) .btn:hover, 
+.plan:nth-child(3) .btn:hover {
+    opacity: 0.9;
 }
 
 .signin-buttons {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 16px;
 }
 
 .auth-btn {
-    height: 40px;
+    background-color: var(--button-color);
+}
+
+.auth-btn:hover {
+    background-color: var(--button-hover-color);
 }
 
 .auth-btn i {
     margin-right: 8px;
 }
 
-.google-btn {
-    border-top: 1px solid var(--button-color);
-    border-bottom: 1px solid var(--button-color);
+#googleSignInButton {
+    background-color: white !important;
+    border: 1px solid var(--button-color);
 }
 
+#googleSignInButton:hover {
+    border-color: var(--button-hover-color);
+}
 footer {
     margin-top: auto;
     text-align: center;
