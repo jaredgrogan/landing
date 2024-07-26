@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Now AI is everywhere",
         "A universal language.",
         "Are you AI bilingual?",
-        "Discover the Universe",
+        "// Discover the Universe",
         "Universitas Pro"
     ];
     let index = 0;
