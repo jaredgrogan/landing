@@ -183,6 +183,26 @@ h1 {
     text-decoration: none;
 }
 
+.btn {
+    width: 80%;
+    max-width: 240px;
+    height: 40px;
+    padding: 0 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    background: var(--button-gradient);
+    color: white;
+    cursor: pointer;
+    transition: opacity var(--transition-speed) ease;
+    font-family: 'Roboto', sans-serif;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
 .btn:hover {
     opacity: 0.8;
 }
@@ -197,22 +217,49 @@ h1 {
 
 .auth-btn {
     background-color: black;
+    color: white;
     margin: 5px 0;
+    justify-content: flex-start;
+    padding-left: 20px;
 }
 
-.auth-btn img {
-    max-width: 24px;
-    max-height: 24px;
+.auth-btn i {
     margin-right: 10px;
+    font-size: 18px;
+}
+
+.google-btn {
+    background-color: white !important;
+    border: 1px solid #d3d3d3;
+    color: #757575;
+}
+
+.google-btn:hover {
+    background-color: #f8f8f8 !important;
+    border-color: #c6c6c6;
+}
+
+.apple-btn {
+    background-color: black;
+}
+
+.facebook-btn {
+    background-color: #1877f2;
+}
+
+.twitter-btn {
+    background-color: black;
 }
 
 #googleSignInButton {
-    background-color: white !important;
-    border: 1px solid #d3d3d3;
+    /* These styles will be applied in addition to the ones set by Google's SDK */
+    border: 1px solid #d3d3d3 !important;
+    box-shadow: none !important;
 }
 
 #googleSignInButton:hover {
-    border-color: #a0a0a0;
+    background-color: #f8f8f8 !important;
+    border-color: #c6c6c6 !important;
 }
 
 footer {
