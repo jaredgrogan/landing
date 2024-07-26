@@ -178,7 +178,6 @@ li {
     padding: 30px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-    min-height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -186,6 +185,7 @@ li {
 
 .concept {
     text-align: left;
+    margin-bottom: 20px;
 }
 
 .concept-title {
@@ -208,6 +208,47 @@ li {
     margin-top: 0;
     color: var(--text-color);
 }
+
+.news-section {
+    margin-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+}
+
+.news-section h3 {
+    font-family: 'Courier New', monospace;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #000000;
+}
+
+.night-mode .news-section h3 {
+    color: #ffffff;
+}
+
+.news-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.news-list li {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.news-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+}
+
+/* ... (rest of the CSS remains unchanged)
 
 .chat-section {
     display: flex;
