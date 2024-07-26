@@ -31,14 +31,12 @@
             background-color: black;
             color: white;
         }
-        #typingAnimation {
-            font-family: 'Courier New', monospace;
-            padding-bottom: 50px;
+        header {
+            padding: 20px;
+            background-color: #f8f8f8;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
             width: 50px;
             height: 50px;
             transition: transform 0.3s ease;
@@ -48,6 +46,18 @@
         }
         main {
             flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .main-content {
+            max-width: 800px;
+            width: 100%;
+        }
+        #typingAnimation {
+            font-family: 'Courier New', monospace;
+            min-height: 200px; /* Adjust as needed */
         }
         footer {
             background-color: #222222;
@@ -79,7 +89,7 @@
             margin-bottom: 5px;
         }
         .footer-column ul li a {
-            color: #cccccc;
+            color: #c0c0c0;
             text-decoration: none;
             transition: color 0.3s ease;
         }
@@ -122,11 +132,15 @@
     </style>
 </head>
 <body class="day-mode">
-    <a href="index.html">
-        <img src="favicon5.svg" alt="Logo" class="logo">
-    </a>
+    <header>
+        <a href="index.html">
+            <img src="favicon5.svg" alt="Logo" class="logo">
+        </a>
+    </header>
     <main>
-        <div id="typingAnimation" class="typing-animation"></div>
+        <div class="main-content">
+            <div id="typingAnimation" class="typing-animation"></div>
+        </div>
     </main>
     <footer>
         <div class="hamburger-menu">
