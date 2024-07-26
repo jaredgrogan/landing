@@ -270,6 +270,14 @@ function adjustGoogleButton() {
     }
 }
 
+// Modify your existing window.onload function or add this if it doesn't exist
+window.onload = function() {
+    initGoogleSignIn();
+    initAppleSignIn();
+    initMetaSignIn();
+    setTimeout(adjustGoogleButton, 100); // Slight delay to ensure the button is rendered
+};
+
 // Call this function after Google Sign-In is initialized
 window.onload = function() {
     // ... your existing onload code ...
