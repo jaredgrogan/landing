@@ -175,8 +175,7 @@ h1 {
 }
 
 .btn {
-    width: 100%;
-    max-width: 240px;
+    width: 240px;
     height: 40px;
     padding: 0 10px;
     font-size: 14px;
@@ -201,6 +200,11 @@ h1 {
 .get-started-btn {
     background-color: white;
     color: black;
+}
+
+.subscribe-btn,
+.contact-btn {
+    background: var(--button-gradient);
 }
 
 .signin-buttons {
@@ -237,8 +241,7 @@ h1 {
 #googleSignInButton {
     border: 1px solid #d3d3d3 !important;
     box-shadow: none !important;
-    max-width: 240px !important;
-    width: 100% !important;
+    width: 240px !important;
 }
 
 #googleSignInButton:hover {
