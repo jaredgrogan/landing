@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Pro — AI and Deep Learning</title>
+    <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('path-to-berkeley-mono-font-file.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --header-height: 80px;
+            --footer-height: 60px;
+            --main-font: 'Roboto', sans-serif;
+            --mono-font: 'Berkeley Mono', monospace;
+            --main-bg-color: #f5f5f5;
+            --panel-bg-color: #ffffff;
+            --text-color: #333333;
+            --accent-color: #4a90e2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--main-font);
+            background-color: var(--main-bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--panel-bg-color);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .slogan {
+            margin-left: 20px;
+            font-size: 1.5rem;
+            font-family: var(--mono-font);
+            font-weight: bold;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .side-panel {
+            flex: 1;
+            background-color: var(--panel-bg-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: calc(100vh - var(--header-height) - var(--footer-height) - 40px);
+        }
+
+        .main-workspace {
+            flex: 2;
+            background-color: var(--panel-bg-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .concept-animation {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--accent-color);
+        }
+
+        footer {
+            background-color: #111111;
+            color: white;
+            height: var(--footer-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono-font);
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            font-family: var(--mono-font);
+            color: var(--accent-color);
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        li {
+            margin-bottom: 10px;
+            font-family: var(--main-font);
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .concept-animation span {
+            display: none;
+            animation: fadeInOut 4s ease-in-out;
+        }
+
+        .concept-animation span:first-child {
+            display: inline-block;
+        }
+
+        nav {
+            background-color: #111111;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            bottom: var(--footer-height);
+            left: 0;
+            right: 0;
+            box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: transform 0.3s ease;
+        }
+
+        nav a:hover {
+            transform: scale(1.1);
+        }
+
+        .mode-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 1001;
+        }
+
+        .mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+
+            .side-panel, .main-workspace {
+                max-height: none;
+            }
+
+            nav {
+                flex-wrap: wrap;
+            }
+
+            nav a {
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <img src="favicon5.svg" alt="Logo" class="logo">
+        </a>
+        <div class="slogan">// Discover the Universe.</div>
+    </header>
+    
+    <main>
+        <aside class="side-panel">
+            <h2>Key Concepts</h2>
+            <ul>
+                <li>Neural Networks</li>
+                <li>Machine Learning</li>
+                <li>Deep Learning</li>
+                <li>Natural Language Processing</li>
+                <li>Computer Vision</li>
+            </ul>
+        </aside>
+        
+        <section class="main-workspace">
+            <div class="concept-animation">
+                <span>Neural Networks</span>
+                <span>Activation Functions</span>
+                <span>Backpropagation</span>
+                <span>Gradient Descent</span>
+                <span>Convolutional Neural Networks</span>
+                <span>Recurrent Neural Networks</span>
+                <span>Long Short-Term Memory</span>
+                <span>Transformers</span>
+                <span>Attention Mechanism</span>
+                <span>Reinforcement Learning</span>
+            </div>
+        </section>
+        
+        <aside class="side-panel">
+            <h2>Resources</h2>
+            <ul>
+                <li>Research Papers</li>
+                <li>Online Courses</li>
+                <li>Textbooks</li>
+                <li>Tutorials</li>
+                <li>Datasets</li>
+            </ul>
+        </aside>
+    </main>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chat.html">Chat</a>
+        <a href="app.html">About</a>
+        <a href="features.html">Features</a>
+        <a href="pricing.html">Services</a>
+    </nav>
+
+    <footer>
+        <div>© <span id="copyright-year"></span> UNIVERSITAS AI</div>
+    </footer>
+
+    <div class="mode-toggle" id="modeToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+            <path d="M12 7a5 5 0 100 10 5 5 0 000-10zM2 13h2a1 1 0 100-2H2a1 1 0 100 2zm18 0h2a1 1 0 100-2h-2a1 1 0 100 2zM11 2v2a1 1 0 102 0V2a1 1 0 10-2 0zm0 18v2a1 1 0 102 0v-2a1 1 0 10-2 0zM5.99 4.58a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon" style="display:none;">
+            <path d="M21.64 13a1 1 0 00-1.05-.14 8.05 8.05 0 01-3.37.73 8.15 8.15 0 01-8.14-8.14 8.59 8.59 0 01.25-2A1 1 0 008 2.36a10.14 10.14 0 1014 11.69 1 1 0 00-.36-1.05zM20 12a8 8 0 01-11.83 7 9.45 9.45 0 001.63-5.18 9.45 9.45 0 005.18-1.63A8 8 0 0120 12z"/>
+        </svg>
+    </div>
+
+    <script>
+        const concepts = document.querySelectorAll('.concept-animation span');
+        let currentIndex = 0;
+
+        function animateConcepts() {
+            concepts[currentIndex].style.display = 'none';
+            currentIndex = (currentIndex + 1) % concepts.length;
+            concepts[currentIndex].style.display = 'inline-block';
+        }
+
+        setInterval(animateConcepts, 4000);
+
+        // Mode toggle
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+        const sunIcon = modeToggle.querySelector('.sun-icon');
+        const moonIcon = modeToggle.querySelector('.moon-icon');
+
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('day-mode');
+            body.classList.toggle('night-mode');
+            sunIcon.style.display = body.classList.contains('day-mode') ? 'block' : 'none';
+            moonIcon.style.display = body.classList.contains('night-mode') ? 'block' : 'none';
+        });
+
+        // Dynamic copyright year
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
