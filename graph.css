@@ -81,13 +81,101 @@ main {
 }
 
 .side-panel {
-    flex: 1;
-    background-color: var(--panel-bg-color);
-    border-radius: 10px;
+    /* ... (previous styles remain) ... */
+    display: flex;
+    flex-direction: column;
+}
+
+.spacer {
+    height: 60px;
+}
+
+.search-bar {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.search-bar input {
+    flex-grow: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+}
+
+.gradient-button {
+    background: linear-gradient(135deg, #8A2BE2, #4169E1);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.gradient-button:hover {
+    opacity: 0.8;
+}
+
+.search-bar .gradient-button {
+    border-radius: 0 5px 5px 0;
+}
+
+.upload-panel {
+    margin-top: 10px;
+}
+
+.upload-box {
+    border: 2px dashed #4169E1;
+    border-radius: 5px;
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    max-height: calc(100vh - var(--header-height) - var(--footer-height) - 40px);
+    text-align: center;
+    cursor: pointer;
+}
+
+.upload-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.main-workspace {
+    /* ... (previous styles remain) ... */
+    display: flex;
+    flex-direction: column;
+}
+
+.concept-animation {
+    /* ... (previous styles remain) ... */
+    margin-bottom: 60px;
+}
+
+.concept-animation strong {
+    font-family: 'Courier New', monospace;
+}
+
+.concept-animation .definition {
+    font-family: 'Berkeley Mono', monospace;
+    font-weight: normal;
+}
+
+.chat-section {
+    display: flex;
+    align-items: flex-start;
+}
+
+.chat-prompt {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.generate-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.generate-buttons .gradient-button {
+    margin-left: 10px;
 }
 
 .main-workspace {
