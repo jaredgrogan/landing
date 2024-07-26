@@ -258,6 +258,24 @@ function updateGoogleButton() {
   }
 }
 
+function adjustGoogleButton() {
+    const googleButton = document.querySelector('#googleSignInButton');
+    if (googleButton) {
+        googleButton.style.width = '100%';
+        googleButton.style.maxWidth = '240px';
+        const buttonContent = googleButton.querySelector('.nsm7Bb-HzV7m-LgbsSe-BPrWId');
+        if (buttonContent) {
+            buttonContent.style.justifyContent = 'center';
+        }
+    }
+}
+
+// Call this function after Google Sign-In is initialized
+window.onload = function() {
+    // ... your existing onload code ...
+    setTimeout(adjustGoogleButton, 100); // Slight delay to ensure the button is rendered
+};
+
 // Initialize on page load
 window.onload = function() {
     initGoogleSignIn();
