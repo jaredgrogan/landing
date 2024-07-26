@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
         "Imagine knowledge",
         "Organized for the Age of AI.",
         "On demand 24/7.",
-        "Unleashe your potential."
+        "Unleashe your potential.",
+        "Universitas Pro."
     ];
     let index = 0;
     const typingElement = document.getElementById('typingAnimation');
