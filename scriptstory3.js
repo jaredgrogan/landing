@@ -2,9 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const texts = [
-        "The Information Age",
-        "Invites a new way.",
-        "To learn, work, and grow",
+        "The Age of AI",
+        "Creates new avenues and rewards.",
+        "To learn and grow",
         "// Discover the Universe",
         "Join Pro.",
         "Your Cognitive Computer."
