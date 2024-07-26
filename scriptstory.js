@@ -2,9 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const texts = [
         "Universities gave rise",
         "to the Information Age",
-        "Now AI is Universal.",
-        "It's the lingua franca.",
-        "Are you bi-lingual in AI?"
+        "Now AI is everywhere",
+        "Universal language.",
+        "Are you bi-lingual?"
     ];
     let index = 0;
     const typingElement = document.getElementById('typingAnimation');
