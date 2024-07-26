@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universitas Pro — About</title>
-    <link rel="stylesheet" href="styles5.css">
-    <link rel="icon" href="/favicon8.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
@@ -16,173 +17,131 @@
             flex-direction: column;
             min-height: 100vh;
         }
-        .mode-toggle {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 24px;
-        }
-        .day-mode {
-            background-color: white;
-            color: black;
-        }
-        .night-mode {
-            background-color: black;
-            color: white;
-        }
+
         header {
             padding: 20px;
-            background-color: #f8f8f8;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+
         .logo {
             width: 50px;
             height: 50px;
             transition: transform 0.3s ease;
         }
+
         .logo:hover {
-            transform: scale(1.5);
+            transform: scale(1.1);
         }
+
+        .slogan {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
         main {
-            flex: 1;
+            flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 40px 20px;
+            padding: 20px;
         }
-        .main-content {
-            max-width: 800px;
-            width: 100%;
-        }
+
         #typingAnimation {
             font-family: 'Courier New', monospace;
-            min-height: 200px; /* Adjust as needed */
+            max-width: 80%;
+            text-align: center;
         }
+
         footer {
-            background-color: #222222;
-            color: white;
-            padding: 20px 0;
-            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
         }
+
         .footer-nav {
             display: flex;
-            justify-content: space-around;
             flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
+            justify-content: space-around;
         }
+
         .footer-column {
             flex: 1;
             min-width: 200px;
-            margin-bottom: 20px;
+            margin: 10px;
         }
+
         .footer-column h3 {
-            color: #ffffff;
             margin-bottom: 10px;
         }
+
         .footer-column ul {
             list-style-type: none;
             padding: 0;
         }
+
         .footer-column ul li {
             margin-bottom: 5px;
         }
+
         .footer-column ul li a {
-            color: #c0c0c0;
             text-decoration: none;
-            transition: color 0.3s ease;
+            color: #333;
         }
-        .footer-column ul li a:hover {
-            color: #ffffff;
-        }
-        .copyright {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #444444;
-        }
-        .hamburger-menu {
-            display: none;
-            cursor: pointer;
-            padding: 10px;
-        }
-        .hamburger-menu div {
-            width: 25px;
-            height: 3px;
-            background-color: white;
-            margin: 5px 0;
-        }
+
         @media (max-width: 768px) {
             .footer-nav {
                 flex-direction: column;
-                align-items: center;
             }
+
             .footer-column {
-                width: 100%;
-                text-align: center;
-            }
-            .hamburger-menu {
-                display: block;
-            }
-            .footer-nav.mobile-hidden {
-                display: none;
+                min-width: 100%;
             }
         }
     </style>
 </head>
-<body class="day-mode">
+<body>
     <header>
         <a href="index.html">
-            <img src="favicon5.svg" alt="Logo" class="logo">
+            <img src="favicon.svg" alt="Logo" class="logo">
         </a>
+        <div class="slogan">Universitas Pro — Empowering Knowledge</div>
     </header>
+
     <main>
-        <div class="main-content">
-            <div id="typingAnimation" class="typing-animation"></div>
-        </div>
+        <div id="typingAnimation" class="typing-animation"></div>
     </main>
+
     <footer>
-        <div class="hamburger-menu">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
         <nav class="footer-nav">
-            <div class="footer-column">
-                <h3>Main</h3>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="chat.html">Chat</a></li>
-                    <li><a href="login.html">Login</a></li>
-                </ul>
-            </div>
             <div class="footer-column">
                 <h3>Products</h3>
                 <ul>
+                    <li><a href="chat.html">Chat</a></li>
                     <li><a href="nocode.html">AI Lab</a></li>
                     <li><a href="note.html">AI Office</a></li>
-                    <li><a href="calendar.html">Mobile</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h3>More</h3>
+                <h3>Company</h3>
                 <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
                     <li><a href="pricing.html">Plans</a></li>
-                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="faq.html">FAQ</a></li>
                     <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html">Login</a></li>
                 </ul>
             </div>
         </nav>
-        <div class="copyright">
-            © 2024 UNIVERSITAS AI
-        </div>
+        <div>© 2024 UNIVERSITAS AI</div>
     </footer>
-    <script src="script10.js"></script>
-    <script>
-        document.querySelector('.hamburger-menu').addEventListener('click', function() {
-            document.querySelector('.footer-nav').classList.toggle('mobile-hidden');
-        });
-    </script>
+
+    <script src="script.js"></script>
 </body>
 </html>
