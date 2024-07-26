@@ -64,6 +64,7 @@
         .slogan {
             margin-left: 20px;
             font-size: 1.2rem;
+            font-family: var(--mono-font);
         }
 
         main {
@@ -85,7 +86,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 2.25rem; /* Increased by 50% from 1.5rem */
             overflow: auto;
         }
 
@@ -125,6 +126,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            font-family: var(--mono-font);
         }
 
         .mode-toggle {
@@ -136,10 +138,16 @@
             z-index: 1001;
         }
 
+        .mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
         @media (max-width: 768px) {
             #typingAnimation {
                 width: 90%;
-                font-size: 1.2rem;
+                font-size: 1.8rem; /* Increased by 50% from 1.2rem */
             }
 
             nav {
@@ -157,7 +165,7 @@
         <a href="index.html">
             <img src="favicon5.svg" alt="Logo" class="logo">
         </a>
-        <div class="slogan">Empowering Minds, Shaping Futures</div>
+        <div class="slogan">// Discover the Universe.</div>
     </header>
 
     <main>
@@ -177,7 +185,14 @@
         <div>© <span id="copyright-year"></span> UNIVERSITAS AI</div>
     </footer>
 
-    <div class="mode-toggle" id="modeToggle">🌓</div>
+    <div class="mode-toggle" id="modeToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+            <path d="M12 7a5 5 0 100 10 5 5 0 000-10zM2 13h2a1 1 0 100-2H2a1 1 0 100 2zm18 0h2a1 1 0 100-2h-2a1 1 0 100 2zM11 2v2a1 1 0 102 0V2a1 1 0 10-2 0zm0 18v2a1 1 0 102 0v-2a1 1 0 10-2 0zM5.99 4.58a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon" style="display:none;">
+            <path d="M21.64 13a1 1 0 00-1.05-.14 8.05 8.05 0 01-3.37.73 8.15 8.15 0 01-8.14-8.14 8.59 8.59 0 01.25-2A1 1 0 008 2.36a10.14 10.14 0 1014 11.69 1 1 0 00-.36-1.05zM20 12a8 8 0 01-11.83 7 9.45 9.45 0 001.63-5.18 9.45 9.45 0 005.18-1.63A8 8 0 0120 12z"/>
+        </svg>
+    </div>
 
     <script>
         // Typing animation
@@ -195,10 +210,14 @@
         // Mode toggle
         const modeToggle = document.getElementById('modeToggle');
         const body = document.body;
+        const sunIcon = modeToggle.querySelector('.sun-icon');
+        const moonIcon = modeToggle.querySelector('.moon-icon');
 
         modeToggle.addEventListener('click', () => {
             body.classList.toggle('day-mode');
             body.classList.toggle('night-mode');
+            sunIcon.style.display = body.classList.contains('day-mode') ? 'block' : 'none';
+            moonIcon.style.display = body.classList.contains('night-mode') ? 'block' : 'none';
         });
 
         // Dynamic copyright year
