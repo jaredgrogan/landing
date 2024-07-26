@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Pro — Join Pro</title>
+    <link rel="stylesheet" href="styles5.css">
+    <link rel="icon" href="/favicon3.svg" type="image/svg+xml">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .tagline {
+            font-family: 'Courier Prime', monospace;
+            margin-left: 20px;
+            font-size: 1.2rem;
+        }
+
+        .mode-toggle {
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #typingAnimation {
+            font-family: 'Courier Prime', monospace;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        nav {
+            background-color: #111111;
+            padding: 10px;
+            width: 100%;
+            box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: transform 0.3s ease;
+        }
+
+        nav a:hover {
+            transform: scale(1.1);
+        }
+
+        footer {
+            background-color: #222222;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .tagline {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .mode-toggle {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+
+            #typingAnimation {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <header class="header">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="favicon5.svg" alt="Logo" class="logo">
+            </a>
+            <div class="tagline">// Discover the Universe</div>
+        </div>
+        <div class="mode-toggle" id="modeToggle">☀️</div>
+    </header>
+
+    <main class="main-content">
+        <div id="typingAnimation" class="typing-animation"></div>
+    </main>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chat.html">Chat</a>
+        <a href="Product.html">Product</a>
+        <a href="pricing">Plans</a>
+        <a href="program.html">App</a>
+        <a href="login.html">Login</a>
+    </nav>
+
+    <footer>
+        <div>© 2024 UNIVERSITAS AI</div>
+    </footer>
+
+    <script src="scriptstory3.js"></script>
+    <script>
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('night-mode');
+            modeToggle.textContent = body.classList.contains('night-mode') ? '🌙' : '☀️';
+        });
+    </script>
+</body>
+</html>
