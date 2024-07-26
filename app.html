@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,6 +50,12 @@
         .mode-toggle {
             cursor: pointer;
             font-size: 24px;
+        }
+
+        .mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
         }
 
         .main-content {
@@ -126,7 +131,14 @@
             </a>
             <div class="tagline">// Discover the Universe</div>
         </div>
-        <div class="mode-toggle" id="modeToggle">☀️</div>
+        <div class="mode-toggle" id="modeToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+                <path d="M12 3a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0V4a1 1 0 0 1 1-1zm0 15a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0v-1a1 1 0 0 1 1-1zm9-9a1 1 0 0 1-1 1h-1a1 1 0 0 1 0-2h1a1 1 0 0 1 1 1zM5 12a1 1 0 0 1-1 1H3a1 1 0 0 1 0-2h1a1 1 0 0 1 1 1zm14.95 6.36a1 1 0 0 1-1.41 0l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 1 0 1.41zM5.76 4.64a1 1 0 0 1 0 1.41l-.71.71a1 1 0 0 1-1.41-1.41l.71-.71a1 1 0 0 1 1.41 0zm12.48 0a1 1 0 0 1 1.41 0l.71.71a1 1 0 0 1-1.41 1.41l-.71-.71a1 1 0 0 1 0-1.41zM4.05 18.36a1 1 0 0 1 1.41 0l.71.71a1 1 0 0 1-1.41 1.41l-.71-.71a1 1 0 0 1 0-1.41zM12 6a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon" style="display: none;">
+                <path d="M12.1 22c-4.9 0-9-3.9-9.1-8.9 0-3.2 1.7-6.3 4.5-7.9.8-.5 1.8-.2 2.3.6.5.8.2 1.8-.6 2.3-1.6.9-2.6 2.7-2.6 4.6.1 2.9 2.4 5.2 5.3 5.2h.3c2.9-.1 5.2-2.4 5.2-5.3 0-1.9-1-3.6-2.6-4.5-.2-.1-.3-.2-.4-.3-.7-.6-1-1.5-.6-2.3s1.3-1.2 2.2-.9l.1.1c2.8 1.6 4.5 4.6 4.5 7.8 0 4.9-4.1 8.9-9 8.9h-.5z"/>
+            </svg>
+        </div>
     </header>
 
     <main class="main-content">
@@ -149,10 +161,18 @@
     <script>
         const modeToggle = document.getElementById('modeToggle');
         const body = document.body;
+        const sunIcon = modeToggle.querySelector('.sun-icon');
+        const moonIcon = modeToggle.querySelector('.moon-icon');
 
         modeToggle.addEventListener('click', () => {
             body.classList.toggle('night-mode');
-            modeToggle.textContent = body.classList.contains('night-mode') ? '🌙' : '☀️';
+            if (body.classList.contains('night-mode')) {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
         });
     </script>
 </body>
