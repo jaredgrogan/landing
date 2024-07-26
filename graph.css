@@ -118,7 +118,11 @@ main {
 h2 {
     margin-bottom: 15px;
     font-family: var(--mono-font);
-    color: var(--accent-color);
+    color: #000000;
+}
+
+.night-mode h2 {
+    color: #ffffff;
 }
 
 ul {
@@ -247,8 +251,6 @@ li {
     left: 0;
     color: var(--accent-color);
 }
-
-/* ... (rest of the CSS remains unchanged)
 
 .chat-section {
     display: flex;
