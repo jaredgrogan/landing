@@ -1,10 +1,10 @@
 :root {
     --day-bg: #ffffff;
     --day-text: #000000;
-    --night-bg: #000000;
+    --night-bg: #111111;
     --night-text: #ffffff;
     --nav-bg: #111111;
-    --footer-bg: #222222;
+    --footer-bg: #111111;
     --transition-speed: 0.5s;
 }
 
@@ -80,7 +80,7 @@ body {
 .tagline {
     font-family: 'Courier Prime', monospace;
     margin-left: 20px;
-    font-size: 1.2rem;
+    font-size: 1.44rem; /* Increased by 20% from 1.2rem */
 }
 
 .mode-toggle {
@@ -124,12 +124,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     border-right: 0.15em solid;
-    animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-}
-
-@keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
+    animation: blink-caret 0.75s step-end infinite;
 }
 
 @keyframes blink-caret {
@@ -174,6 +169,7 @@ body {
     .tagline {
         margin-left: 0;
         margin-top: 10px;
+        font-size: 1.2rem; /* Adjust for mobile */
     }
 
     .mode-toggle {
