@@ -140,13 +140,17 @@
         }
 
         .night-mode .quadrant {
-            background-color: #2f3437;
+            background: linear-gradient(135deg, #2f3437 0%, #23282a 100%);
             color: #f8f8f8;
         }
 
         .quadrant:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .night-mode .quadrant:hover {
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
         }
 
         .quadrant h2 {
@@ -246,6 +250,7 @@
     </style>
 </head>
 <body class="day-mode">
+    <!-- The rest of the HTML remains unchanged -->
     <header>
         <a href="index.html">
             <img src="favicon5.svg" alt="Logo" class="logo">
