@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universitas AI - Plans</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon8.svg" type="image/svg+xml">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
+  <style>
+    /* ... (keep all existing styles) ... */
+
+    .plans-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .plan {
+      flex: 1;
+      min-width: 250px;
+      background-color: var(--form-bg);
+      border: 1px solid var(--form-border);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .plan:hover {
+      transform: scale(1.05);
+    }
+
+    .plan h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .plan .price {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .plan ul {
+      list-style-type: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    .plan li {
+      margin-bottom: 10px;
+    }
+
+    .plan button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background: var(--button-gradient);
+      color: white;
+      cursor: pointer;
+      transition: opacity var(--transition-speed) ease;
+    }
+
+    .plan button:hover {
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .plans-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <!-- ... (keep existing header content) ... -->
+    </header>
+    
+    <main class="main-content">
+      <h1>Choose Your Plan</h1>
+      <div class="plans-container">
+        <div class="plan">
+          <h2>Free</h2>
+          <div class="price">$0/month</div>
+          <ul>
+            <li>Basic AI assistance</li>
+            <li>Limited chat interactions</li>
+            <li>Access to public knowledge base</li>
+            <li>Basic note-taking features</li>
+          </ul>
+          <button>Get Started</button>
+        </div>
+        
+        <div class="plan">
+          <h2>Individual</h2>
+          <div class="price">$19.99/month</div>
+          <ul>
+            <li>Advanced AI assistance</li>
+            <li>Unlimited chat interactions</li>
+            <li>Personalized learning paths</li>
+            <li>Advanced note-taking and organization</li>
+            <li>Priority support</li>
+          </ul>
+          <button>Subscribe Now</button>
+        </div>
+        
+        <div class="plan">
+          <h2>Enterprise</h2>
+          <div class="price">Contact Us</div>
+          <ul>
+            <li>Custom AI solutions</li>
+            <li>Dedicated account manager</li>
+            <li>Team collaboration tools</li>
+            <li>Advanced analytics and reporting</li>
+            <li>24/7 premium support</li>
+            <li>Custom integrations</li>
+          </ul>
+          <button>Contact Sales</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <!-- ... (keep existing footer content) ... -->
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+  <script>
+    // ... (keep existing JavaScript) ...
+  </script>
+</body>
+</html>
