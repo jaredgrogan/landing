@@ -3,11 +3,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const texts = [
         "The Information Age",
-        "Demands new knowledge.",
-        "The knowledege economy",
         "Invites a new way.",
-        "To learn and grow",
-        "// Discovery the Universe",
+        "To learn, work, and grow",
+        "// Discover the Universe",
         "Join Pro.",
         "Your Cognitive Computer."
     ];
