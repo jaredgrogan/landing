@@ -75,13 +75,12 @@
         .slogan {
             margin-left: 20px;
             font-size: 1.5rem;
-            font-family: var(--mono-font);
+            font-family: 'Courier New', monospace;
             font-weight: bold;
         }
 
         .summary-section {
             padding: 20px;
-            text-align: center;
             background-color: white;
             margin-top: var(--header-height);
         }
@@ -96,6 +95,7 @@
             font-size: 2rem;
             margin-bottom: 10px;
             color: #111111;
+            text-align: center;
         }
 
         .night-mode .summary-section h1 {
@@ -108,6 +108,7 @@
             max-width: 800px;
             margin: 0 auto;
             color: #222222;
+            text-align: left;
         }
 
         .night-mode .summary-section p {
@@ -139,8 +140,8 @@
         }
 
         .night-mode .quadrant {
-            background-color: #ffffff;
-            color: #111111;
+            background-color: #2f3437;
+            color: white;
         }
 
         .quadrant:hover {
@@ -157,8 +158,12 @@
         .quadrant p, .quadrant li {
             font-size: 1rem;
             margin-bottom: 15px;
-            font-family: var(--mono-font);
+            font-family: var(--main-font);
             color: #222222;
+        }
+
+        .night-mode .quadrant p, .night-mode .quadrant li {
+            color: white;
         }
 
         .quadrant ul {
@@ -206,7 +211,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            font-family: var(--mono-font);
+            font-family: 'Courier New', monospace;
         }
 
         .mode-toggle {
