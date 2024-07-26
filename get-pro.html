@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Universitas Pro</title>
+    <link rel="icon" href="/favicon8.svg" type="image/svg+xml">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --header-height: 80px;
+            --footer-height: 60px;
+            --main-font: 'Roboto', sans-serif;
+            --mono-font: 'Courier New', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--main-font);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .day-mode {
+            background-color: white;
+            color: black;
+        }
+
+        .night-mode {
+            background-color: #111111;
+            color: white;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1000;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .slogan {
+            margin-left: 20px;
+            font-size: 1.5rem;
+            font-family: var(--mono-font);
+            font-weight: bold;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--header-height) 0 calc(var(--footer-height) + 60px);
+        }
+
+        #typingAnimation {
+            font-family: var(--mono-font);
+            width: 60%;
+            max-width: 800px;
+            min-width: 300px;
+            height: 40vh;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 2.25rem;
+            overflow: auto;
+        }
+
+        nav {
+            background-color: #111111;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            bottom: var(--footer-height);
+            left: 0;
+            right: 0;
+            box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: transform 0.3s ease;
+        }
+
+        nav a:hover {
+            transform: scale(1.1);
+        }
+
+        footer {
+            background-color: #111111;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--footer-height);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: var(--mono-font);
+        }
+
+        .mode-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 1001;
+        }
+
+        .mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 768px) {
+            #typingAnimation {
+                width: 90%;
+                font-size: 1.8rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+            }
+
+            nav a {
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <header>
+        <a href="index.html">
+            <img src="favicon5.svg" alt="Logo" class="logo">
+        </a>
+        <div class="slogan">// Discover the Universe.</div>
+    </header>
+
+    <main>
+        <div id="typingAnimation"></div>
+    </main>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chat.html">Chat</a>
+        <a href="app.html">About</a>
+        <a href="pricing.html">Plans</a>
+        <a href="login.html">Login</a>
+        
+    </nav>
+
+    <footer>
+        <div>© <span id="copyright-year"></span> UNIVERSITAS AI</div>
+    </footer>
+
+    <div class="mode-toggle" id="modeToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+            <path d="M12 7a5 5 0 100 10 5 5 0 000-10zM2 13h2a1 1 0 100-2H2a1 1 0 100 2zm18 0h2a1 1 0 100-2h-2a1 1 0 100 2zM11 2v2a1 1 0 102 0V2a1 1 0 10-2 0zm0 18v2a1 1 0 102 0v-2a1 1 0 10-2 0zM5.99 4.58a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon" style="display:none;">
+            <path d="M21.64 13a1 1 0 00-1.05-.14 8.05 8.05 0 01-3.37.73 8.15 8.15 0 01-8.14-8.14 8.59 8.59 0 01.25-2A1 1 0 008 2.36a10.14 10.14 0 1014 11.69 1 1 0 00-.36-1.05zM20 12a8 8 0 01-11.83 7 9.45 9.45 0 001.63-5.18 9.45 9.45 0 005.18-1.63A8 8 0 0120 12z"/>
+        </svg>
+    </div>
+
+    <script>
+        // Typing animation
+        const text = "Universities gave rise to the Information Age. Today AI is eveywhere, a universal language. Discover the Universe. Universitas Pro. Your Cognitive Computer.";
+        let index = 0;
+
+        function typeWriter() {
+            if (index < text.length) {
+                document.getElementById("typingAnimation").innerHTML += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+
+        // Mode toggle
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+        const sunIcon = modeToggle.querySelector('.sun-icon');
+        const moonIcon = modeToggle.querySelector('.moon-icon');
+
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('day-mode');
+            body.classList.toggle('night-mode');
+            sunIcon.style.display = body.classList.contains('day-mode') ? 'block' : 'none';
+            moonIcon.style.display = body.classList.contains('night-mode') ? 'block' : 'none';
+        });
+
+        // Dynamic copyright year
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+        // Initialize typing animation
+        window.onload = typeWriter;
+    </script>
+</body>
+</html>
