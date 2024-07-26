@@ -12,6 +12,9 @@
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         .mode-toggle {
             position: absolute;
@@ -43,33 +46,16 @@
         .logo:hover {
             transform: scale(1.5);
         }
-        nav {
-            background-color: #111111;
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-            position: absolute;
-            bottom: 60px;
-            width: 100%;
-            box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
-            font-family: 'Roboto', sans-serif;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            transition: transform 0.3s ease;
-        }
-        nav a:hover {
-            transform: scale(1.3);
+        main {
+            flex: 1;
         }
         footer {
             background-color: #222222;
+            color: white;
             padding: 20px 0;
             font-family: 'Roboto', sans-serif;
-            color: white;
         }
-        .footer-content {
+        .footer-nav {
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
@@ -82,6 +68,7 @@
             margin-bottom: 20px;
         }
         .footer-column h3 {
+            color: #ffffff;
             margin-bottom: 10px;
         }
         .footer-column ul {
@@ -92,25 +79,44 @@
             margin-bottom: 5px;
         }
         .footer-column ul li a {
-            color: white;
+            color: #cccccc;
             text-decoration: none;
+            transition: color 0.3s ease;
         }
         .footer-column ul li a:hover {
-            text-decoration: underline;
+            color: #ffffff;
         }
         .copyright {
             text-align: center;
             margin-top: 20px;
-            font-size: 0.9em;
+            padding-top: 20px;
+            border-top: 1px solid #444444;
+        }
+        .hamburger-menu {
+            display: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 5px 0;
         }
         @media (max-width: 768px) {
-            .footer-content {
+            .footer-nav {
                 flex-direction: column;
                 align-items: center;
             }
             .footer-column {
                 width: 100%;
                 text-align: center;
+            }
+            .hamburger-menu {
+                display: block;
+            }
+            .footer-nav.mobile-hidden {
+                display: none;
             }
         }
     </style>
@@ -119,29 +125,27 @@
     <a href="index.html">
         <img src="favicon5.svg" alt="Logo" class="logo">
     </a>
-    <div id="typingAnimation" class="typing-animation"></div>
-    <nav>
-        <a href="chat.html">Chat</a>
-        <a href="login.html">Login</a>
-        <a href="nocode.html">AI Lab</a>
-        <a href="note.html">AI SaaS</a>
-        <a href="calendar.html">Product</a>
-        <a href="index.html">Home</a>
-    </nav>
+    <main>
+        <div id="typingAnimation" class="typing-animation"></div>
+    </main>
     <footer>
-        <div class="footer-content">
+        <div class="hamburger-menu">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <nav class="footer-nav">
             <div class="footer-column">
                 <h3>Main</h3>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="chat.html">Chat</a></li>
+                    <li><a href="login.html">Login</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h3>Product</h3>
+                <h3>Products</h3>
                 <ul>
-                    <li><a href="chat.html">Chat</a></li>
                     <li><a href="nocode.html">AI Lab</a></li>
                     <li><a href="note.html">AI Office</a></li>
                     <li><a href="calendar.html">Mobile</a></li>
@@ -151,16 +155,20 @@
                 <h3>More</h3>
                 <ul>
                     <li><a href="pricing.html">Plans</a></li>
-                    <li><a href="login.html">Login</a></li>
-                    <li><a href="privacy.html">Privacy Policy</a></li>
-                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
-        </div>
+        </nav>
         <div class="copyright">
             © 2024 UNIVERSITAS AI
         </div>
     </footer>
     <script src="script10.js"></script>
+    <script>
+        document.querySelector('.hamburger-menu').addEventListener('click', function() {
+            document.querySelector('.footer-nav').classList.toggle('mobile-hidden');
+        });
+    </script>
 </body>
 </html>
