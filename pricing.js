@@ -240,6 +240,24 @@ function getUserToken() {
     return localStorage.getItem('userToken');
 }
 
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  updateGoogleButton();
+}
+
+function updateGoogleButton() {
+  const googleButton = document.getElementById('googleSignInButton');
+  if (document.body.classList.contains('dark-mode')) {
+    googleButton.style.backgroundColor = '#333';
+    // Change to dark mode Google logo
+    googleButton.querySelector('img').src = 'path-to-dark-mode-google-logo.png';
+  } else {
+    googleButton.style.backgroundColor = 'white';
+    // Change back to light mode Google logo
+    googleButton.querySelector('img').src = 'path-to-light-mode-google-logo.png';
+  }
+}
+
 // Initialize on page load
 window.onload = function() {
     initGoogleSignIn();
