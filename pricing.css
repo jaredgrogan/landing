@@ -129,6 +129,17 @@ h1 {
     align-items: center;
 }
 
+.gradient-bg {
+    background: var(--button-gradient);
+    color: white;
+}
+
+.gradient-bg h2,
+.gradient-bg .price,
+.gradient-bg .features {
+    color: white;
+}
+
 .plan h2 {
     font-size: 24px;
     margin-bottom: 10px;
@@ -164,46 +175,6 @@ h1 {
 }
 
 .btn {
-    width: 80%;
-    max-width: 240px;
-    height: 40px;
-    padding: 0;
-    font-size: 14px;
-    border: none;
-    border-radius: 4px;
-    background: var(--button-gradient);
-    color: white;
-    cursor: pointer;
-    transition: opacity var(--transition-speed) ease;
-    font-family: 'Roboto', sans-serif;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-}
-
-.btn {
-    width: 80%;
-    max-width: 240px;
-    height: 40px;
-    padding: 0 10px;
-    font-size: 14px;
-    border: none;
-    border-radius: 4px;
-    background: var(--button-gradient);
-    color: white;
-    cursor: pointer;
-    transition: opacity var(--transition-speed) ease;
-    font-family: 'Roboto', sans-serif;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-}
-
-.btn {
     width: 100%;
     max-width: 240px;
     height: 40px;
@@ -211,7 +182,7 @@ h1 {
     font-size: 14px;
     border: none;
     border-radius: 4px;
-    background-color: black;
+    background-color: var(--button-gradient);
     color: white;
     cursor: pointer;
     transition: opacity var(--transition-speed) ease;
@@ -227,6 +198,11 @@ h1 {
     opacity: 0.8;
 }
 
+.get-started-btn {
+    background-color: white;
+    color: black;
+}
+
 .signin-buttons {
     display: flex;
     flex-direction: column;
@@ -236,6 +212,8 @@ h1 {
 }
 
 .auth-btn {
+    background-color: black;
+    color: white;
     justify-content: center;
     padding: 0 10px;
 }
@@ -256,12 +234,7 @@ h1 {
     border-color: #c6c6c6;
 }
 
-.apple-btn, .facebook-btn, .twitter-btn {
-    background-color: black;
-}
-
 #googleSignInButton {
-    /* These styles will be applied in addition to the ones set by Google's SDK */
     border: 1px solid #d3d3d3 !important;
     box-shadow: none !important;
     max-width: 240px !important;
@@ -273,7 +246,6 @@ h1 {
     border-color: #c6c6c6 !important;
 }
 
-/* Ensure the Google button content is centered */
 #googleSignInButton > div {
     justify-content: center !important;
 }
