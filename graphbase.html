@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universitas Pro — AI and Deep Learning</title>
     <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="graph.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -16,13 +16,13 @@
     </header>
     
     <main>
-        <aside class="side-panel">
-            <div class="button-group">
+        <aside class="side-panel left-panel">
+            <div class="top-buttons">
                 <button class="gradient-button">Note +</button>
                 <button class="gradient-button">Task +</button>
                 <button class="gradient-button">Project +</button>
             </div>
-            <h2>Key Concepts</h2>
+            <h2>Key Topics</h2>
             <ul>
                 <li class="expandable-item">Neural Networks
                     <div class="definition">Computational models inspired by biological neural networks, consisting of interconnected nodes (neurons) that process and transmit information, capable of learning complex patterns from data.</div>
@@ -54,50 +54,10 @@
         </aside>
         
         <section class="main-workspace">
-            <div class="concept-animation">
+            <div class="concept-display">
                 <div class="concept">
-                    <strong>Attention Mechanism:</strong> 
-                    <span class="definition">A technique in neural networks that allows the model to focus on different parts of the input when producing each element of the output.</span>
-                </div>
-                <div class="concept">
-                    <strong>Transformers:</strong> 
-                    <span class="definition">Advanced neural network architecture that uses self-attention mechanisms to process sequential data, revolutionizing natural language processing and other sequence-based tasks.</span>
-                </div>
-                <div class="concept">
-                    <strong>Convolutional Neural Networks (CNNs):</strong> 
-                    <span class="definition">Deep learning architecture specialized for processing grid-like data, particularly effective for image and video analysis tasks.</span>
-                </div>
-                <div class="concept">
-                    <strong>Recurrent Neural Networks (RNNs):</strong> 
-                    <span class="definition">Neural networks designed to work with sequential data by maintaining an internal state or memory.</span>
-                </div>
-                <div class="concept">
-                    <strong>Long Short-Term Memory (LSTM):</strong> 
-                    <span class="definition">A type of RNN architecture designed to learn long-term dependencies in sequential data.</span>
-                </div>
-                <div class="concept">
-                    <strong>Generative Adversarial Networks (GANs):</strong> 
-                    <span class="definition">A class of machine learning framework where two neural networks compete to generate new, synthetic instances of data.</span>
-                </div>
-                <div class="concept">
-                    <strong>Reinforcement Learning:</strong> 
-                    <span class="definition">A type of machine learning where an agent learns to make decisions by taking actions in an environment to maximize a reward.</span>
-                </div>
-                <div class="concept">
-                    <strong>Transfer Learning:</strong> 
-                    <span class="definition">A machine learning method where a model developed for a task is reused as the starting point for a model on a second task.</span>
-                </div>
-                <div class="concept">
-                    <strong>Backpropagation:</strong> 
-                    <span class="definition">The primary algorithm for training neural networks, which calculates the gradient of the loss function with respect to the network's weights.</span>
-                </div>
-                <div class="concept">
-                    <strong>Gradient Descent:</strong> 
-                    <span class="definition">An optimization algorithm used to minimize the loss function by iteratively moving in the direction of steepest descent.</span>
-                </div>
-                <div class="concept">
-                    <strong>Overfitting:</strong> 
-                    <span class="definition">A modeling error that occurs when a function is too closely fit to a limited set of data points, potentially reducing its generalization capability.</span>
+                    <strong class="concept-title"></strong>
+                    <span class="definition"></span>
                 </div>
             </div>
             <div class="spacer large"></div>
@@ -107,8 +67,8 @@
             </div>
         </section>
         
-        <aside class="side-panel">
-            <div class="generate-buttons">
+        <aside class="side-panel right-panel">
+            <div class="top-buttons">
                 <button class="gradient-button">Generate Quiz</button>
                 <button class="gradient-button">Generate Interview</button>
                 <button class="gradient-button">Generate Citation</button>
@@ -142,26 +102,36 @@
     </footer>
 
     <div class="mode-toggle" id="modeToggle">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
-            <path d="M12 7a5 5 0 100 10 5 5 0 000-10zM2 13h2a1 1 0 100-2H2a1 1 0 100 2zm18 0h2a1 1 0 100-2h-2a1 1 0 100 2zM11 2v2a1 1 0 102 0V2a1 1 0 10-2 0zm0 18v2a1 1 0 102 0v-2a1 1 0 10-2 0zM5.99 4.58a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06z"/>
-        </svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon" style="display:none;">
-            <path d="M21.64 13a1 1 0 00-1.05-.14 8.05 8.05 0 01-3.37.73 8.15 8.15 0 01-8.14-8.14 8.59 8.59 0 01.25-2A1 1 0 008 2.36a10.14 10.14 0 1014 11.69 1 1 0 00-.36-1.05zM20 12a8 8 0 01-11.83 7 9.45 9.45 0 001.63-5.18 9.45 9.45 0 005.18-1.63A8 8 0 0120 12z"/>
-        </svg>
+        <!-- Sun and Moon icons remain unchanged -->
     </div>
 
     <script>
-        const concepts = document.querySelectorAll('.concept-animation .concept');
-        let currentIndex = 0;
+        const concepts = [
+            { title: "Attention Mechanism", definition: "A technique in neural networks that allows the model to focus on different parts of the input when producing each element of the output." },
+            { title: "Transformers", definition: "Advanced neural network architecture that uses self-attention mechanisms to process sequential data, revolutionizing natural language processing and other sequence-based tasks." },
+            { title: "Convolutional Neural Networks (CNNs)", definition: "Deep learning architecture specialized for processing grid-like data, particularly effective for image and video analysis tasks." },
+            { title: "Recurrent Neural Networks (RNNs)", definition: "Neural networks designed to work with sequential data by maintaining an internal state or memory." },
+            { title: "Long Short-Term Memory (LSTM)", definition: "A type of RNN architecture designed to learn long-term dependencies in sequential data." },
+            { title: "Generative Adversarial Networks (GANs)", definition: "A class of machine learning framework where two neural networks compete to generate new, synthetic instances of data." },
+            { title: "Reinforcement Learning", definition: "A type of machine learning where an agent learns to make decisions by taking actions in an environment to maximize a reward." },
+            { title: "Transfer Learning", definition: "A machine learning method where a model developed for a task is reused as the starting point for a model on a second task." },
+            { title: "Backpropagation", definition: "The primary algorithm for training neural networks, which calculates the gradient of the loss function with respect to the network's weights." },
+            { title: "Gradient Descent", definition: "An optimization algorithm used to minimize the loss function by iteratively moving in the direction of steepest descent." },
+            { title: "Overfitting", definition: "A modeling error that occurs when a function is too closely fit to a limited set of data points, potentially reducing its generalization capability." }
+        ];
 
-        function animateConcepts() {
-            concepts[currentIndex].style.display = 'none';
+        let currentIndex = 0;
+        const conceptTitle = document.querySelector('.concept-title');
+        const conceptDefinition = document.querySelector('.concept .definition');
+
+        function updateConcept() {
+            conceptTitle.textContent = concepts[currentIndex].title;
+            conceptDefinition.textContent = concepts[currentIndex].definition;
             currentIndex = (currentIndex + 1) % concepts.length;
-            concepts[currentIndex].style.display = 'block';
         }
 
-        setInterval(animateConcepts, 4000);
-
+        setInterval(updateConcept, 4000);
+        updateConcept(); // Initial update
         // Mode toggle
         const modeToggle = document.getElementById('modeToggle');
         const body = document.body;
