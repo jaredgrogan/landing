@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const texts = [
         "Hi, I'm Herakles",
-        "Your Assistant",
+        "Your Assistant.",
         "The Age of AI",
         "creates new avenues",
         "to learn and grow.",
