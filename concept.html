@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Concepts</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen">
+    <header class="p-4 flex items-center">
+        <img src="logo.svg" alt="Universitas AI Logo" class="h-12 w-auto">
+    </header>
+
+    <main class="flex-grow">
+        <div id="concept-cycler-container"></div>
+    </main>
+
+    <footer class="mt-auto">
+        <nav class="flex justify-center space-x-4 my-4">
+            <a href="index.html" class="text-blue-500 hover:underline">Home</a>
+            <a href="app.html" class="text-blue-500 hover:underline">App</a>
+            <a href="chat.html" class="text-blue-500 hover:underline">Chat</a>
+            <a href="about.html" class="text-blue-500 hover:underline">About</a>
+            <a href="product.html" class="text-blue-500 hover:underline">Product</a>
+        </nav>
+        <p class="text-center py-2">&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script src="formatted_concepts.js"></script>
+    <script type="text/babel">
+        // ConceptCycler component code here
+        ReactDOM.render(<ConceptCycler />, document.getElementById('concept-cycler-container'));
+    </script>
+</body>
+</html>
