@@ -29,7 +29,7 @@ body {
 
 .night-mode {
     --main-bg-color: #222222;
-    --panel-bg-color: #222222;
+    --panel-bg-color: #444444;
     --text-color: #ffffff;
 }
 
