@@ -28,7 +28,7 @@ body {
 }
 
 .night-mode {
-    --main-bg-color: #111111;
+    --main-bg-color: #222222;
     --panel-bg-color: #222222;
     --text-color: #ffffff;
 }
