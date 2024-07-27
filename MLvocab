@@ -1,0 +1,73 @@
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+const concepts = [
+  {
+    name: "Activation Function",
+    shortDef: "Non-linear transformation applied to neuron's weighted sum of inputs",
+    topics: ["Mathematics", "Neuroscience", "Computer Science"],
+    tags: ["#NeuralNetworks", "#NonLinearity", "#Training"],
+    related: ["ReLU", "Sigmoid", "Tanh", "Leaky ReLU", "Swish"],
+    fullDef: "An Activation Function in neural networks introduces non-linearity into the output of a neuron, allowing the network to learn complex patterns. It takes the weighted sum of inputs and a bias term, and produces an output that is typically bounded within a certain range. Common activation functions include the sigmoid (outputs between 0 and 1), tanh (outputs between -1 and 1), and ReLU (Rectified Linear Unit, which outputs the input if positive, otherwise zero). The choice of activation function can significantly impact a network's learning capacity and training dynamics."
+  },
+  {
+    name: "Algorithm",
+    shortDef: "Step-by-step procedure for solving a problem or performing computation",
+    topics: ["Mathematics", "Computer Science", "Logic"],
+    tags: ["#ComputerScience", "#ProblemSolving", "#Efficiency"],
+    related: ["Data Structures", "Complexity Theory", "Pseudocode", "Flowcharts", "Heuristics"],
+    fullDef: "An Algorithm is a step-by-step procedure or set of rules designed to solve a specific problem or perform a particular task. In the context of computer science and artificial intelligence, algorithms are precise sequences of computational steps that transform input data into desired output. They can range from simple procedures like sorting a list of numbers to complex decision-making processes in AI systems. Key properties of algorithms include their correctness (ability to solve the intended problem), efficiency (time and space complexity), and clarity (ease of understanding and implementation)."
+  },
+  // ... Add all 50 concepts here
+];
+
+const ConceptDisplay = ({ concept }) => (
+  <div className="p-6 max-w-3xl mx-auto bg-white rounded-xl shadow-md space-y-4">
+    <h2 className="text-2xl font-bold text-gray-900">{concept.name}</h2>
+    <p className="text-gray-600 italic">{concept.shortDef}</p>
+    <div className="space-y-2">
+      <p><strong>Topics:</strong> {concept.topics.join(", ")}</p>
+      <p><strong>Tags:</strong> {concept.tags.join(", ")}</p>
+      <p><strong>Related Concepts:</strong> {concept.related.join(", ")}</p>
+    </div>
+    <p className="text-gray-700 mt-4">{concept.fullDef}</p>
+  </div>
+);
+
+const ConceptCycler = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % concepts.length);
+    }, 10000); // Change concept every 10 seconds
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + concepts.length) % concepts.length);
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % concepts.length);
+  };
+
+  return (
+    <div className="relative">
+      <ConceptDisplay concept={concepts[currentIndex]} />
+      <div className="absolute top-1/2 left-0 transform -translate-y-1/2">
+        <button onClick={goToPrevious} className="p-2 bg-gray-200 rounded-full">
+          <ChevronLeft size={24} />
+        </button>
+      </div>
+      <div className="absolute top-1/2 right-0 transform -translate-y-1/2">
+        <button onClick={goToNext} className="p-2 bg-gray-200 rounded-full">
+          <ChevronRight size={24} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default ConceptCycler;
