@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI - Plans</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="pricing.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-section">
+                <a href="index.html" class="logo-container">
+                    <div class="logo-circle">
+                        <span class="logo-letter">U</span>
+                    </div>
+                </a>
+                <span class="logo-text">// Discover the Universe</span>
+            </div>
+            <div class="date-time" id="dateTime"></div>
+            <div class="day-night" id="dayNight">
+                <i class="lucide-sun"></i>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <h1>Unlock your potential with AI.</h1>
+            <div class="plans-container">
+                <div class="plan gradient-bg">
+                    <h2>Scholar</h2>
+                    <div class="price">$0/month</div>
+                    <ul class="features">
+                        <li>AI Supported Learning</li>                                                          
+                        <li>Access to Knowledge Base</li>
+                         <li>Limited Chat & Advanced Query</li>
+                        <li>Integrated Note & Task Management</li>
+                    </ul>
+                    <button class="btn get-started-btn" onclick="handlePlanSelection('free')">Get Started</button>
+                    <div class="signin-buttons">
+                        <div id="googleSignInButton" class="btn auth-btn google-btn"></div>
+                        <button id="appleid-signin" class="btn auth-btn apple-btn">
+                            <i class="fab fa-apple"></i>
+                            <span>Sign in with Apple</span>
+                        </button>
+                        <button id="meta-signin-button" class="btn auth-btn facebook-btn">
+                            <i class="fab fa-facebook-f"></i>
+                            <span>Continue with Facebook</span>
+                        </button>
+                        <button id="x-signin-button" class="btn auth-btn twitter-btn">
+                            <i class="fab fa-twitter"></i>
+                            <span>Continue with X</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="plan">
+                    <h2>Researcher</h2>
+                    <div class="price">$19.99/month</div>
+                    <ul class="features">
+                        <li>Advanced AI assistance</li>
+                        <li>Unlimited chat interactions</li>
+                        <li>Personalized learning paths</li>
+                        <li>Advanced note-taking & organization</li>
+                        <li>No Code Programming & Software Dev</li>
+                    </ul>
+                    <button class="btn subscribe-btn" onclick="handlePlanSelection('individual')">Subscribe Now</button>
+                </div>
+
+                <div class="plan">
+                    <h2>Fellow</h2>
+                    <div class="price">Contact Us</div>
+                    <ul class="features">
+                        <li>Custom AI solutions</li>
+                        <li>Dedicated account manager</li>
+                        <li>Team collaboration tools</li>
+                        <li>Advanced analytics and reporting</li>
+                        <li>24/7 premium support</li>
+                        <li>Custom integrations</li>
+                    </ul>
+                    <button class="btn contact-btn" onclick="handlePlanSelection('enterprise')">Contact Sales</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="app.html">About</a>
+                <a href="chat.html">Chat</a>
+                <a href="features.html">Features</a>
+                <a href="learning.html">Learn</a>
+                <a href="product.html">Product</a>
+            </nav>
+            <p class="copyright">&copy; 2024 UNIVERSITAS AI</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <script src="pricing.js"></script>
+</body>
+</html>
