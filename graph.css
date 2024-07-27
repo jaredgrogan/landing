@@ -278,7 +278,7 @@ li {
 }
 
 nav {
-    background-color: #111111;
+    background-color: #222222;
     padding: 10px;
     display: flex;
     justify-content: center;
@@ -301,7 +301,7 @@ nav a:hover {
 }
 
 footer {
-    background-color: #444444;
+    background-color: #222222;
     color: white;
     height: var(--footer-height);
     display: flex;
