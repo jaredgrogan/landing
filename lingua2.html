@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control de Herakles</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Panel de Control de Herakles</h1>
+        <div class="right-nav">
+            <nav>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Herramientas</a></li>
+                    <li class="dropdown">
+                        <a href="#">Idioma</a>
+                        <div class="dropdown-content">
+                            <a href="#" onclick="translateToSpanish()">Español</a>
+                            <a href="#" onclick="translateToEnglish()">English</a>
+                            <a href="#" onclick="translateToItalian()">Italiano</a>
+                            <a href="#" onclick="translateToFrench()">Français</a>
+                            <a href="#" onclick="translateToGerman()">Deutsch</a>
+                            <a href="#" onclick="translateToArabic()">العربية</a>
+                        </div>
+                    </li>
+                    <li>
+                        <button id="nightModeToggle">🌙</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div id="notesContainer"></div>
+        <button id="newNoteButton">Nueva Nota</button>
+        <div id="chatContainer" style="margin-top: 75px;">
+            <div class="chat-box">
+                <div id="heraklesResponse"></div>
+                <textarea id="chatInput" placeholder="Escribe un mensaje..."></textarea>
+                <div>
+                    <button id="chatSendButton">Enviar</button>
+                    <button id="recordButton">🎙️ Grabar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"></script>
+</body>
+</html>
