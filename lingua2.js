@@ -1,108 +1,112 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
+    const nightModeToggle = document.getElementById('nightModeToggle');
+    const nightIcon = document.getElementById('nightIcon');
+    const dayIcon = document.getElementById('dayIcon');
+    const languageToggle = document.getElementById('languageToggle');
     const newNoteButton = document.getElementById('newNoteButton');
     const notesContainer = document.getElementById('notesContainer');
     const chatSendButton = document.getElementById('chatSendButton');
-    const chatInput = document.getElementById('chatInput');
-    const heraklesResponse = document.getElementById('heraklesResponse');
     const recordButton = document.getElementById('recordButton');
-    const nightModeToggle = document.getElementById('nightModeToggle');
-
+    const heraklesResponse = document.getElementById('heraklesResponse');
+    const chatInput = document.getElementById('chatInput');
     let noteCount = 0;
+    const maxNotes = 10;
 
+    // Predefined note positions
+    const notePositions = [
+        { left: 100, top: 50 },
+        { left: 300, top: 50 },
+        { left: 500, top: 50 },
+        { left: 700, top: 50 },
+        { left: 900, top: 50 },
+        { left: 100, top: 300 },
+        { left: 300, top: 300 },
+        { left: 500, top: 300 },
+        { left: 700, top: 300 },
+        { left: 900, top: 300 }
+    ];
+
+    // Toggle night mode
     nightModeToggle.addEventListener('click', () => {
         document.body.classList.toggle('night-mode');
-        const nightMode = document.body.classList.contains('night-mode');
-        const links = document.querySelectorAll('nav ul li a');
-        links.forEach(link => {
-            link.style.color = nightMode ? '#ffffff' : '#000000';
-        });
+        if (document.body.classList.contains('night-mode')) {
+            nightIcon.style.display = 'none';
+            dayIcon.style.display = 'inline';
+        } else {
+            nightIcon.style.display = 'inline';
+            dayIcon.style.display = 'none';
+        }
     });
 
-    function createNote() {
-        const note = document.createElement('div');
-        note.classList.add('note');
-        note.innerHTML = `
-            <div class="note-header">
-                <input type="text" class="note-title" placeholder="Título">
-                <input type="text" class="note-tags" placeholder="Etiquetas">
-                <button class="delete-button note-button">Eliminar</button>
-            </div>
-            <div class="note-content">
-                <div id="editor${noteCount}"></div>
-            </div>
-        `;
-        noteCount++;
-        notesContainer.appendChild(note);
-        initializeEditor(noteCount - 1);
+    // Toggle language
+    languageToggle.addEventListener('click', () => {
+        const currentLang = document.documentElement.lang;
+        document.documentElement.lang = currentLang === 'en' ? 'ar' : 'en';
+    });
 
-        const deleteButton = note.querySelector('.delete-button');
-        deleteButton.addEventListener('click', () => {
-            notesContainer.removeChild(note);
-        });
+    // Show/hide notes container and add a new note
+    newNoteButton.addEventListener('click', () => {
+        if (notesContainer.style.display === 'none' || notesContainer.style.display === '') {
+            notesContainer.style.display = 'flex';
+            if (noteCount >= maxNotes) {
+                alert('Maximum number of notes reached');
+                return;
+            }
 
-        interact(note)
-            .draggable({
-                inertia: true,
-                modifiers: [
-                    interact.modifiers.restrictRect({
-                        restriction: 'parent',
-                        endOnly: true
-                    })
-                ],
-                autoScroll: true,
+            // Create a new note
+            const note = document.createElement('div');
+            note.className = 'note';
+            note.id = 'note-' + noteCount;
+            const noteIndex = noteCount % notePositions.length;
+            note.style.left = notePositions[noteIndex].left + 'px';
+            note.style.top = notePositions[noteIndex].top + 'px';
+            note.innerHTML = `
+                <div class="note-header">
+                    <input type="text" class="note-title" placeholder="Title">
+                    <input type="text" class="note-tags" placeholder="Tags">
+                </div>
+                <div class="note-content" contenteditable="true" placeholder="Write your note here..."></div>
+                <div class="note-buttons">
+                    <button class="note-button save-button">Save</button>
+                    <button class="note-button delete-button">Delete</button>
+                </div>
+            `;
+            notesContainer.appendChild(note);
+            noteCount++;
+
+            // Make notes draggable
+            interact('.note').draggable({
                 listeners: {
                     move(event) {
                         const target = event.target;
                         const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
                         const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-                        target.style.transform = `translate(${x}px, ${y}px)`;
-                        target.setAttribute('data-x', x);
-                        target.setAttribute('data-y', y);
-                    }
-                }
-            })
-            .resizable({
-                edges: { left: true, right: true, bottom: true, top: true },
-                listeners: {
-                    move(event) {
-                        const target = event.target;
-                        let x = (parseFloat(target.getAttribute('data-x')) || 0);
-                        let y = (parseFloat(target.getAttribute('data-y')) || 0);
-
-                        target.style.width = `${event.rect.width}px`;
-                        target.style.height = `${event.rect.height}px`;
-
-                        x += event.deltaRect.left;
-                        y += event.deltaRect.top;
-
                         target.style.transform = `translate(${x}px, ${y}px)`;
                         target.setAttribute('data-x', x);
                         target.setAttribute('data-y', y);
                     }
                 }
             });
-    }
-
-    function initializeEditor(index) {
-        const editorId = `editor${index}`;
-        const editor = new Quill(`#${editorId}`, {
-            theme: 'snow',
-        });
-    }
-
-    newNoteButton.addEventListener('click', createNote);
-
-    chatSendButton.addEventListener('click', () => {
-        const message = chatInput.value.trim();
-        if (message) {
-            heraklesResponse.innerHTML += `<p>${message}</p>`;
-            chatInput.value = '';
-            heraklesResponse.scrollTop = heraklesResponse.scrollHeight;
+        } else {
+            notesContainer.style.display = 'none';
         }
     });
 
+    // Handle chat input
+    chatSendButton.addEventListener('click', () => {
+        const userMessage = chatInput.value;
+        if (userMessage.trim() === '') {
+            alert('Please enter a message.');
+            return;
+        }
+        const userMessageElement = document.createElement('div');
+        userMessageElement.textContent = userMessage;
+        heraklesResponse.appendChild(userMessageElement);
+        chatInput.value = '';
+    });
+
+    // Record button functionality (currently not implemented)
     recordButton.addEventListener('click', () => {
-        alert('Recording functionality not implemented yet.');
+        alert('Record functionality not implemented.');
     });
 });
