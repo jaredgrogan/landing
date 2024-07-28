@@ -141,3 +141,66 @@ main {
     background-color: #111111;
     color: white;
 }
+
+deleteButton = note.querySelector('.delete-button');
+deleteButton.addEventListener('click', () => {
+notesContainer.removeChild(note);
+});
+interact(note)
+        .draggable({
+            inertia: true,
+            modifiers: [
+                interact.modifiers.restrictRect({
+                    restriction: 'parent',
+                    endOnly: true
+                })
+            ],
+            autoScroll: true,
+            listeners: {
+                move(event) {
+                    const target = event.target;
+                    const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                    const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                    target.style.transform = `translate(${x}px, ${y}px)`;
+                    target.setAttribute('data-x', x);
+                    target.setAttribute('data-y', y);
+                }
+            }
+        });
+}
+
+function initializeEditor(index) {
+    const toolbarOptions = [
+        ['bold', 'italic', 'underline'],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+    ];
+
+    new Quill(`#editor${index}`, {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        theme: 'snow'
+    });
+}
+
+newNoteButton.addEventListener('click', createNote);
+
+chatSendButton.addEventListener('click', () => {
+    const userMessage = chatInput.value.trim();
+    if (userMessage) {
+        heraklesResponse.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
+        chatInput.value = '';
+
+        // Mock AI response (replace with actual AI integration)
+        setTimeout(() => {
+            heraklesResponse.innerHTML += `<p><strong>Herakles:</strong> Estoy procesando tu mensaje...</p>`;
+        }, 500);
+    }
+});
+
+recordButton.addEventListener('click', () => {
+    alert('¡Función de grabación de voz próximamente!');
+});
+});
+</antArtifact>
