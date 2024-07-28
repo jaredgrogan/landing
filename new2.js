@@ -26,6 +26,134 @@ document.addEventListener('DOMContentLoaded', () => {
         { left: 1900, top: 150 }
     ];
 
+const translations = {
+        en: {
+            home: 'Home',
+            tools: 'Tools',
+            newNote: 'New Note',
+            send: 'Send',
+            record: 'Record',
+            heraklesGreeting: "HI, I'm Herakles. What are you working on?",
+            typePlaceholder: "// Type your project here",
+            summary: 'Summary',
+            extract: 'Extract',
+            analyze: 'Analyze',
+            actions: 'Actions',
+            export: 'Export',
+            save: 'Save',
+            assets: 'Assets'
+        },
+        es: {
+            home: 'Inicio',
+            tools: 'Herramientas',
+            newNote: 'Nueva Nota',
+            send: 'Enviar',
+            record: 'Grabar',
+            heraklesGreeting: "Hola, soy Herakles. ¿En qué estás trabajando?",
+            typePlaceholder: "// Escribe tu proyecto aquí",
+            summary: 'Resumen',
+            extract: 'Extraer',
+            analyze: 'Analizar',
+            actions: 'Acciones',
+            export: 'Exportar',
+            save: 'Guardar',
+            assets: 'Activos'
+        },
+        it: {
+            home: 'Home',
+            tools: 'Strumenti',
+            newNote: 'Nuova Nota',
+            send: 'Invia',
+            record: 'Registra',
+            heraklesGreeting: "Ciao, sono Herakles. Su cosa stai lavorando?",
+            typePlaceholder: "// Scrivi il tuo progetto qui",
+            summary: 'Riepilogo',
+            extract: 'Estrai',
+            analyze: 'Analizza',
+            actions: 'Azioni',
+            export: 'Esporta',
+            save: 'Salva',
+            assets: 'Risorse'
+        },
+        fr: {
+            home: 'Accueil',
+            tools: 'Outils',
+            newNote: 'Nouvelle Note',
+            send: 'Envoyer',
+            record: 'Enregistrer',
+            heraklesGreeting: "Salut, je suis Herakles. Sur quoi travailles-tu ?",
+            typePlaceholder: "// Écrivez votre projet ici",
+            summary: 'Résumé',
+            extract: 'Extraire',
+            analyze: 'Analyser',
+            actions: 'Actions',
+            export: 'Exporter',
+            save: 'Sauvegarder',
+            assets: 'Ressources'
+        },
+        de: {
+            home: 'Startseite',
+            tools: 'Werkzeuge',
+            newNote: 'Neue Notiz',
+            send: 'Senden',
+            record: 'Aufnehmen',
+            heraklesGreeting: "Hallo, ich bin Herakles. Woran arbeitest du?",
+            typePlaceholder: "// Geben Sie Ihr Projekt hier ein",
+            summary: 'Zusammenfassung',
+            extract: 'Extrahieren',
+            analyze: 'Analysieren',
+            actions: 'Aktionen',
+            export: 'Exportieren',
+            save: 'Speichern',
+            assets: 'Ressourcen'
+        },
+        ar: {
+            home: 'الرئيسية',
+            tools: 'الأدوات',
+            newNote: 'ملاحظة جديدة',
+            send: 'إرسال',
+            record: 'تسجيل',
+            heraklesGreeting: "مرحبا، أنا هيراكليس. على ماذا تعمل؟",
+            typePlaceholder: "// اكتب مشروعك هنا",
+            summary: 'ملخص',
+            extract: 'استخراج',
+            analyze: 'تحليل',
+            actions: 'إجراءات',
+            export: 'تصدير',
+            save: 'حفظ',
+            assets: 'الأصول'
+        }
+    };
+
+    languageSelect.addEventListener('change', (event) => {
+        const selectedLanguage = event.target.value;
+        updateLanguage(selectedLanguage);
+    });
+
+    function updateLanguage(lang) {
+        const t = translations[lang];
+        
+        // Update main menu items
+        document.querySelector('nav ul li:first-child a').textContent = t.home;
+        document.querySelector('nav ul li:nth-child(2) a').textContent = t.tools;
+
+        // Update dropdown menu items
+        const dropdownItems = document.querySelectorAll('.dropdown-content a');
+        dropdownItems[0].textContent = t.summary;
+        dropdownItems[1].textContent = t.extract;
+        dropdownItems[2].textContent = t.analyze;
+        dropdownItems[3].textContent = t.actions;
+        dropdownItems[4].textContent = t.export;
+        dropdownItems[5].textContent = t.save;
+        dropdownItems[6].textContent = t.assets;
+
+        // Update other UI elements
+        document.getElementById('heraklesResponse').innerHTML = t.heraklesGreeting;
+        document.getElementById('chatInput').setAttribute('placeholder', t.typePlaceholder);
+        document.getElementById('chatSendButton').textContent = t.send;
+        document.getElementById('recordButton').textContent = t.record;
+        document.getElementById('newNoteButton').textContent = t.newNote;
+    }
     newNoteButton.addEventListener('click', () => {
         if (noteCount < maxNotes) {
             createNote();
@@ -93,6 +221,7 @@ nightModeToggle.addEventListener('click', () => {
         recordButton.innerText = 'Record';
         newNoteButton.innerText = 'New Note';
     }
+    
 function createNote() {
         const note = document.createElement('div');
         note.className = 'note';
