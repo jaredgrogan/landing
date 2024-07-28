@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const texts = [
         "// Discover the Universe,",
-        "// Discover the Universe,"
+        "// Discover the Universe",
         "// Descubre el Universo",
         "// Scopri l'Universo.",
         "// Découvrez l'Univers",
