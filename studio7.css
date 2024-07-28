@@ -68,6 +68,10 @@ nav ul li a {
     font-family: 'Berkeley Mono', monospace;
 }
 
+.night-mode nav ul li a {
+    color: white; /* Change link color to white in night mode */
+}
+
 .dropdown-content {
     display: none;
     position: absolute;
@@ -113,6 +117,8 @@ nav ul li a {
     padding: 10px 20px;
     margin: 20px;
     cursor: pointer;
+    background-color: #111111; /* Dark background color for day mode */
+    color: white; /* White font color for day mode */
     position: fixed;
     bottom: 10px;
     left: 10px;
@@ -121,6 +127,11 @@ nav ul li a {
 
 #newNoteButton:hover {
     transform: scale(1.5);
+}
+
+.night-mode #newNoteButton {
+    background-color: #f5f5f5; /* Light background color for night mode */
+    color: black; /* Black font color for night mode */
 }
 
 #notesContainer {
