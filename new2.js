@@ -37,9 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.toggle('night-mode');
         if (document.body.classList.contains('night-mode')) {
             nightIcon.style.display = 'none';
-            dayIcon.style.display = 'block';
+            dayIcon.style.display = 'inline-block';
         } else {
-            nightIcon.style.display = 'block';
+            nightIcon.style.display = 'inline-block';
             dayIcon.style.display = 'none';
         }
     });
@@ -55,24 +55,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function translateToSpanish() {
         document.querySelectorAll('nav ul li a').forEach((element, index) => {
-            const spanishMenu = ['Inicio', 'Resumen', 'Extraer', 'Analizar', 'Exportar', 'Activos', 'Guardar'];
-            element.innerText = spanishMenu[index];
+            const spanishMenu = ['Inicio', 'Herramientas'];
+            if (index < spanishMenu.length) {
+                element.innerText = spanishMenu[index];
+            }
+        });
+        document.querySelectorAll('.dropdown-content a').forEach((element, index) => {
+            const spanishSubmenu = ['Resumen', 'Extraer', 'Analizar', 'Acciones', 'Exportar', 'Guardar', 'Activos'];
+            if (index < spanishSubmenu.length) {
+                element.innerText = spanishSubmenu[index];
+            }
         });
         document.getElementById('heraklesResponse').innerHTML = 'Hola, soy Herakles. ¿En qué estás trabajando?';
         chatInput.setAttribute('placeholder', '// Escribe tu proyecto aquí');
         chatSendButton.innerText = 'Enviar';
         recordButton.innerText = 'Grabar';
+        newNoteButton.innerText = 'Nueva Nota';
     }
 
     function translateToEnglish() {
         document.querySelectorAll('nav ul li a').forEach((element, index) => {
-            const englishMenu = ['Home', 'Summarize', 'Extract', 'Analyze', 'Export', 'Assets', 'Save'];
-            element.innerText = englishMenu[index];
+            const englishMenu = ['Home', 'Tools'];
+            if (index < englishMenu.length) {
+                element.innerText = englishMenu[index];
+            }
+        });
+        document.querySelectorAll('.dropdown-content a').forEach((element, index) => {
+            const englishSubmenu = ['Summary', 'Extract', 'Analyze', 'Actions', 'Export', 'Save', 'Assets'];
+            if (index < englishSubmenu.length) {
+                element.innerText = englishSubmenu[index];
+            }
         });
         document.getElementById('heraklesResponse').innerHTML = 'HI, I\'m Herakles. What are you working on?';
         chatInput.setAttribute('placeholder', '// Type your project here');
         chatSendButton.innerText = 'Send';
         recordButton.innerText = 'Record';
+        newNoteButton.innerText = 'New Note';
     }
 
     function createNote() {
@@ -109,16 +127,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function makeNoteDraggable(note) {
-        note.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', null); // Required for Firefox
-            const rect = note.getBoundingClientRect();
-            e.dataTransfer.setDragImage(note, e.clientX - rect.left, e.clientY - rect.top);
-        });
+        interact(note)
+            .draggable({
+                inertia: true,
+                modifiers: [
+                    interact.modifiers.restrictRect({
+                        restriction: 'parent',
+                        endOnly: true
+                    })
+                ],
+                autoScroll: true,
+                listeners: {
+                    move: dragMoveListener,
+                }
+            });
+    }
 
-        note.addEventListener('dragend', (e) => {
-            note.style.left = `${e.clientX - note.offsetWidth / 2}px`;
-            note.style.top = `${e.clientY - note.offsetHeight / 2}px`;
-        });
+    function dragMoveListener(event) {
+        var target = event.target;
+        var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+        var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+        target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+
+        target.setAttribute('data-x', x);
+        target.setAttribute('data-y', y);
     }
 
     function initializeEditor(index) {
@@ -144,3 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
             chatInput.value = '';
 
             // Mock AI response (replace with actual AI integration)
+            setTimeout(() => {
+                heraklesResponse.innerHTML += `<p><strong>Herakles:</strong> I'm processing your message...</p>`;
+            }, 500);
+        }
+    });
+
+    recordButton.addEventListener('click', () => {
+        alert('Voice recording feature coming soon!');
+    });
+});
