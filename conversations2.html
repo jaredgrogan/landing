@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universitas AI - Herakles Chat</title>
+  <link rel="stylesheet" href="chat-style3.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo-section">
+        <a href="#" class="logo-container">
+          <div class="logo-circle">
+            <span class="logo-letter">U</span>
+          </div>
+          <span class="logo-text">Universitas AI</span>
+        </a>
+      </div>
+      <div class="day-night-toggle">
+        <svg class="icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <aside class="side-panel">
+        <div class="file-structure">
+          <h3>Files</h3>
+          <ul>
+            <li class="folder">
+              <span>Folder 1</span>
+              <ul>
+                <li>File 1</li>
+                <li>File 2</li>
+              </ul>
+            </li>
+            <li class="folder">
+              <span>Folder 2</span>
+              <ul>
+                <li>File 3</li>
+                <li>File 4</li>
+              </ul>
+            </li>
+          </ul>
+          <button id="newFolderButton">New Folder</button>
+          <button id="newNoteButton">New Note</button>
+        </div>
+      </aside>
+
+      <section class="chat-section">
+        <div class="chat-messages">
+          <div class="chat-message ai">Hi, I'm Herakles. How can I assist you today?</div>
+        </div>
+        <div class="chat-input">
+          <input type="text" placeholder="Type your message...">
+          <button>Send</button>
+          <button id="voiceNoteButton">
+            <svg class="icon mic-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <aside class="right-panel">
+        <div class="language-selector">
+          <select>
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <!-- Add more language options -->
+          </select>
+        </div>
+      </aside>
+    </main>
+
+    <div id="notePadPopup" class="note-pad-popup">
+      <div class="note-pad-header">
+        <input type="text" placeholder="Note Title">
+        <button id="saveNoteButton">Save</button>
+        <button id="closeNoteButton">Close</button>
+      </div>
+      <div class="note-pad-editor" contenteditable="true"></div>
+    </div>
+
+    <footer>
+      <p class="copyright">© 2024 Universitas AI. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
