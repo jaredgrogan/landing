@@ -247,7 +247,7 @@ nav ul li a {
     justify-content: center;
     padding: 20px;
     position: absolute;
-    bottom: 33%;
+    bottom: calc(33% - 150px); /* Adjusted to move down by 150px */
     width: 100%;
 }
 
