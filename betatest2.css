@@ -1,0 +1,126 @@
+/* styles.css */
+body {
+    font-family: 'Berkeley Mono', monospace;
+}
+
+.note-pad {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 600px; /* 100% bigger */
+    height: 400px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, max-height 0.3s ease;
+    overflow: hidden;
+    resize: both;
+}
+
+.note-pad.collapsed {
+    max-height: 50px;
+}
+
+.note-pad.expanded {
+    max-height: 90vh; /* portrait size */
+}
+
+.note-content {
+    padding: 20px; /* Increased padding */
+    display: none;
+    height: calc(100% - 50px);
+}
+
+.note-content.visible {
+    display: block;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px; /* Increased padding */
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-family: 'Berkeley Mono', monospace;
+}
+
+textarea {
+    height: calc(100% - 90px); /* Adjusted height for better fit */
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    margin-top: 10px;
+    font-family: 'Berkeley Mono', monospace;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.status {
+    margin-top: 10px;
+    font-size: 12px;
+    color: green;
+    display: none;
+}
+
+.status.error {
+    color: red;
+}
+
+#newNoteButton {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Berkeley Mono', monospace;
+}
+
+#newNoteButton:hover {
+    background-color: #0056b3;
+}
+
+.move-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background-color: #f1f1f1;
+    cursor: move;
+    display: none;
+}
+
+.note-pad.expanded .move-handle {
+    display: block;
+}
+
+.resize-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background-color: #f1f1f1;
+    cursor: se-resize;
+    display: none;
+}
+
+.note-pad.expanded .resize-handle {
+    display: block;
+}
