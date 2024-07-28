@@ -1,83 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const maxNotes = 8;
-    let noteCount = 0;
-    let notePositions = [
-        { top: 100, left: 100 },
-        { top: 100, left: 250 },
-        { top: 100, left: 400 },
-        { top: 250, left: 100 },
-        { top: 250, left: 250 },
-        { top: 250, left: 400 },
-        { top: 400, left: 100 },
-        { top: 400, left: 250 },
-        { top: 400, left: 400 },
-        { top: 550, left: 100 },
-    ];
-    let currentNotePosition = 0;
-
     const notesContainer = document.getElementById('notesContainer');
     const nightModeToggle = document.getElementById('nightModeToggle');
     const nightIcon = document.getElementById('nightIcon');
     const dayIcon = document.getElementById('dayIcon');
     const chatSendButton = document.getElementById('chatSendButton');
-    const voiceMemoButton = document.getElementById('voiceMemoButton');
+    let noteCount = 0;
+    const maxNotes = 8;
+    const notePositions = [
+        { left: 50, top: 50 },
+        { left: 200, top: 150 },
+        { left: 400, top: 300 },
+        { left: 600, top: 450 },
+        { left: 800, top: 600 },
+        { left: 1000, top: 750 },
+        { left: 1200, top: 900 },
+        { left: 1400, top: 1050 }
+    ];
 
-    const createNote = () => {
+    document.getElementById('newNoteButton').addEventListener('click', () => {
         if (noteCount < maxNotes) {
-            const note = document.createElement('div');
-            note.className = 'note resizable';
-            note.style.top = `${notePositions[currentNotePosition].top}px`;
-            note.style.left = `${notePositions[currentNotePosition].left}px`;
-            currentNotePosition = (currentNotePosition + 1) % notePositions.length;
-            note.innerHTML = `
-                <div class="note-header">
-                    <input type="text" class="note-title" placeholder="Title">
-                    <input type="text" class="note-tags" placeholder="Tags">
-                </div>
-                <div class="quill note-content"></div>
-                <div class="note-buttons">
-                    <button class="note-button saveButton">💾</button>
-                    <button class="note-button closeButton">❌</button>
-                </div>
-            `;
-
-            const quill = new Quill(note.querySelector('.note-content'), {
-                theme: 'snow'
-            });
-
-            notesContainer.appendChild(note);
-            noteCount++;
-
-            const saveButton = note.querySelector('.saveButton');
-            const closeButton = note.querySelector('.closeButton');
-
-            saveButton.addEventListener('click', () => {
-                const title = note.querySelector('.note-title').value;
-                const tags = note.querySelector('.note-tags').value;
-                const content = quill.root.innerHTML;
-                localStorage.setItem(`note-${Date.now()}`, JSON.stringify({ title, tags, content }));
-                alert('Note saved!');
-            });
-
-            closeButton.addEventListener('click', () => {
-                note.remove();
-                noteCount--;
-            });
-
-            note.addEventListener('mousedown', () => {
-                note.style.zIndex = maxNotes;
-                Array.from(notesContainer.children).forEach((child, index) => {
-                    if (child !== note) {
-                        child.style.zIndex = index;
-                    }
-                });
-            });
+            createNote();
         } else {
-            alert('Maximum number of notes reached!');
+            alert('Maximum note limit reached!');
         }
-    };
-
-    document.getElementById('newNoteButton').addEventListener('click', createNote);
+    });
 
     nightModeToggle.addEventListener('click', () => {
         document.body.classList.toggle('night-mode');
@@ -85,21 +31,83 @@ document.addEventListener('DOMContentLoaded', () => {
         dayIcon.style.display = dayIcon.style.display === 'none' ? 'inline' : 'none';
     });
 
+    function createNote() {
+        const note = document.createElement('div');
+        note.className = 'note resizable';
+        note.style.position = 'absolute';
+        note.style.left = notePositions[noteCount].left + 'px';
+        note.style.top = notePositions[noteCount].top + 'px';
+        note.innerHTML = `
+            <div class="note-header">
+                <input type="text" placeholder="Title" class="note-title">
+                <input type="text" placeholder="Tags (comma separated)" class="note-tags">
+            </div>
+            <div class="note-content" id="noteContent${noteCount}">
+                <div id="toolbar${noteCount}">
+                    <button class="ql-bold">B</button>
+                    <button class="ql-italic">I</button>
+                    <button class="ql-underline">U</button>
+                    <button class="ql-list" value="ordered">Ordered List</button>
+                    <button class="ql-list" value="bullet">Bullet List</button>
+                </div>
+                <div class="text-editor" id="editor${noteCount}"></div>
+            </div>
+            <div class="note-buttons">
+                <button class="note-button save-button">💾</button>
+                <button class="note-button delete-button">🗑️</button>
+            </div>
+        `;
+
+        const editorContainer = note.querySelector(`#editor${noteCount}`);
+        const toolbarContainer = note.querySelector(`#toolbar${noteCount}`);
+        const quill = new Quill(editorContainer, {
+            theme: 'snow',
+            modules: {
+                toolbar: toolbarContainer
+            }
+        });
+
+        notesContainer.appendChild(note);
+
+        note.querySelector('.delete-button').addEventListener('click', () => {
+            note.remove();
+            noteCount--;
+        });
+
+        noteCount++;
+    }
+
     chatSendButton.addEventListener('click', () => {
-        const message = document.getElementById('chatInput').value;
-        if (message.trim() !== '') {
-            alert(`Message sent: ${message}`);
-            document.getElementById('chatInput').value = '';
+        const chatInput = document.getElementById('chatInput').value;
+        if (chatInput.trim() !== '') {
+            fetchResponse(chatInput);
         }
     });
 
-    const chatContainer = document.getElementById('chatContainer');
-    const observer = new MutationObserver(() => {
-        const chatHeight = chatContainer.offsetHeight;
-        const chatWidth = chatContainer.offsetWidth;
+    function fetchResponse(inputText) {
+        const heraklesResponse = document.getElementById('heraklesResponse');
+        const endpoint = 'https://api.openai.com/v1/engines/davinci-codex/completions';
+        const data = {
+            prompt: inputText,
+            max_tokens: 50
+        };
 
-        document.getElementById('chatInput').style.height = `${chatHeight - 80}px`;
-    });
-
-    observer.observe(chatContainer, { attributes: true, childList: true, subtree: true });
+        fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                const message = data.choices[0].text.trim();
+                heraklesResponse.textContent = message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                heraklesResponse.textContent = 'Error fetching response';
+            });
+    }
 });
