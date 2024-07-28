@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotePad</title>
+    <link rel="stylesheet" href="betatest2.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap">
+</head>
+<body>
+    <div class="note-pad collapsed" id="notePad1">
+        <button class="toggleButton" id="toggleButton1">Expand NotePad</button>
+        <div class="note-content">
+            <input type="text" class="noteTitle" id="noteTitle1" placeholder="Title">
+            <textarea class="noteContent" id="noteContent1" placeholder="Write your note here..."></textarea>
+            <input type="text" class="noteTags" id="noteTags1" placeholder="Tags (comma separated)">
+            <button class="saveButton" id="saveButton1">Save</button>
+            <p class="status" id="statusMessage1"></p>
+        </div>
+        <div class="resize-handle" id="resizeHandle1"></div>
+        <div class="move-handle" id="moveHandle1"></div>
+    </div>
+    <button id="newNoteButton">Note +</button>
+    <script src="betatest2.js"></script>
+</body>
+</html>
