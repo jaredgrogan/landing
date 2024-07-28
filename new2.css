@@ -108,13 +108,18 @@ nav ul li a {
     position: fixed;
     bottom: 10px;
     left: 10px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
     background-color: #222222;
     color: white;
 }
 
 #newNoteButton:hover {
     transform: scale(1.5);
+}
+
+.night-mode #newNoteButton {
+    background-color: #e4e4e4;
+    color: #222222;
 }
 
 #notesContainer {
