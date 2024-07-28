@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "// Descubre el Universo",
         "// Scopri l'Universo.",
         "// Découvrez l'Univers",
-        "// Entdecke das Universum',
+        "// Entdecke das Universum",
         "// اكتشف الكون ",
         "Coming 09.09.2024",
         "// Universitas Pro",
