@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Pad App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="newNoteButton" class="new-note-button"></div>
+    <div id="folderButton" class="folder-button"></div>
+    <div id="folderWindow" class="folder-window collapsed">
+        <div class="folder-content">
+            <h3>Saved Notes</h3>
+            <div id="noteList"></div>
+            <h3>Drafts</h3>
+            <div id="draftList"></div>
+        </div>
+    </div>
+    <div id="chatButton" class="chat-button">Chat</div>
+    <div id="chatPad" class="chat-pad collapsed">
+        <div class="chat-content">
+            <textarea id="chatContent" placeholder="Type your message here..."></textarea>
+            <button id="sendButton">Send</button>
+            <p id="chatStatusMessage" class="status"></p>
+            <button id="chatCloseButton" class="closeButton">X</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
