@@ -1,52 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Courier+Prime&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    transition: background-color 0.3s, color 0.3s;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    transition: background-color 0.5s, color 0.5s;
 }
 
-body.dark-mode {
-    background-color: #1a202c;
+.day-mode {
+    background-color: white;
+    color: black;
+}
+
+.night-mode {
+    background-color: #111111;
     color: white;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-header {
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    padding: 20px;
 }
 
-.header-buttons {
+.logo-container {
     display: flex;
-    gap: 10px;
+    align-items: center;
 }
 
-button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
+.logo {
+    width: 50px;
+    height: 50px;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.1);
+}
+
+.tagline {
+    font-family: 'Courier Prime', monospace;
+    margin-left: 20px;
+    font-size: 1.2rem;
+}
+
+.mode-toggle {
     cursor: pointer;
-    background-color: #4299E1;
-    color: white;
+    font-size: 24px;
+}
+
+.mode-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
 }
 
 .search-filter {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    width: 100%;
+    max-width: 800px;
 }
 
-input, select {
+input, select, button {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 1rem;
+}
+
+input, select {
+    flex-grow: 1;
+}
+
+button {
+    cursor: pointer;
+    background-color: #4299E1;
+    color: white;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #3182ce;
 }
 
 .metrics {
@@ -54,6 +110,8 @@ input, select {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     margin-bottom: 20px;
+    width: 100%;
+    max-width: 800px;
 }
 
 .metric-card {
@@ -61,9 +119,10 @@ input, select {
     padding: 20px;
     border-radius: 10px;
     text-align: center;
+    transition: background-color 0.3s;
 }
 
-.dark-mode .metric-card {
+.night-mode .metric-card {
     background-color: #2d3748;
 }
 
@@ -73,6 +132,7 @@ input, select {
     border: 1px solid #ccc;
     border-radius: 10px;
     overflow: hidden;
+    margin-bottom: 20px;
 }
 
 #selectedConcept {
@@ -80,14 +140,45 @@ input, select {
     padding: 20px;
     background-color: #f0f0f0;
     border-radius: 10px;
+    width: 100%;
+    max-width: 800px;
+    transition: background-color 0.3s;
 }
 
-.dark-mode #selectedConcept {
+.night-mode #selectedConcept {
     background-color: #2d3748;
 }
 
 .hidden {
     display: none;
+}
+
+nav {
+    background-color: #111111;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    transition: transform 0.3s ease;
+}
+
+nav a:hover {
+    transform: scale(1.1);
+}
+
+footer {
+    background-color: #111111;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    font-family: 'Courier Prime', monospace;
 }
 
 .modal {
@@ -109,7 +200,7 @@ input, select {
     width: 300px;
 }
 
-.dark-mode .modal-content {
+.night-mode .modal-content {
     background-color: #2d3748;
 }
 
@@ -117,4 +208,42 @@ input, select {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tagline {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .mode-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .search-filter {
+        flex-direction: column;
+    }
+
+    .metrics {
+        grid-template-columns: 1fr;
+    }
+
+    nav {
+        flex-wrap: wrap;
+    }
+
+    nav a {
+        margin: 5px 10px;
+    }
 }
