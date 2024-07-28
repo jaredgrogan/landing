@@ -254,6 +254,32 @@ nav ul li a {
     color: white;
 }
 
+.night-mode #chatInput::placeholder {
+    color: white;
+    opacity: 0.7; /* Adjust this value for desired visibility */
+}
+
+/* For older browsers */
+.night-mode #chatInput::-webkit-input-placeholder {
+    color: white;
+    opacity: 0.7;
+}
+
+.night-mode #chatInput::-moz-placeholder {
+    color: white;
+    opacity: 0.7;
+}
+
+.night-mode #chatInput:-ms-input-placeholder {
+    color: white;
+    opacity: 0.7;
+}
+
+.night-mode #chatInput:-moz-placeholder {
+    color: white;
+    opacity: 0.7;
+}
+
 #chatSendButton, #recordButton {
     width: 100%;
     padding: 10px;
