@@ -40,19 +40,19 @@ body {
 
 .note-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     margin-bottom: 10px;
 }
 
 .note-title, .note-tags {
-    width: 45%;
+    width: 100%;
     font-size: 14px;
+    margin-bottom: 5px;
 }
 
 .note-content {
     width: 100%;
-    height: calc(100% - 60px);
+    height: calc(100% - 80px);
     font-size: 14px;
     border: none;
     resize: none;
