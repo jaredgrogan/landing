@@ -34,16 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    nightModeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('night-mode');
-        if (document.body.classList.contains('night-mode')) {
-            nightIcon.style.display = 'none';
-            dayIcon.style.display = 'inline-block';
-        } else {
-            nightIcon.style.display = 'inline-block';
-            dayIcon.style.display = 'none';
-        }
-    });
+nightModeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('night-mode');
+    if (document.body.classList.contains('night-mode')) {
+        nightIcon.style.display = 'none';
+        dayIcon.style.display = 'inline-block';
+    } else {
+        nightIcon.style.display = 'inline-block';
+        dayIcon.style.display = 'none';
+    }
+});
 
     languageSelect.addEventListener('change', (event) => {
         const selectedLanguage = event.target.value;
