@@ -159,8 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const t = translations[lang];
         
         // Update main menu items
-        document.querySelector('nav ul li:first-child a').textContent = t.home;
-        document.querySelector('nav ul li:nth-child(2) a').textContent = t.tools;
+        const navItems = document.querySelectorAll('nav ul li a');
+        navItems[0].textContent = t.home;
+        navItems[1].textContent = t.tools;
 
         // Update dropdown menu items
         const dropdownItems = document.querySelectorAll('.dropdown-content a');
@@ -173,11 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdownItems[6].textContent = t.assets;
 
         // Update other UI elements
-        document.getElementById('heraklesResponse').innerHTML = t.heraklesGreeting;
-        document.getElementById('chatInput').setAttribute('placeholder', t.typePlaceholder);
-        document.getElementById('chatSendButton').textContent = t.send;
-        document.getElementById('recordButton').textContent = t.record;
-        document.getElementById('newNoteButton').textContent = t.newNote;
+        heraklesResponse.innerHTML = t.heraklesGreeting;
+        chatInput.setAttribute('placeholder', t.typePlaceholder);
+        chatSendButton.textContent = t.send;
+        recordButton.textContent = t.record;
+        newNoteButton.textContent = t.newNote;
         logoText.textContent = t.discoverUniverse;
     }
 
@@ -268,8 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     chatSendButton.addEventListener('click', () => {
-        const chatInput = document.getElementById('chatInput');
-        const heraklesResponse = document.getElementById('heraklesResponse');
         const userMessage = chatInput.value.trim();
         if (userMessage) {
             heraklesResponse.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
