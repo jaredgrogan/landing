@@ -58,61 +58,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="text-editor" id="editor${noteCount}"></div>
             </div>
             <div class="note-buttons">
-                <button class="note-button save-button">💾</button>
-                <button class="note-button delete-button">🗑️</button>
+                <button class="note-button save-button">Save</button>
+                <button class="note-button delete-button">Delete</button>
             </div>
         `;
-
-        const editorContainer = note.querySelector(`#editor${noteCount}`);
-        const toolbarContainer = note.querySelector(`#toolbar${noteCount}`);
-        const quill = new Quill(editorContainer, {
-            theme: 'snow',
-            modules: {
-                toolbar: toolbarContainer
-            }
-        });
-
-        notesContainer.appendChild(note);
-
-        note.querySelector('.delete-button').addEventListener('click', () => {
-            note.remove();
-            noteCount--;
-        });
-
         noteCount++;
+        notesContainer.appendChild(note);
+        makeNoteResizable(note);
+        initializeEditor(noteCount - 1);
+    }
+
+    function makeNoteResizable(note) {
+        note.addEventListener('mousedown', initResize, false);
+
+        function initResize(e) {
+            window.addEventListener('mousemove', resize, false);
+            window.addEventListener('mouseup', stopResize, false);
+        }
+
+        function resize(e) {
+            note.style.width = (e.clientX - note.offsetLeft) + 'px';
+            note.style.height = (e.clientY - note.offsetTop) + 'px';
+        }
+
+        function stopResize() {
+            window.removeEventListener('mousemove', resize, false);
+            window.removeEventListener('mouseup', stopResize, false);
+        }
+    }
+
+    function initializeEditor(index) {
+        const toolbarOptions = [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+        ];
+
+        new Quill(`#editor${index}`, {
+            modules: {
+                toolbar: toolbarOptions
+            },
+            theme: 'snow'
+        });
     }
 
     chatSendButton.addEventListener('click', () => {
-        const chatInput = document.getElementById('chatInput').value;
-        if (chatInput.trim() !== '') {
-            fetchResponse(chatInput);
+        const chatInput = document.getElementById('chatInput');
+        const heraklesResponse = document.getElementById('heraklesResponse');
+        const userMessage = chatInput.value.trim();
+        if (userMessage) {
+            heraklesResponse.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
+            chatInput.value = '';
+
+            // Mock AI response (replace with actual AI integration)
+            setTimeout(() => {
+                heraklesResponse.innerHTML += `<p><strong>Herakles:</strong> I'm processing your message...</p>`;
+            }, 500);
         }
     });
 
-    function fetchResponse(inputText) {
-        const heraklesResponse = document.getElementById('heraklesResponse');
-        const endpoint = 'https://api.openai.com/v1/engines/davinci-codex/completions';
-        const data = {
-            prompt: inputText,
-            max_tokens: 50
-        };
-
-        fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(data => {
-                const message = data.choices[0].text.trim();
-                heraklesResponse.textContent = message;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                heraklesResponse.textContent = 'Error fetching response';
-            });
-    }
+    recordButton.addEventListener('click', () => {
+        alert('Voice recording feature coming soon!');
+    });
 });
