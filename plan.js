@@ -157,4 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     move(event) {
                         const target = event.target;
                         const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-                        const y = (parseFloat(target.getAttribute('data-y')) ||
+                        const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                        target
