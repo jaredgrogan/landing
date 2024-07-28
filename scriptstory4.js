@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "// Upptäcka Universum",
         "// Odkryj Wszechświat",
         "// відкрити всесвіт"",
+        "// ανακαλύψτε το σύμπαν",
         "// اكتشف الكون ",
         "// לגלות את היקום",
         "// 宇宙を発見する",
