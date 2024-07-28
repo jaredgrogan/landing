@@ -1,273 +1,59 @@
 body {
-    font-family: 'Berkeley Mono', monospace;
-    margin: 0;
-    padding: 20px;
-    background-color: #f4f4f4;
+    font-family: 'Courier New', monospace;
+    background-color: #f0f0f0;
     color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 header {
-    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: #f4f4f4;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 2;
+    background-color: #333;
+    padding: 10px 20px;
+    color: white;
 }
 
-.logo-container {
+.logo {
     display: flex;
     align-items: center;
 }
 
-.logo {
-    width: 48px; /* 40% smaller */
-    height: 48px;
-    transition: transform 0.3s;
-}
-
-.logo:hover {
-    transform: scale(1.5); /* 50% larger */
+.logo img {
+    height: 50px;
+    margin-right: 10px;
 }
 
 .logo-text {
     font-family: 'Courier New', monospace;
-    margin-left: 10px;
-    color: #000; /* Day mode color */
+    font-weight: bold;
 }
 
-nav {
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     align-items: center;
 }
 
-nav a {
-    margin-right: 20px;
+nav ul li {
+    margin-left: 20px;
+    position: relative;
+    font-family: 'Berkeley Mono', monospace; /* Updated font */
+}
+
+nav ul li a {
+    color: white;
     text-decoration: none;
-    color: #333;
-    font-size: 16px;
-}
-
-.toggle-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.toggle-icon {
-    width: 20px;
-    height: 20px;
-}
-
-.button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin: 10px;
-    cursor: pointer;
-    background: linear-gradient(45deg, #ccc, #888);
-    border: none;
-    border-radius: 4px;
-    transition: transform 0.3s;
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-}
-
-.button:hover {
-    transform: scale(1.5);
-}
-
-.note {
-    width: 300px;
-    height: 300px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    margin: 10px;
-    padding: 10px;
-    position: relative;
-    resize: both;
-    overflow: auto;
-    z-index: 1;
-}
-
-.note-header {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-}
-
-.note-title, .note-tags {
-    width: 100%;
-    font-size: 14px;
-    margin-bottom: 5px;
-}
-
-.note-content {
-    width: 100%;
-    height: calc(100% - 80px);
-    font-size: 14px;
-    border: none;
-    resize: none;
-}
-
-.note-buttons {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
-
-.note-button {
-    margin-left: 5px;
-    cursor: pointer;
-    border: none;
-    background: none;
-    font-size: 16px;
-}
-
-.quill {
-    height: calc(100% - 80px);
-    width: 100%;
-    overflow: hidden;
-}
-
-.resizable {
-    resize: both;
-}
-
-#chatContainer {
-    position: fixed;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 650px;
-    height: 200px;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-#heraklesResponse {
-    width: calc(100% - 40px);
-    height: 50px;
-    font-family: 'Courier New', monospace;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-#chatInput {
-    width: calc(100% - 40px);
-    height: 100px;
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
-    font-family: 'Courier New', monospace;
-    font-size: 16px;
-    resize: none;
-    outline: none;
-}
-
-.send-button {
-    width: 40px;
-    height: 40px;
-    background-color: #fff;
-    border: 2px solid #888;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3px;
-    font-size: 20px;
-    position: absolute;
-    bottom: 20px;
-    right: 70px;
-}
-
-.send-icon {
-    width: 20px;
-    height: 20px;
-}
-
-#recordButton {
-    right: 20px; /* Positioning record button */
-}
-
-.night-mode {
-    background-color: #444 !important;
-    color: #fff !important;
-}
-
-.night-mode .logo-text {
-    color: #fff !important; /* Night mode color */
-}
-
-.night-mode .note {
-    background-color: #888 !important;
-    color: #fff !important;
-}
-
-.night-mode .button {
-    background: linear-gradient(45deg, #666, #444) !important;
-}
-
-.night-mode #chatContainer {
-    background-color: #666 !important;
-    color: #fff !important;
-}
-
-.night-mode #heraklesResponse {
-    color: #fff !important;
-}
-
-.night-mode #chatInput {
-    background-color: #888 !important;
-    color: #fff !important;
-}
-
-.night-mode .send-button {
-    background-color: #888 !important;
-    border-color: #666 !important;
-    color: #fff !important;
-}
-
-.night-mode .toggle-button {
-    background-color: #444 !important;
-}
-
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropbtn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    margin-right: 20px;
-    font-family: 'Courier New', monospace; /* New Note bold */
+    font-family: 'Berkeley Mono', monospace; /* Updated font */
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    right: 0;
-    background-color: #f9f9f9;
+    background-color: white;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
@@ -278,8 +64,7 @@ nav a {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    font-family: 'Courier New', monospace; /* New Note bold */
-    font-weight: bold; /* New Note bold */
+    font-family: 'Berkeley Mono', monospace; /* Updated font */
 }
 
 .dropdown-content a:hover {background-color: #f1f1f1}
@@ -288,6 +73,129 @@ nav a {
     display: block;
 }
 
-.note-button.delete-button {
-    color: black; /* Closing box black */
+#nightModeToggle {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 24px;
 }
+
+#newNoteButton {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 20px;
+    cursor: pointer;
+}
+
+#notesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    justify-content: center;
+}
+
+.note {
+    width: 250px;
+    height: 200px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin: 10px;
+    padding: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.note-title {
+    width: 60%;
+}
+
+.note-tags {
+    width: 35%;
+}
+
+.note-content {
+    margin-top: 10px;
+}
+
+.note-buttons {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 20px);
+}
+
+.note-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.save-button {
+    color: green;
+}
+
+.delete-button {
+    color: red;
+}
+
+.night-mode {
+    background-color: #121212;
+    color: white;
+}
+
+.night-mode .logo-text {
+    color: white;
+}
+
+#chatContainer {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.chat-box {
+    width: 100%;
+    max-width: 600px;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#chatInput {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #444;
+    color: white;
+    font-family: 'Courier New', monospace;
+}
+
+#chatSendButton, #recordButton {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #555;
+    color: white;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+}
+
+#chatSendButton:hover, #recordButton:hover {
+    background-color: #666;
+}
+JavaScript
