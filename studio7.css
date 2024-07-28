@@ -40,6 +40,7 @@ header {
 .logo-text {
     font-family: 'Courier New', monospace;
     font-weight: bold;
+    font-size: 1.5em; /* Increase font size by 50% */
 }
 
 .nav-links {
@@ -60,6 +61,7 @@ nav ul li {
     margin-left: 20px;
     position: relative;
     font-family: 'Berkeley Mono', monospace;
+    font-size: 1.5em; /* Increase font size by 50% */
 }
 
 nav ul li a {
@@ -117,8 +119,8 @@ nav ul li a {
     padding: 10px 20px;
     margin: 20px;
     cursor: pointer;
-    background-color: #111111; /* Dark background color for day mode */
-    color: white; /* White font color for day mode */
+    background-color: #222222; /* Dark background color */
+    color: white; /* White font color */
     position: fixed;
     bottom: 10px;
     left: 10px;
@@ -135,7 +137,7 @@ nav ul li a {
 }
 
 #notesContainer {
-    display: flex;
+    display: none; /* Hide notes container initially */
     flex-wrap: wrap;
     padding: 20px;
     justify-content: center;
