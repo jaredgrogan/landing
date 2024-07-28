@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <link rel="stylesheet" href="studio3.css">
+    <link rel="icon" href="favicon5.svg">
+</head>
+<body>
+    <header>
+        <nav class="centered-nav">
+            <div class="logo">
+                <img src="favicon5.svg" alt="Logo">
+                <span class="logo-text">AI Revolution</span>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Tools</a>
+                    <div class="dropdown-content">
+                        <a href="#">Summarize</a>
+                        <a href="#">Extract</a>
+                        <a href="#">Analyze</a>
+                        <a href="#">Export</a>
+                        <a href="#">Assets</a>
+                        <a href="#">Save</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <button id="nightModeToggle">
+            <span id="nightIcon">🌙</span>
+            <span id="dayIcon" style="display:none;">☀️</span>
+        </button>
+    </header>
+
+    <main>
+        <section id="notesContainer">
+            <button id="newNoteButton">New Note</button>
+        </section>
+        <section id="chatContainer">
+            <div class="chat-box">
+                <div id="heraklesResponse">Herakles will respond here...</div>
+                <textarea id="chatInput" placeholder="Type your message..."></textarea>
+                <button id="chatSendButton">Send</button>
+                <button id="recordButton">Record</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="studio3.js"></script>
+</body>
+</html>
