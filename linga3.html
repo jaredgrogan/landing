@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <link rel="stylesheet" href="lingua3.css">
+    <link rel="icon" href="favicon5.svg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="top-right-nav">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Tools</a>
+                    <div class="dropdown-content">
+                        <a href="#">Summary</a>
+                        <a href="#">Extract</a>
+                        <a href="#">Analyze</a>
+                        <a href="#">Actions</a>
+                        <a href="#">Export</a>
+                        <a href="#">Save</a>
+                        <a href="#">Assets</a>
+                    </div>
+                </li>
+                <li>
+                    <select id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="it">Italiano</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="ar">العربية</option>
+                    </select>
+                </li>
+                <li>
+                    <button id="nightModeToggle">
+                        <span id="nightIcon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        </span>
+                        <span id="dayIcon" style="display:none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        </span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="notesContainer">
+            <button id="newNoteButton">New Note</button>
+        </section>
+        <section id="chatContainer">
+            <div class="chat-box">
+                <div id="heraklesResponse">HI, I'm Herakles. What are you working on?</div>
+                <textarea id="chatInput" placeholder="// Type your project here"></textarea>
+                <button id="chatSendButton">Send</button>
+                <button id="recordButton">Record</button>
+            </div>
+        </section>
+    </main>
+    <script src="lingua3.js"></script>
+</body>
+</html>
