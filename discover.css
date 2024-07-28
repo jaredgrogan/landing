@@ -1,0 +1,92 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.day-mode {
+    background-color: white;
+    color: black;
+}
+
+.night-mode {
+    background-color: #111111;
+    color: white;
+}
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.typing-animation {
+    display: inline-block;
+    border-right: 0.15em solid;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 2.5rem;
+    text-decoration: none;
+    font-family: 'Courier Prime', monospace;
+}
+
+.day-mode .typing-animation {
+    color: black;
+    border-color: black;
+}
+
+.night-mode .typing-animation {
+    color: white;
+    border-color: white;
+}
+
+nav {
+    background-color: #111111;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    transition: transform 0.3s ease;
+}
+
+nav a:hover {
+    transform: scale(1.1);
+}
+
+footer {
+    background-color: #111111;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    font-family: 'Courier Prime', monospace;
+}
+
+@media (max-width: 768px) {
+    .typing-animation {
+        font-size: 1.5rem;
+    }
+
+    nav {
+        flex-wrap: wrap;
+    }
+
+    nav a {
+        margin: 5px 10px;
+    }
+}
