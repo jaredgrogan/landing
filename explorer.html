@@ -1,18 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Knowledge Graph Explorer</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
-  <link rel="stylesheet" href="explorer.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Graph Explorer</title>
+    <link rel="stylesheet" href="concept.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 </head>
 <body>
-  <div id="app" class="min-h-screen bg-gray-100 text-gray-900"></div>
+    <div class="container">
+        <header>
+            <h1>Knowledge Graph Explorer</h1>
+            <div class="header-buttons">
+                <button id="addConceptBtn">Add Concept</button>
+                <button id="toggleDarkMode">Toggle Dark Mode</button>
+            </div>
+        </header>
+        
+        <div class="search-filter">
+            <input type="text" id="searchInput" placeholder="Search concepts...">
+            <select id="filterSelect">
+                <option value="">All Categories</option>
+                <!-- Add more options dynamically -->
+            </select>
+        </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide-js/0.5.0/lucide.umd.min.js"></script>
-  <script src="explorer.js"></script>
+        <div class="metrics">
+            <div class="metric-card">
+                <h2>Total Concepts</h2>
+                <p id="totalConcepts">0</p>
+            </div>
+            <div class="metric-card">
+                <h2>Connections</h2>
+                <p id="totalConnections">0</p>
+            </div>
+            <div class="metric-card">
+                <h2>Latest Update</h2>
+                <p id="latestUpdate">N/A</p>
+            </div>
+        </div>
+
+        <div id="graph"></div>
+
+        <div id="selectedConcept" class="hidden">
+            <h2 id="selectedConceptTitle"></h2>
+            <p id="selectedConceptDescription"></p>
+        </div>
+    </div>
+
+    <div id="addConceptModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Add New Concept</h2>
+            <form id="addConceptForm">
+                <input type="text" id="conceptName" placeholder="Concept Name" required>
+                <input type="text" id="conceptDescription" placeholder="Brief Description" required>
+                <button type="submit">Add Concept</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="concept.js"></script>
 </body>
 </html>
