@@ -1,0 +1,82 @@
+body {
+    font-family: 'Berkeley Mono', monospace;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+    background: linear-gradient(45deg, #ccc, #888);
+    border: none;
+    border-radius: 4px;
+    transition: transform 0.3s;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+}
+
+.button:hover {
+    transform: scale(1.5);
+}
+
+.note {
+    width: 300px;
+    height: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 10px;
+    padding: 10px;
+    position: relative;
+    resize: both;
+    overflow: auto;
+}
+
+.note-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.note-title, .note-tags {
+    width: 100%;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.note-content {
+    width: 100%;
+    height: calc(100% - 80px);
+    font-size: 14px;
+    border: none;
+    resize: none;
+}
+
+.note-buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.note-button {
+    margin-left: 5px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 16px;
+}
+
+.quill {
+    height: calc(100% - 80px);
+    width: 100%;
+    overflow: hidden;
+}
