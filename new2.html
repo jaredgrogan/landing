@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <link rel="stylesheet" href="new2.css">
+    <link rel="icon" href="favicon5.svg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="top-nav">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="favicon5.svg" alt="Logo">
+                </a>
+                <span class="logo-text">AI Revolution</span>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Tools</a>
+                        <div class="dropdown-content">
+                            <a href="#">Summary</a>
+                            <a href="#">Extract</a>
+                            <a href="#">Analyze</a>
+                            <a href="#">Actions</a>
+                            <a href="#">Export</a>
+                            <a href="#">Save</a>
+                            <a href="#">Assets</a>
+                        </div>
+                    </li>
+                </ul>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="it">Italiano</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ar">العربية</option>
+                </select>
+                <button id="nightModeToggle">
+                    <span id="nightIcon">&#9790;</span>
+                    <span id="dayIcon" style="display:none;">&#9788;</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="notesContainer">
+            <button id="newNoteButton">New Note</button>
+        </section>
+        <section id="chatContainer">
+            <div class="chat-box">
+                <div id="heraklesResponse">HI, I'm Herakles. What are you working on?</div>
+                <textarea id="chatInput" placeholder="// Type your project here"></textarea>
+                <button id="chatSendButton">Send</button>
+                <button id="recordButton">Record</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="new2.js"></script>
+</body>
+</html>
