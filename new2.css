@@ -118,6 +118,33 @@ nav ul li a {
     margin-left: 20px;
 }
 
+#nightModeToggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 20px;
+    padding: 0;
+}
+
+#nightIcon, #dayIcon {
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+#dayIcon {
+    display: none;
+}
+
+.night-mode #nightIcon {
+    display: none;
+}
+
+.night-mode #dayIcon {
+    display: inline-block;
+    color: white;
+}
+
 #newNoteButton {
     font-family: 'Courier New', monospace;
     font-size: 16px;
