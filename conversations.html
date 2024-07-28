@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universitas AI - Herakles Chat</title>
+  <link rel="stylesheet" href="chat-style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo-section">
+        <a href="index.html" class="logo-container">
+          <div class="logo-circle">
+            <span class="logo-letter">U</span>
+          </div>
+        </a>
+        <span class="logo-text">// Discover the Universe</span>
+      </div>
+    </header>
+    
+    <main class="main-content">
+      <aside class="side-panel">
+        <div class="file-structure">
+          <h3>My Files</h3>
+          <ul id="fileList">
+            <!-- File structure will be dynamically populated -->
+          </ul>
+          <button id="newFolderButton">New Folder</button>
+          <button id="newFileButton">New File</button>
+        </div>
+      </aside>
+      
+      <section class="chat-section">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-message ai" data-lang="en">Hi, I'm Herakles. What are you working on?</div>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="Ask Herakles..." aria-label="Chat input">
+          <button id="sendButton" aria-label="Send message">
+            <span data-lang="en">Send</span>
+          </button>
+          <button id="micButton" aria-label="Start voice input">
+            <i class="mic-icon" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div id="languageSelector">
+          <!-- Language selector dropdown will be dynamically populated -->
+        </div>
+      </section>
+      
+      <aside class="side-panel right-panel">
+        <button id="nightModeToggle">
+          <span data-lang="en">Night Mode</span>
+        </button>
+      </aside>
+    </main>
+
+    <div id="notePadPopup" class="note-pad-popup">
+      <div class="note-pad-header">
+        <input type="text" id="notePadTitle" placeholder="Note Title" data-lang="en">
+        <input type="text" id="notePadTags" placeholder="Tags (comma-separated)" data-lang="en">
+        <button id="saveNoteButton">
+          <span data-lang="en">Save</span>
+        </button>
+        <button id="closeNotePadButton">
+          <span data-lang="en">Close</span>
+        </button>
+      </div>
+      <div class="note-pad-editor" id="notePadEditor"></div>
+    </div>
+
+    <div id="notificationContainer"></div>
+    
+    <footer>
+      <p class="copyright">COPYRIGHT © 2024 UNIVERSITAS AI</p>
+    </footer>
+  </div>
+
+  <script src="chat-script.js"></script>
+</body>
+</html>
