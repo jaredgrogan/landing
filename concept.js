@@ -1,10 +1,79 @@
+// Global variables
 let darkMode = false;
 let graphData = { nodes: [], links: [] };
 let selectedConcept = null;
 
 // Initialize the graph
 function initGraph() {
-    // ... (keep the existing graph initialization code)
+    const width = 800;
+    const height = 600;
+
+    // Clear any existing SVG
+    d3.select("#graph").select("svg").remove();
+
+    const svg = d3.select("#graph")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    const simulation = d3.forceSimulation(graphData.nodes)
+        .force("link", d3.forceLink(graphData.links).id(d => d.id))
+        .force("charge", d3.forceManyBody().strength(-300))
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
+    const link = svg.append("g")
+        .selectAll("line")
+        .data(graphData.links)
+        .enter().append("line")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.6);
+
+    const node = svg.append("g")
+        .selectAll("circle")
+        .data(graphData.nodes)
+        .enter().append("circle")
+        .attr("r", 20)
+        .attr("fill", d => d3.schemeCategory10[d.group % 10]);
+
+    const text = svg.append("g")
+        .selectAll("text")
+        .data(graphData.nodes)
+        .enter().append("text")
+        .text(d => d.id)
+        .attr("font-size", 12)
+        .attr("dx", 15)
+        .attr("dy", 4);
+
+    node.append("title")
+        .text(d => d.id);
+
+    simulation
+        .nodes(graphData.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graphData.links);
+
+    function ticked() {
+        link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+
+        node
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+
+        text
+            .attr("x", d => d.x)
+            .attr("y", d => d.y);
+    }
+
+    node.on("click", (event, d) => {
+        selectedConcept = d;
+        updateSelectedConceptDisplay();
+    });
 }
 
 // Update metrics display
@@ -57,56 +126,10 @@ function addConcept(name, description) {
     initGraph(); // Reinitialize the graph with new data
 }
 
-// Event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    const modeToggle = document.getElementById('modeToggle');
-    modeToggle.addEventListener('click', toggleDarkMode);
-
-    const addConceptBtn = document.getElementById('addConceptBtn');
-    const addConceptModal = document.getElementById('addConceptModal');
-    const addConceptForm = document.getElementById('addConceptForm');
-
-    addConceptBtn.addEventListener('click', () => {
-        addConceptModal.classList.remove('hidden');
-    });
-
-    addConceptForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('conceptName').value;
-        const description = document.getElementById('conceptDescription').value;
-        addConcept(name, description);
-        addConceptModal.classList.add('hidden');
-        addConceptForm.reset();
-    });
-
-    // Close modal when clicking outside
-    addConceptModal.addEventListener('click', (e) => {
-        if (e.target === addConceptModal) {
-            addConceptModal.classList.add('hidden');
-        }
-    });
-
-    // Search functionality
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        filterGraph(searchTerm);
-    });
-
-    // Filter functionality
-    const filterSelect = document.getElementById('filterSelect');
-    filterSelect.addEventListener('change', () => {
-        const filterValue = filterSelect.value;
-        filterGraph(null, filterValue);
-    });
-
-    init();
-});
-
 // Filter graph based on search term and/or filter value
 function filterGraph(searchTerm, filterValue) {
     const filteredNodes = graphData.nodes.filter(node => {
-        const matchesSearch = !searchTerm || node.id.toLowerCase().includes(searchTerm);
+        const matchesSearch = !searchTerm || node.id.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesFilter = !filterValue || node.group.toString() === filterValue;
         return matchesSearch && matchesFilter;
     });
@@ -127,7 +150,8 @@ function updateGraph(nodes, links) {
 
     // Reinitialize graph with filtered data
     const tempGraphData = { nodes, links };
-    initGraph(tempGraphData);
+    graphData = tempGraphData;
+    initGraph();
 }
 
 // Initialize the app
@@ -170,7 +194,48 @@ function init() {
         option.textContent = `Group ${group}`;
         filterSelect.appendChild(option);
     });
+
+    // Set up event listeners
+    const modeToggle = document.getElementById('modeToggle');
+    modeToggle.addEventListener('click', toggleDarkMode);
+
+    const addConceptBtn = document.getElementById('addConceptBtn');
+    const addConceptModal = document.getElementById('addConceptModal');
+    const addConceptForm = document.getElementById('addConceptForm');
+
+    addConceptBtn.addEventListener('click', () => {
+        addConceptModal.classList.remove('hidden');
+    });
+
+    addConceptForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('conceptName').value;
+        const description = document.getElementById('conceptDescription').value;
+        addConcept(name, description);
+        addConceptModal.classList.add('hidden');
+        addConceptForm.reset();
+    });
+
+    // Close modal when clicking outside
+    addConceptModal.addEventListener('click', (e) => {
+        if (e.target === addConceptModal) {
+            addConceptModal.classList.add('hidden');
+        }
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value;
+        filterGraph(searchTerm, filterSelect.value);
+    });
+
+    // Filter functionality
+    filterSelect.addEventListener('change', () => {
+        const filterValue = filterSelect.value;
+        filterGraph(searchInput.value, filterValue);
+    });
 }
 
-// Run the app
-// init(); // This is now called in the DOMContentLoaded event listener
+// Run the app when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', init);
