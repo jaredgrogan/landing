@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const recordButton = document.getElementById('recordButton');
     const heraklesResponse = document.getElementById('heraklesResponse');
     const chatInput = document.getElementById('chatInput');
+    const logoText = document.querySelector('.logo-text');
     let noteCount = 0;
     const maxNotes = 10;
 
@@ -40,7 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'Actions',
             export: 'Export',
             save: 'Save',
-            assets: 'Assets'
+            assets: 'Assets',
+            discoverUniverse: 'Discover the Universe'
         },
         es: {
             home: 'Inicio',
@@ -56,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'Acciones',
             export: 'Exportar',
             save: 'Guardar',
-            assets: 'Activos'
+            assets: 'Activos',
+            discoverUniverse: 'Descubre el Universo'
         },
         it: {
             home: 'Home',
@@ -72,7 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'Azioni',
             export: 'Esporta',
             save: 'Salva',
-            assets: 'Risorse'
+            assets: 'Risorse',
+            discoverUniverse: 'Scopri l'Universo'
         },
         fr: {
             home: 'Accueil',
@@ -88,7 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'Actions',
             export: 'Exporter',
             save: 'Sauvegarder',
-            assets: 'Ressources'
+            assets: 'Ressources',
+            discoverUniverse: 'Découvrez l'Univers'
         },
         de: {
             home: 'Startseite',
@@ -104,7 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'Aktionen',
             export: 'Exportieren',
             save: 'Speichern',
-            assets: 'Ressourcen'
+            assets: 'Ressourcen',
+            discoverUniverse: 'Entdecke das Universum'
         },
         ar: {
             home: 'الرئيسية',
@@ -120,7 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'إجراءات',
             export: 'تصدير',
             save: 'حفظ',
-            assets: 'الأصول'
+            assets: 'الأصول',
+            discoverUniverse: 'اكتشف الكون'
         }
     };
 
@@ -171,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('chatSendButton').textContent = t.send;
         document.getElementById('recordButton').textContent = t.record;
         document.getElementById('newNoteButton').textContent = t.newNote;
+        logoText.textContent = t.discoverUniverse;
     }
 
     function createNote() {
