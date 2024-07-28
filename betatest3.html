@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotePad</title>
+    <link rel="stylesheet" href="betatest3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap">
+</head>
+<body>
+    <div class="note-pad collapsed" id="notePad1">
+        <button class="toggleButton" id="toggleButton1">Expand NotePad</button>
+        <div class="note-content">
+            <input type="text" class="noteTitle" id="noteTitle1" placeholder="Title">
+            <textarea class="noteContent" id="noteContent1" placeholder="Write your note here..."></textarea>
+            <input type="text" class="noteTags" id="noteTags1" placeholder="Tags (comma separated)">
+            <button class="saveButton" id="saveButton1">Save</button>
+            <p class="status" id="statusMessage1"></p>
+        </div>
+        <div class="resize-handle" id="resizeHandle1"></div>
+        <div class="move-handle" id="moveHandle1"></div>
+        <button class="closeButton" id="closeButton1">X</button>
+    </div>
+
+    <!-- Chat Button -->
+    <button id="chatButton">Chat</button>
+    <div class="chat-pad collapsed" id="chatPad">
+        <div class="chat-content">
+            <textarea class="chatContent" id="chatContent" placeholder="Type your message..."></textarea>
+            <button class="sendButton" id="sendButton">Send</button>
+            <p class="status" id="chatStatusMessage"></p>
+        </div>
+        <button class="closeButton" id="chatCloseButton">X</button>
+    </div>
+
+    <button id="newNoteButton">+</button>
+    <button id="folderButton">📁</button>
+    <div class="folder-window collapsed" id="folderWindow">
+        <h2>Notes</h2>
+        <div id="noteList"></div>
+        <h2>Drafts</h2>
+        <div id="draftList"></div>
+    </div>
+
+    <script src="betatest3.js"></script>
+</body>
+</html>
