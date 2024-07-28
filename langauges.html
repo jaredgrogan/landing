@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <button id="nightModeToggle">
+            <span id="nightIcon">🌙</span>
+            <span id="dayIcon" style="display: none;">☀️</span>
+        </button>
+        <button id="languageToggle">EN</button>
+        <h1>AI Revolution</h1>
+    </header>
+    
+    <main>
+        <button id="newNoteButton">New Note</button>
+        <div id="notesContainer" style="display: none;"></div>
+        
+        <section id="chat">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button id="chatSendButton">Send</button>
+            <button id="recordButton">Record</button>
+            <div id="heraklesResponse"></div>
+        </section>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
