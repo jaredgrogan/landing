@@ -92,8 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         recordButton.innerText = 'Record';
         newNoteButton.innerText = 'New Note';
     }
-
-    function createNote() {
+function createNote() {
         const note = document.createElement('div');
         note.className = 'note';
         const position = notePositions[noteCount % notePositions.length];
@@ -121,9 +120,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const deleteButton = note.querySelector('.delete-button');
         deleteButton.addEventListener('click', () => {
+            closeNote(note);
+        });
+    }
+
+    function closeNote(note) {
+        // Add a closing animation
+        note.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        note.style.opacity = '0';
+        note.style.transform = 'scale(0.8)';
+
+        // Remove the note after the animation completes
+        setTimeout(() => {
             notesContainer.removeChild(note);
             noteCount--;
-        });
+        }, 300);
     }
 
     function makeNoteDraggable(note) {
