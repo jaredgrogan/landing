@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const nightModeToggle = document.getElementById('nightModeToggle');
     const nightIcon = document.getElementById('nightIcon');
@@ -9,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const recordButton = document.getElementById('recordButton');
     const heraklesResponse = document.getElementById('heraklesResponse');
     const chatInput = document.getElementById('chatInput');
-    const logoText = document.querySelector('.logo-text');
     let noteCount = 0;
     const maxNotes = 10;
 
@@ -41,8 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'Actions',
             export: 'Export',
             save: 'Save',
-            assets: 'Assets',
-            discoverUniverse: 'Discover the Universe'
+            assets: 'Assets'
         },
         es: {
             home: 'Inicio',
@@ -58,8 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'Acciones',
             export: 'Exportar',
             save: 'Guardar',
-            assets: 'Activos',
-            discoverUniverse: 'Descubre el Universo'
+            assets: 'Activos'
         },
         it: {
             home: 'Home',
@@ -75,8 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'Azioni',
             export: 'Esporta',
             save: 'Salva',
-            assets: 'Risorse',
-            discoverUniverse: 'Scopri l'Universo'
+            assets: 'Risorse'
         },
         fr: {
             home: 'Accueil',
@@ -92,8 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'Actions',
             export: 'Exporter',
             save: 'Sauvegarder',
-            assets: 'Ressources',
-            discoverUniverse: 'Découvrez l'Univers'
+            assets: 'Ressources'
         },
         de: {
             home: 'Startseite',
@@ -109,8 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'Aktionen',
             export: 'Exportieren',
             save: 'Speichern',
-            assets: 'Ressourcen',
-            discoverUniverse: 'Entdecke das Universum'
+            assets: 'Ressourcen'
         },
         ar: {
             home: 'الرئيسية',
@@ -126,8 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actions: 'إجراءات',
             export: 'تصدير',
             save: 'حفظ',
-            assets: 'الأصول',
-            discoverUniverse: 'اكتشف الكون'
+            assets: 'الأصول'
         }
     };
 
@@ -159,9 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const t = translations[lang];
         
         // Update main menu items
-        const navItems = document.querySelectorAll('nav ul li a');
-        navItems[0].textContent = t.home;
-        navItems[1].textContent = t.tools;
+        document.querySelector('nav ul li:first-child a').textContent = t.home;
+        document.querySelector('nav ul li:nth-child(2) a').textContent = t.tools;
 
         // Update dropdown menu items
         const dropdownItems = document.querySelectorAll('.dropdown-content a');
@@ -174,12 +167,11 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdownItems[6].textContent = t.assets;
 
         // Update other UI elements
-        heraklesResponse.innerHTML = t.heraklesGreeting;
-        chatInput.setAttribute('placeholder', t.typePlaceholder);
-        chatSendButton.textContent = t.send;
-        recordButton.textContent = t.record;
-        newNoteButton.textContent = t.newNote;
-        logoText.textContent = t.discoverUniverse;
+        document.getElementById('heraklesResponse').innerHTML = t.heraklesGreeting;
+        document.getElementById('chatInput').setAttribute('placeholder', t.typePlaceholder);
+        document.getElementById('chatSendButton').textContent = t.send;
+        document.getElementById('recordButton').textContent = t.record;
+        document.getElementById('newNoteButton').textContent = t.newNote;
     }
 
     function createNote() {
@@ -269,6 +261,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     chatSendButton.addEventListener('click', () => {
+        const chatInput = document.getElementById('chatInput');
+        const heraklesResponse = document.getElementById('heraklesResponse');
         const userMessage = chatInput.value.trim();
         if (userMessage) {
             heraklesResponse.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
