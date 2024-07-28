@@ -1,0 +1,128 @@
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    height: 40px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    color: #fff;
+    margin-left: 20px;
+    text-decoration: none;
+}
+
+.centerU {
+    font-size: 200%;
+}
+
+#notesContainer {
+    padding: 20px;
+}
+
+.note {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.note-title, .note-tags {
+    width: 45%;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.note-content {
+    height: 70px;
+}
+
+.note-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.note-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#newNoteButton {
+    background: linear-gradient(to right, purple, blue);
+    color: #fff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+#chatContainer {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #eee;
+}
+
+#chatInput {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.micIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.night-mode {
+    background-color: #333;
+    color: #fff;
+}
+
+.night-mode .note {
+    background-color: #444;
+    color: #fff;
+}
+
+.night-mode header {
+    background-color: #444;
+}
+
+.night-mode .note-content {
+    background-color: #555;
+}
+
+.night-mode #chatContainer {
+    background-color: #444;
+}
+
+.night-mode #chatInput {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.night-mode #newNoteButton {
+    background: linear-gradient(to right, darkpurple, darkblue);
+}
