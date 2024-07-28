@@ -344,3 +344,9 @@ Enter the details of the new concept to add it to the knowledge graph.
 </div>
 );
 };
+/ Render the Dashboard component
+ReactDOM.render(
+React.createElement(Dashboard, null),
+document.getElementById('app')
+);
+</antArtifact>
