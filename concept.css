@@ -93,6 +93,25 @@ input, select {
     flex-grow: 1;
 }
 
+.main-title {
+    font-family: 'Courier New', monospace;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.gradient-button {
+    background: linear-gradient(135deg, #8e2de2, #4a00e0);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.gradient-button:hover {
+    opacity: 0.9;
+}
 button {
     cursor: pointer;
     background-color: #4299E1;
