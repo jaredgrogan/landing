@@ -1,131 +1,261 @@
-/* styles.css */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Courier New', monospace;
+    background-color: #f5f5f5;
+    color: black;
     margin: 0;
     padding: 0;
-    transition: background-color 0.3s, color 0.3s;
 }
 
 header {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    text-align: center;
-}
-
-header h1 {
-    font-size: 2.5em;
-}
-
-button {
-    background-color: #222;
-    color: white;
-    border: none;
+    display: flex;
+    justify-content: space-between; /* Adjusted to space between elements */
+    align-items: center;
+    background-color: transparent;
     padding: 10px 20px;
-    margin: 5px;
+    color: black;
+}
+
+.right-nav {
+    display: flex;
+    justify-content: flex-end; /* Align to the right */
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px;
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.5);
+}
+
+.logo-text {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 1.5em; /* Increase font size by 50% */
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Push nav-links to the right */
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+nav ul li {
+    margin-left: 20px;
+    position: relative;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 1.5em; /* Increase font size by 50% */
+}
+
+nav ul li a {
+    color: black;
+    text-decoration: none;
+    font-family: 'Berkeley Mono', monospace;
+}
+
+.night-mode nav ul li a {
+    color: white; /* Change link color to white in night mode */
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-family: 'Berkeley Mono', monospace;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+#languageSelect {
+    margin-left: 20px;
+}
+
+#nightModeToggle, #languageToggle {
+    background: none;
+    border: none;
+    color: black;
     cursor: pointer;
-    border-radius: 5px;
+    font-size: 16px;
+    margin-left: 10px;
 }
 
-button#newNoteButton {
-    background-color: #444;
+#newNoteButton {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    margin: 20px;
+    cursor: pointer;
+    background-color: #222222; /* Dark background color */
+    color: white; /* White font color */
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    transition: transform 0.3s ease;
 }
 
-button:hover {
-    background-color: #555;
+#newNoteButton:hover {
+    transform: scale(1.5);
+}
+
+.night-mode #newNoteButton {
+    background-color: #f5f5f5; /* Light background color for night mode */
+    color: black; /* Black font color for night mode */
 }
 
 #notesContainer {
-    position: relative;
-    width: 100%;
-    height: 80vh;
-    overflow: auto;
+    display: none; /* Hide notes container initially */
+    flex-wrap: wrap;
+    padding: 20px;
+    justify-content: center;
 }
 
 .note {
-    position: absolute;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    width: 200px;
+    width: 250px;
     height: 200px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    margin: 10px;
     padding: 10px;
-    box-sizing: border-box;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    cursor: move;
 }
 
 .note-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    align-items: center;
 }
 
-.note-title, .note-tags {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 5px;
-    width: 100%;
+.note-title {
+    width: 60%;
+}
+
+.note-tags {
+    width: 35%;
 }
 
 .note-content {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 5px;
-    height: calc(100% - 70px);
-    overflow-y: auto;
+    margin-top: 10px;
 }
 
 .note-buttons {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 20px);
 }
 
 .note-button {
-    background-color: #222;
-    color: white;
+    background: none;
     border: none;
-    padding: 5px;
-    margin-left: 5px;
-    border-radius: 3px;
     cursor: pointer;
+    font-size: 18px;
 }
 
-.note-button:hover {
-    background-color: #333;
+.save-button {
+    color: green;
 }
 
-#chat {
-    margin-top: 20px;
-}
-
-#chatInput {
-    width: 70%;
-    padding: 10px;
-}
-
-#chatSendButton, #recordButton {
-    margin-left: 10px;
+.delete-button {
+    color: red;
 }
 
 .night-mode {
-    background-color: #121212;
-    color: #e0e0e0;
+    background-color: #222222;
+    color: #f5f5f5;
 }
 
-.night-mode header {
-    background-color: #333;
+.night-mode .logo-text {
+    color: white;
 }
 
-.night-mode .note {
-    background-color: #333;
-    color: #e0e0e0;
+#chatContainer {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    position: absolute;
+    bottom: 33%;
+    width: 100%;
 }
 
-.night-mode button {
-    background-color: #444;
+.chat-box {
+    width: 100%;
+    max-width: 600px;
+    background-color: #e4e4e4;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
 }
 
-.night-mode button:hover {
+.night-mode .chat-box {
+    background-color: #444444;
+    color: white;
+}
+
+#chatInput {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: black;
+    font-family: 'Courier New', monospace;
+}
+
+.night-mode #chatInput {
+    background-color: #888888;
+    color: white;
+}
+
+#chatSendButton, #recordButton {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
     background-color: #555;
+    color: white;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+}
+
+#chatSendButton:hover, #recordButton:hover {
+    background-color: #666;
 }
