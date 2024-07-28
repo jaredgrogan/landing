@@ -4,9 +4,9 @@
 }
 
 :root {
-    --bg-color: #f5f5f5;
+    --bg-color: #444444;
     --lighter-accent: #fdfdfd;
-    --text-color: black;
+    --text-color: white;
     --form-bg: white;
     --form-border: #d3d3d3;
     --link-color: blue;
