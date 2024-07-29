@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatSphere = document.getElementById('chat-sphere');
     const chatConsole = document.getElementById('chat-console');
     const logoText = document.querySelector('.logo-text');
+    const currentDateTime = document.getElementById('currentDateTime');
+    const minimizeButton = document.createElement('button');
+    minimizeButton.id = 'minimizeChat';
+    minimizeButton.textContent = '-';
+    chatConsole.appendChild(minimizeButton);
     
     let currentDate = new Date();
     let isChatOpen = false;
@@ -174,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateDateTime() {
         const now = new Date();
-        document.getElementById('currentDateTime').textContent = now.toLocaleString('en-US', {
+        currentDateTime.textContent = now.toLocaleString('en-US', {
             weekday: 'short',
             year: 'numeric',
             month: 'short',
@@ -230,6 +235,12 @@ document.addEventListener('DOMContentLoaded', () => {
         isChatOpen = !isChatOpen;
         chatConsole.style.display = isChatOpen ? 'block' : 'none';
         chatSphere.style.display = isChatOpen ? 'none' : 'block';
+    });
+
+    minimizeButton.addEventListener('click', () => {
+        isChatOpen = false;
+        chatConsole.style.display = 'none';
+        chatSphere.style.display = 'block';
     });
 
     nightModeToggle.addEventListener('click', () => {
