@@ -126,6 +126,25 @@ nav ul li a {
     margin-bottom: 20px;
 }
 
+#prev-month, #next-month {
+    background: linear-gradient(45deg, #8a2be2, #4169e1);
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#prev-month::before {
+    content: '←';
+    margin-right: 5px;
+}
+
+#next-month::after {
+    content: '→';
+    margin-left: 5px;
+}
+
 #calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -277,7 +296,7 @@ footer {
 
 .night-mode .left-column,
 .night-mode .right-column {
-    background-color: #999999;
+    background: linear-gradient(to bottom, #777777, #888888);
     border: 1px solid rgba(228, 228, 228, 0.75);
     color: white;
 }
@@ -303,7 +322,7 @@ footer {
 }
 
 .night-mode #settings-panel {
-    background-color: #999999;
+    background: linear-gradient(to bottom, #777777, #888888);
     color: white;
 }
 
