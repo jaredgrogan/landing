@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice and Video Processing</title>
+    <link rel="stylesheet" href="voice-style.css">
+    <link rel="icon" href="favicon5.svg">
+</head>
+<body>
+    <header>
+        <nav class="top-nav">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="favicon5.svg" alt="Logo">
+                </a>
+                <span class="logo-text">// Discover the Universe</span>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Home</a>
+                        <div class="dropdown-content">
+                            <a href="discover.html">Discover</a>
+                            <a href="features.html">Features</a>
+                            <a href="pricing.html">Join</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Tools</a>
+                        <div class="dropdown-content">
+                            <a href="#">Audio Processing</a>
+                            <a href="#">Video Processing</a>
+                            <a href="#">Transcriptions</a>
+                        </div>
+                    </li>
+                </ul>
+
+              <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="it">Italiano</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ar">العربية</option>
+                </select>
+                <span id="currentDateTime" class="current-date-time"></span>
+                <button id="nightModeToggle">
+                    <span id="nightIcon">&#9790;</span>
+                    <span id="dayIcon" style="display:none;">&#9788;</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+   <main id="processing-container">
+        <div class="left-column">
+            <section id="audio-recording">
+                <h2>Audio Recording</h2>
+                <button id="startRecordingBtn">Start Recording</button>
+                <button id="stopRecordingBtn" disabled>Stop Recording</button>
+                <audio id="audioPlayback" controls></audio>
+            </section>
+            <section id="video-upload">
+                <h2>Video Upload</h2>
+                <input type="file" id="videoUpload" accept="video/*">
+                <video id="videoPlayer" controls></video>
+            </section>
+        </div>
+        <div class="center-column">
+            <section id="transcription-display">
+                <h2>Transcription</h2>
+                <div id="transcriptionText" contenteditable="true"></div>
+                <button id="refineTranscriptionBtn">Refine Transcription</button>
+            </section>
+        </div>
+        <div class="right-column">
+            <section id="saved-transcriptions">
+                <h2>Saved Transcriptions</h2>
+                <input type="text" id="searchTranscriptions" placeholder="Search transcriptions...">
+                <ul id="transcriptionsList"></ul>
+            </section>
+            <section id="combine-transcriptions">
+                <h2>Combine Transcriptions</h2>
+                <select id="transcriptionsToMerge" multiple></select>
+                <button id="mergeTranscriptionsBtn">Merge Selected</button>
+            </section>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+  
+    <div id="chat-sphere" class="chat-sphere">H</div>
+    <div id="chat-console" class="chat-console">
+        <div id="heraklesResponse">HI, I'm Herakles. How can I assist with your audio and video processing?</div>
+        <textarea id="chatInput" placeholder="// Type your question here"></textarea>
+        <button id="chatSendButton">Send</button>
+        <button id="minimizeChat">-</button>
+    </div>
+
+    <script src="voice-script.js"></script>
+</body>
+</html>
