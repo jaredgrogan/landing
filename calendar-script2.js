@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // DOM elements
     const calendarGrid = document.getElementById('calendar-grid');
     const currentMonthElement = document.getElementById('current-month');
     const prevMonthButton = document.getElementById('prev-month');
@@ -10,133 +11,144 @@ document.addEventListener('DOMContentLoaded', () => {
     const languageSelect = document.getElementById('languageSelect');
     const chatSphere = document.getElementById('chat-sphere');
     const chatConsole = document.getElementById('chat-console');
+    const minimizeButton = document.getElementById('minimizeChat');
     const logoText = document.querySelector('.logo-text');
     const currentDateTime = document.getElementById('currentDateTime');
-    const minimizeButton = document.createElement('button');
-    minimizeButton.id = 'minimizeChat';
-    minimizeButton.textContent = '-';
-    chatConsole.appendChild(minimizeButton);
-    
+    const todayBriefing = document.getElementById('todayBriefing');
+    const tomorrowBriefing = document.getElementById('tomorrowBriefing');
+    const yesterdaySummary = document.getElementById('yesterdaySummary');
+    const calendarSettings = document.getElementById('calendarSettings');
+    const connectGmail = document.getElementById('connect-gmail');
+    const connectOutlook = document.getElementById('connect-outlook');
+    const connectIcloud = document.getElementById('connect-icloud');
+    const heraklesResponse = document.getElementById('heraklesResponse');
+    const chatInput = document.getElementById('chatInput');
+    const chatSendButton = document.getElementById('chatSendButton');
+    const recordButton = document.getElementById('recordButton');
+
+    // State
     let currentDate = new Date();
     let isChatOpen = false;
 
+    // Translations
     const translations = {
-    en: {
-        home: 'Home',
-        tools: 'Tools',
-        discover: 'Discover',
-        features: 'Features',
-        join: 'Join',
-        discoverUniverse: "// Discover the Universe",
-        todayBriefing: "Today's Briefing",
-        tomorrowBriefing: "Tomorrow's Briefing",
-        yesterdaySummary: "Yesterday's Summary",
-        calendarSettings: "Calendar Settings",
-        connectGmail: "Connect Gmail",
-        connectOutlook: "Connect Outlook",
-        connectIcloud: "Connect iCloud",
-        heraklesGreeting: "HI, I'm Herakles. What are you working on?",
-        typePlaceholder: "// Type your project here",
-        send: "Send",
-        record: "Record"
-    },
-    es: {
-        home: 'Inicio',
-        tools: 'Herramientas',
-        discover: 'Descubrir',
-        features: 'Características',
-        join: 'Unirse',
-        discoverUniverse: "// Descubre el Universo",
-        todayBriefing: "Informe de Hoy",
-        tomorrowBriefing: "Informe de Mañana",
-        yesterdaySummary: "Resumen de Ayer",
-        calendarSettings: "Configuración del Calendario",
-        connectGmail: "Conectar Gmail",
-        connectOutlook: "Conectar Outlook",
-        connectIcloud: "Conectar iCloud",
-        heraklesGreeting: "Hola, soy Herakles. ¿En qué estás trabajando?",
-        typePlaceholder: "// Escribe tu proyecto aquí",
-        send: "Enviar",
-        record: "Grabar"
-    },
-    fr: {
-        home: 'Accueil',
-        tools: 'Outils',
-        discover: 'Découvrir',
-        features: 'Fonctionnalités',
-        join: 'Rejoindre',
-        discoverUniverse: "// Découvrez l'Univers",
-        todayBriefing: "Briefing d'Aujourd'hui",
-        tomorrowBriefing: "Briefing de Demain",
-        yesterdaySummary: "Résumé d'Hier",
-        calendarSettings: "Paramètres du Calendrier",
-        connectGmail: "Connecter Gmail",
-        connectOutlook: "Connecter Outlook",
-        connectIcloud: "Connecter iCloud",
-        heraklesGreeting: "Bonjour, je suis Herakles. Sur quoi travaillez-vous ?",
-        typePlaceholder: "// Tapez votre projet ici",
-        send: "Envoyer",
-        record: "Enregistrer"
-    },
-    it: {
-        home: 'Home',
-        tools: 'Strumenti',
-        discover: 'Scopri',
-        features: 'Funzionalità',
-        join: 'Unisciti',
-        discoverUniverse: "// Scopri l'Universo",
-        todayBriefing: "Briefing di Oggi",
-        tomorrowBriefing: "Briefing di Domani",
-        yesterdaySummary: "Riepilogo di Ieri",
-        calendarSettings: "Impostazioni Calendario",
-        connectGmail: "Connetti Gmail",
-        connectOutlook: "Connetti Outlook",
-        connectIcloud: "Connetti iCloud",
-        heraklesGreeting: "Ciao, sono Herakles. Su cosa stai lavorando?",
-        typePlaceholder: "// Scrivi il tuo progetto qui",
-        send: "Invia",
-        record: "Registra"
-    },
-    de: {
-        home: 'Startseite',
-        tools: 'Werkzeuge',
-        discover: 'Entdecken',
-        features: 'Funktionen',
-        join: 'Beitreten',
-        discoverUniverse: "// Entdecke das Universum",
-        todayBriefing: "Heutiges Briefing",
-        tomorrowBriefing: "Morgiges Briefing",
-        yesterdaySummary: "Zusammenfassung von Gestern",
-        calendarSettings: "Kalendereinstellungen",
-        connectGmail: "Gmail verbinden",
-        connectOutlook: "Outlook verbinden",
-        connectIcloud: "iCloud verbinden",
-        heraklesGreeting: "Hallo, ich bin Herakles. Woran arbeitest du?",
-        typePlaceholder: "// Gib dein Projekt hier ein",
-        send: "Senden",
-        record: "Aufnehmen"
-    },
-    ar: {
-        home: 'الرئيسية',
-        tools: 'الأدوات',
-        discover: 'اكتشف',
-        features: 'الميزات',
-        join: 'انضم',
-        discoverUniverse: "// اكتشف الكون",
-        todayBriefing: "ملخص اليوم",
-        tomorrowBriefing: "ملخص الغد",
-        yesterdaySummary: "ملخص الأمس",
-        calendarSettings: "إعدادات التقويم",
-        connectGmail: "ربط جيميل",
-        connectOutlook: "ربط أوتلوك",
-        connectIcloud: "ربط آي كلاود",
-        heraklesGreeting: "مرحبًا، أنا هيراكليس. على ماذا تعمل؟",
-        typePlaceholder: "// اكتب مشروعك هنا",
-        send: "إرسال",
-        record: "تسجيل"
-    }
-};
+        en: {
+            home: 'Home',
+            tools: 'Tools',
+            discover: 'Discover',
+            features: 'Features',
+            join: 'Join',
+            discoverUniverse: "// Discover the Universe",
+            todayBriefing: "Today's Briefing",
+            tomorrowBriefing: "Tomorrow's Briefing",
+            yesterdaySummary: "Yesterday's Summary",
+            calendarSettings: "Calendar Settings",
+            connectGmail: "Connect Gmail",
+            connectOutlook: "Connect Outlook",
+            connectIcloud: "Connect iCloud",
+            heraklesGreeting: "HI, I'm Herakles. What are you working on?",
+            typePlaceholder: "// Type your project here",
+            send: "Send",
+            record: "Record"
+        },
+        es: {
+            home: 'Inicio',
+            tools: 'Herramientas',
+            discover: 'Descubrir',
+            features: 'Características',
+            join: 'Unirse',
+            discoverUniverse: "// Descubre el Universo",
+            todayBriefing: "Informe de Hoy",
+            tomorrowBriefing: "Informe de Mañana",
+            yesterdaySummary: "Resumen de Ayer",
+            calendarSettings: "Configuración del Calendario",
+            connectGmail: "Conectar Gmail",
+            connectOutlook: "Conectar Outlook",
+            connectIcloud: "Conectar iCloud",
+            heraklesGreeting: "Hola, soy Herakles. ¿En qué estás trabajando?",
+            typePlaceholder: "// Escribe tu proyecto aquí",
+            send: "Enviar",
+            record: "Grabar"
+        },
+        fr: {
+            home: 'Accueil',
+            tools: 'Outils',
+            discover: 'Découvrir',
+            features: 'Fonctionnalités',
+            join: 'Rejoindre',
+            discoverUniverse: "// Découvrez l'Univers",
+            todayBriefing: "Briefing d'Aujourd'hui",
+            tomorrowBriefing: "Briefing de Demain",
+            yesterdaySummary: "Résumé d'Hier",
+            calendarSettings: "Paramètres du Calendrier",
+            connectGmail: "Connecter Gmail",
+            connectOutlook: "Connecter Outlook",
+            connectIcloud: "Connecter iCloud",
+            heraklesGreeting: "Bonjour, je suis Herakles. Sur quoi travaillez-vous ?",
+            typePlaceholder: "// Tapez votre projet ici",
+            send: "Envoyer",
+            record: "Enregistrer"
+        },
+        it: {
+            home: 'Home',
+            tools: 'Strumenti',
+            discover: 'Scopri',
+            features: 'Funzionalità',
+            join: 'Unisciti',
+            discoverUniverse: "// Scopri l'Universo",
+            todayBriefing: "Briefing di Oggi",
+            tomorrowBriefing: "Briefing di Domani",
+            yesterdaySummary: "Riepilogo di Ieri",
+            calendarSettings: "Impostazioni Calendario",
+            connectGmail: "Connetti Gmail",
+            connectOutlook: "Connetti Outlook",
+            connectIcloud: "Connetti iCloud",
+            heraklesGreeting: "Ciao, sono Herakles. Su cosa stai lavorando?",
+            typePlaceholder: "// Scrivi il tuo progetto qui",
+            send: "Invia",
+            record: "Registra"
+        },
+        de: {
+            home: 'Startseite',
+            tools: 'Werkzeuge',
+            discover: 'Entdecken',
+            features: 'Funktionen',
+            join: 'Beitreten',
+            discoverUniverse: "// Entdecke das Universum",
+            todayBriefing: "Heutiges Briefing",
+            tomorrowBriefing: "Morgiges Briefing",
+            yesterdaySummary: "Zusammenfassung von Gestern",
+            calendarSettings: "Kalendereinstellungen",
+            connectGmail: "Gmail verbinden",
+            connectOutlook: "Outlook verbinden",
+            connectIcloud: "iCloud verbinden",
+            heraklesGreeting: "Hallo, ich bin Herakles. Woran arbeitest du?",
+            typePlaceholder: "// Gib dein Projekt hier ein",
+            send: "Senden",
+            record: "Aufnehmen"
+        },
+        ar: {
+            home: 'الرئيسية',
+            tools: 'الأدوات',
+            discover: 'اكتشف',
+            features: 'الميزات',
+            join: 'انضم',
+            discoverUniverse: "// اكتشف الكون",
+            todayBriefing: "ملخص اليوم",
+            tomorrowBriefing: "ملخص الغد",
+            yesterdaySummary: "ملخص الأمس",
+            calendarSettings: "إعدادات التقويم",
+            connectGmail: "ربط جيميل",
+            connectOutlook: "ربط أوتلوك",
+            connectIcloud: "ربط آي كلاود",
+            heraklesGreeting: "مرحبًا، أنا هيراكليس. على ماذا تعمل؟",
+            typePlaceholder: "// اكتب مشروعك هنا",
+            send: "إرسال",
+            record: "تسجيل"
+        }
+    };
 
+    // Functions
     function generateCalendar(year, month) {
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
@@ -189,38 +201,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function updateBriefings() {
-        document.getElementById('todayBriefing').textContent = "Today's events and tasks...";
-        document.getElementById('tomorrowBriefing').textContent = "Upcoming events for tomorrow...";
-        document.getElementById('yesterdaySummary').textContent = "Summary of yesterday's activities...";
-    }
-
     function updateLanguage(lang) {
         const t = translations[lang];
         
         logoText.textContent = t.discoverUniverse;
-        document.querySelector('.left-column h2:nth-child(1)').textContent = t.todayBriefing;
-        document.querySelector('.left-column h2:nth-child(3)').textContent = t.tomorrowBriefing;
-        document.querySelector('.left-column h2:nth-child(5)').textContent = t.yesterdaySummary;
+        document.querySelector('nav ul li:nth-child(1) a').textContent = t.home;
+        document.querySelector('nav ul li:nth-child(2) a').textContent = t.tools;
         
-        document.querySelectorAll('nav ul li a.dropbtn')[0].textContent = t.home;
-        document.querySelectorAll('nav ul li a.dropbtn')[1].textContent = t.tools;
+        const dropdownItems = document.querySelectorAll('.dropdown-content a');
+        dropdownItems[0].textContent = t.discover;
+        dropdownItems[1].textContent = t.features;
+        dropdownItems[2].textContent = t.join;
         
-        document.querySelectorAll('nav ul li:first-child .dropdown-content a')[0].textContent = t.discover;
-        document.querySelectorAll('nav ul li:first-child .dropdown-content a')[1].textContent = t.features;
-        document.querySelectorAll('nav ul li:first-child .dropdown-content a')[2].textContent = t.join;
-        
-        document.querySelector('#settings-panel h3').textContent = t.calendarSettings;
-        document.getElementById('connect-gmail').textContent = t.connectGmail;
-        document.getElementById('connect-outlook').textContent = t.connectOutlook;
-        document.getElementById('connect-icloud').textContent = t.connectIcloud;
-        
-        document.getElementById('heraklesResponse').textContent = t.heraklesGreeting;
-        document.getElementById('chatInput').setAttribute('placeholder', t.typePlaceholder);
-        document.getElementById('chatSendButton').textContent = t.send;
-        document.getElementById('recordButton').textContent = t.record;
+        todayBriefing.textContent = t.todayBriefing;
+        tomorrowBriefing.textContent = t.tomorrowBriefing;
+        yesterdaySummary.textContent = t.yesterdaySummary;
+        calendarSettings.textContent = t.calendarSettings;
+        connectGmail.textContent = t.connectGmail;
+        connectOutlook.textContent = t.connectOutlook;
+        connectIcloud.textContent = t.connectIcloud;
+        heraklesResponse.textContent = t.heraklesGreeting;
+        chatInput.setAttribute('placeholder', t.typePlaceholder);
+        chatSendButton.textContent = t.send;
+        recordButton.textContent = t.record;
     }
 
+    // Event Listeners
     prevMonthButton.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() - 1);
         updateCalendar();
@@ -245,37 +251,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     nightModeToggle.addEventListener('click', () => {
         document.body.classList.toggle('night-mode');
-        if (document.body.classList.contains('night-mode')) {
-            nightIcon.style.display = 'none';
-            dayIcon.style.display = 'inline-block';
-        } else {
-            nightIcon.style.display = 'inline-block';
-            dayIcon.style.display = 'none';
-        }
+        const isNightMode = document.body.classList.contains('night-mode');
+        nightIcon.style.display = isNightMode ? 'none' : 'inline-block';
+        dayIcon.style.display = isNightMode ? 'inline-block' : 'none';
+        localStorage.setItem('nightMode', isNightMode);
     });
 
     languageSelect.addEventListener('change', (event) => {
         updateLanguage(event.target.value);
     });
 
-    interact(chatConsole).draggable({
-        listeners: {
-            move(event) {
-                const target = event.target;
-                const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-                const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+    // Initialization
+    function init() {
+        updateCalendar();
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+        updateLanguage(languageSelect.value);
 
-                target.style.transform = `translate(${x}px, ${y}px)`;
-                target.setAttribute('data-x', x);
-                target.setAttribute('data-y', y);
-            }
+        // Check for saved night mode preference
+        const savedNightMode = localStorage.getItem('nightMode');
+        if (savedNightMode === 'true') {
+            document.body.classList.add('night-mode');
+            nightIcon.style.display = 'none';
+            dayIcon.style.display = 'inline-block';
         }
-    });
 
-    // Initialize
-    updateCalendar();
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
-    updateBriefings();
-    updateLanguage(languageSelect.value);
+        // Update chat sphere style
+        const chatSphereH = chatSphere.querySelector('::after');
+        if (chatSphereH) {
+            chatSphereH.style.fontWeight = 'bold';
+            chatSphereH.style.fontSize = '36px'; // 150% larger than the original 24px
+        }
+    }
+
+    init();
 });
