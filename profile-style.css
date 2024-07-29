@@ -150,7 +150,7 @@ nav ul li a {
 }
 
 #calendar-events:hover, #user-notes:hover, #focus-productivity:hover, #global-explorer:hover, #qr-code-module:hover {
-    transform: scale(1.3);
+    transform: scale(1.05);
     z-index: 10;
 }
 
@@ -164,39 +164,20 @@ nav ul li a {
     resize: vertical;
 }
 
-#save-notes, #toggle-focus, #start-timer {
+#save-notes, #toggle-focus, #start-timer, #toggle-tagline, #edit-tagline, #save-tagline {
     background: linear-gradient(45deg, #8a2be2, #4169e1);
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-}
-
-#status-message {
-    width: calc(100% - 60px);
-    padding: 5px;
     margin-top: 10px;
 }
 
-.edit-button, .save-button {
-    width: 20px;
-    height: 20px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: none;
-    cursor: pointer;
-    margin-left: 5px;
-}
-
-.edit-button {
-    background-image: url('pencil-icon.svg');
-}
-
-.save-button {
-    background-image: url('disk-icon.svg');
-    display: none;
+#status-message {
+    width: calc(100% - 120px);
+    padding: 5px;
+    margin-top: 10px;
 }
 
 #productivity-chart {
@@ -204,11 +185,30 @@ nav ul li a {
     height: 200px;
 }
 
-#world-map {
-    width: 100%;
-    height: 300px;
-    background-color: #e0e0e0;
+#mini-calendar {
     margin-bottom: 20px;
+}
+
+#mini-calendar table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#mini-calendar th, #mini-calendar td {
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+#mini-calendar th {
+    background-color: #f2f2f2;
+}
+
+#qr-code {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
 }
 
 footer {
@@ -238,14 +238,14 @@ footer {
 }
 
 .chat-sphere:hover {
-    transform: scale(1.5);
+    transform: scale(1.1);
     box-shadow: 0 0 20px rgba(74, 144, 226, 0.5);
 }
 
 .chat-console {
     display: none;
     position: fixed;
-    bottom: 100px;
+    bottom: 80px;
     right: 20px;
     width: 300px;
     height: 400px;
@@ -301,6 +301,15 @@ footer {
     border-color: #777777;
 }
 
+.night-mode #mini-calendar th {
+    background-color: #555555;
+    color: white;
+}
+
+.night-mode #mini-calendar td {
+    border-color: #777777;
+}
+
 @media (max-width: 768px) {
     #profile-container {
         grid-template-columns: 1fr;
@@ -330,10 +339,5 @@ footer {
     #avatar-container {
         margin-right: 0;
         margin-bottom: 20px;
-    }
-
-    #qr-code {
-        margin-left: 0;
-        margin-top: 20px;
     }
 }
