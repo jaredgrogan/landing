@@ -141,32 +141,17 @@ nav ul li a {
     text-decoration: none;
 }
 
-#qr-code {
-    width: 100px;
-    height: 100px;
-    background-color: white;
-    margin-left: 20px;
-}
-
-#status-message {
-    width: 100%;
-    padding: 5px;
-    margin-top: 10px;
-}
-
-.status-light {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-left: 10px;
-}
-
-#calendar-events, #user-notes, #productivity-tracker, #focus-mode, #global-explorer {
+#calendar-events, #user-notes, #focus-productivity, #global-explorer, #qr-code-module {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+#calendar-events:hover, #user-notes:hover, #focus-productivity:hover, #global-explorer:hover, #qr-code-module:hover {
+    transform: scale(1.3);
+    z-index: 10;
 }
 
 #notes-area {
@@ -188,18 +173,35 @@ nav ul li a {
     cursor: pointer;
 }
 
+#status-message {
+    width: calc(100% - 60px);
+    padding: 5px;
+    margin-top: 10px;
+}
+
+.edit-button, .save-button {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.edit-button {
+    background-image: url('pencil-icon.svg');
+}
+
+.save-button {
+    background-image: url('disk-icon.svg');
+    display: none;
+}
+
 #productivity-chart {
     width: 100%;
     height: 200px;
-}
-
-#virtual-workspace {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
 }
 
 #world-map {
@@ -284,9 +286,9 @@ footer {
 .night-mode #user-info,
 .night-mode #calendar-events,
 .night-mode #user-notes,
-.night-mode #productivity-tracker,
-.night-mode #focus-mode,
-.night-mode #global-explorer {
+.night-mode #focus-productivity,
+.night-mode #global-explorer,
+.night-mode #qr-code-module {
     background: linear-gradient(to bottom, #666666, #888888);
     color: white;
 }
