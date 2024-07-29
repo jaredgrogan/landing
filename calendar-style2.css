@@ -177,8 +177,13 @@ nav ul li a {
 .chat-sphere::after {
     content: 'H';
     font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 36px; /* 150% larger than the original 24px */
     color: white;
-    font-size: 24px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .chat-console {
