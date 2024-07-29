@@ -194,17 +194,17 @@ nav ul li a {
 .night-mode #languageSelect,
 .night-mode #languageSelect option {
     color: white;
-    background-color: #333333;
+    background-color: #444444;
 }
 
 .night-mode .dropdown-content,
 .night-mode .dropdown-content a {
-    background-color: #333333;
+    background-color: #444444;
     color: white;
 }
 
 .night-mode .dropdown-content a:hover {
-    background-color: #444444;
+    background-color: #555555;
 }
 
 #chatContainer {
@@ -248,7 +248,7 @@ nav ul li a {
 }
 
 .night-mode #chatInput {
-    background-color: #888888;
+    background-color: #666666;
     color: white;
 }
 
@@ -262,14 +262,14 @@ nav ul li a {
     margin-top: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #555;
+    background-color: #555555;
     color: white;
     cursor: pointer;
     font-family: 'Courier New', monospace;
 }
 
 #chatSendButton:hover, #recordButton:hover {
-    background-color: #666;
+    background-color: #666666;
 }
 
 .night-mode #newNoteButton {
