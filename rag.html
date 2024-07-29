@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Assistant - Universitas AI</title>
+    <link rel="stylesheet" href="rag-style.css">
+    <link rel="icon" href="favicon5.svg">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="top-nav">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="favicon5.svg" alt="Universitas AI Logo">
+                </a>
+                <span class="logo-text">// Discover the Universe</span>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="index.html" id="nav-home">Home</a></li>
+                    <li><a href="#" id="nav-rag">RAG Assistant</a></li>
+                    <li><a href="#" id="nav-documents">Documents</a></li>
+                    <li><a href="#" id="nav-settings">Settings</a></li>
+                </ul>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="it">Italiano</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ar">العربية</option>
+                </select>
+                <button id="nightModeToggle">
+                    <span id="nightIcon">&#9790;</span>
+                    <span id="dayIcon" style="display:none;">&#9788;</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main id="rag-container">
+        <section id="document-upload">
+            <h2>Upload Documents</h2>
+            <input type="file" id="file-upload" multiple>
+            <button id="upload-btn">Upload</button>
+        </section>
+
+        <section id="query-input">
+            <h2>Ask a Question</h2>
+            <textarea id="query-text" placeholder="Enter your question here..."></textarea>
+            <button id="submit-query">Submit</button>
+        </section>
+
+        <section id="results-display">
+            <h2>Results</h2>
+            <div id="rag-response"></div>
+        </section>
+
+        <section id="rag-config">
+            <h2>RAG Configuration</h2>
+            <div>
+                <label for="relevance-threshold">Relevance Threshold:</label>
+                <input type="range" id="relevance-threshold" min="0" max="1" step="0.1" value="0.5">
+            </div>
+            <div>
+                <label for="num-documents">Number of Retrieved Documents:</label>
+                <input type="number" id="num-documents" min="1" max="10" value="3">
+            </div>
+        </section>
+
+        <section id="document-management">
+            <h2>Document Collection</h2>
+            <ul id="document-list"></ul>
+        </section>
+
+        <section id="retrieval-visualization">
+            <h2>Retrieval Process Visualization</h2>
+            <canvas id="relevance-chart"></canvas>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script src="rag-script.js"></script>
+</body>
+</html>
