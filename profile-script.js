@@ -112,3 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             reader.readAsDataURL(file);
         }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const nightModeToggle = document.getElementById('nightModeToggle');
+    const nightIcon = document.getElementById('nightIcon');
+    const dayIcon = document.getElementById('dayIcon');
+    const languageSelect = document.getElementById('languageSelect');
+    const avatarUpload = document.getElementById('avatar-upload');
+    const userAvatar = document.getElementById('user-avatar');
+    const saveNot
