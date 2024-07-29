@@ -258,6 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <canvas id="productivity-chart"></canvas>
         `;
 
+        document.addEventListener('DOMContentLoaded', () => {
+    const nightM
+            
         // Implement focus mode and timer functionality here
     }
 
