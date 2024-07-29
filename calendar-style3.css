@@ -146,7 +146,8 @@ nav ul li a {
 }
 
 .calendar-day.today {
-    background-color: #e6f3ff;
+    background: linear-gradient(45deg, #8a2be2, #4169e1);
+    color: white;
 }
 
 .calendar-day.other-month {
@@ -226,8 +227,33 @@ footer {
     font-size: 14px;
 }
 
+#chatSendButton, #recordButton {
+    background: linear-gradient(45deg, #8a2be2, #4169e1);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#recordButton {
+    position: relative;
+}
+
+#recordButton::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 15px;
+    background-color: white;
+    border-radius: 50%;
+}
+
 .night-mode {
-    background: linear-gradient(to right, #222222, #444444);
+    background: linear-gradient(to right, #111111, #333333);
     color: #f5f5f5;
 }
 
@@ -251,7 +277,8 @@ footer {
 
 .night-mode .left-column,
 .night-mode .right-column {
-    background-color: rgba(68, 68, 68, 0.5);
+    background-color: #999999;
+    border: 1px solid rgba(228, 228, 228, 0.75);
     color: white;
 }
 
@@ -262,7 +289,7 @@ footer {
 }
 
 .night-mode .calendar-day.today {
-    background-color: #1a3f5c;
+    background: linear-gradient(45deg, #6a1bc2, #3159d1);
 }
 
 .night-mode .calendar-day.other-month {
@@ -276,7 +303,7 @@ footer {
 }
 
 .night-mode #settings-panel {
-    background-color: rgba(68, 68, 68, 0.5);
+    background-color: #999999;
     color: white;
 }
 
