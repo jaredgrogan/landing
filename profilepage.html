@@ -6,7 +6,8 @@
     <title>User Profile - Universitas AI</title>
     <link rel="stylesheet" href="profile-style.css">
     <link rel="icon" href="favicon5.svg">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 </head>
 <body>
     <header>
@@ -23,7 +24,6 @@
                     <li><a href="#" id="nav-profile">Profile</a></li>
                     <li><a href="#" id="nav-calendar">Calendar</a></li>
                     <li><a href="#" id="nav-notes">Notes</a></li>
-                    <li><a href="#" id="nav-global-explorer">Global Explorer</a></li>
                 </ul>
                 <select id="languageSelect">
                     <option value="en">English</option>
@@ -51,8 +51,12 @@
             <div id="user-details">
                 <h2 id="user-name">John Doe</h2>
                 <p id="user-email">johndoe@example.com</p>
-                <input type="text" id="status-message" maxlength="80" placeholder="Set your status...">
-                <div id="status-light" class="status-light"></div>
+                <div id="tagline-container">
+                    <input type="text" id="status-message" maxlength="60" placeholder="Set your tagline..." readonly>
+                    <button id="toggle-tagline">Toggle Tagline</button>
+                    <button id="edit-tagline" style="display: none;">Edit</button>
+                    <button id="save-tagline" style="display: none;">Save</button>
+                </div>
                 <div id="social-links">
                     <a href="#" class="social-icon" id="linkedin">LinkedIn</a>
                     <a href="#" class="social-icon" id="x">X</a>
@@ -62,9 +66,6 @@
                     <a href="#" class="social-icon" id="youtube">YouTube</a>
                 </div>
             </div>
-            <div id="qr-code">
-                <!-- QR code will be generated and inserted here -->
-            </div>
         </section>
 
         <section id="calendar-events">
@@ -72,11 +73,8 @@
             <div id="mini-calendar"></div>
             <div id="todays-briefing">
                 <h4>Today's Briefing</h4>
-                <ul id="briefing-list"></ul>
+                <p id="briefing-content"></p>
             </div>
-            <ul id="event-list">
-                <!-- Calendar events will be populated here -->
-            </ul>
         </section>
 
         <section id="user-notes">
@@ -85,28 +83,29 @@
             <button id="save-notes">Save Notes</button>
         </section>
 
-        <section id="productivity-tracker">
-            <h3>Productivity Tracker</h3>
-            <canvas id="productivity-chart"></canvas>
-        </section>
-
-        <section id="focus-mode">
-            <h3>Focus Mode</h3>
-            <button id="toggle-focus">Toggle Focus Mode</button>
-            <div id="timer">25:00</div>
-            <button id="start-timer">Start Timer</button>
+        <section id="focus-productivity">
+            <h3>Focus & Productivity</h3>
+            <div id="focus-mode">
+                <button id="toggle-focus">Toggle Focus Mode</button>
+                <div id="timer">25:00</div>
+                <button id="start-timer">Start Timer</button>
+            </div>
+            <div id="productivity-tracker">
+                <h4>Productivity Tracker</h4>
+                <canvas id="productivity-chart"></canvas>
+            </div>
         </section>
 
         <section id="global-explorer">
-            <h3>Global Explorer</h3>
-            <div id="world-map"></div>
-            <div id="language-resources"></div>
-            <div id="cultural-guides"></div>
-            <div id="travel-planner"></div>
+            <h3>Global AI News</h3>
+            <div id="news-content"></div>
+        </section>
+
+        <section id="qr-code-module">
+            <h3>Your Profile QR Code</h3>
+            <div id="qr-code"></div>
         </section>
     </main>
-
-    <div id="virtual-workspace"></div>
 
     <footer>
         <p>&copy; 2024 UNIVERSITAS AI</p>
@@ -120,7 +119,6 @@
         <button id="minimizeChat">-</button>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="profile-script.js"></script>
 </body>
 </html>
