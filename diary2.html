@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon5.svg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="top-nav">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="favicon5.svg" alt="Logo">
+                </a>
+                <span class="logo-text">// Discover the Universe</span>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Home</a>
+                        <div class="dropdown-content">
+                            <a href="discover.html">Discover</a>
+                            <a href="features.html">Features</a>
+                            <a href="pricing.html">Join</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Tools</a>
+                        <div class="dropdown-content">
+                            <a href="#">Summary</a>
+                            <a href="#">Extract</a>
+                            <a href="#">Analyze</a>
+                            <a href="#">Actions</a>
+                            <a href="#">Export</a>
+                            <a href="#">Save</a>
+                            <a href="#">Assets</a>
+                        </div>
+                    </li>
+                </ul>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="it">Italiano</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ar">العربية</option>
+                </select>
+                <span id="currentDateTime" class="current-date-time"></span>
+                <button id="nightModeToggle">
+                    <span id="nightIcon">&#9790;</span>
+                    <span id="dayIcon" style="display:none;">&#9788;</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+    
+    <main id="calendar-container">
+        <div class="left-column">
+            <h2>Today's Briefing</h2>
+            <div id="todayBriefing"></div>
+            <h2>Tomorrow's Briefing</h2>
+            <div id="tomorrowBriefing"></div>
+            <h2>Yesterday's Summary</h2>
+            <div id="yesterdaySummary"></div>
+        </div>
+        <div class="center-column">
+            <div id="calendar-navigation">
+                <button id="prev-month">Previous</button>
+                <h2 id="current-month"></h2>
+                <button id="next-month">Next</button>
+            </div>
+            <div id="calendar-grid"></div>
+        </div>
+        <div class="right-column">
+            <div id="event-list"></div>
+        </div>
+    </main>
+    
+    <footer>
+        <div id="settings-panel">
+            <h3>Calendar Settings</h3>
+            <button id="connect-gmail">Connect Gmail</button>
+            <button id="connect-outlook">Connect Outlook</button>
+            <button id="connect-icloud">Connect iCloud</button>
+            <div id="calendar-toggles">
+                <!-- Calendar toggle switches will be dynamically added here -->
+            </div>
+        </div>
+    </footer>
+
+    <div id="chat-sphere" class="chat-sphere"></div>
+    <div id="chat-console" class="chat-console">
+        <div id="heraklesResponse">HI, I'm Herakles. What are you working on?</div>
+        <textarea id="chatInput" placeholder="// Type your project here"></textarea>
+        <button id="chatSendButton">Send</button>
+        <button id="recordButton">Record</button>
+    </div>
+
+    <script src="calendar-script.js"></script>
+</body>
+</html>
