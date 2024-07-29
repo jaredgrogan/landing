@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Note Taker</title>
+    <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/openai@3.1.0/dist/openai.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
+    <style>
+        :root {
+            --primary-light: #f5f5f5;
+            --secondary-light: #e4e4e4;
+            --tertiary-light: #ffffff;
+            --text-light: #000000;
+            --primary-dark: #222222;
+            --secondary-dark: #444444;
+            --tertiary-dark: #888888;
+            --text-dark: #ffffff;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary-light);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: var(--primary-dark);
+            color: var(--text-dark);
+        }
+
+        header {
+            background-color: var(--secondary-light);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.dark-mode header {
+            background-color: var(--secondary-dark);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .slogan {
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        #datetime-display {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        #global-search {
+            width: 200px;
+            padding: 5px;
+            border-radius: 15px;
+            border: 1px solid var(--secondary-dark);
+            transition: all 0.3s ease;
+        }
+
+        #global-search:hover, #global-search:focus {
+            width: 300px;
+            outline: none;
+        }
+
+        #dark-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        #dark-mode-toggle svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+        }
+
+        #sidebar {
+            width: 250px;
+            background-color: var(--secondary-light);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        body.dark-mode #sidebar {
+            background-color: var(--secondary-dark);
+        }
+
+        #content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .widget {
+            background-color: var(--tertiary-light);
+            border-radius: 8px;
+            padding: 15px;
+            min-width: 200px;
+        }
+
+        body.dark-mode .widget {
+            background-color: var(--tertiary-dark);
+        }
+
+        #note-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #note-title, #note-tags {
+            font-size: 18px;
+            margin-bottom: 10px;
+            padding: 5px;
+            border: none;
+            border-bottom: 2px solid var(--secondary-light);
+            background-color: transparent;
+            color: inherit;
+        }
+
+        #note-content {
+            flex: 1;
+            resize: none;
+            padding: 10px;
+            border: none;
+            background-color: var(--tertiary-light);
+            color: inherit;
+            border-radius: 8px;
+        }
+
+        body.dark-mode #note-content {
+            background-color: var(--tertiary-dark);
+        }
+
+        #voice-input {
+            margin-top: 20px;
+        }
+
+        #transcript {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--tertiary-light);
+            border-radius: 8px;
+            min-height: 50px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        body.dark-mode #transcript {
+            background-color: var(--tertiary-dark);
+        }
+
+        #ai-assistant {
+            margin-top: 20px;
+            border-top: 1px solid var(--secondary-light);
+            padding-top: 20px;
+        }
+
+        #chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--secondary-light);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        body.dark-mode #chat-messages {
+            border-color: var(--secondary-dark);
+        }
+
+        #user-input {
+            width: calc(100% - 70px);
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            background-color: var(--tertiary-light);
+            color: inherit;
+        }
+
+        body.dark-mode #user-input {
+            background-color: var(--tertiary-dark);
+        }
+
+        button {
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        #save-note-btn, #close-note-btn {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        #file-explorer {
+            margin-top: 20px;
+        }
+
+        .folder, .file {
+            padding: 5px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .folder::before {
+            content: '📁';
+            margin-right: 5px;
+        }
+
+        .file::before {
+            content: '📄';
+            margin-right: 5px;
+        }
+
+        .folder-contents {
+            margin-left: 20px;
+            display: none;
+        }
+
+        .folder.open > .folder-contents {
+            display: block;
+        }
+
+        #ai-suggestions {
+            position: fixed;
+            right: 20px;
+            top: 100px;
+            width: 250px;
+            background-color: var(--tertiary-light);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode #ai-suggestions {
+            background-color: var(--tertiary-dark);
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: var(--secondary-light);
+            font-family: 'Courier New', monospace;
+        }
+
+        body.dark-mode footer {
+            background-color: var(--secondary-dark);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="favicon5.svg" alt="Logo" class="logo">
+            <span class="slogan">// Discover the Universe</span>
+        </div>
+        <div class="header-right">
+            <span id="datetime-display"></span>
+            <input type="text" id="global-search" placeholder="Search notes...">
+            <button id="dark-mode-toggle" aria-label="Toggle dark mode">
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+        </div>
+    </header>
+    <main>
+        <div id="sidebar">
+            <h2>File Explorer</h2>
+            <div id="file-explorer"></div>
+            <button id="new-folder-btn">New Folder</button>
+        </div>
+        <div id="content">
+            <div id="dashboard">
+                <!-- Widgets will be added here dynamically -->
+            </div>
+            <div id="note-area">
+                <input type="text" id="note-title" placeholder="Note Title">
+                <input type="text" id="note-tags" placeholder="Add tags (comma-separated)">
+                <textarea id="note-content" placeholder="// Start writing here"></textarea>
+                <div>
+                    <button id="save-note-btn">Save</button>
+                    <button id="close-note-btn">Close</button>
+                </div>
+            </div>
+            <div id="voice-input">
+                <button id="start-record-btn" aria-label="Start voice recording">Start Recording</button>
+                <button id="stop-record-btn" aria-label="Stop voice recording" style="display:none;">Stop Recording</button>
+                <select id="language-select">
+                    <option value="en-US">English (US)</option>
+                    <option value="es-ES">Spanish (Spain)</option>
+                    <option value="fr-FR">French (France)</option>
+                </select>
+                <div id="transcript"></div>
+            </div>
+            <div id="ai-assistant">
+                <div id="chat-messages"></div>
+                <input type="text" id="user-input" placeholder="Ask Herakles...">
+                <button id="send-btn">Send</button>
+            </div>
+        </div>
+        <div id="ai-suggestions">
+            <h3>AI Suggestions</h3>
+            <div id="writing-prompts"></div>
+            <div id="relevant-info"></div>
+            <div id="style-improvements"></div>
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 UNIVERSITAS AI
+    </footer>
+
+    <script>
+        // OpenAI API configuration
+        const OPENAI_API_KEY = 'your-openai-api-key-here';
+        const openai = new OpenAI(OPENAI_API_KEY);
+
+        // IndexedDB setup
+        let db;
+        let isOnline = navigator.onLine;
+
+        async function initDB() {
+            db = await idb.openDB('NotesDB', 1, {
+                upgrade(db) {
+                    db.createObjectStore('notes', { keyPath: 'id' });
+                    db.createObjectStore('syncQueue', { keyPath: 'id' });
+                }
+            });
+        }
+
+        // Note management
+        let notes = [];
+        let currentNote = null;
+
+        async function createNote(title = 'Untitled', content = '', tags = []) {
+            const note = { id: Date.now(), title, content, tags };
+            notes.push(note);
+            await saveNote(note);
+            renderFileExplorer();
+            return note;
+        }
+
+        async function saveNote(note) {
+            if (!note) return;
+            note.title = document.getElementById('note-title').value;
+            note.content = document.getElementById('note-content').value;
+            note.tags = document.getElementById('note-tags').value.split(',').map(tag => tag.trim());
+            
+            await db.put('notes', note);
+            
+            if (isOnline) {
+                await syncNote(note);
+            } else {
+                await db.put('syncQueue', { id: note.id, action: 'update', data: note });
+                if ('serviceWorker' in navigator && 'SyncManager' in window) {
+                    const registration = await navigator.serviceWorker.ready;
+                    await registration.sync.register('sync-notes');
+                }
+            }
+            
+            renderFileExplorer();
+        }
+
+        async function syncNote(note) {
+            try {
+                const response = await fetch('/api/sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'update', data: note })
+                });
+                if (!response.ok) throw new Error('Sync failed');
+            } catch (error) {
+                console.error('Sync failed:', error);
+                await db.put('syncQueue', { id: note.id, action: 'update', data: note });
+            }
+        }
+
+        async function loadNotes() {
+            notes = await db.getAll('notes');
+            renderFileExplorer();
+            if (notes.length > 0) {
+                loadNote(notes[0]);
+            }
+        }
+
+        function loadNote(note) {
+            currentNote = note;
+            document.getElementById('note-title').value = note.title;
+            document.getElementById('note-content').value = note.content;
+            document.getElementById('note-tags').value = note.tags ? note.tags.join(', ') : '';
+            renderNoteDetails(note);
+        }
+
+        function closeNote() {
+            currentNote = null;
+            document.getElementById('note-title').
