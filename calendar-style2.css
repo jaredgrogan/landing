@@ -172,7 +172,14 @@ nav ul li a {
     box-shadow: 0 0 20px rgba(74, 144, 226, 0.5);
 }
 
+.night-mode .calendar-day {
+    background-color: #888888;
+    color: white;
+    border-color: #999999;
+}
+
 .chat-console {
+    background-color: #e4e4e4;
     display: none;
     position: fixed;
     bottom: 100px;
