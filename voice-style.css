@@ -1,0 +1,113 @@
+Voice and Video Processing CSS
+
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #f5f5f5;
+    color: black;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* ... (previous styles for header, nav, etc. remain the same) ... */
+
+#processing-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    padding: 20px;
+}
+
+.left-column, .right-column, .center-column {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#audio-recording, #video-upload, #transcription-display, #saved-transcriptions, #combine-transcriptions {
+    margin-bottom: 20px;
+}
+
+#startRecordingBtn, #stopRecordingBtn, #refineTranscriptionBtn, #mergeTranscriptionsBtn {
+    background: linear-gradient(45deg, #8a2be2, #4169e1);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+#startRecordingBtn:disabled, #stopRecordingBtn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+#audioPlayback, #videoPlayer {
+    width: 100%;
+    margin-top: 10px;
+}
+
+#transcriptionText {
+    width: 100%;
+    height: 300px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+#searchTranscriptions, #transcriptionsToMerge {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+#transcriptionsList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#transcriptionsList li {
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+#transcriptionsList li:hover {
+    background-color: #f0f0f0;
+}
+
+.night-mode {
+    background: linear-gradient(to right, #111111, #333333);
+    color: #f5f5f5;
+}
+
+.night-mode .left-column,
+.night-mode .right-column,
+.night-mode .center-column {
+    background: linear-gradient(to bottom, #666666, #888888);
+    border: 1px solid rgba(228, 228, 228, 0.75);
+    color: white;
+}
+
+.night-mode #transcriptionText,
+.night-mode #searchTranscriptions,
+.night-mode #transcriptionsToMerge {
+    background-color: #555555;
+    color: white;
+    border-color: #777777;
+}
+
+.night-mode #transcriptionsList li:hover {
+    background-color: #777777;
+}
+
+/* ... (previous styles for chat console, footer, etc. remain the same) ... */
+
+@media (max-width: 768px) {
+    #processing-container {
+        grid-template-columns: 1fr;
+    }
+}
