@@ -4,6 +4,7 @@ body {
     color: black;
     margin: 0;
     padding: 0;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 header {
@@ -134,6 +135,7 @@ nav ul li a {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
     position: absolute;
     cursor: move;
+    z-index: 2;
 }
 
 .note-header {
@@ -182,20 +184,27 @@ nav ul li a {
     color: #f5f5f5;
 }
 
-.night-mode .logo-text {
+.night-mode .logo-text,
+.night-mode nav ul li a,
+.night-mode #nightModeToggle,
+.night-mode #languageSelect {
     color: white;
 }
 
-.night-mode nav ul li a {
+.night-mode #languageSelect,
+.night-mode #languageSelect option {
     color: white;
-}
-
-.night-mode .dropdown-content {
     background-color: #333333;
 }
 
+.night-mode .dropdown-content,
 .night-mode .dropdown-content a {
-    color: black;
+    background-color: #333333;
+    color: white;
+}
+
+.night-mode .dropdown-content a:hover {
+    background-color: #444444;
 }
 
 #chatContainer {
@@ -205,6 +214,7 @@ nav ul li a {
     position: absolute;
     bottom: calc(33% - 150px);
     width: 100%;
+    z-index: 1;
 }
 
 .chat-box {
@@ -222,7 +232,7 @@ nav ul li a {
 }
 
 #heraklesResponse {
-    font-size: 1.6em; /* Increased by 60% */
+    font-size: 1.6em;
 }
 
 #chatInput {
@@ -234,7 +244,7 @@ nav ul li a {
     background-color: #ffffff;
     color: black;
     font-family: 'Courier New', monospace;
-    font-size: 1.6em; /* Increased by 60% */
+    font-size: 1.6em;
 }
 
 .night-mode #chatInput {
@@ -243,8 +253,7 @@ nav ul li a {
 }
 
 .night-mode #chatInput::placeholder {
-    color: white;
-    opacity: 0.7;
+    color: #cccccc;
 }
 
 #chatSendButton, #recordButton {
@@ -266,4 +275,39 @@ nav ul li a {
 .night-mode #newNoteButton {
     background-color: #e4e4e4;
     color: #222222;
+}
+
+@media (max-width: 768px) {
+    .top-nav {
+        flex-direction: column;
+    }
+
+    .nav-links {
+        margin-top: 10px;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    .dropdown-content {
+        position: static;
+        display: none;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    #chatContainer {
+        bottom: 0;
+    }
+
+    .chat-box {
+        max-width: 100%;
+    }
 }
