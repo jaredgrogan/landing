@@ -76,7 +76,7 @@ nav ul li a {
 
 #profile-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 20px;
     max-width: 1200px;
@@ -148,7 +148,21 @@ nav ul li a {
     margin-left: 20px;
 }
 
-#calendar-events, #user-notes {
+#status-message {
+    width: 100%;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+.status-light {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+#calendar-events, #user-notes, #productivity-tracker, #focus-mode, #global-explorer {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
@@ -165,7 +179,7 @@ nav ul li a {
     resize: vertical;
 }
 
-#save-notes {
+#save-notes, #toggle-focus, #start-timer {
     background: linear-gradient(45deg, #8a2be2, #4169e1);
     color: white;
     border: none;
@@ -174,11 +188,85 @@ nav ul li a {
     cursor: pointer;
 }
 
+#productivity-chart {
+    width: 100%;
+    height: 200px;
+}
+
+#virtual-workspace {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+#world-map {
+    width: 100%;
+    height: 300px;
+    background-color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
 footer {
     text-align: center;
     padding: 20px 0;
     font-family: 'Courier New', monospace;
     font-size: 14px;
+}
+
+.chat-sphere {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #4a90e2, #2ecc71);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Courier New', monospace;
+    color: white;
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.chat-sphere:hover {
+    transform: scale(1.5);
+    box-shadow: 0 0 20px rgba(74, 144, 226, 0.5);
+}
+
+.chat-console {
+    display: none;
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background-color: #e4e4e4;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    animation: fadeIn 0.5s ease;
+}
+
+#minimizeChat {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .night-mode {
@@ -195,12 +283,17 @@ footer {
 
 .night-mode #user-info,
 .night-mode #calendar-events,
-.night-mode #user-notes {
+.night-mode #user-notes,
+.night-mode #productivity-tracker,
+.night-mode #focus-mode,
+.night-mode #global-explorer {
     background: linear-gradient(to bottom, #666666, #888888);
     color: white;
 }
 
-.night-mode #notes-area {
+.night-mode #notes-area,
+.night-mode #status-message,
+.night-mode #chatInput {
     background-color: #555555;
     color: white;
     border-color: #777777;
