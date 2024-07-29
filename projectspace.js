@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatSendButton.textContent = t.send;
         recordButton.textContent = t.record;
         newNoteButton.textContent = t.newNote;
-        logoText.textContent = t.discoverUniverse;
+        logoText.textContent = t.discoverUniverse;  // Update the slogan
     }
 
     function createNote() {
