@@ -202,8 +202,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
         
-        const x = centerX + radius * Math.cos(angle * Math.PI / 180) - 125; // 125 is half the note width
-        const y = centerY + radius * Math.sin(angle * Math.PI / 180) - 100; // 100 is half the note height
+        // Calculate position based on clock positions (1, 2, 3 o'clock)
+        let x, y;
+        switch (noteCount % 3) {
+            case 0: // 3 o'clock
+                x = centerX + radius;
+                y = centerY;
+                break;
+            case 1: // 2 o'clock
+                x = centerX + radius * Math.cos(30 * Math.PI / 180);
+                y = centerY - radius * Math.sin(30 * Math.PI / 180);
+                break;
+            case 2: // 1 o'clock
+                x = centerX + radius * Math.cos(60 * Math.PI / 180);
+                y = centerY - radius * Math.sin(60 * Math.PI / 180);
+                break;
+        }
+        
+        x -= 125; // Adjust for note width (250/2)
+        y -= 100; // Adjust for note height (200/2)
         
         note.style.left = `${x}px`;
         note.style.top = `${y}px`;
