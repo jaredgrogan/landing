@@ -258,12 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <canvas id="productivity-chart"></canvas>
         `;
 
-        document.addEventListener('DOMContentLoaded', () => {
-    const nightM
-            
-        // Implement focus mode and timer functionality here
-    }
-
     function generateQRCode() {
         const qrCode = document.getElementById('qr-code-module');
         // Use a QR code generation library here
