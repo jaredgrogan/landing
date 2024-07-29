@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Note Taker</title>
+    <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/openai@3.1.0/dist/openai.min.js"></script>
+    <style>
+        :root {
+            --primary-light: #f5f5f5;
+            --secondary-light: #e4e4e4;
+            --tertiary-light: #ffffff;
+            --text-light: #000000;
+            --primary-dark: #222222;
+            --secondary-dark: #444444;
+            --tertiary-dark: #888888;
+            --text-dark: #ffffff;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary-light);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode {
+            background-color: var(--primary-dark);
+            color: var(--text-dark);
+        }
+
+        header {
+            background-color: var(--secondary-light);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dark-mode header {
+            background-color: var(--secondary-dark);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .slogan {
+            font-size: 14px;
+        }
+
+        #datetime-display {
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+        }
+
+        #sidebar {
+            width: 250px;
+            background-color: var(--secondary-light);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .dark-mode #sidebar {
+            background-color: var(--secondary-dark);
+        }
+
+        #content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .widget {
+            background-color: var(--tertiary-light);
+            border-radius: 8px;
+            padding: 15px;
+            min-width: 200px;
+        }
+
+        .dark-mode .widget {
+            background-color: var(--tertiary-dark);
+        }
+
+        #note-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #note-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            padding: 5px;
+            border: none;
+            border-bottom: 2px solid var(--secondary-light);
+            background-color: transparent;
+            color: inherit;
+        }
+
+        #note-content {
+            flex: 1;
+            resize: none;
+            padding: 10px;
+            border: none;
+            background-color: var(--tertiary-light);
+            color: inherit;
+            border-radius: 8px;
+        }
+
+        .dark-mode #note-content {
+            background-color: var(--tertiary-dark);
+        }
+
+        #voice-input {
+            margin-top: 20px;
+        }
+
+        #transcript {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--tertiary-light);
+            border-radius: 8px;
+            min-height: 50px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .dark-mode #transcript {
+            background-color: var(--tertiary-dark);
+        }
+
+        #ai-assistant {
+            margin-top: 20px;
+            border-top: 1px solid var(--secondary-light);
+            padding-top: 20px;
+        }
+
+        #chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--secondary-light);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .dark-mode #chat-messages {
+            border-color: var(--secondary-dark);
+        }
+
+        #user-input {
+            width: calc(100% - 70px);
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            background-color: var(--tertiary-light);
+            color: inherit;
+        }
+
+        .dark-mode #user-input {
+            background-color: var(--tertiary-dark);
+        }
+
+        button {
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        #file-explorer {
+            margin-top: 20px;
+        }
+
+        .folder, .file {
+            padding: 5px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .folder::before {
+            content: '📁';
+            margin-right: 5px;
+        }
+
+        .file::before {
+            content: '📄';
+            margin-right: 5px;
+        }
+
+        .folder-contents {
+            margin-left: 20px;
+            display: none;
+        }
+
+        .folder.open > .folder-contents {
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: var(--secondary-light);
+            font-family: 'Courier New', monospace;
+        }
+
+        .dark-mode footer {
+            background-color: var(--secondary-dark);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="favicon5.svg" alt="Logo" class="logo">
+            <span class="slogan">// Discover the Universe</span>
+        </div>
+        <div>
+            <span id="datetime-display"></span>
+            <button id="dark-mode-toggle">
+                <img src="sun-icon.svg" alt="Light mode" id="light-icon">
+                <img src="moon-icon.svg" alt="Dark mode" id="dark-icon" style="display:none;">
+            </button>
+        </div>
+    </header>
+    <main>
+        <div id="sidebar">
+            <h2>File Explorer</h2>
+            <div id="file-explorer"></div>
+            <button id="new-folder-btn">New Folder</button>
+        </div>
+        <div id="content">
+            <div id="dashboard">
+                <!-- Widgets will be added here dynamically -->
+            </div>
+            <div id="note-area">
+                <input type="text" id="note-title" placeholder="Note Title">
+                <textarea id="note-content" placeholder="// Start writing here"></textarea>
+            </div>
+            <div id="voice-input">
+                <button id="start-record-btn" aria-label="Start voice recording">Start Recording</button>
+                <button id="stop-record-btn" aria-label="Stop voice recording" style="display:none;">Stop Recording</button>
+                <select id="language-select">
+                    <option value="en-US">English (US)</option>
+                    <option value="es-ES">Spanish (Spain)</option>
+                    <option value="fr-FR">French (France)</option>
+                </select>
+                <div id="transcript"></div>
+            </div>
+            <div id="ai-assistant">
+                <div id="chat-messages"></div>
+                <input type="text" id="user-input" placeholder="Ask Herakles...">
+                <button id="send-btn">Send</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 UNIVERSITAS AI
+    </footer>
+
+    <script>
+        // OpenAI API configuration
+        const OPENAI_API_KEY = 'your-openai-api-key-here';
+        const openai = new OpenAI(OPENAI_API_KEY);
+
+        // Note management
+        let notes = [];
+        let currentNote = null;
+
+        function createNote(title = 'Untitled', content = '') {
+            const note = { id: Date.now(), title, content };
+            notes.push(note);
+            saveNotes();
+            renderFileExplorer();
+            return note;
+        }
+
+        function saveNote() {
+            if (currentNote) {
+                currentNote.title = document.getElementById('note-title').value;
+                currentNote.content = document.getElementById('note-content').value;
+                saveNotes();
+                renderFileExplorer();
+            }
+        }
+
+        function saveNotes() {
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+
+        function loadNotes() {
+            const savedNotes = localStorage.getItem('notes');
+            notes = savedNotes ? JSON.parse(savedNotes) : [];
+            renderFileExplorer();
+            if (notes.length > 0) {
+                loadNote(notes[0]);
+            }
+        }
+
+        function loadNote(note) {
+            currentNote = note;
+            document.getElementById('note-title').value = note.title;
+            document.getElementById('note-content').value = note.content;
+        }
+
+        // File Explorer
+        function renderFileExplorer() {
+            const explorer = document.getElementById('file-explorer');
+            explorer.innerHTML = '';
+            
+            const rootFolder = { name: 'My Notes', type: 'folder', children: notes };
+            renderFolder(rootFolder, explorer);
+        }
+
+        function renderFolder(folder, container) {
+            const folderElement = document.createElement('div');
+            folderElement.className = 'folder';
+            folderElement.textContent = folder.name;
+            folderElement.addEventListener('click', (e) => {
+                e.stopPropagation();
+                folderElement.classList.toggle('open');
+            });
+
+            const contentsElement = document.createElement('div');
+            contentsElement.className = 'folder-contents';
+
+            folder.children.forEach(child => {
+                if (child.type === 'folder') {
+                    renderFolder(child, contentsElement);
+                } else {
+                    const fileElement = document.createElement('div');
+                    fileElement.className = 'file';
+                    fileElement.textContent = child.title;
+                    fileElement.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        loadNote(child);
+                    });
+                    contentsElement.appendChild(fileElement);
+                }
+            });
+
+            folderElement.appendChild(contentsElement);
+            container.appendChild(folderElement);
+        }
+
+        document.getElementById('new-folder-btn').addEventListener('click', () => {
+            const folderName = prompt('Enter folder name:');
+            if (folderName) {
+                // In a real app, you'd update your data structure here
+                renderFileExplorer();
+            }
+        });
+
+        // Voice input
+        const startBtn = document.getElementById('start-record-btn');
+        const stopBtn = document.getElementById('stop-record-btn');
+        const languageSelect = document.getElementById('language-select');
+        const transcriptDiv = document.getElementById('transcript');
+
+        let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+        startBtn.addEventListener('click', startRecording);
+        stopBtn.addEventListener('click', stopRecording);
+        languageSelect.addEventListener('change', updateLanguage);
+
+        function startRecording() {
+            recognition.start();
+            startBtn.style.display = 'none';
+            stopBtn.style.display = 'inline-block';
+        }
+
+        function stopRecording() {
+            recognition.stop();
+            startBtn.style.display = 'inline-block';
+            stopBtn.style.display = 'none';
+        }
+
+        function updateLanguage() {
+            recognition.lang = languageSelect.value;
+        }
+
+        recognition.addEventListener('result', (event) => {
+            let interimTranscript = '';
+            let finalTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript + ' ';
+                    handleVoiceCommand(finalTranscript.trim());
+                } else {
+                    interimTranscript += transcript;
+                }
+            }
+
+            transcriptDiv.innerHTML = finalTranscript + '<i style="color: #999;">' + interimTranscript + '</i>';
+
+            if (finalTranscript) {
+                document.getElementById('note-content').value += finalTranscript;
+            }
+        });
+
+        // Voice commands
+        const commands = {
+            'new note': () => createNote('New Voice Note', ''),
+            'open note': (title) => {
+                const note = notes.find(n => n.title.toLowerCase().includes(title.toLowerCase()));
+                if (note) loadNote(note);
+            },
+            'summarize': () => summarizeCurrentNote(),
+            'ai help': () => activateAIAssistant()
+        };
+
+        function handleVoiceCommand(command) {
+            for (const [key, func] of Object.entries(commands)) {
+                if (command.toLowerCase().startsWith(key)) {
+                    func(command.slice(key.length).trim());
+                    return;
+                }
+            }
+            // If no command matched, treat it as note content
+            document.getElementById('note-content').value += command + ' ';
+        }
+
+        // AI Assistant
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (message === '') return;
+
+            addMessageToChat('You', message);
+            userInput.value = '';
+
+            const response = await getAIResponse(message);
+            addMessageToChat('Herakles', response);
+        }
+
+        function addMessageToChat(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function getAIResponse(message, context = '') {
+            try {
+                const response = await openai.complete({
+                    engine: 'davinci',
+   prompt: `The following is a conversation with an AI assistant named Herakles for a note-taking app. Herakles is helpful, creative, clever, and very friendly. The current context is: ${context}\n\nHuman: ${message}\nHerakles:`,
+                    max_tokens: 150,
+                    n: 1,
+                    stop: ["\nHuman:", "\nHerakles:"],
+                });
+                return response.choices[0].text.trim();
+            } catch (error) {
+                console.error('Error:', error);
+                return "I'm sorry, I'm having trouble responding right now. Please try again later.";
+            }
+        }
+
+        async function summarizeCurrentNote() {
+            if (currentNote) {
+                const summary = await getAIResponse(`Summarize the following note: ${currentNote.content}`, 'Summarizing a note');
+                addMessageToChat('Herakles', `Summary of "${currentNote.title}": ${summary}`);
+            }
+        }
+
+        function activateAIAssistant() {
+            const context = currentNote ? currentNote.content : '';
+            addMessageToChat('You', 'Can you help me with my current note?');
+            getAIResponse('Can you help me with my current note?', context).then(response => {
+                addMessageToChat('Herakles', response);
+            });
+        }
+
+        // Multimodal Input
+        const noteContent = document.getElementById('note-content');
+        const hammer = new Hammer(noteContent);
+
+        hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+
+        hammer.on('swipeleft', function() {
+            // Navigate to next note
+            const currentIndex = notes.findIndex(n => n.id === currentNote.id);
+            if (currentIndex < notes.length - 1) {
+                loadNote(notes[currentIndex + 1]);
+            }
+        });
+
+        hammer.on('swiperight', function() {
+            // Navigate to previous note
+            const currentIndex = notes.findIndex(n => n.id === currentNote.id);
+            if (currentIndex > 0) {
+                loadNote(notes[currentIndex - 1]);
+            }
+        });
+
+        hammer.on('swipeup', function() {
+            // Minimize current note
+            noteContent.style.height = '100px';
+        });
+
+        hammer.on('swipedown', function() {
+            // Maximize current note
+            noteContent.style.height = '300px';
+        });
+
+        // Voice-to-diagram placeholder
+        function createDiagramFromVoice(description) {
+            const diagramElement = document.createElement('div');
+            diagramElement.innerHTML = `<pre>
+    +--------+
+    | Diagram|
+    |  ${description}  |
+    +--------+
+    </pre>`;
+            document.getElementById('note-content').appendChild(diagramElement);
+        }
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const lightIcon = document.getElementById('light-icon');
+        const darkIcon = document.getElementById('dark-icon');
+
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            lightIcon.style.display = document.body.classList.contains('dark-mode') ? 'none' : 'inline';
+            darkIcon.style.display = document.body.classList.contains('dark-mode') ? 'inline' : 'none';
+        });
+
+        // DateTime display
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('datetime-display').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'n') {
+                e.preventDefault();
+                createNote();
+            } else if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveNote();
+            }
+        });
+
+        // Initialize
+        loadNotes();
+        updateLanguage();
+        addMessageToChat('Herakles', "Hi, I'm Herakles. What are you writing?");
+
+        // Dashboard Widgets
+        const widgets = [
+            { id: 'quick-note', name: 'Quick Note', content: '<textarea placeholder="Quick note..."></textarea>' },
+            { id: 'recent-notes', name: 'Recent Notes', content: '<ul id="recent-notes-list"></ul>' },
+            { id: 'ai-suggestions', name: 'AI Suggestions', content: '<div id="ai-suggestions-content"></div>' },
+            { id: 'voice-commands', name: 'Voice Commands', content: '<button id="voice-command-btn">Start Voice Command</button>' }
+        ];
+
+        function createWidget(widget) {
+            const widgetElement = document.createElement('div');
+            widgetElement.className = 'widget';
+            widgetElement.innerHTML = `
+                <h3>${widget.name}</h3>
+                <div class="widget-content">${widget.content}</div>
+                <button class="remove-widget-btn">Remove</button>
+            `;
+            widgetElement.querySelector('.remove-widget-btn').addEventListener('click', () => widgetElement.remove());
+            return widgetElement;
+        }
+
+        document.getElementById('dashboard').appendChild(createWidget(widgets[0]));
+        document.getElementById('dashboard').appendChild(createWidget(widgets[1]));
+
+        // Drag and drop for file explorer
+        let draggedItem = null;
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.classList.contains('file')) {
+                draggedItem = e.target;
+                e.dataTransfer.setData('text/plain', e.target.textContent);
+            }
+        });
+
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            if (e.target.classList.contains('folder')) {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        document.addEventListener('dragleave', (e) => {
+            if (e.target.classList.contains('folder')) {
+                e.target.style.backgroundColor = '';
+            }
+        });
+
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if (e.target.classList.contains('folder') && draggedItem) {
+                e.target.style.backgroundColor = '';
+                e.target.querySelector('.folder-contents').appendChild(draggedItem);
+                // In a real app, you'd update your data structure here
+            }
+            draggedItem = null;
+        });
+    </script>
+</body>
+</html>
