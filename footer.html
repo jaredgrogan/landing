@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Pro</title>
+    <link rel="stylesheet" href="footer.css">
+    <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.4);
+        }
+
+        .tagline {
+            font-family: 'Courier Prime', monospace;
+            margin-left: 20px;
+            font-size: 1.2rem;
+        }
+
+        .mode-toggle {
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #typingAnimation {
+            font-family: 'Courier Prime', monospace;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        nav {
+            background-color: #111111;
+            padding: 10px;
+            width: 100%;
+            box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: transform 0.3s ease;
+        }
+
+        nav a:hover {
+            transform: scale(1.4);
+        }
+
+        footer {
+            background-color: #111111;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .tagline {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .mode-toggle {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+
+            #typingAnimation {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <header class="header">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="favicon5.svg" alt="Logo" class="logo">
+            </a>
+            <div class="tagline">// Discover the Universe</div>
+        </div>
+        <div class="mode-toggle" id="modeToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+                <path d="M12 3a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0V4a1 1 0 0 1 1-1zm0 15a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0v-1a1 1 0 0 1 1-1zm9-9a1 1 0 0 1-1 1h-1a1 1 0 0 1 0-2h1a1 1 0 0 1 1 1zM5 12a1 1 0 0 1-1 1H3a1 1 0 0 1 0-2h1a1 1 0 0 1 1 1zm14.95 6.36a1 1 0 0 1-1.41 0l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 1 0 1.41zM5.76 4.64a1 1 0 0 1 0 1.41l-.71.71a1 1 0 0 1-1.41-1.41l.71-.71a1 1 0 0 1 1.41 0zm12.48 0a1 1 0 0 1 1.41 0l.71.71a1 1 0 0 1-1.41 1.41l-.71-.71a1 1 0 0 1 0-1.41zM4.05 18.36a1 1 0 0 1 1.41 0l.71.71a1 1 0 0 1-1.41 1.41l-.71-.71a1 1 0 0 1 0-1.41zM12 6a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon" style="display: none;">
+                <path d="M12.1 22c-4.9 0-9-3.9-9.1-8.9 0-3.2 1.7-6.3 4.5-7.9.8-.5 1.8-.2 2.3.6.5.8.2 1.8-.6 2.3-1.6.9-2.6 2.7-2.6 4.6.1 2.9 2.4 5.2 5.3 5.2h.3c2.9-.1 5.2-2.4 5.2-5.3 0-1.9-1-3.6-2.6-4.5-.2-.1-.3-.2-.4-.3-.7-.6-1-1.5-.6-2.3s1.3-1.2 2.2-.9l.1.1c2.8 1.6 4.5 4.6 4.5 7.8 0 4.9-4.1 8.9-9 8.9h-.5z"/>
+            </svg>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div id="typingAnimation" class="typing-animation"></div>
+    </main>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chat.html">Launch</a>
+        <a href="product.html">Dashboard</a>
+        <a href="features.html">Features</a>
+        <a href="pricing.html">Join</a>
+    </nav>
+
+  <footer>
+    <div class="footer-nav">
+        <div class="footer-column">
+            <a href="index.html">Home</a>
+            <a href="chat.html">Launch</a>
+            <a href="product.html">Dashboard</a>
+            <a href="features.html">Features</a>
+        </div>
+        <div class="footer-column">
+            <a href="pricing.html">Join</a>
+            <a href="discover.html">Discover</a>
+            <a href="learning.html">Learn</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </div>
+    <div>© 2024 UNIVERSITAS AI</div>
+</footer>
+
+    <script src="scriptstory3.js"></script>
+    <script>
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+        const sunIcon = modeToggle.querySelector('.sun-icon');
+        const moonIcon = modeToggle.querySelector('.moon-icon');
+
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('night-mode');
+            if (body.classList.contains('night-mode')) {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        });
+    </script>
+  
+</body>
+</html>
