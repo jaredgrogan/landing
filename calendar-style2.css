@@ -155,16 +155,18 @@ nav ul li a {
 }
 
 .chat-sphere {
-    width: 50px;
-    height: 50px;
     position: fixed;
     bottom: 20px;
     right: 20px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: linear-gradient(45deg, #4a90e2, #2ecc71);
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .chat-sphere:hover {
@@ -172,21 +174,21 @@ nav ul li a {
     box-shadow: 0 0 20px rgba(74, 144, 226, 0.5);
 }
 
-.night-mode .calendar-day {
-    background-color: #888888;
+.chat-sphere::after {
+    content: 'H';
+    font-family: 'Courier New', monospace;
     color: white;
-    border-color: #999999;
+    font-size: 24px;
 }
 
 .chat-console {
-    background-color: #e4e4e4;
     display: none;
     position: fixed;
     bottom: 100px;
     right: 20px;
     width: 300px;
     height: 400px;
-    background-color: #aaaaaa;
+    background-color: #e4e4e4;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     padding: 20px;
@@ -208,25 +210,22 @@ nav ul li a {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.chat-sphere::after {
-    content: 'H';
-    font-family: 'Courier New', monospace;
-    color: white;
-    font-size: 24px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
 #settings-panel {
-    text-align: center;
     background-color: #f0f0f0;
     padding: 20px;
     border-radius: 5px;
     margin-top: 20px;
+    text-align: center;
 }
 
+footer {
+    text-align: center;
+    padding: 20px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+/* Night mode styles */
 .night-mode {
     background-color: #222222;
     color: #f5f5f5;
@@ -251,11 +250,15 @@ nav ul li a {
 }
 
 .night-mode .left-column,
-.night-mode .right-column,
-.night-mode .calendar-day {
+.night-mode .right-column {
     background-color: #444444;
     color: white;
-    border-color: #555555;
+}
+
+.night-mode .calendar-day {
+    background-color: #888888;
+    color: white;
+    border-color: #999999;
 }
 
 .night-mode .calendar-day.today {
@@ -263,8 +266,8 @@ nav ul li a {
 }
 
 .night-mode .calendar-day.other-month {
-    background-color: #333333;
-    color: #777;
+    background-color: #777777;
+    color: #aaaaaa;
 }
 
 .night-mode .chat-console {
@@ -278,19 +281,6 @@ nav ul li a {
 }
 
 .night-mode #chatInput {
-    background-color: #888888;
-    color: white;
-}
-
-#searchBar {
-    background-color: white;
-    border-radius: 20px;
-    padding: 5px 10px;
-    margin-right: 10px;
-    font-family: 'Courier New', monospace;
-}
-
-.night-mode #searchBar {
     background-color: #888888;
     color: white;
 }
