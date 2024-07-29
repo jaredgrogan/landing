@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     // DOM elements
     const calendarGrid = document.getElementById('calendar-grid');
@@ -25,22 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatInput = document.getElementById('chatInput');
     const chatSendButton = document.getElementById('chatSendButton');
     const recordButton = document.getElementById('recordButton');
-
- const chatSphere = document.getElementById('chat-sphere');
-    const chatConsole = document.getElementById('chat-console');
-    const minimizeButton = document.getElementById('minimizeChat');
-
-    let isChatOpen = false;
-
-    function toggleChat() {
-        isChatOpen = !isChatOpen;
-        chatConsole.style.display = isChatOpen ? 'block' : 'none';
-        chatSphere.style.display = isChatOpen ? 'none' : 'flex';
-        chatSphere.textContent = isChatOpen ? '-' : 'H';
-    }
-
-    chatSphere.addEventListener('click', toggleChat);
-    minimizeButton.addEventListener('click', toggleChat);
 
     // State
     let currentDate = new Date();
