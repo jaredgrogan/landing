@@ -1,0 +1,244 @@
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #f5f5f5;
+    color: black;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+header {
+    background-color: transparent;
+    padding: 10px 20px;
+    color: black;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 52px;
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.5);
+}
+
+.logo-text {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+nav ul li {
+    margin-left: 20px;
+    position: relative;
+    font-family: 'Berkeley Mono', monospace;
+}
+
+nav ul li a {
+    color: black;
+    text-decoration: none;
+    font-family: 'Berkeley Mono', monospace;
+}
+
+#languageSelect, #nightModeToggle {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 20px;
+}
+
+#profile-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#user-info {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#avatar-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin-right: 20px;
+}
+
+#user-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+#avatar-upload {
+    display: none;
+}
+
+#avatar-upload-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    padding: 5px;
+    cursor: pointer;
+    border-bottom-left-radius: 75px;
+    border-bottom-right-radius: 75px;
+}
+
+#user-details {
+    flex-grow: 1;
+}
+
+#social-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.social-icon {
+    font-size: 24px;
+    color: #4a90e2;
+    text-decoration: none;
+}
+
+#qr-code {
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    margin-left: 20px;
+}
+
+#calendar-events, #user-notes {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#notes-area {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+#save-notes {
+    background: linear-gradient(45deg, #8a2be2, #4169e1);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+.night-mode {
+    background: linear-gradient(to right, #111111, #333333);
+    color: #f5f5f5;
+}
+
+.night-mode .logo-text,
+.night-mode nav ul li a,
+.night-mode #nightModeToggle,
+.night-mode #languageSelect {
+    color: white;
+}
+
+.night-mode #user-info,
+.night-mode #calendar-events,
+.night-mode #user-notes {
+    background: linear-gradient(to bottom, #666666, #888888);
+    color: white;
+}
+
+.night-mode #notes-area {
+    background-color: #555555;
+    color: white;
+    border-color: #777777;
+}
+
+@media (max-width: 768px) {
+    #profile-container {
+        grid-template-columns: 1fr;
+    }
+
+    .top-nav {
+        flex-direction: column;
+    }
+
+    .nav-links {
+        margin-top: 10px;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    #user-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #avatar-container {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    #qr-code {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+}
