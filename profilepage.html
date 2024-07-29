@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile - Universitas AI</title>
-    <link rel="stylesheet" href="profile-style.css">
+    <link rel="stylesheet" href="profile-styles.css">
     <link rel="icon" href="favicon5.svg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <header>
@@ -22,6 +23,7 @@
                     <li><a href="#" id="nav-profile">Profile</a></li>
                     <li><a href="#" id="nav-calendar">Calendar</a></li>
                     <li><a href="#" id="nav-notes">Notes</a></li>
+                    <li><a href="#" id="nav-global-explorer">Global Explorer</a></li>
                 </ul>
                 <select id="languageSelect">
                     <option value="en">English</option>
@@ -49,11 +51,13 @@
             <div id="user-details">
                 <h2 id="user-name">John Doe</h2>
                 <p id="user-email">johndoe@example.com</p>
+                <input type="text" id="status-message" maxlength="80" placeholder="Set your status...">
+                <div id="status-light" class="status-light"></div>
                 <div id="social-links">
                     <a href="#" class="social-icon" id="linkedin">LinkedIn</a>
-                    <a href="#" class="social-icon" id="twitter">Twitter</a>
-                    <a href="#" class="social-icon" id="instagram">Instagram</a>
-                    <a href="#" class="social-icon" id="facebook">Facebook</a>
+                    <a href="#" class="social-icon" id="x">X</a>
+                    <a href="#" class="social-icon" id="ig">IG</a>
+                    <a href="#" class="social-icon" id="fb">FB</a>
                     <a href="#" class="social-icon" id="github">GitHub</a>
                     <a href="#" class="social-icon" id="youtube">YouTube</a>
                 </div>
@@ -65,6 +69,11 @@
 
         <section id="calendar-events">
             <h3 id="calendar-title">Upcoming Events</h3>
+            <div id="mini-calendar"></div>
+            <div id="todays-briefing">
+                <h4>Today's Briefing</h4>
+                <ul id="briefing-list"></ul>
+            </div>
             <ul id="event-list">
                 <!-- Calendar events will be populated here -->
             </ul>
@@ -75,12 +84,43 @@
             <textarea id="notes-area" placeholder="Type your notes here..."></textarea>
             <button id="save-notes">Save Notes</button>
         </section>
+
+        <section id="productivity-tracker">
+            <h3>Productivity Tracker</h3>
+            <canvas id="productivity-chart"></canvas>
+        </section>
+
+        <section id="focus-mode">
+            <h3>Focus Mode</h3>
+            <button id="toggle-focus">Toggle Focus Mode</button>
+            <div id="timer">25:00</div>
+            <button id="start-timer">Start Timer</button>
+        </section>
+
+        <section id="global-explorer">
+            <h3>Global Explorer</h3>
+            <div id="world-map"></div>
+            <div id="language-resources"></div>
+            <div id="cultural-guides"></div>
+            <div id="travel-planner"></div>
+        </section>
     </main>
+
+    <div id="virtual-workspace"></div>
 
     <footer>
         <p>&copy; 2024 UNIVERSITAS AI</p>
     </footer>
 
+    <div id="chat-sphere" class="chat-sphere">H</div>
+    <div id="chat-console" class="chat-console">
+        <div id="heraklesResponse">HI, I'm Herakles. How can I assist you today?</div>
+        <textarea id="chatInput" placeholder="// Type your message here"></textarea>
+        <button id="chatSendButton">Send</button>
+        <button id="minimizeChat">-</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="profile-script.js"></script>
 </body>
 </html>
