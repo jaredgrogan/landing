@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Universitas AI</title>
+    <link rel="stylesheet" href="profile-style.css">
+    <link rel="icon" href="favicon5.svg">
+</head>
+<body>
+    <header>
+        <nav class="top-nav">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="favicon5.svg" alt="Universitas AI Logo">
+                </a>
+                <span class="logo-text">// Discover the Universe</span>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="index.html" id="nav-home">Home</a></li>
+                    <li><a href="#" id="nav-profile">Profile</a></li>
+                    <li><a href="#" id="nav-calendar">Calendar</a></li>
+                    <li><a href="#" id="nav-notes">Notes</a></li>
+                </ul>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="it">Italiano</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ar">العربية</option>
+                </select>
+                <button id="nightModeToggle">
+                    <span id="nightIcon">&#9790;</span>
+                    <span id="dayIcon" style="display:none;">&#9788;</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main id="profile-container">
+        <section id="user-info">
+            <div id="avatar-container">
+                <img id="user-avatar" src="default-avatar.png" alt="User Avatar">
+                <input type="file" id="avatar-upload" accept="image/*">
+                <label for="avatar-upload" id="avatar-upload-label">Upload Photo</label>
+            </div>
+            <div id="user-details">
+                <h2 id="user-name">John Doe</h2>
+                <p id="user-email">johndoe@example.com</p>
+                <div id="social-links">
+                    <a href="#" class="social-icon" id="linkedin">LinkedIn</a>
+                    <a href="#" class="social-icon" id="twitter">Twitter</a>
+                    <a href="#" class="social-icon" id="instagram">Instagram</a>
+                    <a href="#" class="social-icon" id="facebook">Facebook</a>
+                    <a href="#" class="social-icon" id="github">GitHub</a>
+                    <a href="#" class="social-icon" id="youtube">YouTube</a>
+                </div>
+            </div>
+            <div id="qr-code">
+                <!-- QR code will be generated and inserted here -->
+            </div>
+        </section>
+
+        <section id="calendar-events">
+            <h3 id="calendar-title">Upcoming Events</h3>
+            <ul id="event-list">
+                <!-- Calendar events will be populated here -->
+            </ul>
+        </section>
+
+        <section id="user-notes">
+            <h3 id="notes-title">Personal Notes</h3>
+            <textarea id="notes-area" placeholder="Type your notes here..."></textarea>
+            <button id="save-notes">Save Notes</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script src="profile-script.js"></script>
+</body>
+</html>
