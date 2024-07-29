@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', () => {
     const nightModeToggle = document.getElementById('nightModeToggle');
     const nightIcon = document.getElementById('nightIcon');
     const dayIcon = document.getElementById('dayIcon');
