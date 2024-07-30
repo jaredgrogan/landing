@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Neural Network Diagram</title>
+    <style>
+        .node {
+            cursor: pointer;
+        }
+        .tooltip {
+            display: none;
+            position: absolute;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="diagram">
+        <!-- SVG or Canvas for the diagram -->
+        <svg width="800" height="600">
+            <!-- Example Node -->
+            <circle cx="100" cy="100" r="20" class="node" data-info="Input Layer Node"></circle>
+            <text x="100" y="100" text-anchor="middle" alignment-baseline="middle">Input</text>
+        </svg>
+    </div>
+    <div id="tooltip" class="tooltip"></div>
+
+    <script>
+        document.querySelectorAll('.node').forEach(node => {
+            node.addEventListener('click', function() {
+                const info = this.getAttribute('data-info');
+                const tooltip = document.getElementById('tooltip');
+                tooltip.innerHTML = info;
+                tooltip.style.display = 'block';
+                tooltip.style.left = event.pageX + 'px';
+                tooltip.style.top = event.pageY + 'px';
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!event.target.classList.contains('node')) {
+                document.getElementById('tooltip').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
