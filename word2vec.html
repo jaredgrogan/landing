@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Embeddings and Word2Vec Tutorial</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #45a049;
+            --bg-color: #f2f2f2;
+            --text-color: #333333;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: var(--secondary-color) 3px solid;
+        }
+        header h1 {
+            margin: 0;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        nav {
+            background: var(--secondary-color);
+            color: white;
+            padding: 10px 0;
+        }
+        nav ul {
+            padding: 0;
+            list-style: none;
+            text-align: center;
+        }
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+        .section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        code {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-left: 3px solid var(--primary-color);
+            color: #666;
+            page-break-inside: avoid;
+            font-family: monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 1.6em;
+            max-width: 100%;
+            overflow: auto;
+            padding: 1em 1.5em;
+            display: block;
+            word-wrap: break-word;
+        }
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Word Embeddings and Word2Vec Tutorial</h1>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#word2vec">Word2Vec</a></li>
+            <li><a href="#training">Training Word2Vec</a></li>
+            <li><a href="#using-model">Using the Model</a></li>
+            <li><a href="#exercises">Exercises</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2>Introduction to Word Embeddings</h2>
+            <p>Word embeddings are a type of word representation that allows words with similar meanings to have similar representations. These embeddings are dense vector representations of words that capture their meanings based on their context in a text.</p>
+        </section>
+        
+        <section id="word2vec" class="section">
+            <h2>Word2Vec</h2>
+            <p>Word2Vec is a popular method for learning word embeddings using a two-layer neural network. It can be trained using two approaches: Continuous Bag of Words (CBOW) and Skip-Gram. CBOW predicts a target word from its context words, while Skip-Gram predicts context words from a target word.</p>
+        </section>
+        
+        <section id="training" class="section">
+            <h2>Training Word2Vec</h2>
+            <p>To train a Word2Vec model, you need a corpus of text. Here’s how to train a Word2Vec model using the Gensim library and the Brown corpus from NLTK:</p>
+            <code>
+from gensim.models import Word2Vec
+from nltk.corpus import brown
+
+# Prepare the corpus
+sentences = brown.sents()
+
+# Create and train the Word2Vec model
+model = Word2Vec(sentences, vector_size=100, window=5, min_count=1, workers=4)
+model.save("word2vec.model")
+            </code>
+        </section>
+        
+        <section id="using-model" class="section">
+            <h2>Using the Model</h2>
+            <p>Once the model is trained, you can use it to find similar words, get word vectors, and perform other operations:</p>
+            <code>
+from gensim.models import Word2Vec
+
+# Load the trained model
+model = Word2Vec.load("word2vec.model")
+
+# Get word vector
+vector = model.wv['example']
+
+# Find similar words
+similar_words = model.wv.most_similar('example')
+
+print("Vector for 'example':", vector)
+print("Similar words to 'example':", similar_words)
+            </code>
+        </section>
+        
+        <section id="exercises" class="section">
+            <h2>Exercises</h2>
+            <ol>
+                <li>Train a Word2Vec model using a different corpus and analyze the learned word embeddings.</li>
+                <li>Experiment with different hyperparameters such as vector size, window size, and minimum word count to see how they affect the model's performance.</li>
+                <li>Implement a function that visualizes word embeddings using dimensionality reduction techniques like PCA or t-SNE.</li>
+                <li>Compare the results of Word2Vec with another embedding technique such as GloVe or FastText.</li>
+            </ol>
+        </section>
+        
+        <a href="#" class="btn">Back to Top</a>
+    </div>
+</body>
+</html>
