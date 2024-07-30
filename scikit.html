@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Classification using Scikit-learn Tutorial</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50; /* Primary button color */
+            --secondary-color: #45a049; /* Secondary button color */
+            --bg-color: #1e1e1e; /* Dark background color */
+            --text-color: #e0e0e0; /* Light text color */
+            --code-bg-color: #2e2e2e; /* Code block background color */
+            --code-border-color: #4CAF50; /* Code block border color */
+            --link-color: #4CAF50; /* Link color */
+        }
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            background: var(--primary-color);
+            color: var(--text-color);
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: var(--secondary-color) 3px solid;
+        }
+        header h1 {
+            margin: 0;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        nav {
+            background: var(--secondary-color);
+            color: var(--text-color);
+            padding: 10px 0;
+        }
+        nav ul {
+            padding: 0;
+            list-style: none;
+            text-align: center;
+        }
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .section {
+            background: #2e2e2e; /* Dark section background color */
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        code {
+            background: var(--code-bg-color);
+            border: 1px solid #444;
+            border-left: 3px solid var(--code-border-color);
+            color: #cfcfcf;
+            page-break-inside: avoid;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 1.6em;
+            max-width: 100%;
+            overflow: auto;
+            padding: 1em 1.5em;
+            display: block;
+            word-wrap: break-word;
+        }
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Text Classification using Scikit-learn Tutorial</h1>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#data-preparation">Data Preparation</a></li>
+            <li><a href="#feature-extraction">Feature Extraction</a></li>
+            <li><a href="#model-training">Model Training</a></li>
+            <li><a href="#evaluation">Evaluation</a></li>
+            <li><a href="#exercises">Exercises</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2>Introduction to Text Classification</h2>
+            <p>Text classification is the process of assigning categories to text documents. Scikit-learn provides efficient tools for text classification tasks, allowing us to build models that can automatically categorize text into predefined classes.</p>
+        </section>
+        
+        <section id="data-preparation" class="section">
+            <h2>Data Preparation</h2>
+            <p>Before training a model, we need to prepare the data. Here’s how to load a dataset using Scikit-learn:</p>
+            <code>
+from sklearn.datasets import fetch_20newsgroups
+
+categories = ['alt.atheism', 'soc.religion.christian', 'comp.graphics', 'sci.med']
+twenty_train = fetch_20newsgroups(subset='train', categories=categories, shuffle=True, random_state=42)
+            </code>
+        </section>
+        
+        <section id="feature-extraction" class="section">
+            <h2>Feature Extraction</h2>
+            <p>Next, we convert the text data into numerical features that can be used by the model. Scikit-learn provides several tools for feature extraction:</p>
+            <code>
+from sklearn.feature_extraction.text import CountVectorizer
+
+count_vect = CountVectorizer()
+X_train_counts = count_vect.fit_transform(twenty_train.data)
+            </code>
+        </section>
+        
+        <section id="model-training" class="section">
+            <h2>Model Training</h2>
+            <p>With the features extracted, we can now train a classification model. Here’s an example using a Naive Bayes classifier:</p>
+            <code>
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+
+text_clf = Pipeline([
+    ('vect', CountVectorizer()),
+    ('clf', MultinomialNB()),
+])
+text_clf.fit(twenty_train.data, twenty_train.target)
+            </code>
+        </section>
+        
+        <section id="evaluation" class="section">
+            <h2>Evaluation</h2>
+            <p>After training the model, it is important to evaluate its performance. We can use metrics such as accuracy, precision, recall, and F1-score to assess the model’s effectiveness.</p>
+            <code>
+from sklearn import metrics
+
+# Predict on test data
+twenty_test = fetch_20newsgroups(subset='test', categories=categories, shuffle=True, random_state=42)
+predicted = text_clf.predict(twenty_test.data)
+
+# Calculate performance metrics
+accuracy = metrics.accuracy_score(twenty_test.target, predicted)
+print("Accuracy:", accuracy)
+            </code>
+        </section>
+        
+        <section id="exercises" class="section">
+            <h2>Exercises</h2>
+            <ol>
+                <li>Experiment with different classifiers such as Support Vector Machines or Random Forests and compare their performance.</li>
+                <li>Use the TfidfVectorizer instead of CountVectorizer and analyze how it affects the model’s performance.</li>
+                <li>Perform a grid search to find the optimal hyperparameters for your model.</li>
+                <li>Apply the classification model to a new dataset and assess its generalizability.</li>
+            </ol>
+        </section>
+        
+        <a href="#" class="btn">Back to Top</a>
+    </div>
+</body>
+</html>
