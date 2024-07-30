@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Named Entity Recognition with spaCy Tutorial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        nav {
+            background-color: #444;
+            color: #fff;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0;
+        }
+        nav ul li a {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+        nav ul li a:hover {
+            background-color: #555;
+        }
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark-mode .section {
+            background-color: #1e1e1e;
+        }
+        h1, h2 {
+            margin: 0;
+            padding-bottom: 1rem;
+        }
+        code {
+            display: block;
+            background-color: #efefef;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            transition: background-color 0.3s;
+        }
+        body.dark-mode code {
+            background-color: #2e2e2e;
+        }
+        ol {
+            padding-left: 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #555;
+        }
+        .night-mode-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #fff;
+            transition: color 0.3s;
+        }
+        body.dark-mode .night-mode-toggle {
+            color: #e0e0e0;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav ul li a {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Named Entity Recognition with spaCy Tutorial</h1>
+            <button class="night-mode-toggle" onclick="toggleNightMode()">
+                🌞
+            </button>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#basic-ner">Basic NER</a></li>
+            <li><a href="#custom-ner">Custom NER</a></li>
+            <li><a href="#visualization">Visualization</a></li>
+            <li><a href="#exercises">Exercises</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2>Introduction to Named Entity Recognition</h2>
+            <p>Named Entity Recognition (NER) is the task of identifying and classifying named entities (person, organization, location, etc.) in text. spaCy provides powerful tools for NER.</p>
+        </section>
+        
+        <section id="installation" class="section">
+            <h2>Installation</h2>
+            <code>
+pip install spacy
+python -m spacy download en_core_web_sm
+            </code>
+        </section>
+        
+        <section id="basic-ner" class="section">
+            <h2>Basic NER with spaCy</h2>
+            <code>
+import spacy
+
+nlp = spacy.load("en_core_web_sm")
+text = "Apple is looking at buying U.K. startup for $1 billion"
+doc = nlp(text)
+
+for ent in doc.ents:
+    print(ent.text, ent.label_)
+            </code>
+        </section>
+        
+        <section id="custom-ner" class="section">
+            <h2>Custom NER Model</h2>
+            <p>To create a custom NER model, you need to prepare training data and use spaCy's training API.</p>
+            <code>
+import spacy
+from spacy.tokens import DocBin
+from spacy.util import minibatch, compounding
+
+# Prepare your training data
+TRAIN_DATA = [
+    ("Uber blew through $1 million a week", {"entities": [(0, 4, "ORG")]}),
+    ("Google rebrands its business apps", {"entities": [(0, 6, "ORG")]})]
+
+nlp = spacy.blank("en")
+ner = nlp.add_pipe("ner")
+
+for _, annotations in TRAIN_DATA:
+    for ent in annotations.get("entities"):
+        ner.add_label(ent[2])
+
+# Train the model
+optimizer = nlp.begin_training()
+for itn in range(20):
+    random.shuffle(TRAIN_DATA)
+    losses = {}
+    batches = minibatch(TRAIN_DATA, size=compounding(4., 32., 1.001))
+    for batch in batches:
+        texts, annotations = zip(*batch)
+        nlp.update(texts, annotations, sgd=optimizer, drop=0.35, losses=losses)
+    print("Losses", losses)
+            </code>
+        </section>
+        
+        <section id="visualization" class="section">
+            <h2>Visualizing NER Results</h2>
+            <p>spaCy provides a built-in visualizer called displacy for NER visualization.</p>
+            <code>
+from spacy import displacy
+
+doc = nlp("Apple is looking at buying U.K. startup for $1 billion")
+displacy.serve(doc, style="ent")
+            </code>
+        </section>
+        
+        <section id="exercises" class="section">
+            <h2>Exercises</h2>
+            <ol>
+                <li>Create a custom NER model to recognize product names in tech news articles.</li>
+                <li>Implement a function that extracts all locations from a given text using spaCy's NER.</li>
+                <li>Build a simple web application that allows users to input text and visualize the named entities.</li>
+                <li>Evaluate the performance of spaCy's pre-trained NER model on a custom dataset.</li>
+            </ol>
+        </section>
+        
+        <a href="#" class="btn">Back to Top</a>
+    </div>
+    <script>
+        function toggleNightMode() {
+            const body = document.body;
+            const toggleButton = document.querySelector('.night-mode-toggle');
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                toggleButton.textContent = '🌞'; // Sun icon for light mode
+            } else {
+                body.classList.add('dark-mode');
+                toggleButton.textContent = '🌜'; // Moon icon for dark mode
+            }
+        }
+    </script>
+</body>
+</html>
