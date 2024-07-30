@@ -1,0 +1,191 @@
+/* styles.css */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #ffffff;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(45deg, #282c34, #121212);
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+header .logo {
+    height: 50px;
+}
+
+header .slogan {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+}
+
+header .main-nav a {
+    color: #e0e0e0;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+header .main-nav a:hover {
+    color: #ff9800;
+}
+
+header .mode-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+header .mode-toggle svg {
+    height: 24px;
+    width: 24px;
+    margin-left: 10px;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+}
+
+.main-workspace {
+    margin-top: 70px; /* Adjust for fixed header */
+    padding: 20px;
+}
+
+.side-panel {
+    background: #1e1e1e;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.left-panel, .right-panel {
+    position: fixed;
+    width: 20%;
+    top: 70px; /* Adjust for fixed header */
+    bottom: 0;
+    overflow-y: auto;
+    background: #1e1e1e;
+}
+
+.left-panel {
+    left: 0;
+}
+
+.right-panel {
+    right: 0;
+}
+
+.main-workspace {
+    margin-left: 22%;
+    margin-right: 22%;
+}
+
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.gradient-button {
+    background: linear-gradient(45deg, #ff5722, #ff9800);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.gradient-button:hover {
+    background: linear-gradient(45deg, #ff9800, #ff5722);
+}
+
+.expandable-item {
+    cursor: pointer;
+    margin: 5px 0;
+}
+
+.definition {
+    display: none;
+    margin: 5px 0;
+    padding: 5px;
+    background-color: #333;
+    border-radius: 4px;
+}
+
+.expandable-item:hover .definition {
+    display: block;
+}
+
+.search-bar {
+    margin-top: 20px;
+}
+
+.search-bar input {
+    width: calc(100% - 110px);
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 4px;
+}
+
+.upload-panel {
+    margin-top: 20px;
+}
+
+.upload-box {
+    display: flex;
+    align-items: center;
+    border: 1px dashed #444;
+    padding: 20px;
+    border-radius: 4px;
+    background: #222;
+}
+
+.upload-icon {
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+}
+
+.chat-section {
+    margin-top: 20px;
+}
+
+.chat-prompt {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background: #1e1e1e;
+    color: #ffffff;
+}
+
+.chat-button {
+    margin-top: 10px;
+    background: linear-gradient(45deg, #ff5722, #ff9800);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.chat-button:hover {
+    background: linear-gradient(45deg, #ff9800, #ff5722);
+}
+
+footer {
+    background: #1e1e1e;
+    padding: 10px;
+    text-align: center;
+    color: #e0e0e0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
