@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Language Processing with NLTK Tutorial</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #45a049;
+            --bg-color: #f2f2f2;
+            --text-color: #333333;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: var(--secondary-color) 3px solid;
+        }
+        header h1 {
+            margin: 0;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        nav {
+            background: var(--secondary-color);
+            color: white;
+            padding: 10px 0;
+        }
+        nav ul {
+            padding: 0;
+            list-style: none;
+            text-align: center;
+        }
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+        .section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        code {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-left: 3px solid var(--primary-color);
+            color: #666;
+            page-break-inside: avoid;
+            font-family: monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 1.6em;
+            max-width: 100%;
+            overflow: auto;
+            padding: 1em 1.5em;
+            display: block;
+            word-wrap: break-word;
+        }
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Natural Language Processing with NLTK Tutorial</h1>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#tokenization">Tokenization</a></li>
+            <li><a href="#pos-tagging">POS Tagging</a></li>
+            <li><a href="#stemming">Stemming</a></li>
+            <li><a href="#lemmatization">Lemmatization</a></li>
+            <li><a href="#exercises">Exercises</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2>Introduction to NLTK</h2>
+            <p>NLTK (Natural Language Toolkit) is a leading platform for building Python programs to work with human language data. It provides easy-to-use interfaces to over 50 corpora and lexical resources such as WordNet, along with a suite of text processing libraries for classification, tokenization, stemming, tagging, parsing, and semantic reasoning.</p>
+        </section>
+        
+        <section id="installation" class="section">
+            <h2>Installation</h2>
+            <p>To install NLTK, use pip:</p>
+            <code>pip install nltk</code>
+            <p>After installation, you need to download the necessary NLTK data:</p>
+            <code>
+import nltk
+nltk.download('popular')
+            </code>
+        </section>
+        
+        <section id="tokenization" class="section">
+            <h2>Tokenization</h2>
+            <p>Tokenization is the process of breaking down text into individual words or sentences. Here's how to tokenize text using NLTK:</p>
+            <code>
+from nltk.tokenize import word_tokenize, sent_tokenize
+
+text = "NLTK is a powerful library for NLP. It's widely used in Python."
+words = word_tokenize(text)
+sentences = sent_tokenize(text)
+
+print(words)
+print(sentences)
+            </code>
+        </section>
+        
+        <section id="pos-tagging" class="section">
+            <h2>Part-of-Speech (POS) Tagging</h2>
+            <p>POS tagging is the process of marking up a word in a text as corresponding to a particular part of speech. Here's how to perform POS tagging:</p>
+            <code>
+from nltk import pos_tag
+
+text = "NLTK is a powerful library for NLP"
+tokens = word_tokenize(text)
+tagged = pos_tag(tokens)
+
+print(tagged)
+            </code>
+        </section>
+        
+        <section id="stemming" class="section">
+            <h2>Stemming</h2>
+            <p>Stemming is the process of reducing inflected (or sometimes derived) words to their word stem, base or root form. Here's how to perform stemming:</p>
+            <code>
+from nltk.stem import PorterStemmer
+
+stemmer = PorterStemmer()
+words = ["running", "runs", "ran", "runner"]
+stemmed_words = [stemmer.stem(word) for word in words]
+
+print(stemmed_words)
+            </code>
+        </section>
+        
+        <section id="lemmatization" class="section">
+            <h2>Lemmatization</h2>
+            <p>Lemmatization is the process of grouping together the inflected forms of a word so they can be analysed as a single item. Here's how to perform lemmatization:</p>
+            <code>
+from nltk.stem import WordNetLemmatizer
+
+lemmatizer = WordNetLemmatizer()
+words = ["running", "runs", "ran", "better"]
+lemmatized_words = [lemmatizer.lemmatize(word) for word in words]
+
+print(lemmatized_words)
+            </code>
+        </section>
+        
+        <section id="exercises" class="section">
+            <h2>Exercises</h2>
+            <ol>
+                <li>Create a function that takes a sentence as input and returns the most common part of speech in that sentence.</li>
+                <li>Implement a simple text summarizer using NLTK's frequency distribution functionality.</li>
+                <li>Build a named entity recognizer using NLTK's built-in NER functionality.</li>
+                <li>Create a function that takes a text as input and returns the text with all stop words removed.</li>
+            </ol>
+        </section>
+        
+        <a href="#" class="btn">Back to Top</a>
+    </div>
+</body>
+</html>
