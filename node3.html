@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neural Network Diagram</title>
+    <title>Interactive Neural Network Diagram</title>
     <link rel="stylesheet" href="assets/styles/node.css">
 </head>
 <body>
@@ -22,13 +22,13 @@
             </select>
             <button id="zoomIn">Zoom In</button>
             <button id="zoomOut">Zoom Out</button>
+            <button id="addNode">Add Node</button>
+            <button id="deleteNode">Delete Node</button>
             <button id="startSimulation">Start Simulation</button>
         </div>
 
         <div id="legend">
-            <div><span class="legend-color" style="background: #3498db;"></span> Input Layer</div>
-            <div><span class="legend-color" style="background: #e74c3c;"></span> Hidden Layer</div>
-            <div><span class="legend-color" style="background: #2ecc71;"></span> Output Layer</div>
+            <div><span class="legend-color" style="background: linear-gradient(45deg, magenta, goldenrod);"></span> Neuron</div>
         </div>
 
         <div id="diagram-container">
@@ -38,7 +38,7 @@
         <div id="tooltip" class="tooltip"></div>
     </main>
 
-    <script src="assets/scripts/d3.min.js"></script>
-    <script src="assets/scripts/node-script.js"></script>
+    <script src="d3.min.js"></script>
+    <script src="node-script.js"></script>
 </body>
 </html>
