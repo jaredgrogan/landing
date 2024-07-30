@@ -17,8 +17,10 @@
             --link-hover-color: #45a049; /* Link hover color */
             --code-bg-color: #f0f0f0; /* Light code block background color for day mode */
             --code-bg-color-night: #333333; /* Dark code block background color for night mode */
-            --icon-size: 24px; /* Icon size */
+            --icon-size: 24px; /* Icon size for day/night toggle */
             --icon-hover-scale: 1.5; /* Icon hover scale factor */
+            --favicon-size: 50px; /* Favicon size */
+            --favicon-padding: 20px; /* Padding for favicon */
         }
         body {
             font-family: 'Berkeley Mono', monospace;
@@ -121,6 +123,22 @@
         .toggle-container:hover img {
             transform: scale(var(--icon-hover-scale));
         }
+        .top-left-link {
+            position: absolute;
+            top: var(--favicon-padding);
+            left: var(--favicon-padding);
+            display: block;
+            transition: transform 0.3s;
+        }
+        .top-left-link img {
+            width: var(--favicon-size);
+            height: var(--favicon-size);
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .top-left-link:hover img {
+            transform: scale(1.5);
+        }
     </style>
 </head>
 <body>
@@ -221,7 +239,7 @@ rasa train
             } else {
                 document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night');
                 document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-night');
-                document.querySelectorAll('nav').forEach(el => el.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night'));
+                document.querySelectorAll('nav').forEach(el => el.style.backgroundColor = '#000');
                 document.querySelectorAll('.section').forEach(section => section.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--code-bg-color-night'));
                 toggleIcon.src = 'moon-icon.svg'; // Set to moon icon for night mode
             }
