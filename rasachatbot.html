@@ -17,7 +17,8 @@
             --link-hover-color: #45a049; /* Link hover color */
             --code-bg-color: #f0f0f0; /* Light code block background color for day mode */
             --code-bg-color-night: #333333; /* Dark code block background color for night mode */
-            --link-hover-scale: 1.5; /* Link hover scale factor */
+            --icon-size: 24px; /* Icon size */
+            --icon-hover-scale: 1.5; /* Icon hover scale factor */
         }
         body {
             font-family: 'Berkeley Mono', monospace;
@@ -109,38 +110,16 @@
             top: 20px;
             right: 20px;
             z-index: 1000;
-            display: flex;
-            align-items: center;
-        }
-        .toggle-container label {
-            font-size: 16px;
-            color: var(--text-color-day);
-            margin-right: 10px;
-        }
-        .toggle-container input[type="checkbox"] {
             cursor: pointer;
+            transition: transform 0.3s;
         }
         .toggle-container img {
-            width: 24px;
-            height: 24px;
+            width: var(--icon-size);
+            height: var(--icon-size);
             transition: transform 0.3s;
         }
-        .toggle-container input[type="checkbox"]:checked + label img {
-            transform: scale(1.5); /* Enlarge icon on toggle */
-        }
-        .top-left-link {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-            transition: transform 0.3s;
-        }
-        .top-left-link img {
-            width: 30px;
-            height: auto;
-        }
-        .top-left-link:hover img {
-            transform: scale(1.5);
+        .toggle-container:hover img {
+            transform: scale(var(--icon-hover-scale));
         }
     </style>
 </head>
@@ -225,28 +204,28 @@ rasa train
     </div>
     
     <div class="toggle-container">
-        <label for="theme-toggle">
-            <img src="sun-icon.svg" alt="Day Mode" id="day-icon">
-            <img src="moon-icon.svg" alt="Night Mode" id="night-icon">
-        </label>
-        <input type="checkbox" id="theme-toggle" aria-label="Toggle Day/Night Mode">
+        <img src="sun-moon-icon.svg" alt="Toggle Theme" id="theme-toggle">
     </div>
     
     <script>
-        document.getElementById('theme-toggle').addEventListener('change', function() {
-            if (this.checked) {
-                document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night');
-                document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-night');
-                document.querySelectorAll('nav').forEach(el => el.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night'));
-                document.querySelectorAll('.section').forEach(section => section.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--code-bg-color-night'));
-                document.querySelectorAll('nav a').forEach(a => a.style.color = '#ffffff'); // White links in night mode
-            } else {
+        const toggleIcon = document.getElementById('theme-toggle');
+        let isNightMode = false;
+
+        toggleIcon.addEventListener('click', () => {
+            if (isNightMode) {
                 document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-day');
                 document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-day');
                 document.querySelectorAll('nav').forEach(el => el.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color'));
                 document.querySelectorAll('.section').forEach(section => section.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--code-bg-color'));
-                document.querySelectorAll('nav a').forEach(a => a.style.color = '#ffffff'); // White links in day mode
+                toggleIcon.src = 'sun-icon.svg'; // Set to sun icon for day mode
+            } else {
+                document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night');
+                document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-night');
+                document.querySelectorAll('nav').forEach(el => el.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night'));
+                document.querySelectorAll('.section').forEach(section => section.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--code-bg-color-night'));
+                toggleIcon.src = 'moon-icon.svg'; // Set to moon icon for night mode
             }
+            isNightMode = !isNightMode;
         });
     </script>
 </body>
