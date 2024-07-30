@@ -1,0 +1,82 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+header {
+  background: #333;
+  color: #fff;
+  padding: 1rem 0;
+  text-align: center;
+}
+nav a {
+  color: #fff;
+  margin: 0 1rem;
+  text-decoration: none;
+}
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+section {
+  padding: 2rem 0;
+}
+
+/* Dashboard */
+#dashboard {
+  background-color: #f4f4f4;
+}
+#interactive-tutorials {
+  margin-top: 2rem;
+}
+.tutorial-widget {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Personalized Learning Paths */
+#personalized-paths {
+  background-color: #fff;
+}
+#path-form {
+  display: flex;
+  flex-direction: column;
+}
+#path-form select {
+  margin-bottom: 1rem;
+}
+
+/* Interactive Assessments */
+#interactive-assessments {
+  background-color: #f4f4f4;
+}
+#performance-chart {
+  width: 100%;
+  height: 400px;
+}
+
+/* Language Switcher */
+#language-switcher-container {
+  margin: 1rem auto;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  #course-select {
+    width: 100%;
+  }
+  .tutorial-widget {
+    margin: 0;
+  }
+}
