@@ -1,0 +1,172 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    background: #121212;
+    overflow-x: hidden;
+}
+
+header {
+    background: #333;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    width: 50px;
+}
+
+.slogan {
+    font-size: 1.2em;
+    color: #fff;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+nav ul li .dropdown-menu {
+    display: none;
+    position: absolute;
+    background: #333;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+nav ul li:hover .dropdown-menu {
+    display: block;
+}
+
+main {
+    display: flex;
+    padding: 20px;
+}
+
+.side-panel {
+    background: #222;
+    padding: 15px;
+    width: 20%;
+    box-sizing: border-box;
+}
+
+.main-workspace {
+    background: #1c1c1c;
+    flex: 1;
+    padding: 15px;
+}
+
+.side-panel .top-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.side-panel .gradient-button {
+    background: linear-gradient(to right, #f06, #f79);
+    border: none;
+    padding: 10px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+.side-panel .spacer {
+    height: 20px;
+}
+
+.side-panel .search-bar {
+    display: flex;
+}
+
+.side-panel .search-bar input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background: #333;
+    color: #fff;
+}
+
+.side-panel .upload-panel .upload-box {
+    background: #333;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.side-panel .upload-panel .upload-box .upload-icon {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.main-workspace .concept-display {
+    background: #2c2c2c;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.main-workspace .news-section {
+    background: #333;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.main-workspace .chat-section {
+    background: #222;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+footer {
+    background: #333;
+    padding: 15px;
+    text-align: center;
+}
+
+.social-media {
+    margin-top: 10px;
+}
+
+.mode-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.sun-icon, .moon-icon {
+    width: 24px;
+    fill: #fff;
+}
+
+.sun-icon {
+    display: none;
+}
+
+.mode-toggle[data-mode="light"] .sun-icon {
+    display: inline;
+}
+
+.mode-toggle[data-mode="dark"] .moon-icon {
+    display: inline;
+}
