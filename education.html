@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Outcomes - Universitas AI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
+        :root {
+            --color-space-black: #111111;
+            --color-cosmic-white: #FFFFFF;
+            --color-nebula-blue: #4A90E2;
+            --font-primary: 'Roboto', sans-serif;
+            --font-monospace: 'Courier Prime', monospace;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-cosmic-white);
+            color: var(--color-space-black);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.night-mode {
+            background-color: var(--color-space-black);
+            color: var(--color-cosmic-white);
+        }
+
+        .header {
+            background-color: var(--color-space-black);
+            color: var(--color-cosmic-white);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .tagline {
+            font-family: var(--font-monospace);
+            font-size: 1.2rem;
+        }
+
+        .mode-toggle {
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        nav {
+            background-color: var(--color-nebula-blue);
+            padding: 10px;
+        }
+
+        nav a {
+            color: var(--color-cosmic-white);
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .outcome {
+            background-color: #f4f4f4;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        body.night-mode .outcome {
+            background-color: #2c3e50;
+        }
+
+        .outcome h3 {
+            background-color: var(--color-nebula-blue);
+            color: var(--color-cosmic-white);
+            padding: 15px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .outcome-details {
+            display: none;
+            padding: 15px;
+        }
+
+        footer {
+            background-color: var(--color-space-black);
+            color: var(--color-cosmic-white);
+            text-align: center;
+            padding: 10px 0;
+            font-family: var(--font-monospace);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="favicon5.svg" alt="Universitas AI Logo" class="logo">
+            <div class="tagline">// Discover the Universe</div>
+        </div>
+        <div class="mode-toggle" id="modeToggle">🌙</div>
+    </header>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Courses</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <div class="main-content">
+        <h1>Learning Outcomes at Universitas AI</h1>
+        <p>Our curriculum is designed to equip you with cutting-edge skills in AI, Machine Learning, and Data Science. By the end of our program, you will be able to:</p>
+
+        <div class="outcome">
+            <h3>1. Master Data Visualization Techniques</h3>
+            <div class="outcome-details">
+                <p>Create compelling visual representations of complex datasets using Python libraries.</p>
+                <ul>
+                    <li>Utilize libraries such as Matplotlib, Seaborn, and Plotly</li>
+                    <li>Design interactive dashboards for data exploration</li>
+                    <li>Apply best practices in data visualization for effective communication</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="outcome">
+            <h3>2. Develop Web Scraping Skills</h3>
+            <div class="outcome-details">
+                <p>Gather and process data from various web sources efficiently and ethically.</p>
+                <ul>
+                    <li>Use tools like Beautiful Soup and Scrapy for web scraping</li>
+                    <li>Handle dynamic content and AJAX calls in web scraping tasks</li>
+                    <li>Implement ethical scraping practices and respect website policies</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="outcome">
+            <h3>3. Build Data Preprocessing Pipelines</h3>
+            <div class="outcome-details">
+                <p>Create robust data preprocessing workflows to prepare data for analysis and modeling.</p>
+                <ul>
+                    <li>Perform data cleaning, normalization, and transformation</li>
+                    <li>Handle missing values and outliers effectively</li>
+                    <li>Develop scalable preprocessing pipelines using Pandas and NumPy</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="outcome">
+            <h3>4. Leverage Deep Learning Frameworks</h3>
+            <div class="outcome-details">
+                <p>Utilize popular deep learning frameworks to build and deploy sophisticated AI models.</p>
+                <ul>
+                    <li>Work with TensorFlow and PyTorch for model development</li>
+                    <li>Implement transfer learning for efficient model training</li>
+                    <li>Optimize neural network architectures for various tasks</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="outcome">
+            <h3>5. Design and Deploy APIs</h3>
+            <div class="outcome-details">
+                <p>Create and manage APIs to serve machine learning models and data services.</p>
+                <ul>
+                    <li>Develop RESTful APIs using Flask or FastAPI</li>
+                    <li>Implement proper documentation and testing for APIs</li>
+                    <li>Ensure security and scalability in API design</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="outcome">
+            <h3>6. Implement MLOps Practices</h3>
+            <div class="outcome-details">
+                <p>Manage the entire lifecycle of machine learning projects from development to deployment.</p>
+                <ul>
+                    <li>Set up CI/CD pipelines for ML projects</li>
+                    <li>Monitor model performance and implement version control</li>
+                    <li>Automate model retraining and deployment processes</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="outcome">
+            <h3>7. Develop NLP Models and Prompts</h3>
+            <div class="outcome-details">
+                <p>Create and deploy natural language processing models with effective prompt engineering.</p>
+                <ul>
+                    <li>Work with state-of-the-art NLP models like GPT</li>
+                    <li>Implement text classification, summarization, and sentiment analysis</li>
+                    <li>Design effective prompts for various NLP tasks</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="outcome">
+            <h3>8. Build Full Stack Applications</h3>
+            <div class="outcome-details">
+                <p>Develop end-to-end web applications integrating AI and data science components.</p>
+                <ul>
+                    <li>Create backend services using Django or Flask</li>
+                    <li>Develop frontend interfaces with modern JavaScript frameworks</li>
+                    <li>Integrate AI models into web applications</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="outcome">
+            <h3>9. Optimize Machine Learning Models</h3>
+            <div class="outcome-details">
+                <p>Build and fine-tune various machine learning models for optimal performance.</p>
+                <ul>
+                    <li>Implement supervised and unsupervised learning algorithms</li>
+                    <li>Perform hyperparameter tuning and model selection</li>
+                    <li>Evaluate and interpret model results effectively</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="outcome">
+            <h3>10. Design Scalable Databases</h3>
+            <div class="outcome-details">
+                <p>Create and manage databases to support data-intensive applications.</p>
+                <ul>
+                    <li>Work with SQL and NoSQL databases</li>
+                    <li>Optimize database performance and query execution</li>
+                    <li>Implement data security and privacy best practices</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 Universitas AI
+    </footer>
+
+    <script>
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('night-mode');
+            modeToggle.textContent = body.classList.contains('night-mode') ? '☀️' : '🌙';
+        });
+
+        document.querySelectorAll('.outcome h3').forEach(header => {
+            header.addEventListener('click', () => {
+                const details = header.nextElementSibling;
+                details.style.display = details.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+    </script>
+</body>
+</html>
