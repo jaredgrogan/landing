@@ -9,13 +9,13 @@
         :root {
             --primary-color: #4CAF50; /* Primary button color */
             --secondary-color: #45a049; /* Secondary button color */
-            --bg-color-day: #f5f5f5; /* Light background color for day mode */
-            --bg-color-night: #1e1e1e; /* Dark background color for night mode */
-            --text-color-day: #333; /* Dark text color for day mode */
+            --bg-color-day: #2e2e2e; /* Dark background color for day mode */
+            --bg-color-night: #1e1e1e; /* Darker background color for night mode */
+            --text-color-day: #ffffff; /* White text color for day mode */
             --text-color-night: #e0e0e0; /* Light text color for night mode */
-            --link-color: #ffffff; /* Link color */
+            --link-color: #ffffff; /* Link color in both modes */
             --link-hover-color: #4CAF50; /* Link hover color */
-            --code-bg-color: #2e2e2e; /* Code block background color */
+            --code-bg-color: #333333; /* Dark code block background color */
             --code-border-color: #4CAF50; /* Code block border color */
             --link-hover-scale: 1.5; /* Link hover scale factor */
         }
@@ -66,7 +66,7 @@
             color: var(--link-hover-color);
         }
         .section {
-            background: #2e2e2e; /* Dark section background color */
+            background: var(--code-bg-color); /* Dark section background color */
             margin: 20px 0;
             padding: 20px;
             border-radius: 5px;
@@ -219,10 +219,12 @@ rasa train
                 document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night');
                 document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-night');
                 document.querySelectorAll('nav a').forEach(link => link.style.color = var(--link-color));
+                document.querySelectorAll('.section').forEach(section => section.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--code-bg-color'));
             } else {
                 document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-day');
                 document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-day');
                 document.querySelectorAll('nav a').forEach(link => link.style.color = var(--link-color));
+                document.querySelectorAll('.section').forEach(section => section.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--code-bg-color'));
             }
         });
     </script>
