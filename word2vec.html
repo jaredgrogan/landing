@@ -4,51 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Embeddings and Word2Vec Tutorial</title>
+    <link rel="icon" href="favicon5.svg" type="image/svg+xml">
     <style>
         :root {
             --primary-color: #4CAF50; /* Primary button color */
             --secondary-color: #45a049; /* Secondary button color */
-            --bg-color: #1e1e1e; /* Dark background color */
-            --text-color: #e0e0e0; /* Light text color */
+            --bg-color-day: #f5f5f5; /* Light background color for day mode */
+            --bg-color-night: #1e1e1e; /* Dark background color for night mode */
+            --text-color-day: #333; /* Dark text color for day mode */
+            --text-color-night: #e0e0e0; /* Light text color for night mode */
             --code-bg-color: #2e2e2e; /* Code block background color */
             --code-border-color: #4CAF50; /* Code block border color */
             --link-color: #4CAF50; /* Link color */
+            --link-hover-scale: 1.5; /* Link hover scale factor */
         }
         body {
             font-family: 'Berkeley Mono', monospace;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
+            color: var(--text-color-day);
+            background-color: var(--bg-color-day);
             margin: 0;
             padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
         }
         header {
             background: var(--primary-color);
-            color: var(--text-color);
+            color: var(--text-color-day);
             padding-top: 30px;
             min-height: 70px;
             border-bottom: var(--secondary-color) 3px solid;
+            position: relative;
+        }
+        header .container {
+            text-align: center;
         }
         header h1 {
             margin: 0;
-            text-align: center;
             padding-bottom: 20px;
         }
         nav {
             background: var(--secondary-color);
-            color: var(--text-color);
+            color: var(--text-color-day);
             padding: 10px 0;
         }
         nav ul {
             padding: 0;
             list-style: none;
             text-align: center;
+            margin: 0;
         }
         nav li {
             display: inline;
@@ -87,7 +90,7 @@
         .btn {
             display: inline-block;
             background: var(--primary-color);
-            color: var(--text-color);
+            color: var(--text-color-day);
             padding: 10px 20px;
             border: none;
             cursor: pointer;
@@ -97,10 +100,39 @@
         .btn:hover {
             background: var(--secondary-color);
         }
+        .toggle-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .toggle-container label {
+            font-size: 16px;
+            color: var(--text-color-day);
+        }
+        .toggle-container input[type="checkbox"] {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .top-left-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        .top-left-link img {
+            width: 30px;
+            height: auto;
+        }
+        .top-left-link:hover img {
+            transform: scale(var(--link-hover-scale));
+        }
     </style>
 </head>
 <body>
     <header>
+        <a href="index.html" class="top-left-link">
+            <img src="favicon5.svg" alt="Home">
+        </a>
         <div class="container">
             <h1>Word Embeddings and Word2Vec Tutorial</h1>
         </div>
@@ -117,61 +149,67 @@
     <div class="container">
         <section id="introduction" class="section">
             <h2>Introduction to Word Embeddings</h2>
-            <p>Word embeddings are a type of word representation that allows words with similar meanings to have similar representations. These embeddings are dense vector representations of words that capture their meanings based on their context in a text.</p>
+            <p>Word embeddings are a type of word representation that allows words with similar meaning to have a similar representation.</p>
         </section>
         
         <section id="word2vec" class="section">
             <h2>Word2Vec</h2>
-            <p>Word2Vec is a popular method for learning word embeddings using a two-layer neural network. It can be trained using two approaches: Continuous Bag of Words (CBOW) and Skip-Gram. CBOW predicts a target word from its context words, while Skip-Gram predicts context words from a target word.</p>
+            <p>Word2Vec is a popular method to learn word embeddings using a two-layer neural network.</p>
         </section>
         
         <section id="training" class="section">
             <h2>Training Word2Vec</h2>
-            <p>To train a Word2Vec model, you need a corpus of text. Here’s how to train a Word2Vec model using the Gensim library and the Brown corpus from NLTK:</p>
             <code>
 from gensim.models import Word2Vec
 from nltk.corpus import brown
 
-# Prepare the corpus
+# Load the dataset
 sentences = brown.sents()
 
-# Create and train the Word2Vec model
+# Initialize and train the model
 model = Word2Vec(sentences, vector_size=100, window=5, min_count=1, workers=4)
-model.save("word2vec.model")
             </code>
         </section>
         
         <section id="using-model" class="section">
             <h2>Using the Model</h2>
-            <p>Once the model is trained, you can use it to find similar words, get word vectors, and perform other operations:</p>
             <code>
-from gensim.models import Word2Vec
+# Get the vector for a word
+vector = model.wv['computer']
 
-# Load the trained model
-model = Word2Vec.load("word2vec.model")
-
-# Get word vector
-vector = model.wv['example']
-
-# Find similar words
-similar_words = model.wv.most_similar('example')
-
-print("Vector for 'example':", vector)
-print("Similar words to 'example':", similar_words)
+# Find most similar words
+similar_words = model.wv.most_similar('computer', topn=5)
             </code>
         </section>
         
         <section id="exercises" class="section">
             <h2>Exercises</h2>
             <ol>
-                <li>Train a Word2Vec model using a different corpus and analyze the learned word embeddings.</li>
-                <li>Experiment with different hyperparameters such as vector size, window size, and minimum word count to see how they affect the model's performance.</li>
-                <li>Implement a function that visualizes word embeddings using dimensionality reduction techniques like PCA or t-SNE.</li>
-                <li>Compare the results of Word2Vec with another embedding technique such as GloVe or FastText.</li>
+                <li>Train a Word2Vec model on a different dataset and compare the results.</li>
+                <li>Experiment with different hyperparameters and observe their effects on the model performance.</li>
+                <li>Visualize the word vectors using dimensionality reduction techniques like PCA or t-SNE.</li>
+                <li>Implement a similarity search function to find similar words based on user input.</li>
             </ol>
         </section>
         
+        <div class="toggle-container">
+            <label for="theme-toggle">Night Mode:</label>
+            <input type="checkbox" id="theme-toggle" aria-label="Toggle Day/Night Mode">
+        </div>
+        
         <a href="#" class="btn">Back to Top</a>
     </div>
+    
+    <script>
+        document.getElementById('theme-toggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night');
+                document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-night');
+            } else {
+                document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-day');
+                document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-day');
+            }
+        });
+    </script>
 </body>
 </html>
