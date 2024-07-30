@@ -1,5 +1,5 @@
 // script.js
-const { useState } = React;
+const { useState, useEffect } = React;
 const { TransformWrapper, TransformComponent } = ReactZoomPanPinch;
 
 const NeuralNetworkVisualization = () => {
@@ -9,6 +9,10 @@ const NeuralNetworkVisualization = () => {
         { id: 3, type: 'output', neurons: 2 },
     ]);
     const [darkMode, setDarkMode] = useState(false);
+
+    useEffect(() => {
+        document.body.classList.toggle('dark-mode', darkMode);
+    }, [darkMode]);
 
     const addLayer = () => {
         const newLayer = {
@@ -39,7 +43,7 @@ const NeuralNetworkVisualization = () => {
     };
 
     return (
-        <div className={`container ${darkMode ? 'dark-mode' : ''}`}>
+        <div className="container">
             <h1>Neural Network Visualization</h1>
             <div>
                 <button className="btn btn-primary" onClick={addLayer}>Add Layer</button>
@@ -62,11 +66,16 @@ const NeuralNetworkVisualization = () => {
                         </div>
                         <TransformComponent>
                             <div className="neural-network">
-                                {layers.map((layer, index) => (
+                                {layers.map((layer) => (
                                     <div key={layer.id} className="layer">
                                         <div className="layer-description">{getLayerDescription(layer.type)}</div>
                                         {Array.from({ length: layer.neurons }).map((_, neuronIndex) => (
-                                            <div key={neuronIndex} className="neuron" title={`Neuron ${neuronIndex + 1} in ${layer.type} layer`}></div>
+                                            <div 
+                                                key={neuronIndex} 
+                                                className="neuron" 
+                                                title={`Neuron ${neuronIndex + 1} in ${layer.type} layer`}
+                                                aria-label={`Neuron ${neuronIndex + 1} in ${layer.type} layer`}
+                                            ></div>
                                         ))}
                                     </div>
                                 ))}
