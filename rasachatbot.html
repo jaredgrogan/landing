@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Chatbots with Rasa Tutorial</title>
+    <link rel="icon" href="favicon5.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --primary-color: #4CAF50; /* Primary button color */
+            --secondary-color: #45a049; /* Secondary button color */
+            --bg-color-day: #f5f5f5; /* Light background color for day mode */
+            --bg-color-night: #1e1e1e; /* Dark background color for night mode */
+            --text-color-day: #333; /* Dark text color for day mode */
+            --text-color-night: #e0e0e0; /* Light text color for night mode */
+            --code-bg-color: #2e2e2e; /* Code block background color */
+            --code-border-color: #4CAF50; /* Code block border color */
+            --link-color: #4CAF50; /* Link color */
+            --link-hover-scale: 1.5; /* Link hover scale factor */
+        }
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            line-height: 1.6;
+            color: var(--text-color-night);
+            background-color: var(--bg-color-night);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        header {
+            background: var(--primary-color);
+            color: var(--text-color-night);
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: var(--secondary-color) 3px solid;
+            position: relative;
+        }
+        header .container {
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            padding-bottom: 20px;
+        }
+        nav {
+            background: var(--secondary-color);
+            color: var(--text-color-night);
+            padding: 10px 0;
+        }
+        nav ul {
+            padding: 0;
+            list-style: none;
+            text-align: center;
+            margin: 0;
+        }
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .section {
+            background: #2e2e2e; /* Dark section background color */
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        code {
+            background: var(--code-bg-color);
+            border: 1px solid #444;
+            border-left: 3px solid var(--code-border-color);
+            color: #cfcfcf;
+            page-break-inside: avoid;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 1.6em;
+            max-width: 100%;
+            overflow: auto;
+            padding: 1em 1.5em;
+            display: block;
+            word-wrap: break-word;
+        }
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--text-color-night);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+        .toggle-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .toggle-container label {
+            font-size: 16px;
+            color: var(--text-color-night);
+        }
+        .toggle-container input[type="checkbox"] {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .top-left-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        .top-left-link img {
+            width: 30px;
+            height: auto;
+        }
+        .top-left-link:hover img {
+            transform: scale(var(--link-hover-scale));
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="top-left-link">
+            <img src="favicon5.svg" alt="Home">
+        </a>
+        <div class="container">
+            <h1>Building Chatbots with Rasa Tutorial</h1>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#setup">Setup</a></li>
+            <li><a href="#nlu">Natural Language Understanding</a></li>
+            <li><a href="#dialogue">Dialogue Management</a></li>
+            <li><a href="#training">Training the Bot</a></li>
+            <li><a href="#exercises">Exercises</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2>Introduction to Rasa</h2>
+            <p>Rasa is an open-source machine learning framework for automated text and voice-based conversations.</p>
+        </section>
+        
+        <section id="setup" class="section">
+            <h2>Setup</h2>
+            <code>
+pip install rasa
+rasa init
+            </code>
+        </section>
+        
+        <section id="nlu" class="section">
+            <h2>Natural Language Understanding</h2>
+            <p>Configure your NLU model in the <code>nlu.yml</code> file:</p>
+            <code>
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+            </code>
+        </section>
+        
+        <section id="dialogue" class="section">
+            <h2>Dialogue Management</h2>
+            <p>Define your conversation flows in the <code>stories.yml</code> file:</p>
+            <code>
+stories:
+- story: greet user
+  steps:
+  - intent: greet
+  - action: utter_greet
+            </code>
+        </section>
+        
+        <section id="training" class="section">
+            <h2>Training the Bot</h2>
+            <p>Train your chatbot using the following command:</p>
+            <code>
+rasa train
+            </code>
+        </section>
+        
+        <section id="exercises" class="section">
+            <h2>Exercises</h2>
+            <ol>
+                <li>Create a new intent and add examples for it in the <code>nlu.yml</code> file.</li>
+                <li>Define a new dialogue flow in the <code>stories.yml</code> file for a different scenario.</li>
+                <li>Test your bot with the <code>rasa shell</code> command and improve its responses based on the feedback.</li>
+                <li>Explore Rasa's custom actions and add a new action to handle a specific task in your chatbot.</li>
+            </ol>
+        </section>
+        
+        <div class="toggle-container">
+            <label for="theme-toggle">Night Mode:</label>
+            <input type="checkbox" id="theme-toggle" aria-label="Toggle Day/Night Mode">
+        </div>
+        
+        <a href="#" class="btn">Back to Top</a>
+    </div>
+    
+    <script>
+        document.getElementById('theme-toggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-day');
+                document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-day');
+            } else {
+                document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night');
+                document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-night');
+            }
+        });
+    </script>
+</body>
+</html>
