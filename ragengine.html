@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG System Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h1 class="text-3xl font-bold mb-6">RAG System Interface</h1>
+        
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Data Ingestion</h2>
+            <form hx-post="/ingest" hx-swap="afterend" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".txt,.pdf,.doc,.docx" class="mb-2">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Upload</button>
+            </form>
+        </div>
+
+        <div>
+            <h2 class="text-xl font-semibold mb-4">Query</h2>
+            <form hx-post="/query" hx-target="#response">
+                <input type="text" name="query" placeholder="Enter your query" class="w-full p-2 border rounded mb-2">
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit Query</button>
+            </form>
+            <div id="response" class="mt-4 p-4 bg-gray-200 rounded"></div>
+        </div>
+    </div>
+
+    <script>
+        htmx.on("htmx:afterRequest", function(evt) {
+            if (evt.detail.successful) {
+                alert("Operation successful!");
+            } else {
+                alert("An error occurred. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>
