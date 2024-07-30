@@ -1,8 +1,24 @@
-// Dependencies: d3.js
 document.addEventListener('DOMContentLoaded', () => {
     const svg = d3.select("#neural-network-diagram");
     const width = svg.attr("width", "100%").node().getBoundingClientRect().width;
     const height = svg.attr("height", 600).node().getBoundingClientRect().height;
+
+    svg.append("defs")
+        .append("linearGradient")
+        .attr("id", "neuronGradient")
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "100%")
+        .attr("y2", "100%")
+        .selectAll("stop")
+        .data([
+            { offset: "0%", color: "magenta" },
+            { offset: "100%", color: "goldenrod" }
+        ])
+        .enter()
+        .append("stop")
+        .attr("offset", d => d.offset)
+        .attr("stop-color", d => d.color);
 
     const zoom = d3.zoom()
         .scaleExtent([0.5, 5])
@@ -82,4 +98,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 .on('end', () => simulateDataFlow());
         });
     }
+
+    // Create example nodes and links
+    createNode(1, 'input', 100, 100);
+    createNode(2, 'hidden', 300, 100);
+    createNode(3, 'hidden', 300, 300);
+    createNode(4, 'output', 500, 200);
+
+    createLink(1, 2);
+    createLink(1, 3);
+    createLink(2, 4);
+    createLink(3, 4);
 });
