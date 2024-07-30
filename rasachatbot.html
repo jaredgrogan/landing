@@ -47,6 +47,10 @@
             background: var(--secondary-color);
             color: var(--text-color-day);
             padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
         }
         nav ul {
             padding: 0;
@@ -59,7 +63,7 @@
             margin: 0 10px;
         }
         nav a {
-            color: var(--link-color);
+            color: #ffffff; /* White font color for links */
             text-decoration: none;
         }
         nav a:hover {
@@ -116,6 +120,14 @@
         .toggle-container input[type="checkbox"] {
             cursor: pointer;
         }
+        .toggle-container img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s;
+        }
+        .toggle-container input[type="checkbox"]:checked + label img {
+            transform: scale(1.5); /* Enlarge icon on toggle */
+        }
         .top-left-link {
             position: absolute;
             top: 20px;
@@ -128,7 +140,7 @@
             height: auto;
         }
         .top-left-link:hover img {
-            transform: scale(var(--link-hover-scale));
+            transform: scale(1.5);
         }
     </style>
 </head>
@@ -213,7 +225,10 @@ rasa train
     </div>
     
     <div class="toggle-container">
-        <label for="theme-toggle">Night Mode:</label>
+        <label for="theme-toggle">
+            <img src="sun-icon.svg" alt="Day Mode" id="day-icon">
+            <img src="moon-icon.svg" alt="Night Mode" id="night-icon">
+        </label>
         <input type="checkbox" id="theme-toggle" aria-label="Toggle Day/Night Mode">
     </div>
     
@@ -224,13 +239,13 @@ rasa train
                 document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-night');
                 document.querySelectorAll('nav').forEach(el => el.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night'));
                 document.querySelectorAll('.section').forEach(section => section.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--code-bg-color-night'));
-                document.querySelectorAll('nav a').forEach(link => link.style.color = var(--link-color));
+                document.querySelectorAll('nav a').forEach(a => a.style.color = '#ffffff'); // White links in night mode
             } else {
                 document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-day');
                 document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-day');
-                document.querySelectorAll('nav').forEach(el => el.style.backgroundColor = var(--secondary-color));
+                document.querySelectorAll('nav').forEach(el => el.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color'));
                 document.querySelectorAll('.section').forEach(section => section.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--code-bg-color'));
-                document.querySelectorAll('nav a').forEach(link => link.style.color = var(--link-color));
+                document.querySelectorAll('nav a').forEach(a => a.style.color = '#ffffff'); // White links in day mode
             }
         });
     </script>
