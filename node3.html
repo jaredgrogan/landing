@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Network Diagram</title>
+    <link rel="stylesheet" href="assets/styles/node.css">
+</head>
+<body>
+    <header>
+        <h1>Interactive Neural Network Diagram</h1>
+    </header>
+
+    <main>
+        <div id="control-panel">
+            <input type="text" id="search" placeholder="Search nodes...">
+            <select id="layerFilter">
+                <option value="all">All Layers</option>
+                <option value="input">Input Layer</option>
+                <option value="hidden">Hidden Layer</option>
+                <option value="output">Output Layer</option>
+            </select>
+            <button id="zoomIn">Zoom In</button>
+            <button id="zoomOut">Zoom Out</button>
+            <button id="startSimulation">Start Simulation</button>
+        </div>
+
+        <div id="legend">
+            <div><span class="legend-color" style="background: #3498db;"></span> Input Layer</div>
+            <div><span class="legend-color" style="background: #e74c3c;"></span> Hidden Layer</div>
+            <div><span class="legend-color" style="background: #2ecc71;"></span> Output Layer</div>
+        </div>
+
+        <div id="diagram-container">
+            <svg id="neural-network-diagram"></svg>
+        </div>
+
+        <div id="tooltip" class="tooltip"></div>
+    </main>
+
+    <script src="assets/scripts/d3.min.js"></script>
+    <script src="assets/scripts/script.js"></script>
+</body>
+</html>
