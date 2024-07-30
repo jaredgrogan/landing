@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Chatbots with Rasa Tutorial</title>
+    <link rel="icon" href="favicon5.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --primary-color: #4CAF50; /* Primary button color */
+            --secondary-color: #45a049; /* Secondary button color */
+            --bg-color-day: #f5f5f5; /* Light background color for day mode */
+            --bg-color-night: #2e2e2e; /* Dark background color for night mode */
+            --text-color-day: #333333; /* Dark text color for day mode */
+            --text-color-night: #e0e0e0; /* Light text color for night mode */
+            --link-color: #4CAF50; /* Link color */
+            --link-hover-color: #45a049; /* Link hover color */
+            --code-bg-color: #f0f0f0; /* Light code block background color for day mode */
+            --code-bg-color-night: #333333; /* Dark code block background color for night mode */
+            --icon-size: 24px; /* Icon size for day/night toggle */
+            --icon-hover-scale: 1.5; /* Icon hover scale factor */
+            --favicon-size: 50px; /* Favicon size */
+            --favicon-padding: 20px; /* Padding for favicon */
+        }
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            line-height: 1.6;
+            color: var(--text-color-day);
+            background-color: var(--bg-color-day);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        header {
+            background: var(--primary-color);
+            color: var(--text-color-day);
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: var(--secondary-color) 3px solid;
+            position: relative;
+        }
+        header .container {
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            padding-bottom: 20px;
+        }
+        nav {
+            background: var(--secondary-color);
+            color: var(--text-color-day);
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            padding: 0;
+            list-style: none;
+            text-align: center;
+            margin: 0;
+        }
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav a {
+            color: #ffffff; /* White font color for links */
+            text-decoration: none;
+        }
+        nav a:hover {
+            color: var(--link-hover-color);
+        }
+        .section {
+            background: var(--code-bg-color); /* Light section background color */
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        code {
+            background: var(--code-bg-color);
+            border: 1px solid #444;
+            border-left: 3px solid var(--link-color);
+            color: #333;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 1.6em;
+            max-width: 100%;
+            overflow: auto;
+            padding: 1em 1.5em;
+            display: block;
+            word-wrap: break-word;
+        }
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--text-color-day);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+        .toggle-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .toggle-container img {
+            width: var(--icon-size);
+            height: var(--icon-size);
+            transition: transform 0.3s;
+        }
+        .toggle-container:hover img {
+            transform: scale(var(--icon-hover-scale));
+        }
+        .top-left-link {
+            position: absolute;
+            top: var(--favicon-padding);
+            left: var(--favicon-padding);
+            display: block;
+            transition: transform 0.3s;
+        }
+        .top-left-link img {
+            width: var(--favicon-size);
+            height: var(--favicon-size);
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .top-left-link:hover img {
+            transform: scale(1.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="top-left-link">
+            <img src="favicon5.svg" alt="Home">
+        </a>
+        <div class="container">
+            <h1>Building Chatbots with Rasa Tutorial</h1>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#setup">Setup</a></li>
+            <li><a href="#nlu">Natural Language Understanding</a></li>
+            <li><a href="#dialogue">Dialogue Management</a></li>
+            <li><a href="#training">Training the Bot</a></li>
+            <li><a href="#exercises">Exercises</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2>Introduction to Rasa</h2>
+            <p>Rasa is an open-source machine learning framework designed for developing intelligent, conversational bots capable of handling both text and voice interactions. It provides tools for natural language understanding (NLU) and dialogue management, making it easier to create sophisticated and engaging conversational agents.</p>
+        </section>
+        
+        <section id="setup" class="section">
+            <h2>Setup</h2>
+            <p>To get started with Rasa, you first need to install it and initialize a new project. Here’s how to do it:</p>
+            <h3>Install Rasa:</h3>
+            <p>You can install Rasa using pip, which is a package manager for Python. Open your terminal and run the following command:</p>
+            <code>pip install rasa</code>
+            <h3>Initialize a New Project:</h3>
+            <p>Once Rasa is installed, create a new Rasa project by running:</p>
+            <code>rasa init</code>
+            <p>This command sets up a basic Rasa project structure with example files and a pre-configured sample bot. Follow the prompts to set up your initial configuration.</p>
+        </section>
+        
+        <section id="nlu" class="section">
+            <h2>Natural Language Understanding (NLU)</h2>
+            <p>NLU is responsible for interpreting user inputs and extracting meaningful information, such as intents and entities. Here’s how to configure your NLU model:</p>
+            <h3>Edit the nlu.yml File:</h3>
+            <p>This file is where you define your intents and their training examples. Open <code>nlu.yml</code> and add your intents as shown below:</p>
+            <code>
+nlu:
+  - intent: greet
+    examples: |
+      - hey
+      - hello
+      - hi
+      - hello there
+  - intent: goodbye
+    examples: |
+      - bye
+      - see you later
+      - goodbye
+      - take care
+            </code>
+            <p>In this example, we've added a new intent called <code>goodbye</code> with several variations of goodbye messages.</p>
+        </section>
+        
+        <section id="dialogue" class="section">
+            <h2>Dialogue Management</h2>
+            <p>Dialogue management handles the flow of conversation, determining how the bot should respond to user inputs based on the recognized intents and conversation context.</p>
+            <h3>Edit the stories.yml File:</h3>
+            <p>Define the conversation paths and actions in this file. Open <code>stories.yml</code> and configure it as follows:</p>
+            <code>
+stories:
+  - story: greet user
+    steps:
+      - intent: greet
+        action: utter_greet
+  - story: say goodbye
+    steps:
+      - intent: goodbye
+        action: utter_goodbye
+            </code>
+            <p>In this example, we’ve added a story for handling a goodbye intent, where the bot will respond with the <code>utter_goodbye</code> action.</p>
+        </section>
+        
+        <section id="training" class="section">
+            <h2>Training the Bot</h2>
+            <p>Once you’ve configured your NLU and dialogue management, you need to train your Rasa model. This process uses the data defined in <code>nlu.yml</code> and <code>stories.yml</code> to create a model that can understand and manage conversations.</p>
+            <h3>Train Your Model:</h3>
+            <p>Run the following command in your terminal:</p>
+            <code>rasa train</code>
+            <p>This command will train a model based on your current configuration and data. Training can take a few minutes depending on the complexity of your data.</p>
+        </section>
+        
+        <section id="exercises" class="section">
+            <h2>Exercises</h2>
+            <h3>Create a New Intent:</h3>
+            <p>Add a new intent to <code>nlu.yml</code>, such as <code>thank_you</code>, and include several example phrases that users might use to express gratitude.</p>
+            <h3>Expand Your Stories:</h3>
+            <p>Update <code>stories.yml</code> to include more detailed conversation paths, such as handling multiple intents in a single conversation or incorporating additional actions and responses.</p>
+            <h3>Test Your Bot:</h3>
+            <p>Use the Rasa shell to interact with your bot and test its responses. Run:</p>
+            <code>rasa shell</code>
+            <p>Engage in conversation with your bot to see how well it handles different inputs and follows the defined stories.</p>
+            <h3>Deploy Your Bot Using Rasa X:</h3>
+            <p>Rasa X is a tool that helps with improving and deploying Rasa chatbots. Install Rasa X using pip:</p>
+            <code>pip install rasa-x --extra-index-url https://pypi.rasa.com/simple</code>
+            <p>Launch Rasa X with:</p>
+            <code>rasa x</code>
+            <p>Follow the instructions to deploy and test your bot in a more user-friendly interface.</p>
+        </section>
+    </div>
+    <div class="toggle-container">
+        <img id="toggle-icon" src="sun-icon.svg" alt="Toggle day/night mode">
+    </div>
+    <script>
+        const toggleIcon = document.getElementById('toggle-icon');
+        let isNightMode = false;
+
+        const updateMode = () => {
+            if (isNightMode) {
+                document.documentElement.style.setProperty('--bg-color-day', '#2e2e2e');
+                document.documentElement.style.setProperty('--text-color-day', '#e0e0e0');
+                document.querySelectorAll('nav').forEach(el => el.style.backgroundColor = '#000');
+                document.querySelectorAll('.section').forEach(section => section.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--code-bg-color-night'));
+                toggleIcon.src = 'moon-icon.svg'; // Set to moon icon for night mode
+            } else {
+                document.documentElement.style.setProperty('--bg-color-day', '#f5f5f5');
+                document.documentElement.style.setProperty('--text-color-day', '#333333');
+                document.querySelectorAll('nav').forEach(el => el.style.backgroundColor = var(--secondary-color));
+                document.querySelectorAll('.section').forEach(section => section.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--code-bg-color'));
+                toggleIcon.src = 'sun-icon.svg'; // Set to sun icon for day mode
+            }
+        };
+
+        toggleIcon.addEventListener('click', () => {
+            updateMode();
+            isNightMode = !isNightMode;
+        });
+
+        // Initialize mode on load
+        updateMode();
+    </script>
+</body>
+</html>
