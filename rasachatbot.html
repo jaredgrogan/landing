@@ -13,23 +13,24 @@
             --bg-color-night: #1e1e1e; /* Dark background color for night mode */
             --text-color-day: #333; /* Dark text color for day mode */
             --text-color-night: #e0e0e0; /* Light text color for night mode */
+            --link-color: #ffffff; /* Link color */
+            --link-hover-color: #4CAF50; /* Link hover color */
             --code-bg-color: #2e2e2e; /* Code block background color */
             --code-border-color: #4CAF50; /* Code block border color */
-            --link-color: #4CAF50; /* Link color */
             --link-hover-scale: 1.5; /* Link hover scale factor */
         }
         body {
             font-family: 'Berkeley Mono', monospace;
             line-height: 1.6;
-            color: var(--text-color-night);
-            background-color: var(--bg-color-night);
+            color: var(--text-color-day);
+            background-color: var(--bg-color-day);
             margin: 0;
             padding: 0;
             transition: background-color 0.3s, color 0.3s;
         }
         header {
             background: var(--primary-color);
-            color: var(--text-color-night);
+            color: var(--text-color-day);
             padding-top: 30px;
             min-height: 70px;
             border-bottom: var(--secondary-color) 3px solid;
@@ -44,7 +45,7 @@
         }
         nav {
             background: var(--secondary-color);
-            color: var(--text-color-night);
+            color: var(--text-color-day);
             padding: 10px 0;
         }
         nav ul {
@@ -62,7 +63,7 @@
             text-decoration: none;
         }
         nav a:hover {
-            text-decoration: underline;
+            color: var(--link-hover-color);
         }
         .section {
             background: #2e2e2e; /* Dark section background color */
@@ -76,7 +77,6 @@
             border: 1px solid #444;
             border-left: 3px solid var(--code-border-color);
             color: #cfcfcf;
-            page-break-inside: avoid;
             font-family: 'Berkeley Mono', monospace;
             font-size: 15px;
             line-height: 1.6;
@@ -90,7 +90,7 @@
         .btn {
             display: inline-block;
             background: var(--primary-color);
-            color: var(--text-color-night);
+            color: var(--text-color-day);
             padding: 10px 20px;
             border: none;
             cursor: pointer;
@@ -106,7 +106,7 @@
         }
         .toggle-container label {
             font-size: 16px;
-            color: var(--text-color-night);
+            color: var(--text-color-day);
         }
         .toggle-container input[type="checkbox"] {
             cursor: pointer;
@@ -189,7 +189,7 @@ stories:
         
         <section id="training" class="section">
             <h2>Training the Bot</h2>
-            <p>Train your chatbot using the following command:</p>
+            <p>Train your Rasa model:</p>
             <code>
 rasa train
             </code>
@@ -198,10 +198,10 @@ rasa train
         <section id="exercises" class="section">
             <h2>Exercises</h2>
             <ol>
-                <li>Create a new intent and add examples for it in the <code>nlu.yml</code> file.</li>
-                <li>Define a new dialogue flow in the <code>stories.yml</code> file for a different scenario.</li>
-                <li>Test your bot with the <code>rasa shell</code> command and improve its responses based on the feedback.</li>
-                <li>Explore Rasa's custom actions and add a new action to handle a specific task in your chatbot.</li>
+                <li>Create a new intent and add examples to the <code>nlu.yml</code> file.</li>
+                <li>Expand your stories in the <code>stories.yml</code> file to include more conversation paths.</li>
+                <li>Test your bot using the Rasa shell.</li>
+                <li>Deploy your bot using Rasa X.</li>
             </ol>
         </section>
         
@@ -216,11 +216,13 @@ rasa train
     <script>
         document.getElementById('theme-toggle').addEventListener('change', function() {
             if (this.checked) {
-                document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-day');
-                document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-day');
-            } else {
                 document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-night');
                 document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-night');
+                document.querySelectorAll('nav a').forEach(link => link.style.color = var(--link-color));
+            } else {
+                document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color-day');
+                document.body.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color-day');
+                document.querySelectorAll('nav a').forEach(link => link.style.color = var(--link-color));
             }
         });
     </script>
