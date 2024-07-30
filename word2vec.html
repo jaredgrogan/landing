@@ -6,13 +6,16 @@
     <title>Word Embeddings and Word2Vec Tutorial</title>
     <style>
         :root {
-            --primary-color: #4CAF50;
-            --secondary-color: #45a049;
-            --bg-color: #f2f2f2;
-            --text-color: #333333;
+            --primary-color: #4CAF50; /* Primary button color */
+            --secondary-color: #45a049; /* Secondary button color */
+            --bg-color: #1e1e1e; /* Dark background color */
+            --text-color: #e0e0e0; /* Light text color */
+            --code-bg-color: #2e2e2e; /* Code block background color */
+            --code-border-color: #4CAF50; /* Code block border color */
+            --link-color: #4CAF50; /* Link color */
         }
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Berkeley Mono', monospace;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--bg-color);
@@ -27,7 +30,7 @@
         }
         header {
             background: var(--primary-color);
-            color: white;
+            color: var(--text-color);
             padding-top: 30px;
             min-height: 70px;
             border-bottom: var(--secondary-color) 3px solid;
@@ -39,7 +42,7 @@
         }
         nav {
             background: var(--secondary-color);
-            color: white;
+            color: var(--text-color);
             padding: 10px 0;
         }
         nav ul {
@@ -52,23 +55,26 @@
             margin: 0 10px;
         }
         nav a {
-            color: white;
+            color: var(--link-color);
             text-decoration: none;
         }
+        nav a:hover {
+            text-decoration: underline;
+        }
         .section {
-            background: white;
+            background: #2e2e2e; /* Dark section background color */
             margin: 20px 0;
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
         code {
-            background: #f4f4f4;
-            border: 1px solid #ddd;
-            border-left: 3px solid var(--primary-color);
-            color: #666;
+            background: var(--code-bg-color);
+            border: 1px solid #444;
+            border-left: 3px solid var(--code-border-color);
+            color: #cfcfcf;
             page-break-inside: avoid;
-            font-family: monospace;
+            font-family: 'Berkeley Mono', monospace;
             font-size: 15px;
             line-height: 1.6;
             margin-bottom: 1.6em;
@@ -81,7 +87,7 @@
         .btn {
             display: inline-block;
             background: var(--primary-color);
-            color: white;
+            color: var(--text-color);
             padding: 10px 20px;
             border: none;
             cursor: pointer;
