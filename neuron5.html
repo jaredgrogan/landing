@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Network Visualization</title>
+    <link rel="stylesheet" href="neurom5.css">
+</head>
+<body>
+    <header>
+        <a href="index.html"><img src="favicon5.svg" alt="Logo" class="logo"></a>
+        <div class="slogan">// Discover the Universe.</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="chat.html">Launch</a></li>
+                <li><a href="app.html">About</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="pricing.html">Join</a></li>
+                <li><a href="discover.html">Discover</a></li>
+                <li><a href="resources.html">Resources</a></li>
+            </ul>
+        </nav>
+        <div class="mode-toggle" id="modeToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+                <path d="M12 7a5 5 0 100 10 5 5 0 000-10zM2 13h2a1 1 0 100-2H2a1 1 0 100 2zm18 0h2a1 1 0 100-2h-2a1 1 0 100 2zM11 2v2a1 1 0 102 0V2a1 1 0 10-2 0zm0 18v2a1 1 0 102 0v-2a1 1 0 10-2 0zM5.99 4.58a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06z"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon">
+                <path d="M12 3a9 9 0 00-9 9 9 9 0 009 9 9 9 0 000-18zm0 2a7 7 0 00-7 7 7 7 0 007 7 7 7 0 000-14z"/>
+            </svg>
+        </div>
+    </header>
+
+    <main>
+        <div class="network-diagram" id="network-diagram"></div>
+        <div class="controls">
+            <button onclick="addNeuron()">Add Neuron</button>
+            <button onclick="addLayer()">Add Layer</button>
+            <button onclick="deleteNeuron()">Delete Neuron</button>
+        </div>
+    </main>
+
+    <footer>
+        <div>© <span id="copyright-year"></span> UNIVERSITAS AI</div>
+        <div class="social-media">
+            <!-- Social media links -->
+        </div>
+        <div class="contact-form">
+            <!-- Contact form -->
+        </div>
+    </footer>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="neuron2-script.js"></script>
+</body>
+</html>
