@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Pro — AI and Deep Learning</title>
+    <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="graph.css">
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <img src="favicon5.svg" alt="Logo" class="logo">
+        </a>
+        <div class="slogan">// Discover the Universe.</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="chat.html">Launch</a></li>
+                <li><a href="app.html">About</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="pricing.html">Join</a></li>
+                <li><a href="discover.html">Discover</a></li>
+                <li><a href="resources.html" class="dropdown">Resources
+                    <ul class="dropdown-menu">
+                        <li><a href="education.html">Learning Outcomes</a></li>
+                        <li><a href="concept.html">Knowledge Graph</a></li>
+                        <li><a href="pytorch.html">Pytorch</a></li>
+                        <li><a href="tensorflow.html">Tensorflow</a></li>
+                        <li><a href="nltk.html">Text Extraction</a></li>
+                        <li><a href="word2vec.html">Word 2 Vector</a></li>
+                        <li><a href="rasa2.html">Chatbot</a></li>
+                    </ul>
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <aside class="side-panel left-panel">
+            <div class="top-buttons">
+                <button class="gradient-button">Note +</button>
+                <button class="gradient-button">Task +</button>
+                <button class="gradient-button">Project +</button>
+            </div>
+            <div class="spacer small"></div>
+            <h2>Key Topics</h2>
+            <ul>
+                <li class="expandable-item">Neural Networks
+                    <div class="definition">Computational models inspired by biological neural networks...</div>
+                </li>
+                <!-- Additional items omitted for brevity -->
+            </ul>
+            <div class="spacer"></div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button class="gradient-button">Search</button>
+            </div>
+            <div class="upload-panel">
+                <div class="upload-box">
+                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <span>Assets Here</span>
+                </div>
+            </div>
+        </aside>
+        
+        <section class="main-workspace">
+            <div class="concept-display">
+                <div class="concept">
+                    <strong class="concept-title"></strong>
+                    <p class="definition"></p>
+                    <div class="interactive-diagram">
+                        <!-- Placeholder for interactive diagrams and flowcharts -->
+                    </div>
+                </div>
+                <div class="news-section">
+                    <h3>News</h3>
+                    <div class="news-filters">
+                        <button class="filter-button">All</button>
+                        <button class="filter-button">AI</button>
+                        <button class="filter-button">Deep Learning</button>
+                        <!-- More filters -->
+                    </div>
+                    <ul class="news-list">
+                        <li>OpenAI announces AI-powered search tool SearchGPT</li>
+                        <!-- Additional news items -->
+                    </ul>
+                </div>
+            </div>
+            <div class="spacer large"></div>
+            <div class="chat-section">
+                <textarea class="chat-prompt" rows="3" placeholder="Ask Herakles about Deep Learning..."></textarea>
+                <button class="chat-button gradient-button">Chat</button>
+                <!-- Voice input/output controls -->
+            </div>
+        </section>
+        
+        <aside class="side-panel right-panel">
+            <div class="top-buttons">
+                <button class="gradient-button">Quiz</button>
+                <button class="gradient-button">Interview</button>
+                <button class="gradient-button">Citation</button>
+            </div>
+            <div class="spacer small"></div>
+            <h2>Resources</h2>
+            <ul>
+                <li class="expandable-item"><a href="education.html">Learning Outcomes</a></li>
+                <!-- Additional resources -->
+            </ul>
+            <h2>Tutorials</h2>
+            <ul>
+                <li class="expandable-item"><a href="pytorch.html">Pytorch</a></li>
+                <!-- Additional tutorials -->
+            </ul>
+            <h2>Classic Papers</h2>
+            <div class="citations-list">
+                <!-- Citations will be dynamically inserted here -->
+            </div>
+        </aside>
+    </main>
+    
+    <footer>
+        <div>© <span id="copyright-year"></span> UNIVERSITAS AI</div>
+        <div class="social-media">
+            <!-- Social media links -->
+        </div>
+        <div class="contact-form">
+            <!-- Contact form -->
+        </div>
+    </footer>
+
+    <div class="mode-toggle" id="modeToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+            <path d="M12 7a5 5 0 100 10 5 5 0 000-10zM2 13h2a1 1 0 100-2H2a1 1 0 100 2zm18 0h2a1 1 0 100-2h-2a1 1 0 100 2zM11 2v2a1 1 0 102 0V2a1 1 0 10-2 0zm0 18v2a1 1 0 102 0v-2a1 1 0 10-2 0zM5.99 4.58a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon">
+            <path d="M12 3a9 9 0 00-9 9 9 9 0 009 9 9 9 0 000-18zm0 2a7 7 0 00-7 7 7 7 0 007 7 7 7 0 000-14z"/>
+        </svg>
+    </div>
+</body>
+</html>
