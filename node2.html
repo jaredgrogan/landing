@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Neural Network Diagram</title>
+    <style>
+        .node {
+            cursor: pointer;
+        }
+        .link {
+            stroke: #999;
+            stroke-width: 2px;
+        }
+        .tooltip {
+            display: none;
+            position: absolute;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <svg width="800" height="600"></svg>
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+        const width = 800, height = 600;
+
+        const svg = d3.select("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const nodes = [
+            { id: 1, layer: 'input', x: 100, y: 100 },
+            { id: 2, layer: 'hidden', x: 300, y: 100 },
+            { id: 3, layer: 'output', x: 500, y: 100 }
+        ];
+
+        const links = [
+            { source: 1, target: 2 },
+            { source: 2, target: 3 }
+        ];
+
+        const link = svg.selectAll(".link")
+            .data(links)
+            .enter().append("line")
+            .attr("class", "link")
+            .attr("x1", d => nodes.find(n => n.id === d.source).x)
+            .attr("y1", d => nodes.find(n => n.id === d.source).y)
+            .attr("x2", d => nodes.find(n => n.id === d.target).x)
+            .attr("y2", d => nodes.find(n => n.id === d.target).y);
+
+        const node = svg.selectAll(".node")
+            .data(nodes)
+            .enter().append("circle")
+            .attr("class", "node")
+            .attr("r", 20)
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .on("mouseover", function(event, d) {
+                d3.select("#tooltip")
+                    .style("display", "block")
+                    .html(`Node ${d.id}: ${d.layer} layer`)
+                    .style("left", `${event.pageX}px`)
+                    .style("top", `${event.pageY}px`);
+            })
+            .on("mouseout", function() {
+                d3.select("#tooltip").style("display", "none");
+            });
+    </script>
+</body>
+</html>
