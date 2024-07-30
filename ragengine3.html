@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Roboto&family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/luxon@2.0.2/build/global/luxon.min.js"></script>
+    <style>
+        .courier-new { font-family: 'Courier Prime', monospace; }
+        .roboto { font-family: 'Roboto', sans-serif; }
+        .berkeley-mono { font-family: 'Berkeley Mono', monospace; }
+        .hover-enlarge:hover { transform: scale(1.5); transition: transform 0.3s; }
+        .gradient-green-blue { background: linear-gradient(to right, #4CAF50, #2196F3); }
+        .gradient-purple-blue { background: linear-gradient(to right, #9C27B0, #2196F3); }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen transition-colors duration-300">
+    <header class="bg-white shadow-md p-4 flex justify-between items-center transition-colors duration-300">
+        <div class="flex items-center">
+            <img src="favicon5.svg" alt="Logo" class="h-8 w-8 mr-2 hover-enlarge">
+            <h1 class="text-2xl courier-new">// Discover the Universe</h1>
+        </div>
+        <div class="flex items-center">
+            <div class="mr-4 berkeley-mono">
+                <div class="dropdown inline-block relative">
+                    <button class="font-semibold py-2 px-4 rounded inline-flex items-center">
+                        <span class="mr-1">Home</span>
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/> </svg>
+                    </button>
+                    <ul class="dropdown-menu absolute hidden text-gray-700 pt-1">
+                        <li><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="discover.html">Discover</a></li>
+                        <li><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="features.html">Features</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mr-4 berkeley-mono">
+                <div class="dropdown inline-block relative">
+                    <button class="font-semibold py-2 px-4 rounded inline-flex items-center">
+                        <span class="mr-1">Assets and Tools</span>
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/> </svg>
+                    </button>
+                    <ul class="dropdown-menu absolute hidden text-gray-700 pt-1">
+                        <li><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="#">Summarize</a></li>
+                        <li><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="#">Extract</a></li>
+                        <li><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="#">Analyze</a></li>
+                        <li><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="#">Actions</a></li>
+                        <li><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="#">Export</a></li>
+                        <li><a class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="#">Save</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="datetime" class="mr-4 courier-new"></div>
+            <button id="darkModeToggle" class="focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto mt-8 p-8 bg-white rounded-lg shadow-md transition-colors duration-300">
+        <h1 class="text-3xl font-bold mb-6 courier-new">RAG Search</h1>
+        
+        <p class="berkeley-mono mb-4">Retrieval Augmented Generation is an advanced search option. Upload your assets and documents for search, analyze, and summaries.</p>
+        
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Data Ingestion</h2>
+            <form hx-post="/ingest" hx-swap="afterend" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".txt,.pdf,.doc,.docx" class="mb-2" title="Upload your assets for advanced search here.">
+                <button type="submit" class="gradient-purple-blue text-white px-4 py-2 rounded">Upload</button>
+            </form>
+        </div>
+
+        <div>
+            <h2 class="text-xl font-semibold mb-4">Query</h2>
+            <form hx-post="/query" hx-target="#response">
+                <input type="text" name="query" placeholder="Enter your query" class="w-full p-2 border rounded mb-2">
+                <button type="submit" class="gradient-green-blue text-white px-4 py-2 rounded">Submit Query</button>
+            </form>
+            <div id="response" class="mt-4 p-4 bg-gray-200 rounded"></div>
+        </div>
+
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold mb-4">AI Chat</h2>
+            <p class="mb-4">Hi, I'm Herkales. Can I help you with advanced search?</p>
+            <!-- Add your chat interface here -->
+        </div>
+    </main>
+
+    <footer class="bg-[#111111] text-white p-4 transition-colors duration-300">
+        <nav class="container mx-auto flex flex-col items-center">
+            <div class="space-x-4 roboto mb-2">
+                <a href="index.html" class="hover:text-gray-300 hover:scale-150 inline-block transition-transform duration-300">Home</a>
+                <a href="about.html" class="hover:text-gray-300 hover:scale-150 inline-block transition-transform duration-300">About</a>
+                <a href="chat.html" class="hover:text-gray-300 hover:scale-150 inline-block transition-transform duration-300">Launch</a>
+                <a href="features.html" class="hover:text-gray-300 hover:scale-150 inline-block transition-transform duration-300">Features</a>
+                <a href="join.html" class="hover:text-gray-300 hover:scale-150 inline-block transition-transform duration-300">Join</a>
+                <a href="prices.html" class="hover:text-gray-300 hover:scale-150 inline-block transition-transform duration-300">Prices</a>
+            </div>
+            <div class="courier-new">
+                © UNIVERSITAS AI
+            </div>
+        </nav>
+    </footer>
+
+    <script>
+        htmx.on("htmx:afterRequest", function(evt) {
+            if (evt.detail.successful) {
+                alert("Operation successful!");
+            } else {
+                alert("An error occurred. Please try again.");
+            }
+        });
+
+        function updateDateTime() {
+            const now = luxon.DateTime.local();
+            const formatted = now.toFormat("cccc, dd LLL yyyy HH:mm:ss");
+            document.getElementById('datetime').textContent = formatted;
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        let darkMode = false;
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        const header = document.querySelector('header');
+        const main = document.querySelector('main');
+
+        darkModeToggle.addEventListener('click', () => {
+            darkMode = !darkMode;
+            body.classList.toggle('dark', darkMode);
+            if (darkMode) {
+                body.style.backgroundColor = '#111111';
+                body.style.color = 'white';
+                header.style.backgroundColor = '#444444';
+                main.style.backgroundColor = '#444444';
+            } else {
+                body.style.backgroundColor = '';
+                body.style.color = '';
+                header.style.backgroundColor = '';
+                main.style.backgroundColor = '';
+            }
+            darkModeToggle.innerHTML = darkMode
+                ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>';
+        });
+    </script>
+</body>
+</html>
