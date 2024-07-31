@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Neural Network</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/recharts@2.1.9/umd/Recharts.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .neuron {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-bottom: 8px;
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } = Recharts;
+
+        const NeuralNetwork = () => {
+            const [layers, setLayers] = useState([
+                { id: 1, type: 'input', neurons: 3 },
+                { id: 2, type: 'hidden', neurons: 4 },
+                { id: 3, type: 'output', neurons: 2 }
+            ]);
+            const [darkMode, setDarkMode] = useState(false);
+            const [activeNeuron, setActiveNeuron] = useState(null);
+            const [learningData, setLearningData] = useState([]);
+
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setLearningData(prevData => {
+                        const newData = [...prevData, { epoch: prevData.length, error: Math.random() * 0.5 }];
+                        return newData.slice(-20);
+                    });
+                }, 1000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const addLayer = () => {
+                setLayers(prevLayers => [
+                    ...prevLayers.slice(0, -1),
+                    { id: prevLayers.length, type: 'hidden', neurons: 4 },
+                    prevLayers[prevLayers.length - 1]
+                ]);
+            };
+
+            const removeLayer = () => {
+                if (layers.length > 3) {
+                    setLayers(prevLayers => [...prevLayers.slice(0, -2), prevLayers[prevLayers.length - 1]]);
+                }
+            };
+
+            const toggleDarkMode = () => setDarkMode(prev => !prev);
+
+            const handleNeuronHover = (layerId, neuronId) => {
+                setActiveNeuron({ layerId, neuronId });
+            };
+
+            const handleNeuronLeave = () => {
+                setActiveNeuron(null);
+            };
+
+            return (
+                <div className={`p-4 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
+                    <h1 className="text-2xl font-bold mb-4">Interactive Neural Network</h1>
+                    <div className="mb-4">
+                        <button onClick={addLayer} className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Add Layer</button>
+                        <button onClick={removeLayer} className="bg-red-500 text-white px-4 py-2 rounded mr-2">Remove Layer</button>
+                        <button onClick={toggleDarkMode} className="bg-gray-500 text-white px-4 py-2 rounded">
+                            {darkMode ? 'Light Mode' : 'Dark Mode'}
+                        </button>
+                    </div>
+                    <div className="flex justify-between items-center mb-4">
+                        {layers.map((layer) => (
+                            <div key={layer.id} className="flex flex-col items-center">
+                                <div className="mb-2">{layer.type.charAt(0).toUpperCase() + layer.type.slice(1)} Layer</div>
+                                {Array.from({ length: layer.neurons }).map((_, neuronIndex) => (
+                                    <div
+                                        key={neuronIndex}
+                                        className={`neuron ${
+                                            activeNeuron?.layerId === layer.id && activeNeuron?.neuronId === neuronIndex
+                                                ? 'bg-yellow-400'
+                                                : darkMode
+                                                ? 'bg-blue-400'
+                                                : 'bg-blue-600'
+                                        }`}
+                                        onMouseEnter={() => handleNeuronHover(layer.id, neuronIndex)}
+                                        onMouseLeave={handleNeuronLeave}
+                                    />
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-8">
+                        <h2 className="text-xl font-bold mb-2">Learning Progress</h2>
+                        <LineChart width={600} height={300} data={learningData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="epoch" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="error" stroke="#8884d8" />
+                        </LineChart>
+                    </div>
+                </div>
+            );
+        };
+
+        // Error boundary component
+        class ErrorBoundary extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { hasError: false };
+            }
+
+            static getDerivedStateFromError(error) {
+                return { hasError: true };
+            }
+
+            componentDidCatch(error, errorInfo) {
+                console.log('Error:', error, errorInfo);
+            }
+
+            render() {
+                if (this.state.hasError) {
+                    return <h1>Something went wrong. Check the console for more information.</h1>;
+                }
+
+                return this.props.children; 
+            }
+        }
+
+        // Wrap the main component with ErrorBoundary
+        const App = () => (
+            <ErrorBoundary>
+                <NeuralNetwork />
+            </ErrorBoundary>
+        );
+
+        // Render with error logging
+        try {
+            ReactDOM.render(<App />, document.getElementById('root'));
+            console.log('React component rendered successfully');
+        } catch (error) {
+            console.error('Error rendering React component:', error);
+        }
+    </script>
+</body>
+</html>
