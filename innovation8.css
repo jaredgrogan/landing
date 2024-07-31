@@ -45,14 +45,13 @@ header {
     transition: transform 0.3s ease;
 }
 
-#favicon:hover, #discover-text:hover {
+#favicon:hover {
     transform: scale(1.5);
 }
 
 #discover-text {
     font-size: 1.5em;
     color: #000;
-    cursor: pointer;
 }
 
 .header-center nav ul {
