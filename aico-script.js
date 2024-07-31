@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 const NeuralNetwork = () => {
@@ -89,4 +90,5 @@ const NeuralNetwork = () => {
   );
 };
 
-export default NeuralNetwork;
+// Render the React component
+ReactDOM.render(<NeuralNetwork />, document.getElementById('root'));
