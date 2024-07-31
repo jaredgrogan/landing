@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/svg+xml" href="favicon5.svg">
+    <style>
+        /* ... (previous styles remain the same) ... */
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .favicon {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            background-color: var(--chat-bg);
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            right: 0;
+        }
+
+        .menu-content a {
+            color: var(--text-color);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .menu-content a:hover {
+            background-color: var(--input-border);
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="header-left">
+                <img src="favicon5.svg" alt="Logo" class="favicon">
+                <div class="chat-title">AI Chat Assistant</div>
+            </div>
+            <div class="header-right">
+                <div class="menu-dropdown">
+                    <button class="header-button" id="menu-button" aria-label="Menu">
+                        Menu
+                    </button>
+                    <div class="menu-content" id="menu-content">
+                        <a href="#" id="english">English</a>
+                        <a href="#" id="spanish">Español</a>
+                    </div>
+                </div>
+                <button class="header-button" id="mode-toggle" aria-label="Toggle dark mode">
+                    <i data-lucide="moon"></i>
+                </button>
+            </div>
+        </div>
+        <!-- ... (rest of the HTML remains the same) ... -->
+    </div>
+
+    <script>
+        // ... (previous script content remains the same) ...
+
+        // Add this to handle the menu dropdown
+        const menuButton = document.getElementById('menu-button');
+        const menuContent = document.getElementById('menu-content');
+
+        menuButton.addEventListener('click', () => {
+            menuContent.classList.toggle('show');
+        });
+
+        window.addEventListener('click', (event) => {
+            if (!event.target.matches('#menu-button')) {
+                if (menuContent.classList.contains('show')) {
+                    menuContent.classList.remove('show');
+                }
+            }
+        });
+
+        // Add language switching functionality (placeholder)
+        document.getElementById('english').addEventListener('click', () => {
+            console.log('Switched to English');
+            // Implement language switch logic here
+        });
+
+        document.getElementById('spanish').addEventListener('click', () => {
+            console.log('Switched to Spanish');
+            // Implement language switch logic here
+        });
+    </script>
+</body>
+</html>
