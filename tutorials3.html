@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Learning Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Berkeley Mono', Courier New, monospace;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+        .logo img {
+            width: 50px;
+            height: 50px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        .logo img:hover {
+            transform: scale(1.5);
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #333;
+            font-size: 1rem;
+            transition: font-size 0.3s ease;
+        }
+        nav a:hover {
+            font-size: 1.2rem;
+        }
+        .date-time {
+            font-family: 'Courier New', monospace;
+        }
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(120deg, #e0e0e0, #fff);
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        .cta-button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .search-bar {
+            margin: 20px auto;
+            width: 50%;
+            text-align: center;
+        }
+        .tutorials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .tutorial-card {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .tutorial-card h3 {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        .learning-outcomes, .featured-tutorials {
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .learning-outcomes h2, .featured-tutorials h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .chat-bot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .chat-bot-content {
+            display: none;
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 20px;
+            overflow-y: auto;
+            border-radius: 5px;
+        }
+        .chat-bot-content h3 {
+            margin: 0 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="favicon5.svg" alt="Logo"></a>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#">Tutorials</a>
+            <a href="#">Courses</a>
+            <a href="#">Projects</a>
+            <a href="#">Community</a>
+            <a href="#">Contact</a>
+        </nav>
+        <div class="date-time">
+            <span id="date-time-display"></span>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Master Python, AI, Deep Learning & Blockchain</h1>
+        <p>Hands-on tutorials and projects to build your skills.</p>
+        <button class="cta-button">Get Started Now</button>
+    </section>
+
+    <section class="search-bar">
+        <input type="text" placeholder="Search tutorials, courses, projects..." id="search-input">
+    </section>
+
+    <section class="learning-outcomes">
+        <h2>Learning Outcomes</h2>
+        <div id="outcomes-list">
+            <!-- Auto-populated content for learning outcomes -->
+        </div>
+    </section>
+
+    <section class="featured-tutorials">
+        <h2>Featured Tutorials</h2>
+        <div id="featured-list">
+            <!-- Auto-populated content for featured tutorials -->
+        </div>
+    </section>
+
+    <section class="tutorials-grid">
+        <!-- Auto-populated tutorial cards for all 13 tutorials -->
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 Minimalist Learning. All rights reserved.</p>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="app.html">Launch</a>
+            <a href="product.html">Product</a>
+            <a href="discover.html">Discover</a>
+            <a href="pricing.html">Join</a>
+        </nav>
+        <div style="font-size: 2rem; font-family: 'Courier New', monospace; margin-top: 20px;">
+            // Discover the Universe
+        </div>
+    </footer>
+
+    <div class="chat-bot" onclick="toggleChatBot()">Chat</div>
+    <div class="chat-bot-content" id="chat-bot-content">
+        <h3>How can I help you?</h3>
+        <p>Ask me anything about Python, AI, Deep Learning, Blockchain, or Data Science.</p>
+        <input type="text" placeholder="Type your question here...">
+    </div>
+
+    <script>
+        // Chat Bot Toggle Function
+        function toggleChatBot() {
+            const chatContent = document.getElementById('chat-bot-content');
+            chatContent.style.display = chatContent.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Display Current Date and Time
+        function updateDateTime() {
+            const dateTimeDisplay = document.getElementById('date-time-display');
+            const now = new Date();
+            dateTimeDisplay.innerText = now.toLocaleString('en-US', {
+                weekday: 'short', // Changed from full name to short form
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Auto-populate Learning Outcomes and Featured Tutorials (Placeholder Function)
+        function populateContent() {
+            // Placeholder content population logic for learning outcomes and featured tutorials
+        }
+        populateContent();
+    </script>
+</body>
+</html>
