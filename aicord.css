@@ -1,0 +1,88 @@
+/* Reset some default styles */
+body, h1, h2, p, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General body styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Header styles */
+header {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 1em 0;
+}
+
+header .container {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+header h1 {
+    margin-bottom: 0.5em;
+}
+
+header .tagline {
+    font-style: italic;
+    color: #cccccc;
+}
+
+/* Main content styles */
+main {
+    width: 80%;
+    margin: 2em auto;
+}
+
+.hero {
+    background-color: #444444;
+    padding: 2em;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.hero h2 {
+    margin-bottom: 0.5em;
+}
+
+.hero p {
+    font-size: 1.2em;
+}
+
+.about, .contact {
+    margin-top: 2em;
+}
+
+.about p, .contact p {
+    font-size: 1em;
+}
+
+/* Link styles */
+a {
+    color: #1e90ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Footer styles */
+footer {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 1em 0;
+    text-align: center;
+}
+
+footer .container {
+    width: 80%;
+    margin: 0 auto;
+}
