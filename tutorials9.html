@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Learning Platform</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Berkeley Mono', Courier New, monospace;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            transition: transform 0.3s ease;
+        }
+        .logo img:hover {
+            transform: scale(1.5);
+        }
+        .logo span {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .date-time {
+            font-family: 'Courier New', monospace;
+        }
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(120deg, #e0e0e0, #fff);
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        .cta-button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        .search-bar {
+            margin: 20px auto;
+            width: 50%;
+            text-align: center;
+        }
+        .search-bar input {
+            width: 80%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            outline: none;
+            transition: box-shadow 0.3s ease;
+        }
+        .search-bar input:focus {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        .tutorials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .tutorial-card {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .tutorial-card h3 {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        .learning-outcomes, .featured-tutorials {
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .learning-outcomes h2, .featured-tutorials h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .learning-outcomes-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 10px;
+            padding: 10px;
+            animation: scroll 30s linear infinite;
+        }
+        .learning-outcomes-carousel div {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+        .learning-outcomes-carousel div:hover {
+            transform: scale(1.05);
+        }
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+        .footer nav {
+            margin-bottom: 10px;
+        }
+        .footer nav a {
+            font-family: 'Roboto', sans-serif;
+            margin: 0 10px;
+            text-decoration: none;
+            color: #fff;
+            transition: transform 0.3s ease;
+        }
+        .footer nav a:hover {
+            transform: scale(1.5);
+        }
+        .footer p {
+            font-size: 0.65rem; /* Reduced font size by 35% */
+        }
+        .chat-bot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(to right, #4CAF50, #2196F3);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .chat-bot:hover {
+            transform: scale(1.5);
+        }
+        .chat-bot-content {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            max-height: 500px;
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 20px;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .chat-bot-content h3 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+        }
+        .chat-bot-content #chat-content {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .chat-bot-content input {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="favicon5.svg" alt="Logo"></a>
+            <span>// Discover the Universe</span>
+        </div>
+        <div class="date-time">
+            <span id="date-time-display"></span>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Master Python, AI, Deep Learning & Blockchain</h1>
+        <p>Hands-on tutorials and projects to build your skills.</p>
+        <button class="cta-button">Sign Up Now</button>
+    </section>
+
+    <section class="search-bar">
+        <input type="text" placeholder="Search tutorials, courses, projects..." id="search-input">
+    </section>
+
+    <section class="learning-outcomes">
+        <h2>Learning Outcomes</h2>
+        <div class="learning-outcomes-carousel" id="outcomes-list">
+            <!-- Carousel items will be auto-populated here -->
+        </div>
+    </section>
+
+    <section class="featured-tutorials">
+        <h2>Featured Tutorials</h2>
+        <div id="featured-list">
+            <!-- Auto-populated content for featured tutorials carousel -->
+        </div>
+    </section>
+
+    <section class="tutorials-grid" id="tutorials-grid">
+        <!-- Tutorial cards for all tutorials -->
+    </section>
+
+    <footer class="footer">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="app.html">Launch</a>
+            <a href="product.html">Product</a>
+            <a href="discover.html">Discover</a>
+            <a href="pricing.html">Join</a>
+        </nav>
+        <p>&copy; 2024 Minimalist Learning. All rights reserved.</p>
+    </footer>
+
+    <div class="chat-bot" onclick="toggleChatBot()">💬</div>
+    <div class="chat-bot-content" id="chat-bot-content">
+        <h3>How can I help you?</h3>
+        <div id="chat-content">
+            <!-- Chat content here -->
+        </div>
+        <input type="text" placeholder="Type your question here..." id="chat-input">
+    </div>
+
+    <script>
+        // Chat Bot Toggle Function
+        function toggleChatBot() {
+            const chatContent = document.getElementById('chat-bot-content');
+            chatContent.style.display = chatContent.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Display Current Date and Time
+        function updateDateTime() {
+            const dateTimeDisplay = document.getElementById('date-time-display');
+            const now = new Date();
+            dateTimeDisplay.innerText = now.toLocaleString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Auto-populate Learning Outcomes and Featured Tutorials (Placeholder Function)
+        function populateContent() {
+            const outcomes = [
+                "Implement a CNN for image classification using PyTorch",
+                "Build an LSTM model for sentiment analysis using Keras",
+                "Develop a time series forecasting model with TensorFlow",
+                "Master tensor operations and autograd in PyTorch",
+                "Implement transformer architectures for NLP with Hugging Face Transformers",
+                "Create advanced computer vision applications using TensorFlow",
+                "Implement a basic blockchain and cryptocurrency in Python",
+                "Generate synthetic images using GANs with PyTorch/TensorFlow",
+                "Apply LSTM networks to complex time series problems",
+                "Develop an RL agent for game environments with OpenAI Gym",
+                "Create and deploy smart contracts and dApps with Solidity, Web3.js",
+                "Implement privacy-preserving machine learning with TensorFlow Federated",
+                "Detect anomalies in blockchain transactions with PyTorch/TensorFlow",
+                "Master advanced techniques for handling, scaling, and encoding data to improve the quality and efficiency of deep learning models",
+                "Develop and implement reinforcement learning models to create and optimize automated trading strategies in financial markets",
+                "Fine-tune BERT models for advanced NLP tasks, applying them to practical scenarios and optimizing their performance",
+                "Apply advanced image augmentation techniques to enhance the diversity and robustness of training datasets for deep learning models",
+                "Implement blockchain solutions in supply chain management to enhance transparency, traceability, and fraud prevention",
+                "Optimize deep learning model performance through effective hyperparameter tuning techniques like grid search and Bayesian optimization"
+            ];
+
+            const outcomesList = document.getElementById('outcomes-list');
+            outcomes.forEach(outcome => {
+                const item = document.createElement('div');
+                item.textContent = outcome;
+                outcomesList.appendChild(item);
+            });
+        }
+
+        function populateTutorials() {
+            const tutorials = [
+                { title: "Image Classification with PyTorch", framework: "PyTorch", learningOutcome: "Implement a CNN for image classification", category: "Computer Vision" },
+                { title: "Sentiment Analysis with Keras", framework: "Keras", learningOutcome: "Build an LSTM model for sentiment analysis", category: "NLP" },
+                { title: "Time Series Forecasting with TensorFlow", framework: "TensorFlow", learningOutcome: "Develop a time series forecasting model", category: "Time Series Analysis" },
+                { title: "Deep Learning Fundamentals with PyTorch", framework: "PyTorch", learningOutcome: "Master tensor operations and autograd", category: "Deep Learning" },
+                { title: "Natural Language Processing with Transformers", framework: "Hugging Face Transformers", learningOutcome: "Implement transformer architectures for NLP", category: "NLP" },
+                { title: "Computer Vision Applications using TensorFlow", framework: "TensorFlow", learningOutcome: "Create advanced computer vision applications", category: "Computer Vision" },
+                { title: "Blockchain Basics and Cryptocurrency Implementation", framework: "Python", learningOutcome: "Implement a basic blockchain and cryptocurrency", category: "Blockchain" },
+                { title: "Generative Adversarial Networks for Image Synthesis", framework: "PyTorch/TensorFlow", learningOutcome: "Generate synthetic images using GANs", category: "Deep Learning" },
+                { title: "Time Series Forecasting with LSTM Networks", framework: "PyTorch/TensorFlow", learningOutcome: "Apply LSTM networks to complex time series problems", category: "Time Series Analysis" },
+                { title: "Reinforcement Learning for Game AI", framework: "OpenAI Gym", learningOutcome: "Develop an RL agent for game environments", category: "Reinforcement Learning" },
+                { title: "Smart Contracts and Decentralized Applications", framework: "Solidity, Web3.js", learningOutcome: "Create and deploy smart contracts and dApps", category: "Blockchain" },
+                { title: "Federated Learning for Privacy-Preserving AI", framework: "TensorFlow Federated", learningOutcome: "Implement privacy-preserving machine learning", category: "Privacy-Preserving AI" },
+                { title: "AI for Anomaly Detection in Blockchain Transactions", framework: "PyTorch/TensorFlow", learningOutcome: "Detect anomalies in blockchain transactions", category: "Blockchain, AI" },
+                { title: "Advanced Data Preprocessing for Deep Learning", framework: "Python (Pandas, NumPy, Scikit-Learn)", learningOutcome: "Master advanced techniques for handling, scaling, and encoding data to improve the quality and efficiency of deep learning models", category: "Data Science" },
+                { title: "Tokenization and ICO Development", framework: "Solidity, Web3.js, Python", learningOutcome: "Develop and deploy secure smart contracts for ICOs, understanding tokenization, regulatory compliance, and blockchain interactions", category: "Blockchain" },
+                { title: "Reinforcement Learning for Financial Trading", framework: "Python (OpenAI Gym, TensorFlow)", learningOutcome: "Develop and implement reinforcement learning models to create and optimize automated trading strategies in financial markets", category: "Reinforcement Learning" },
+                { title: "Advanced Natural Language Understanding with BERT", framework: "TensorFlow/Keras", learningOutcome: "Fine-tune BERT models for advanced NLP tasks, applying them to practical scenarios and optimizing their performance", category: "NLP" },
+                { title: "Advanced Image Augmentation Techniques for Deep Learning", framework: "TensorFlow/Keras, PyTorch", learningOutcome: "Apply advanced image augmentation techniques to enhance the diversity and robustness of training datasets for deep learning models", category: "Deep Learning" },
+                { title: "Blockchain-Based Supply Chain Management", framework: "Python, Hyperledger Fabric", learningOutcome: "Implement blockchain solutions in supply chain management to enhance transparency, traceability, and fraud prevention", category: "Blockchain" },
+                { title: "Hyperparameter Tuning for Deep Learning Models", framework: "Python (Keras, TensorFlow, PyTorch)", learningOutcome: "Optimize deep learning model performance through effective hyperparameter tuning techniques like grid search and Bayesian optimization", category: "Deep Learning" }
+            ];
+
+            const grid = document.getElementById('tutorials-grid');
+            tutorials.forEach(tutorial => {
+                const card = document.createElement('div');
+                card.className = 'tutorial-card';
+                card.innerHTML = `
+                    <h3>${tutorial.title}</h3>
+                    <p>Framework: ${tutorial.framework}</p>
+                    <p>${tutorial.learningOutcome}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        populateContent();
+        populateTutorials();
+    </script>
+</body>
+</html>
