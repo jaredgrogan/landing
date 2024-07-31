@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    background: #f5f5f5;
+    color: #333;
+    overflow-x: hidden;
+}
+
+header {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1em 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2em;
+    justify-content: center;
+    flex: 1;
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.2em;
+    transition: transform 0.3s ease;
+}
+
+nav a:hover {
+    transform: scale(1.5);
+}
+
+nav a, #favicon-link, #discover-text, #date-time {
+    transition: transform 0.3s ease;
+}
+
+#favicon-link {
+    padding: 20px;
+}
+
+#favicon {
+    width: 50px;
+    transition: transform 0.3s ease;
+}
+
+#favicon:hover, #discover-text:hover, #date-time:hover {
+    transform: scale(1.5);
+}
+
+#discover-text {
+    font-size: 2em;
+    color: #000;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+#date-time {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 1.2em;
+    color: #333;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+}
+
+main {
+    padding-top: 5em;
+}
+
+section {
+    padding: 2em;
+    text-align: center;
+}
+
+section#home {
+    background: #ffffff;
+    margin: 2em 0;
+}
+
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1em 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+    opacity: 0.5;
+    overflow: hidden;
+}
+
+.shape {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: move 25s linear infinite;
+}
+
+.shape.one {
+    width: 150px;
+    height: 150px;
+    top: 10%;
+    left: 10%;
+    animation-duration: 20s;
+}
+
+.shape.two {
+    width: 100px;
+    height: 100px;
+    top: 40%;
+    left: 60%;
+    animation-duration: 30s;
+}
+
+.shape.three {
+    width: 200px;
+    height: 200px;
+    top: 70%;
+    left: 30%;
+    animation-duration: 35s;
+}
+
+@keyframes move {
+    0% { transform: translateY(0) translateX(0) scale(1); }
+    50% { transform: translateY(-20px) translateX(20px) scale(1.1); }
+    100% { transform: translateY(0) translateX(0) scale(1); }
+}
