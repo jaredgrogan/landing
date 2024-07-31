@@ -15,22 +15,51 @@ header {
     background: rgba(255, 255, 255, 0.9);
     padding: 1em 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
 }
 
-nav ul {
+.header-left, .header-center, .header-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-left {
+    justify-content: flex-start;
+    margin-left: 20px;
+}
+
+#favicon-link {
+    margin-right: 20px;
+}
+
+#favicon {
+    width: 50px;
+    transition: transform 0.3s ease;
+}
+
+#favicon:hover, #discover-text:hover {
+    transform: scale(1.5);
+}
+
+#discover-text {
+    font-size: 1.5em;
+    color: #000;
+    cursor: pointer;
+}
+
+.header-center nav ul {
     list-style: none;
     display: flex;
     gap: 2em;
     justify-content: center;
-    flex: 1;
-    margin: 0;
-    padding: 0;
 }
 
 nav a {
@@ -45,44 +74,23 @@ nav a:hover {
     transform: scale(1.5);
 }
 
-nav a, #favicon-link, #discover-text, #date-time {
-    transition: transform 0.3s ease;
-}
-
-#favicon-link {
-    padding: 20px;
-}
-
-#favicon {
-    width: 50px;
-    transition: transform 0.3s ease;
-}
-
-#favicon:hover, #discover-text:hover, #date-time:hover {
-    transform: scale(1.5);
-}
-
-#discover-text {
-    font-size: 2em;
-    color: #000;
-    margin-left: 20px;
-    cursor: pointer;
+.header-right {
+    justify-content: flex-end;
+    margin-right: 20px;
 }
 
 #date-time {
-    position: absolute;
-    top: 10px;
-    right: 20px;
     font-size: 1.2em;
     color: #333;
     font-family: 'Courier New', Courier, monospace;
     padding: 10px;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 5px;
+    text-align: right;
 }
 
 main {
-    padding-top: 5em;
+    padding-top: 7em; /* Increased padding to account for header */
 }
 
 section {
