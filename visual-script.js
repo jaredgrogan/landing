@@ -115,11 +115,21 @@ document.addEventListener('DOMContentLoaded', () => {
         { source: 'Load Balancing', target: 'Cloud Computing' },
     ];
 
+    const width = 960;
+    const height = 600;
+
     const svg = d3.select("#knowledge-graph")
+        .attr("width", width)
+        .attr("height", height)
         .call(d3.zoom().on("zoom", ({ transform }) => {
             svg.attr("transform", transform);
         }))
         .append("g");
+
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id).distance(150))
+        .force("charge", d3.forceManyBody().strength(-300))
+        .force("center", d3.forceCenter(width / 2, height / 2));
 
     const link = svg.append("g")
         .attr("stroke", "#999")
