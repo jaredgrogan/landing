@@ -84,6 +84,30 @@
         /* Padding adjustments */
         .bars {
             padding-bottom: 10px; /* Added padding below the bars */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .bars a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: 300px; /* Set a consistent width for all panels */
+            margin: 10px;
+        }
+
+        .bar {
+            background: #f5f5f5;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .bar:hover {
+            transform: translateY(-5px);
         }
 
         footer {
@@ -112,13 +136,6 @@
         /* Additional spacing below the main heading */
         #home h1 {
             margin-bottom: 10px; /* Added 10px buffer below the heading */
-        }
-
-        /* Remove underline and set color to inherit for links */
-        .bars a {
-            text-decoration: none;
-            color: inherit;
-            display: block; /* Make the link cover the entire bar */
         }
     </style>
 </head>
@@ -235,6 +252,7 @@
 
         function typeEffect(element, text, speed) {
             let i = 0;
+            element.innerHTML = ""; // Clear previous content to avoid duplication
             function typing() {
                 if (i < text.length) {
                     element.innerHTML += text.charAt(i);
@@ -246,7 +264,7 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            typeEffect(document.getElementById('typing-effect'), 'Explore our cutting-edge solutions designed with a minimalist touch.', 100);
+            typeEffect(document.getElementById('typing-effect'), 'Explore our cutting-edge solutions designed with a minimalist touch.', 90); // Increased speed by 10%
         });
 
         // Removed hover effect on "Your Cognitive Computer"
