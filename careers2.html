@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Opportunities — Python</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Berkeley Mono', Courier New, monospace;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex: 1;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            transition: transform 0.3s ease;
+        }
+        .logo img:hover {
+            transform: scale(1.5);
+        }
+        .logo span {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .date-time {
+            font-family: 'Courier New', monospace;
+        }
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(120deg, #e0e0e0, #fff);
+          .dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 1000;
+}
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        .cta-button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        .career-carousel {
+            margin: 20px auto;
+            width: 90%;
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+        .career-carousel h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .career-carousel div {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .career-carousel div:hover {
+            transform: scale(1.1);
+        }
+        .career-details {
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+        .career-details h3 {
+            font-size: 1.8rem;
+            margin-top: 0;
+        }
+        .career-details p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+        .footer nav {
+            margin-bottom: 10px;
+        }
+        .footer nav a {
+            font-family: 'Roboto', sans-serif;
+            margin: 0 10px;
+            text-decoration: none;
+            color: #fff;
+            transition: transform 0.3s ease;
+        }
+        .footer nav a:hover {
+            transform: scale(1.5);
+        }
+        .footer p {
+            font-size: 0.65rem; /* Reduced font size by 35% */
+        }
+        .chat-bot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(to right, #4CAF50, #2196F3);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .chat-bot:hover {
+            transform: scale(1.5);
+        }
+        .chat-bot-content {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            max-height: 500px;
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 20px;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .chat-bot-content h3 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+        }
+        .chat-bot-content #chat-content {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .chat-bot-content input {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            outline: none;
+        }
+        .pop-out-panel {
+            position: fixed;
+            top: 20%;
+            right: -300px;
+            width: 300px;
+            height: 60%;
+            background-color: #fff;
+            border-left: 1px solid #ddd;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+        }
+        .pop-out-panel.open {
+            right: 0;
+        }
+        .pop-out-panel h4 {
+            font-size: 1.5rem;
+            margin: 10px;
+        }
+        .pop-out-panel ul {
+            list-style: none;
+            padding: 10px;
+        }
+        .pop-out-panel ul li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        body.dark-mode header,
+        body.dark-mode .career-carousel,
+        body.dark-mode .career-details,
+        body.dark-mode .chat-bot-content,
+        body.dark-mode .pop-out-panel {
+            background-color: #2a2a2a;
+            color: #f5f5f5;
+        }
+        body.dark-mode .career-carousel div {
+            background-color: #3a3a3a;
+        }
+        body.dark-mode .pop-out-panel ul li {
+            background-color: #3a3a3a;
+        }
+        body.dark-mode .chat-bot-content input {
+            background-color: #3a3a3a;
+            color: #f5f5f5;
+            border-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="favicon5.svg" alt="Logo"></a>
+            <span>// Discover the Universe</span>
+        </div>
+        <div class="date-time">
+            <span id="date-time-display"></span>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Explore Your Career Opportunities</h1>
+            <p>Align your Python skills with real-world job applications and career paths.</p>
+            <button class="cta-button" onclick="togglePanel()">View Recommended Courses</button>
+        </section>
+
+        <section class="career-carousel">
+            <h2>Career Paths in Python</h2>
+            <div onclick="showDetails('Data Scientist')">Data Scientist</div>
+            <div onclick="showDetails('Machine Learning Engineer')">Machine Learning Engineer</div>
+            <div onclick="showDetails('Software Developer (Python Specialist)')">Software Developer (Python Specialist)</div>
+            <div onclick="showDetails('Data Engineer')">Data Engineer</div>
+            <div onclick="showDetails('AI Research Scientist')">AI Research Scientist</div>
+            <div onclick="showDetails('Computer Vision Engineer')">Computer Vision Engineer</div>
+            <div onclick="showDetails('Natural Language Processing (NLP) Engineer')">Natural Language Processing (NLP) Engineer</div>
+            <div onclick="showDetails('AI Ethics Specialist')">AI Ethics Specialist</div>
+            <div onclick="showDetails('Blockchain Developer')">Blockchain Developer</div>
+            <div onclick="showDetails('AI in Healthcare Specialist')">AI in Healthcare Specialist</div>
+            <div onclick="showDetails('Quantum Machine Learning Researcher')">Quantum Machine Learning Researcher</div>
+            <div onclick="showDetails('Autonomous Systems Engineer')">Autonomous Systems Engineer</div>
+            <div onclick="showDetails('AI-Assisted Creative Professional')">AI-Assisted Creative Professional</div>
+            <div onclick="showDetails('Edge AI Developer')">Edge AI Developer</div>
+        </section>
+
+        <section class="career-details" id="career-details">
+            <h3>Career Details</h3>
+            <p>Select a career path to see detailed information about job roles, skills needed, and industry trends.</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="app.html">Launch</a>
+            <a href="product.html">Product</a>
+            <a href="discover.html">Discover</a>
+            <a href="pricing.html">Join</a>
+        </nav>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <div class="chat-bot" onclick="toggleChatBot()">💬</div>
+    <div class="chat-bot-content" id="chat-bot-content">
+        <h3>How can I help you?</h3>
+        <div id="chat-content">
+            <!-- Chat content here -->
+        </div>
+        <input type="text" placeholder="Type your question here..." id="chat-input" onkeypress="handleChatInput(event)">
+    </div>
+
+    <div class="pop-out-panel" id="pop-out-panel">
+        <h4>Recommended Courses</h4>
+        <ul>
+            <li>Introduction to Python for Data Science</li>
+            <li>Basic Machine Learning with Scikit-Learn</li>
+            <li>Introduction to Neural Networks</li>
+            <li>Data Preprocessing and Cleaning</li>
+            <li>Introduction to Natural Language Processing (NLP)</li>
+        </ul>
+    </div>
+
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">◐</button>
+
+    <script>
+        // Chat Bot Toggle Function
+        function toggleChatBot() {
+            const chatContent = document.getElementById('chat-bot-content');
+            chatContent.style.display = chatContent.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Display Current Date and Time
+        function updateDateTime() {
+            const dateTimeDisplay = document.getElementById('date-time-display');
+            const now = new Date();
+            dateTimeDisplay.innerText = now.toLocaleString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Show career details based on selection
+        function showDetails(career) {
+            const careerDetails = {
+                'Data Scientist': 'Data Scientists analyze complex datasets to extract insights and inform business decisions. They develop predictive models and machine learning algorithms, and communicate findings to stakeholders through visualizations and reports.',
+                'Machine Learning Engineer': 'Machine Learning Engineers design and implement machine learning systems, optimize algorithms for performance and scalability, and collaborate with data scientists to deploy models in production environments.',
+                'Software Developer (Python Specialist)': 'Python Specialists develop and maintain Python-based applications and systems, implement efficient, scalable code, and collaborate with cross-functional teams to integrate Python solutions.',
+                'Data Engineer': 'Data Engineers design and maintain data pipelines and infrastructure, ensure data quality, accessibility, and security, and optimize data storage and retrieval systems.',
+                'AI Research Scientist': 'AI Research Scientists conduct cutting-edge research in artificial intelligence and machine learning, develop novel algorithms and approaches, and publish findings in academic journals.',
+                'Computer Vision Engineer': 'Computer Vision Engineers develop image and video processing algorithms, implement object detection, recognition, and tracking systems, and apply deep learning techniques to solve computer vision challenges.',
+                'Natural Language Processing (NLP) Engineer': 'NLP Engineers design and implement language understanding and generation systems, develop chatbots, sentiment analysis tools, and translation systems, and apply advanced NLP techniques like transformers and BERT.',
+                'AI Ethics Specialist': 'AI Ethics Specialists assess the ethical implications of AI systems and algorithms, develop guidelines and frameworks for responsible AI development, and collaborate with teams to implement ethical AI practices.',
+                'Blockchain Developer': 'Blockchain Developers design and implement blockchain-based solutions, develop smart contracts and decentralized applications (dApps), and integrate blockchain technology with existing systems.',
+                'AI in Healthcare Specialist': 'AI in Healthcare Specialists apply machine learning and AI techniques to medical data, develop predictive models for disease diagnosis and treatment, and collaborate with healthcare professionals to implement AI solutions.',
+                'Quantum Machine Learning Researcher': 'Quantum Machine Learning Researchers explore the intersection of quantum computing and machine learning, develop quantum algorithms for AI applications, and investigate potential advantages of quantum approaches in AI.',
+                'Autonomous Systems Engineer': 'Autonomous Systems Engineers develop AI systems for self-driving vehicles, drones, and robots, implement reinforcement learning algorithms for decision-making, and integrate computer vision and sensor data for autonomous navigation.',
+                'AI-Assisted Creative Professional': 'AI-Assisted Creative Professionals leverage AI tools for content creation, design, and art, develop AI systems that augment human creativity, and explore the boundaries of human-AI collaboration in creative fields.',
+                'Edge AI Developer': 'Edge AI Developers optimize AI models for deployment on edge devices and IoT systems, develop efficient, low-latency AI solutions for real-time processing, and integrate AI capabilities into embedded systems and mobile devices.'
+            };
+            document.getElementById('
+
+<script>
+        // ... (previous JavaScript code remains the same)
+
+        // Toggle pop-out panel
+        function togglePanel() {
+            const panel = document.getElementById('pop-out-panel');
+            panel.classList.toggle('open');
+        }
+
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const darkModeIcon = document.getElementById('dark-mode-icon');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.textContent = '☀';
+            } else {
+                darkModeIcon.textContent = '☾';
+            }
+        }
+
+        // Chat bot input handling
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                const input = document.getElementById('chat-input');
+                const message = input.value.trim();
+                if (message) {
+                    addChatMessage('You: ' + message);
+                    generateBotResponse(message);
+                    input.value = '';
+                }
+            }
+        }
+
+        function addChatMessage(message) {
+            const chatContent = document.getElementById('chat-content');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            chatContent.appendChild(messageElement);
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }
+
+        function generateBotResponse(message) {
+            // This is a placeholder for the NLP-based chat bot.
+            // In a real implementation, this would involve calling an API or using a local NLP model.
+            const responses = {
+                'hello': 'Hello! How can I assist you with your Python career today?',
+                'career': 'There are many exciting career paths in Python. Would you like to know more about a specific role?',
+                'courses': 'We offer various Python courses. Check out our recommended courses in the side panel!',
+                'help': 'I'm here to help! Feel free to ask about Python careers, skills, or courses.'
+            };
+
+            const lowercaseMessage = message.toLowerCase();
+            let botResponse = 'I'm sorry, I don't have specific information about that. Can you try rephrasing your question?';
+
+            for (const [key, value] of Object.entries(responses)) {
+                if (lowercaseMessage.includes(key)) {
+                    botResponse = value;
+                    break;
+                }
+            }
+
+            setTimeout(() => {
+                addChatMessage('Bot: ' + botResponse);
+            }, 500);
+        }
+
+        // Initialize dark mode icon
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const darkModeToggle = document.querySelector('.dark-mode-toggle');
+            darkModeToggle.innerHTML = '<span id="dark-mode-icon">☾</span>';
+        });
+    </script>
+</body>
+</html>
