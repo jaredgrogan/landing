@@ -1,0 +1,102 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+    padding-top: 10px;
+}
+
+.navbar {
+    background-color: #333;
+    padding: 1rem 0;
+}
+
+.navbar-title {
+    color: white;
+    display: inline-block;
+}
+
+.navbar-controls {
+    display: inline-block;
+    float: right;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.light-mode {
+    background-color: #f7fafc;
+    color: #333;
+}
+
+.dark-mode {
+    background-color: #1a202c;
+    color: #fff;
+}
+
+.search-filter {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.graph-container {
+    margin: 2rem 0;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    position: relative;
+}
+
+.concept-details {
+    margin: 2rem 0;
+}
+
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.chat-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+    height: 400px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background-color: #333;
+    color: #fff;
+    padding: 0.5rem;
+    text-align: center;
+    cursor: pointer;
+}
+
+.chat-body {
+    flex: 1;
+    padding: 0.5rem;
+    overflow-y: auto;
+}
+
+.chat-input {
+    padding: 0.5rem;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+
+.circle:hover {
+    r: 15;
+}
