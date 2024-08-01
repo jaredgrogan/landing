@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -320,7 +321,7 @@
       if (message !== '') {
         const messageElement = document.createElement('div');
         messageElement.classList.add('mb-2', 'text-green-500');
-        messageElement.innerHTML = <strong>User:</strong> ${message};
+        messageElement.innerHTML = `<strong>User:</strong> ${message}`;
         chatMessages.appendChild(messageElement);
         messageInput.value = '';
         
@@ -328,7 +329,7 @@
         const aiReply = "I'm just a demo AI, I can't reply yet!";
         const replyElement = document.createElement('div');
         replyElement.classList.add('mb-2', 'text-blue-500');
-        replyElement.innerHTML = <strong>AI:</strong> ${aiReply};
+        replyElement.innerHTML = `<strong>AI:</strong> ${aiReply}`;
         chatMessages.appendChild(replyElement);
         
         chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -352,13 +353,13 @@
     events.forEach(event => {
       const eventItem = document.createElement('li');
       eventItem.classList.add('flex', 'items-center');
-      eventItem.innerHTML = 
+      eventItem.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
         <span>${event.title} - ${event.date} at ${event.time}</span>
-      ;
+      `;
       upcomingEvents.appendChild(eventItem);
     });
 
@@ -373,7 +374,7 @@
     briefingItems.forEach(item => {
       const briefingItem = document.createElement('li');
       briefingItem.classList.add('flex', 'items-center');
-      briefingItem.innerHTML = <span>• ${item}</span>;
+      briefingItem.innerHTML = `<span>• ${item}</span>`;
       todaysBriefing.appendChild(briefingItem);
     });
     
@@ -385,7 +386,7 @@
     chatInitialMessages.forEach(msg => {
       const messageElement = document.createElement('div');
       messageElement.classList.add('mb-2', msg.sender === 'AI' ? 'text-blue-500' : 'text-green-500');
-      messageElement.innerHTML = <strong>${msg.sender}:</strong> ${msg.message};
+      messageElement.innerHTML = `<strong>${msg.sender}:</strong> ${msg.message}`;
       chatMessages.appendChild(messageElement);
     });
   </script>
