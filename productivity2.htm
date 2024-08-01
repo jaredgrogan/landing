@@ -1,0 +1,71 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universitas Pro Productivity Tool</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+  <div class="container">
+    <header class="header">
+      <h1 class="title">Universitas Pro</h1>
+      <div class="controls">
+        <select id="language-select" class="language-select">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+        <button id="toggle-dark-mode" class="icon-button">
+          <img src="sun-icon.svg" alt="Toggle Dark Mode" class="icon">
+        </button>
+        <button id="voice-command" class="icon-button">
+          <img src="mic-icon.svg" alt="Voice Command" class="icon">
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div class="editor-toolbar">
+        <button class="icon-button"><img src="bold-icon.svg" alt="Bold" class="icon"></button>
+        <button class="icon-button"><img src="italic-icon.svg" alt="Italic" class="icon"></button>
+        <button class="icon-button"><img src="underline-icon.svg" alt="Underline" class="icon"></button>
+        <button class="icon-button"><img src="align-left-icon.svg" alt="Align Left" class="icon"></button>
+        <button class="icon-button"><img src="align-center-icon.svg" alt="Align Center" class="icon"></button>
+        <button class="icon-button"><img src="align-right-icon.svg" alt="Align Right" class="icon"></button>
+      </div>
+      <div id="note-editor" class="note-editor" contenteditable="true" placeholder="Start typing your notes here..."></div>
+    </main>
+
+    <div id="voice-recorder" class="voice-recorder">
+      <div class="recorder-content">
+        <h2>Voice Recorder</h2>
+        <div class="recorder-visualization"></div>
+        <p class="transcription">Transcription will appear here...</p>
+      </div>
+    </div>
+
+    <div id="calendar" class="calendar">
+      <div class="calendar-content">
+        <h2>Calendar</h2>
+        <div class="calendar-view">
+          <!-- Calendar content goes here -->
+        </div>
+      </div>
+    </div>
+
+    <div id="chat-console" class="chat-console">
+      <div class="chat-content">
+        <h2>Chat</h2>
+        <div class="chat-messages">
+          <!-- Chat messages will appear here -->
+        </div>
+        <input type="text" class="chat-input" placeholder="Type your message...">
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
