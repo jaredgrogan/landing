@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const nightModeToggle = document.getElementById('nightModeToggle');
     const nightIcon = document.getElementById('nightIcon');
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             newNote: 'New Note',
             send: 'Send',
             record: 'Record',
-            heraklesGreeting: "Hi, I'm Herakles. What are you working on?",
+            heraklesGreeting: "HI, I'm Herakles. What are you working on?",
             typePlaceholder: "// Type your project here",
             summary: 'Summary',
             extract: 'Extract',
@@ -172,8 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const homeDropdownItems = document.querySelectorAll('nav ul li:first-child .dropdown-content a');
         homeDropdownItems[0].textContent = t.discover;
         homeDropdownItems[1].textContent = t.features;
-        homeDropdownItems[2].textContent = t.assets;
-        homeDropdownItems[3].textContent = t.join;
+        homeDropdownItems[2].textContent = t.join;
 
         // Update Tools dropdown items
         const toolsDropdownItems = document.querySelectorAll('nav ul li:nth-child(2) .dropdown-content a');
@@ -183,7 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
         toolsDropdownItems[3].textContent = t.actions;
         toolsDropdownItems[4].textContent = t.export;
         toolsDropdownItems[5].textContent = t.save;
-        
+        toolsDropdownItems[6].textContent = t.assets;
+
         // Update other UI elements
         heraklesResponse.innerHTML = t.heraklesGreeting;
         chatInput.setAttribute('placeholder', t.typePlaceholder);
