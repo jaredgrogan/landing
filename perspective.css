@@ -1,16 +1,16 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    background-color: #f0f2f5;
     color: #333;
 }
 
 /* Header Styles */
 header {
-    background-color: #0044cc;
-    color: white;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
@@ -19,6 +19,8 @@ header {
 
 header .logo {
     font-size: 1.5em;
+    font-weight: bold;
+    color: #0073e6;
 }
 
 header nav ul {
@@ -26,24 +28,50 @@ header nav ul {
     margin: 0;
     padding: 0;
     display: flex;
-}
-
-header nav ul li {
-    margin-left: 20px;
+    gap: 20px;
 }
 
 header nav ul li a {
-    color: white;
+    color: #0073e6;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
+}
+
+header .login-signup .button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #0073e6;
+    color: #0073e6;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+header .login-signup .button.signup {
+    background-color: #0073e6;
+    color: white;
+}
+
+header .login-signup .button:hover {
+    opacity: 0.8;
 }
 
 /* Hero Section */
 #hero {
-    background: url('hero-bg.jpg') no-repeat center center/cover;
+    background: linear-gradient(to right, #0073e6, #00aaff);
     color: white;
     text-align: center;
     padding: 100px 20px;
+    position: relative;
+}
+
+#hero .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('hero-bg.jpg') no-repeat center center/cover;
+    opacity: 0.3;
 }
 
 #hero .cta-button {
@@ -54,82 +82,27 @@ header nav ul li a {
     border-radius: 5px;
     display: inline-block;
     margin-top: 20px;
+    transition: background-color 0.3s ease;
 }
 
 #hero .cta-button:hover {
     background-color: #e55a00;
 }
 
-/* Services Section */
-#services {
-    background-color: #fff;
+/* Recommended Content Section */
+#recommended-content {
+    background-color: #ffffff;
     padding: 60px 20px;
     text-align: center;
 }
 
-#services h2 {
+#recommended-content h2 {
     margin-bottom: 40px;
 }
 
-.service {
-    margin-bottom: 30px;
-}
-
-/* Testimonials Section */
-#testimonials {
-    background-color: #f0f0f0;
-    padding: 60px 20px;
-    text-align: center;
-}
-
-.testimonial {
-    margin-bottom: 20px;
-}
-
-/* Contact Section */
-#contact {
-    padding: 60px 20px;
-    background-color: #fff;
-    text-align: center;
-}
-
-#contact form {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-#contact label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-#contact input,
-#contact textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-#contact button {
-    background-color: #0044cc;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#contact button:hover {
-    background-color: #003399;
-}
-
-/* Footer */
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 20px;
+.recommendations {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
 }
