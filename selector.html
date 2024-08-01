@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cutting-Edge Minimalist Website</title>
+    <link rel="stylesheet" href="innovate3.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Additional styling for the chat box and button */
+        #chat-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            display: none; /* Initially hidden */
+        }
+
+        #chat-header {
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chat-body {
+            padding: 20px;
+        }
+
+        #chat-input-container {
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+        }
+
+        #chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        #chat-send {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #4caf50, #2196f3);
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        #chat-icon:hover {
+            transform: scale(1.5);
+        }
+
+        .chat-icon-content {
+            color: white;
+            font-size: 1.5em;
+        }
+
+        #date-time {
+            font-size: 80%; /* Reduce the size of the time display by 20% */
+        }
+
+        #home h1 {
+            font-size: 20% larger; /* Increase the size of the main heading */
+        }
+
+        .info-bubble {
+            position: absolute;
+            display: none;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            z-index: 1000;
+        }
+
+        .bar:last-child {
+            margin-bottom: 10px; /* Add 10px buffer space between the last bar and footer */
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        footer nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        footer nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        footer p {
+            margin-top: 10px; /* 10px padding between the bottom nav and the copyright */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+    <div id="background-animation">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    <header>
+        <div class="header-left">
+            <a href="index.html" id="favicon-link">
+                <img src="favicon5.svg" alt="Favicon" id="favicon">
+            </a>
+            <span id="discover-text">// Discover the Universe.</span>
+        </div>
+        <div class="header-center">
+            <div id="date-time"></div>
+        </div>
+    </header>
+    <main>
+        <section id="home">
+            <h1>Your Cognitive Computer</h1>
+            <p id="typing-effect">Hi, I'm Herakles. I'm the orchestrator of your computer.</p>
+        </section>
+        <div class="bars">
+            <div class="bar">
+                <h2>AI Task Assistant</h2>
+                <p>Manages your notes and calendar. Personal briefings. Task extractions, actions, and reminders.</p>
+            </div>
+            <div class="bar">
+                <h2>Projectspace</h2>
+                <p>Save unique project spaces to organize your thoughts with your AI Assistant.</p>
+            </div>
+            <div class="bar">
+                <h2>AI Engineer</h2>
+                <p>Natural Language environment to build skills in programming. No Code.</p>
+            </div>
+            <div class="bar">
+                <h2>AI Voice Assistant</h2>
+                <p>Discover how our voice assistant can help with research and streamline tasks.</p>
+            </div>
+            <div class="bar">
+                <h2>Tutorials</h2>
+                <p>Master Python for AI and Deep Learning.</p>
+            </div>
+            <div class="bar">
+                <h2>Careers</h2>
+                <p>Explore careers in AI / Deep Learning.</p>
+            </div>
+            <div class="bar">
+                <h2>RAG Engine</h2>
+                <p>Advanced AI powered Search via Retrieval Augmented Generation.</p>
+            </div>
+            <div class="bar">
+                <h2>Data Visualization</h2>
+                <p>Extract Data and find powerful ways to communicate via Data Visualization.</p>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="about.html">About</a></li>
+                <li><a href="product.html">Product</a></li>
+                <li><a href="pricing.html">Join</a></li>
+                <li><a href="chat.html">Launch</a></li> <!-- Added new nav item -->
+            </ul>
+        </nav>
+        <p>© 2024 UNIVERSITAS AI</p>
+    </footer>
+    <div id="chat-box">
+        <div id="chat-header">
+            <span>Chat with Us!</span>
+            <button id="chat-close">−</button>
+        </div>
+        <div id="chat-body">
+            <p>How can we assist you today?</p>
+        </div>
+        <div id="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type your message here...">
+            <button id="chat-send">Send</button>
+        </div>
+    </div>
+    <div id="chat-icon">
+        <span class="chat-icon-content">💬</span>
+    </div>
+    <div id="info-bubble" class="info-bubble">
+        Explore our cutting-edge solutions designed with a minimalist touch.
+    </div>
+    <script>
+        document.getElementById('chat-icon').addEventListener('click', function() {
+            document.getElementById('chat-box').style.display = 'block';
+            document.getElementById('chat-icon').style.display = 'none';
+        });
+
+        document.getElementById('chat-close').addEventListener('click', function() {
+            document.getElementById('chat-box').style.display = 'none';
+            document.getElementById('chat-icon').style.display = 'flex';
+        });
+
+        function typeEffect(element, text, speed) {
+            let i = 0;
+            function typing() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typing, speed);
+                }
+            }
+            typing();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            typeEffect(document.getElementById('typing-effect'), "Hi, I'm Herakles. I'm the orchestrator of your computer.", 100);
+        });
+
+        document.getElementById('home').querySelector('h1').addEventListener('mouseover', function() {
+            const bubble = document.getElementById('info-bubble');
+            bubble.style.display = 'block';
+            bubble.style.top = this.offsetTop + this.offsetHeight + 'px';
+            bubble.style.left = this.offsetLeft + 'px';
+        });
+        document.getElementById('home').querySelector('h1').addEventListener('mouseout', function() {
+            document.getElementById('info-bubble').style.display = 'none';
+        });
+    </script>
+    <script src="innovate3.js"></script>
+</body>
+</html>
