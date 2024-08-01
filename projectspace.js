@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const homeDropdownItems = document.querySelectorAll('nav ul li:first-child .dropdown-content a');
         homeDropdownItems[0].textContent = t.discover;
         homeDropdownItems[1].textContent = t.features;
-        toolsDropdownItems[2].textContent = t.assets;
+        homeDropdownItems[2].textContent = t.assets;
         homeDropdownItems[3].textContent = t.join;
 
         // Update Tools dropdown items
