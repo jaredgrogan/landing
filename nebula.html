@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cognitive Computer</title>
+    <link rel="icon" href="favicon5.svg">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            background: url('/cosmic.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .title {
+            font-size: 4em;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bolder;
+        }
+
+        .notepad {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            font-family: 'Berkeley Mono', monospace;
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .notepad textarea {
+            width: 100%;
+            height: 100px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 16px;
+            resize: none;
+            outline: none;
+        }
+
+        .notepad .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .notepad .controls button,
+        .notepad .controls select {
+            background-color: #333;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chat-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            max-width: 90%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            display: none;
+        }
+
+        .chat-box textarea {
+            width: 100%;
+            height: 50px;
+            background: transparent;
+            border: none;
+            color: white;
+            resize: none;
+            outline: none;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .chat-box .controls {
+            text-align: right;
+        }
+
+        .chat-box .controls button {
+            background-color: #333;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#"><img src="favicon5.svg" alt="Logo"></a>
+    </header>
+    <div class="title">Your Cognitive Computer</div>
+    <div class="notepad">
+        <textarea placeholder="Write your notes here..."></textarea>
+        <div class="controls">
+            <select>
+                <option value="12px">12px</option>
+                <option value="14px">14px</option>
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+            </select>
+            <button>B</button>
+            <button>I</button>
+            <button>U</button>
+            <button>Justify</button>
+            <button>Save</button>
+            <button onclick="toggleNotepad()">Close</button>
+        </div>
+    </div>
+    <div class="chat-box">
+        <textarea placeholder="Type your message..."></textarea>
+        <div class="controls">
+            <button>Send</button>
+            <button onclick="toggleChatBox()">Close</button>
+        </div>
+    </div>
+    <footer>UNIVERSITAS AI</footer>
+
+    <script>
+        function toggleNotepad() {
+            var notepad = document.querySelector('.notepad');
+            if (notepad.style.display === 'none' || notepad.style.display === '') {
+                notepad.style.display = 'block';
+            } else {
+                notepad.style.display = 'none';
+            }
+        }
+
+        function toggleChatBox() {
+            var chatBox = document.querySelector('.chat-box');
+            if (chatBox.style.display === 'none' || chatBox.style.display === '') {
+                chatBox.style.display = 'block';
+            } else {
+                chatBox.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
