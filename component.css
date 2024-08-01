@@ -1,0 +1,126 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Berkeley Mono', monospace;
+}
+
+.dark-mode {
+    background-color: #333;
+    color: #fff;
+}
+
+.light-mode {
+    background-color: #fff;
+    color: #333;
+}
+
+.p-4 {
+    padding: 16px;
+}
+
+.text-2xl {
+    font-size: 24px;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.mb-4 {
+    margin-bottom: 16px;
+}
+
+.mb-2 {
+    margin-bottom: 8px;
+}
+
+.mb-8 {
+    margin-bottom: 32px;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.bg-blue-500 {
+    background-color: #3b82f6;
+}
+
+.bg-red-500 {
+    background-color: #ef4444;
+}
+
+.bg-gray-500 {
+    background-color: #6b7280;
+}
+
+.bg-blue-400 {
+    background-color: #60a5fa;
+}
+
+.bg-blue-600 {
+    background-color: #2563eb;
+}
+
+.bg-yellow-400 {
+    background-color: #fbbf24;
+}
+
+.text-white {
+    color: #fff;
+}
+
+.px-4 {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.py-2 {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.rounded {
+    border-radius: 8px;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.w-8 {
+    width: 32px;
+}
+
+.h-8 {
+    height: 32px;
+}
+
+.rounded-full {
+    border-radius: 50%;
+}
+
+.mx-4 {
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.max-w-4xl {
+    max-width: 1024px;
+}
+
+.text-center {
+    text-align: center;
+}
