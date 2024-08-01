@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
     const addLayerButton = document.getElementById('add-layer');
     const removeLayerButton = document.getElementById('remove-layer');
+    const learningChartCtx = document.getElementById('learning-chart').getContext('2d');
 
     let layers = [
         { id: 1, type: 'input', neurons: 3 },
@@ -11,6 +12,53 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 3, type: 'output', neurons: 2 }
     ];
     let darkMode = false;
+
+    const learningChart = new Chart(learningChartCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Error',
+                data: [],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Epoch'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Error'
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    function updateLearningChart() {
+        const epoch = learningChart.data.labels.length;
+        const error = Math.random() * 0.5;
+
+        if (learningChart.data.labels.length >= 20) {
+            learningChart.data.labels.shift();
+            learningChart.data.datasets[0].data.shift();
+        }
+
+        learningChart.data.labels.push(epoch);
+        learningChart.data.datasets[0].data.push(error);
+
+        learningChart.update();
+    }
 
     function renderLayers() {
         layersContainer.innerHTML = '';
@@ -47,4 +95,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     renderLayers();
+    setInterval(updateLearningChart, 1000);
 });
