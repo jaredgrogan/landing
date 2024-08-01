@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             newNote: 'New Note',
             send: 'Send',
             record: 'Record',
-            heraklesGreeting: "HI, I'm Herakles. What are you working on?",
+            heraklesGreeting: "Hi, I'm Herakles. What are you working on?",
             typePlaceholder: "// Type your project here",
             summary: 'Summary',
             extract: 'Extract',
