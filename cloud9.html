@@ -8,7 +8,7 @@
   <style>
     .dark-mode {
       background-color: rgb(17 24 39);
-      color: black;
+      color: white;
     }
 
     .light-mode {
@@ -16,26 +16,14 @@
       color: rgb(17 24 39);
     }
 
-    .logo-container {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      background: linear-gradient(to right, #32CD32, #ADFF2F);
-      transition: transform 0.3s;
-    }
-
     .logo {
       width: 50px;
       height: 50px;
+      padding: 20px;
       transition: transform 0.3s;
     }
 
-    .logo-container:hover,
-    .button-circle:hover {
+    .logo:hover {
       transform: scale(1.5);
     }
 
@@ -50,21 +38,30 @@
       transition: transform 0.3s;
     }
 
+    .button-circle:hover {
+      transform: scale(1.5);
+    }
+
     .button-circle svg {
       width: 24px;
       height: 24px;
+    }
+
+    .dark-mode .header-text,
+    .dark-mode .footer-text {
+      color: white;
     }
   </style>
 </head>
 <body>
   <div id="app" class="min-h-screen light-mode">
     <div class="container mx-auto p-4">
-      <header class="flex justify-between items-center mb-8">
-        <a href="index.html" class="logo-container">
+      <header class="flex items-center mb-8">
+        <a href="index.html">
           <img src="favicon5.svg" alt="Logo" class="logo">
         </a>
-        <h1 class="text-3xl font-bold" style="font-family: 'Courier New', monospace; padding-left: 10px;">// Discover the Universe</h1>
-        <div class="flex items-center space-x-4">
+        <h1 class="text-3xl font-bold header-text" style="font-family: 'Courier New', monospace; padding-left: 10px;">// Discover the Universe</h1>
+        <div class="flex items-center space-x-4 ml-auto">
           <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
             <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -138,9 +135,9 @@
         </div>
       </main>
 
-      <footer class="mt-8 text-center text-sm">
+      <footer class="mt-8 text-center text-sm footer-text">
         <p>Connected with Gmail, Outlook, and iCloud</p>
-        <p class="mt-2">2024 Copyright Universitas AI</p>
+        <p class="mt-2">© 2024 Universitas AI</p>
       </footer>
     </div>
 
@@ -182,7 +179,7 @@
       </button>
       <button
         id="mediaViewerBtn" 
-        class="button-circle bg-gradient-to-r from-purple-400 to-blue-500"
+        class="button-circle bg-gradient-to-r from-orange-400 to-yellow-500"
         onclick="toggleMediaViewer()"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
