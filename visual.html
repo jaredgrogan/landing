@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Graph Explorer</title>
+    <link rel="stylesheet" href="visual.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body class="light-mode">
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="navbar-title">Knowledge Graph Explorer</h1>
+            <div class="navbar-controls">
+                <button id="toggle-dark-mode">Toggle Dark Mode</button>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <section class="search-filter">
+            <input type="text" id="search-input" placeholder="Search concepts...">
+            <button id="search-button">Search</button>
+            <button id="add-concept-button">Add Concept</button>
+        </section>
+        
+        <section class="graph-container">
+            <svg id="knowledge-graph" width="100%" height="800px"></svg>
+        </section>
+        
+        <section class="concept-details">
+            <h2 id="concept-title">Concept Details</h2>
+            <p id="concept-description">Select a node to see details.</p>
+        </section>
+    </main>
+    
+    <footer class="footer">
+        <p>© 2024 Knowledge Graph Explorer. All rights reserved.</p>
+    </footer>
+
+    <div id="chat-container" class="chat-container">
+        <div id="chat-header" class="chat-header">Chat with LLM</div>
+        <div id="chat-body" class="chat-body"></div>
+        <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
+    </div>
+    
+    <script src="visual-scripts.js"></script>
+</body>
+</html>
