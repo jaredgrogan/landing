@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Neural Network</title>
+    <link rel="stylesheet" href="component.css">
+</head>
+<body>
+    <div id="app" class="p-4 flex flex-col items-center">
+        <h1 class="text-2xl font-bold mb-4">Interactive Neural Network</h1>
+        <div class="mb-4">
+            <button id="add-layer" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Add Layer</button>
+            <button id="remove-layer" class="bg-red-500 text-white px-4 py-2 rounded mr-2">Remove Layer</button>
+            <button id="toggle-dark-mode" class="bg-gray-500 text-white px-4 py-2 rounded">Dark Mode</button>
+        </div>
+        <div id="layers-container" class="flex justify-center items-center mb-8 w-full"></div>
+        <div class="mt-8 w-full max-w-4xl">
+            <h2 class="text-xl font-bold mb-2 text-center">Learning Progress</h2>
+            <div id="chart-container" style="width: 100%; height: 300px;"></div>
+        </div>
+    </div>
+    <script src="component-script.js"></script>
+</body>
+</html>
