@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +13,7 @@
     }
 
     .light-mode {
-      background-color: rgb(243 244 246);
+      background-color: rgb(243 244 246); 
       color: rgb(17 24 39);
     }
   </style>
@@ -102,38 +103,35 @@
       </footer>
     </div>
 
-    <!-- Bottom Buttons -->  
+    <!-- Bottom Buttons -->
     <div class="fixed bottom-5 left-0 right-0 grid grid-cols-4 gap-4 px-5">
-      <button
+      <button 
         id="chatBtn"
         class="w-[50px] h-[50px] rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center hover:scale-110 transition-transform duration-300"
         onclick="toggleChat()"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
           <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
         </svg>
       </button>
-      <div class="relative">  
-        <button
-          id="calendarBtn"
-          class="w-[50px] h-[50px] rounded-full bg-gradient-to-r from-lime-300 to-lime-500 flex items-center justify-center hover:scale-110 transition-transform duration-300"
-          onclick="toggleCalendar()"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-white">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-        </button>
-        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-gradient-to-r from-green-400 to-lime-500"></div>
-      </div>
+      <button
+        id="calendarBtn"
+        class="w-[50px] h-[50px] rounded-full bg-gradient-to-r from-lime-300 to-lime-500 flex items-center justify-center hover:scale-110 transition-transform duration-300"
+        onclick="toggleCalendar()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </button>
       <button
         id="notepadBtn"
-        class="w-[50px] h-[50px] rounded-full bg-red-500 flex items-center justify-center hover:scale-110 transition-transform duration-300"
-        onclick="toggleNotepad()"  
+        class="w-[50px] h-[50px] rounded-full bg-red-500 flex items-center justify-center hover:scale-110 transition-transform duration-300" 
+        onclick="toggleNotepad()"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
           <polyline points="14 2 14 8 20 8"></polyline>
           <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -141,14 +139,14 @@
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
       </button>
-      <button 
-        id="mediaViewerBtn"
+      <button
+        id="mediaViewerBtn" 
         class="w-[50px] h-[50px] rounded-full bg-gradient-to-r from-purple-400 to-blue-500 flex items-center justify-center hover:scale-110 transition-transform duration-300"
         onclick="toggleMediaViewer()"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
           <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
-          <line x1="7" y1="2" x2="7" y2="22"></line>  
+          <line x1="7" y1="2" x2="7" y2="22"></line>
           <line x1="17" y1="2" x2="17" y2="22"></line>
           <line x1="2" y1="12" x2="22" y2="12"></line>
           <line x1="2" y1="7" x2="7" y2="7"></line>
@@ -180,7 +178,7 @@
 
     <!-- Notepad Component -->
     <div id="notepadCard" class="hidden fixed bottom-20 right-5 w-64 h-96 bg-white shadow rounded-lg">
-      <div class="flex flex-row justify-between items-center py-2 px-4 border-b">
+      <div class="flex flex-row justify-between items-center py-2 px-4 border-b">  
         <h3 class="text-sm">Notepad</h3>
         <button class="p-1 rounded-md hover:bg-gray-200" onclick="toggleNotepad()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
@@ -191,7 +189,7 @@
       </div>
       <div class="p-4">
         <textarea class="w-full h-full resize-none" placeholder="Type your notes here..."></textarea>
-      </div>
+      </div>  
     </div>
 
     <!-- Media Viewer Component -->
@@ -205,22 +203,154 @@
           </svg>
         </button>
       </div>
-     <div class="w-1/2 h-64 bg-black flex items-center justify-center text-white">
-      YouTube Player
     </div>
-    <div class="w-1/2 h-64 bg-black flex items-center justify-center text-white">
-      Amazon Prime Player
+      <div class="flex space-x-4 p-4">
+        <div class="w-1/2 h-64 bg-black flex items-center justify-center text-white">
+          YouTube Player
+        </div>
+        <div class="w-1/2 h-64 bg-black flex items-center justify-center text-white">
+          Amazon Prime Player  
+        </div>
+      </div>
     </div>
-  </div>
-</div>
   </div>
   <script>
-    // JavaScript code remains the same as in the previous response
     const app = document.getElementById('app');
     const darkModeBtn = document.getElementById('darkModeBtn');
     const darkModeIcon = document.getElementById('darkModeIcon');
     const darkModeSwitch = document.getElementById('darkModeSwitch');
-    // ... rest of the JavaScript code ...
+    const calendarCard = document.getElementById('calendarCard');
+    const briefingCard = document.getElementById('briefingCard');
+    const minimizeCalendarBtn = document.getElementById('minimizeCalendarBtn');
+    const calendarGrid = document.getElementById('calendarGrid');
+    const upcomingEvents = document.getElementById('upcomingEvents');
+    const todaysBriefing = document.getElementById('todaysBriefing');
+    const chatCard = document.getElementById('chatCard');
+    const chatMessages = document.getElementById('chatMessages');
+    const messageInput = document.getElementById('messageInput');
+    const notepadCard = document.getElementById('notepadCard'); 
+    const mediaViewerCard = document.getElementById('mediaViewerCard');
+
+    let isDarkMode = false;
+    let isCalendarMinimized = false;
+    let isChatOpen = false;
+    let isNotepadOpen = false;
+    let isMediaViewerOpen = false;
+
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+      darkModeSwitch.checked = isDarkMode;
+    }
+
+    function toggleCalendar() {
+      isCalendarMinimized = !isCalendarMinimized;
+      if (isCalendarMinimized) {
+        calendarCard.classList.add('hidden');
+        briefingCard.classList.remove('hidden');
+      } else {
+        calendarCard.classList.remove('hidden');
+        briefingCard.classList.add('hidden');
+      }
+    }
+
+    function toggleChat() {
+      isChatOpen = !isChatOpen;
+      chatCard.classList.toggle('hidden');
+    }
+
+    function toggleNotepad() {
+      isNotepadOpen = !isNotepadOpen;
+      notepadCard.classList.toggle('hidden');
+    }
+
+    function toggleMediaViewer() {
+      isMediaViewerOpen = !isMediaViewerOpen;
+      mediaViewerCard.classList.toggle('hidden');
+    }
+
+    function handleSendMessage(e) {
+      e.preventDefault();
+      const message = messageInput.value.trim();
+      if (message !== '') {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('mb-2', 'text-green-500');
+        messageElement.innerHTML = `<strong>User:</strong> ${message}`;
+        chatMessages.appendChild(messageElement);
+        messageInput.value = '';
+        
+        // Here you would typically send the message to your AI backend and get a response
+        const aiReply = "I'm just a demo AI, I can't reply yet!";
+        const replyElement = document.createElement('div');
+        replyElement.classList.add('mb-2', 'text-blue-500');
+        replyElement.innerHTML = `<strong>AI:</strong> ${aiReply}`;
+        chatMessages.appendChild(replyElement);
+        
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    }
+
+    // Generate calendar days
+    for (let i = 1; i <= 35; i++) {
+      const day = document.createElement('div');
+      day.classList.add('text-center', 'p-2', 'border', 'rounded-md');
+      day.textContent = i;
+      calendarGrid.appendChild(day);
+    }
+
+    // Generate upcoming events
+    const events = [
+      { id: 1, title: 'Team Meeting', date: '2024-07-31', time: '10:00 AM' },
+      { id: 2, title: 'Project Deadline', date: '2024-08-02', time: '5:00 PM' },
+    ];
+
+    events.forEach(event => {
+      const eventItem = document.createElement('li');
+      eventItem.classList.add('flex', 'items-center');
+      eventItem.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span>${event.title} - ${event.date} at ${event.time}</span>
+      `;
+      upcomingEvents.appendChild(eventItem);
+    });
+
+    // Generate today's briefing
+    const briefingItems = [
+      'Review lecture notes for Advanced AI Ethics',
+      'Complete research paper draft', 
+      'Attend virtual lab meeting at 2 PM',
+      'Submit grant proposal for quantum computing project',
+    ];
+
+    briefingItems.forEach(item => {
+      const briefingItem = document.createElement('li');
+      briefingItem.classList.add('flex', 'items-center');
+      briefingItem.innerHTML = `<span>• ${item}</span>`;
+      todaysBriefing.appendChild(briefingItem);
+    });
+    
+    // Initialize chat messages
+    const chatInitialMessages = [
+      { sender: 'AI', message: "Hi, I'm Herakles" }
+    ];
+
+    chatInitialMessages.forEach(msg => {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('mb-2', msg.sender === 'AI' ? 'text-blue-500' : 'text-green-500');
+      messageElement.innerHTML = `<strong>${msg.sender}:</strong> ${msg.message}`;
+      chatMessages.appendChild(messageElement);
+    });
   </script>
 </body>
 </html>
