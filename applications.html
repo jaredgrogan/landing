@@ -93,6 +93,21 @@
         footer p {
             padding-top: 15px; /* Added padding between footer nav and copyright */
         }
+
+        /* Reduce font size for date-time */
+        #date-time {
+            font-size: 80%; /* Reduced font size by 20% */
+        }
+
+        /* Adjust wave animation duration to slow it down */
+        .wave {
+            animation: wave-animation 30s linear infinite; /* Increased duration to 30s */
+        }
+
+        @keyframes wave-animation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
     </style>
 </head>
 <body>
