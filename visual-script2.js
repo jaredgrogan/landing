@@ -54,6 +54,49 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'Load Balancing', group: 40 },
     ];
 
+    const definitions = {
+        'Blockchain': 'Decentralized, immutable digital ledger tech for secure, transparent record-keeping & transactions',
+        'Ensemble Methods': 'Techniques combining multiple models to improve prediction accuracy and robustness',
+        'Transformer Algorithms': 'Neural network architecture using self-attention for sequence-to-sequence tasks, esp. in NLP',
+        'Weights & Biases': 'Adjustable parameters in neural networks that determine the strength of connections & offsets',
+        'Reinforcement Learning': 'ML paradigm where agents learn to make decisions by interacting with an environment',
+        'Attention Mechanism': 'Neural network component that allows focus on relevant parts of input for improved performance',
+        'Data Structures': 'Organizational formats for storing and accessing data efficiently in computer systems',
+        'Backpropagation': 'Algorithm for efficient gradient computation in neural networks, enabling learning',
+        'Gradient Descent': 'Optimization algorithm for finding local minimum of a function by iterative steps',
+        'Software Architecture': 'High-level structure of software systems, defining components, relationships, and properties',
+        'Random Forests': 'Ensemble learning method using multiple decision trees for classification and regression',
+        'Decision Trees': 'Predictive model using tree-like graph of decisions for classification and regression',
+        'Artificial Intelligence': 'Field of computer science focused on creating intelligent machines that work and react like humans',
+        'Computer Vision': 'AI field that trains computers to interpret and understand the visual world',
+        'NLP': 'AI subfield focused on the interaction between computers and humans using natural language',
+        'Convolutional Neural Networks': 'Deep learning algorithm particularly effective for analyzing visual imagery',
+        'Supervised Learning': 'ML task of learning a function that maps an input to an output based on example input-output pairs',
+        'Unsupervised Learning': 'ML task of inferring a function to describe hidden structure from unlabeled data',
+        'LSTM': 'Recurrent neural network architecture designed to handle long-term dependencies',
+        'Recurrent Neural Networks': 'Neural network type where connections between nodes form a directed graph along a sequence',
+        'Cybernetics': 'Transdisciplinary approach for exploring regulatory systems, their structures, constraints, possibilities',
+        'Data Science': 'Interdisciplinary field using scientific methods, processes, algorithms to extract knowledge from data',
+        'Deep Learning': 'Subset of ML using neural networks with multiple layers to learn hierarchical representations',
+        'Neural Networks': 'Computing systems inspired by biological neural networks, basis of deep learning',
+        'Machine Learning': 'Field of AI that gives computers the ability to learn without being explicitly programmed',
+        'GANs': 'Deep learning model pitting two networks against each other to generate new, synthetic instances',
+        'Gradient Boosting': 'ML technique for regression and classification problems, building model in stages',
+        'Feature Engineering': 'Process of using domain knowledge to extract features from raw data for ML algorithms',
+        'Loss Function': 'Function that maps values of model parameters to a real number, quantifying prediction error',
+        'Image Segmentation': 'Process of partitioning a digital image into multiple segments or objects',
+        'K-means Clustering': 'Unsupervised learning algorithm that partitions n observations into k clusters',
+        'Distributed Systems': 'Computing paradigm where components on networked computers communicate and coordinate actions',
+        'Federated Learning': 'ML technique that trains algorithm across multiple decentralized devices holding local data samples',
+        'Linear Algebra': 'Branch of mathematics concerning linear equations and linear functions',
+        'Regularization': 'Technique to prevent overfitting in ML models by adding a penalty term to the loss function',
+        'Cloud Computing': 'On-demand delivery of computing power, database, storage, applications over the internet',
+        'Containerization': 'OS-level virtualization method for deploying and running distributed applications',
+        'Parallel Computing': 'Type of computation where many calculations or processes are carried out simultaneously',
+        'Data Pre-processing': 'Techniques for transforming raw data into a clean and appropriate format for analysis',
+        'Load Balancing': 'Distributing network or application traffic across multiple servers to optimize resource use'
+    };
+
     const links = [
         { source: 'Blockchain', target: 'Ensemble Methods' },
         { source: 'Ensemble Methods', target: 'Transformer Algorithms' },
@@ -167,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .on("click", function(event, d) {
             conceptTitle.textContent = d.id;
-            conceptDescription.textContent = "Details for " + d.id + " will be added later.";
+            conceptDescription.textContent = definitions[d.id] || "No description available.";
         });
 
     node.append("title")
@@ -226,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const node = nodes.find(n => n.id.toLowerCase() === searchTerm);
         if (node) {
             conceptTitle.textContent = node.id;
-            conceptDescription.textContent = "Details for " + node.id + " will be added later.";
+            conceptDescription.textContent = definitions[node.id] || "No description available.";
             svg.transition().duration(750).call(
                 d3.zoom().transform,
                 d3.zoomIdentity.translate(width / 2, height / 2).scale(1.5).translate(-node.x, -node.y)
