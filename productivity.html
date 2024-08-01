@@ -1,0 +1,225 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Moon, Sun, Mic, MessageSquare, Calendar, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight,
+} from 'lucide-react';
+import { useWebSocket } from 'react-use-websocket';
+import { useMediaRecorder } from 'react-media-recorder';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'; // Added for voice commands
+import OAuth2Provider from './OAuth2Provider'; // Assuming you have an OAuth2 provider component for calendar syncing
+
+const ProductivityTool = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isVoiceRecorderOpen, setIsVoiceRecorderOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [language, setLanguage] = useState('en');
+
+  const { startRecording, stopRecording, mediaBlobUrl } = useMediaRecorder();
+  const { sendMessage, lastMessage } = useWebSocket('ws://your-websocket-url');
+  const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+
+  useEffect(() => {
+    if (transcript) {
+      handleVoiceCommand(transcript.toLowerCase());
+      resetTranscript();
+    }
+  }, [transcript]);
+
+  const handleVoiceCommand = (command) => {
+    if (command.includes('dark mode')) {
+      setIsDarkMode(!isDarkMode);
+    } else if (command.includes('start recording')) {
+      startRecording();
+    } else if (command.includes('stop recording')) {
+      stopRecording();
+    } else if (command.includes('open chat')) {
+      setIsChatOpen(true);
+    } else if (command.includes('close chat')) {
+      setIsChatOpen(false);
+    } else if (command.includes('open calendar')) {
+      setIsCalendarOpen(true);
+    } else if (command.includes('close calendar')) {
+      setIsCalendarOpen(false);
+    } else if (command.includes('notes')) {
+      // Handle navigation to notes
+    } else if (command.includes('voice recorder')) {
+      // Handle navigation to voice recorder
+    }
+  };
+
+  const translations = {
+    en: {
+      title: 'Universitas Pro Productivity Tool',
+      notePlaceholder: 'Start typing your notes here...',
+      voiceRecorder: 'Voice Recorder',
+      transcription: 'Transcription will appear here...',
+      chat: 'Chat',
+      chatPlaceholder: 'Type your message...',
+      calendar: 'Calendar',
+    },
+    es: {
+      title: 'Herramienta de Productividad Universitas Pro',
+      notePlaceholder: 'Empieza a escribir tus notas aquí...',
+      voiceRecorder: 'Grabadora de Voz',
+      transcription: 'La transcripción aparecerá aquí...',
+      chat: 'Chat',
+      chatPlaceholder: 'Escribe tu mensaje...',
+      calendar: 'Calendario',
+    },
+    // Additional languages can be added here
+  };
+
+  const t = translations[language];
+
+  return (
+    <div className={`min-h-screen p-4 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+      <div className="max-w-4xl mx-auto">
+        <header className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold font-['Courier_New']">Universitas Pro</h1>
+          <div className="flex items-center space-x-4">
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className={`p-2 rounded ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900'}`}
+            >
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </select>
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              {isDarkMode ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
+            </button>
+            {browserSupportsSpeechRecognition && (
+              <button
+                onClick={() => SpeechRecognition.startListening({ continuous: true, language })}
+                className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+              >
+                {listening ? <Mic className="w-6 h-6 text-red-500" /> : <Mic className="w-6 h-6" />}
+              </button>
+            )}
+          </div>
+        </header>
+
+        <main>
+          <div className="mb-2 flex space-x-2">
+            <button className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+              <Bold className="w-4 h-4" />
+            </button>
+            <button className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+              <Italic className="w-4 h-4" />
+            </button>
+            <button className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+              <Underline className="w-4 h-4" />
+            </button>
+            <button className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+              <AlignLeft className="w-4 h-4" />
+            </button>
+            <button className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+              <AlignCenter className="w-4 h-4" />
+            </button>
+            <button className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+              <AlignRight className="w-4 h-4" />
+            </button>
+          </div>
+          <div
+            className={`w-full h-96 p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900'
+            }`}
+            contentEditable={true}
+            suppressContentEditableWarning={true}
+            placeholder={t.notePlaceholder}
+          />
+        </main>
+
+        <div className="fixed bottom-5 left-5">
+          <div
+            className={`transition-all duration-300 ease-in-out ${
+              isVoiceRecorderOpen ? 'w-1/2 h-64' : 'w-12 h-12'
+            } rounded-full overflow-hidden ${
+              isDarkMode ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-gradient-to-r from-blue-500 to-teal-500'
+            }`}
+            onMouseEnter={() => !isVoiceRecorderOpen && setIsVoiceRecorderOpen(true)}
+            onMouseLeave={() => setIsVoiceRecorderOpen(false)}
+          >
+            {isVoiceRecorderOpen ? (
+              <div className="p-4 h-full flex flex-col">
+                <h2 className="text-white font-bold mb-2">{t.voiceRecorder}</h2>
+                <div className="flex-grow bg-black/20 rounded-lg mb-2">
+                  {/* Media Recorder visualization component */}
+                  <audio src={mediaBlobUrl} controls className="w-full" />
+                </div>
+                <p className="text-white text-sm">{t.transcription}</p>
+              </div>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <Mic className="w-6 h-6 text-white" />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2">
+          <OAuth2Provider>
+            <div
+              className={`transition-all duration-300 ease-in-out ${
+                isCalendarOpen ? 'w-1/2 h-64' : 'w-12 h-12'
+              } rounded-full overflow-hidden bg-gradient-to-r from-yellow-500 to-orange-500`}
+              onMouseEnter={() => !isCalendarOpen && setIsCalendarOpen(true)}
+              onMouseLeave={() => setIsCalendarOpen(false)}
+            >
+              {isCalendarOpen ? (
+                <div className="p-4 h-full flex flex-col">
+                  <h2 className="text-white font-bold mb-2">{t.calendar}</h2>
+                  <div className="flex-grow bg-black/20 rounded-lg mb-2">
+                    {/* Calendar component with syncing functionality */}
+                    <CalendarSyncComponent language={language} />
+                  </div>
+                </div>
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Calendar className="w-6 h-6 text-white" />
+                </div>
+              )}
+            </div>
+          </OAuth2Provider>
+        </div>
+
+        <div className="fixed bottom-5 right-5">
+          <div
+            className={`transition-all duration-300 ease-in-out ${
+              isChatOpen ? 'w-1/2 h-64' : 'w-12 h-12'
+            } rounded-full overflow-hidden ${
+              isDarkMode ? 'bg-gradient-to-r from-yellow-500 to-red-500' : 'bg-gradient-to-r from-green-500 to-blue-500'
+            }`}
+            onMouseEnter={() => !isChatOpen && setIsChatOpen(true)}
+            onMouseLeave={() => setIsChatOpen(false)}
+          >
+            {isChatOpen ? (
+              <div className="p-4 h-full flex flex-col">
+                <h2 className="text-white font-bold mb-2">{t.chat}</h2>
+                <div className="flex-grow bg-black/20 rounded-lg mb-2 overflow-y-auto">
+                  {/* WebSocket-driven chat messages */}
+                  {lastMessage && <div className="text-white">{lastMessage.data}</div>}
+                </div>
+                <input
+                  type="text"
+                  placeholder={t.chatPlaceholder}
+                  className="w-full p-2 rounded-lg bg-white/20 text-white placeholder-white/50"
+                  onKeyPress={(e) => e.key === 'Enter' && sendMessage(e.target.value)}
+                />
+              </div>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <MessageSquare className="w-6 h-6 text-white" />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProductivityTool;
