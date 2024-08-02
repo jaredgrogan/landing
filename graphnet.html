@@ -1,0 +1,39 @@
+
+Copy code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Graph Explorer</title>
+    <link rel="stylesheet" href="graphnet.css">
+</head>
+<body class="light-mode">
+    <header>
+        <div class="logo-title">
+            <img src="favicon5.svg" alt="Logo" id="logo">
+            <h1>// Discover the Universe</h1>
+        </div>
+        <button id="toggle-dark-mode">
+            <img src="sun-icon.svg" alt="Day Mode" id="day-icon">
+            <img src="moon-icon.svg" alt="Night Mode" id="night-icon" style="display: none;">
+        </button>
+    </header>
+    <main>
+        <input type="text" id="search-input" placeholder="Search concepts...">
+        <h2 id="concept-title">Select a concept to see details</h2>
+        <p id="concept-description"></p>
+        <svg id="knowledge-graph"></svg>
+    </main>
+    <div id="chat-container">
+        <div id="chat-header">Chat</div>
+        <div id="chat-body"></div>
+        <input type="text" id="chat-input" placeholder="Type a message...">
+    </div>
+    <footer>
+        <p>&copy; 2024 Knowledge Graph Explorer. All rights reserved.</p>
+    </footer>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="graphnet.js"></script>
+</body>
+</html>
