@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="card ${state.isDarkMode ? 'dark-mode' : ''}">
                     <div class="card-content">
-                        <div>
+                        <div class="flex items-center justify-between mb-2">
                             <button onclick="toggleCalendarView()">Toggle Calendar View</button>
                         </div>
                         <div class="calendar">
@@ -39,11 +39,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="fixed-button ${state.isDarkMode ? 'dark-mode' : ''}" style="bottom: 5rem; left: 1rem;" onclick="toggleNotePad()">
                     ${state.isNotePadOpen ? 'X' : '+'}
                 </div>
-                ${state.isNotePadOpen ? '<div class="note-pad ${state.isDarkMode ? 'dark-mode' : ''}"></div>' : ''}
+                ${state.isNotePadOpen ? `<div class="note-pad ${state.isDarkMode ? 'dark-mode' : ''}">
+                    <textarea placeholder="Type your notes here..."></textarea>
+                </div>` : ''}
                 <div class="fixed-button ${state.isDarkMode ? 'dark-mode' : ''}" style="bottom: 5rem; right: 1rem;" onclick="toggleLLMChat()">
                     ${state.isLLMChatOpen ? 'X' : 'C'}
                 </div>
-                ${state.isLLMChatOpen ? '<div class="llm-chat ${state.isDarkMode ? 'dark-mode' : ''}"></div>' : ''}
+                ${state.isLLMChatOpen ? `<div class="llm-chat ${state.isDarkMode ? 'dark-mode' : ''}">
+                    <div class="chat-content">
+                        <input type="text" placeholder="Type your message...">
+                        <button>Send</button>
+                    </div>
+                </div>` : ''}
             </div>
         `;
     };
@@ -80,7 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return Object.keys(state.tasks).map(column => `
             <div class="task-column ${state.isDarkMode ? 'dark-mode' : ''}">
                 <h3>${column}</h3>
-                ${state.tasks[column].map(task => `<div class="task ${state.isDarkMode ? 'dark-mode' : ''}">${task}</div>`).join('')}
+                ${state.tasks[column].map(task => `<div class="task ${state.isDarkMode ? 'dark-mode' : ''}">
+                    <input type="text" value="${task}" oninput="updateTask('${column}', ${state.tasks[column].indexOf(task)}, this.value)">
+                </div>`).join('')}
                 <button onclick="addTask('${column}')">Add Task</button>
             </div>
         `).join('');
@@ -88,6 +97,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addTask = (column) => {
         state.tasks[column].push('New Task');
+        render();
+    };
+
+    window.updateTask = (column, index, newValue) => {
+        state.tasks[column][index] = newValue;
         render();
     };
 
