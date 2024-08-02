@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black and White Spotlight Dance Animation</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: black; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="animationCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('animationCanvas');
+        const ctx = canvas.getContext('2d', { alpha: false });
+
+        let width, height;
+        let particles = [];
+        let mouseX = 0, mouseY = 0;
+        let isMouseDown = false;
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.z = Math.random() * 2000;
+                this.baseOpacity = Math.random() * 0.9 + 0.1;
+                this.speed = (Math.random() * 1 + 0.25) * 0.75;
+                this.radius = (Math.random() * 6 + 2) * 2;
+                this.tail = [];
+                this.tailLength = Math.floor(Math.random() * 60) + 15;
+                this.movementType = Math.random() < 0.7 ? 1 : Math.floor(Math.random() * 3);
+                this.angle = Math.random() * Math.PI * 2;
+                this.fibonacciIndex = 0;
+                this.largerRadius = Math.random() < 0.1;
+                this.larger = Math.random() < 0.1;
+                this.smaller = Math.random() < 0.5;
+                if (this.larger) {
+                    this.radius *= 1 + (Math.random() * 0.618);
+                } else if (this.smaller) {
+                    this.radius *= 0.5;
+                }
+                this.vx = 0;
+                this.vy = 0;
+            }
+
+            update(time) {
+                this.z -= this.speed;
+                if (this.z < 1) {
+                    this.reset();
+                }
+
+                const depthFactor = (2000 - this.z) / 2000;
+                this.opacity = Math.min(1, Math.max(0.1, depthFactor)) * this.baseOpacity;
+
+                const scale = 2000 / (2000 - this.z + 1);
+                let x = (this.x - width / 2) * scale + width / 2;
+                let y = (this.y - height / 2) * scale + height / 2;
+
+                const radiusFactor = this.largerRadius ? 2 : 1;
+
+                switch(this.movementType) {
+                    case 0:
+                        x += Math.sin(time * 0.0015 + this.z * 0.015) * 5 * radiusFactor * depthFactor;
+                        y += Math.cos(time * 0.0015 + this.z * 0.015) * 5 * radiusFactor * depthFactor;
+                        break;
+                    case 1:
+                        this.angle += 0.03 * depthFactor;
+                        x += Math.cos(this.angle) * 5 * radiusFactor * depthFactor;
+                        y += Math.sin(this.angle) * 5 * radiusFactor * depthFactor;
+                        break;
+                    case 2:
+                        this.fibonacciIndex += 0.015 * depthFactor;
+                        const fibRadius = this.fibonacciIndex * 2 * radiusFactor * depthFactor;
+                        const fibAngle = this.fibonacciIndex * Math.PI * 2;
+                        x += Math.cos(fibAngle) * fibRadius;
+                        y += Math.sin(fibAngle) * fibRadius;
+                        break;
+                }
+
+                if (isMouseDown) {
+                    const dx = mouseX - x;
+                    const dy = mouseY - y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 300) {
+                        const attractionForce = 0.0875;
+                        this.vx += dx * attractionForce;
+                        this.vy += dy * attractionForce;
+                    }
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vx *= 0.95;
+                this.vy *= 0.95;
+
+                this.tail.unshift({x, y, opacity: this.opacity});
+                if (this.tail.length > this.tailLength) {
+                    this.tail.pop();
+                }
+
+                this.x += (Math.random() - 0.5) * 3 * depthFactor;
+                this.y += (Math.random() - 0.5) * 3 * depthFactor;
+            }
+
+            draw() {
+                const size = this.radius * (2000 / (2000 - this.z + 1));
+                ctx.beginPath();
+                ctx.arc(this.tail[0].x, this.tail[0].y, size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fill();
+
+                for (let i = 1; i < this.tail.length; i++) {
+                    const t = this.tail[i];
+                    const prevT = this.tail[i - 1];
+                    ctx.beginPath();
+                    ctx.moveTo(prevT.x, prevT.y);
+                    ctx.lineTo(t.x, t.y);
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${t.opacity * (1 - i / this.tail.length)})`;
+                    ctx.lineWidth = size * (1 - i / this.tail.length);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        const particleCount = 1500;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate(time) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.fillRect(0, 0, width, height);
+
+            particles.forEach(particle => {
+                particle.update(time);
+                particle.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        canvas.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        canvas.addEventListener('mousedown', () => {
+            isMouseDown = true;
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isMouseDown = false;
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            isMouseDown = false;
+        });
+
+        animate(0);
+    </script>
+</body>
+</html>
