@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Graph Explorer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #111111;
+        }
+
+        #logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        #logo:hover {
+            transform: scale(1.5);
+        }
+
+        .navbar-title {
+            color: #ffffff;
+            font-size: 1.5em;
+        }
+
+        .navbar-controls {
+            margin-left: auto;
+        }
+
+        .navbar-controls button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .navbar-controls button:hover {
+            background-color: #45a049;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .search-filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .graph-container {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .concept-details {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #111111;
+            color: white;
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 300px;
+            background-color: #333333;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background-color: #444444;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .chat-input {
+            border: none;
+            padding: 10px;
+            border-radius: 0 0 10px 10px;
+            outline: none;
+        }
+
+        .light-mode {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .dark-mode {
+            background-color: #000000;
+            color: #ffffff;
+        }
+    </style>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body class="light-mode">
+    <nav class="navbar">
+        <a href="/index.html"><img src="favicon5.svg" alt="Logo" id="logo"></a>
+        <h1 class="navbar-title">// Discover the Universe</h1>
+        <div class="navbar-controls">
+            <button id="toggle-dark-mode">Toggle Dark Mode</button>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <section class="search-filter">
+            <input type="text" id="search-input" placeholder="Search concepts...">
+            <button id="search-button">Search</button>
+            <button id="add-concept-button">Add Concept</button>
+        </section>
+        
+        <section class="graph-container">
+            <svg id="knowledge-graph" width="100%" height="800px"></svg>
+        </section>
+        
+        <section class="concept-details">
+            <h2 id="concept-title">Concept Details</h2>
+            <p id="concept-description">Select a node to see details.</p>
+        </section>
+    </main>
+    
+    <footer class="footer">
+        <p>© 2024 Universitas AI. All rights reserved.</p>
+    </footer>
+
+    <div id="chat-container" class="chat-container">
+        <div id="chat-header" class="chat-header">Chat with Herakles</div>
+        <div id="chat-body" class="chat-body"></div>
+        <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
+    </div>
+    
+    <script>
+        document.getElementById('toggle-dark-mode').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+        });
+    </script>
+</body>
+</html>
