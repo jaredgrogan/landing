@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Graph Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+    <header>
+        <img src="favicon5.svg" alt="Logo" id="logo">
+        <h1>// Knowledge Graph Explorer.</h1>
+        <button id="toggle-dark-mode">Toggle Dark Mode</button>
+    </header>
+    <main>
+        <input type="text" id="search-input" placeholder="Search concepts...">
+        <h2 id="concept-title">Select a concept to see details</h2>
+        <p id="concept-description"></p>
+        <svg id="knowledge-graph"></svg>
+    </main>
+    <div id="chat-container">
+        <div id="chat-header">Chat</div>
+        <div id="chat-body"></div>
+        <input type="text" id="chat-input" placeholder="Type a message...">
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
