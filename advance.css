@@ -65,6 +65,12 @@ button.dark-mode {
     background-color: #555;
 }
 
+.task-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
 .task-column {
     padding: 1rem;
     border-radius: 8px;
