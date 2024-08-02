@@ -4,25 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Knowledge Graph Explorer</title>
-    <link rel="stylesheet" href="visualize.css">
+    <link rel="stylesheet" href="visualize2.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body class="light-mode">
-    <header>
-        <img src="favicon5.svg" alt="Logo" id="logo">
-        <h1>// Knowledge Graph Explorer.</h1>
-        <button id="toggle-dark-mode">Toggle Dark Mode</button>
-    </header>
-    <main>
-        <input type="text" id="search-input" placeholder="Search concepts...">
-        <h2 id="concept-title">Select a concept to see details</h2>
-        <p id="concept-description"></p>
-        <svg id="knowledge-graph"></svg>
+    <nav class="navbar" style="background-color: #111111;">
+        <div class="container">
+            <a href="/index.html"><img src="favicon5.svg" alt="Logo" id="logo"></a>
+            <h1 class="navbar-title">Knowledge Graph Explorer</h1>
+            <div class="navbar-controls">
+                <button id="toggle-dark-mode">Toggle Dark Mode</button>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <section class="search-filter">
+            <input type="text" id="search-input" placeholder="Search concepts...">
+            <button id="search-button">Search</button>
+            <button id="add-concept-button">Add Concept</button>
+        </section>
+        
+        <section class="graph-container">
+            <svg id="knowledge-graph" width="100%" height="800px"></svg>
+        </section>
+        
+        <section class="concept-details">
+            <h2 id="concept-title">Concept Details</h2>
+            <p id="concept-description">Select a node to see details.</p>
+        </section>
     </main>
-    <div id="chat-container">
-        <div id="chat-header">Chat</div>
-        <div id="chat-body"></div>
-        <input type="text" id="chat-input" placeholder="Type a message...">
+    
+    <footer class="footer">
+        <p>© 2024 Universitas AI. All rights reserved.</p>
+    </footer>
+
+    <div id="chat-container" class="chat-container">
+        <div id="chat-header" class="chat-header">Chat with Herakles</div>
+        <div id="chat-body" class="chat-body"></div>
+        <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
     </div>
-    <script src="visualize.js"></script>
+    
+    <script src="visual-script4.js"></script>
 </body>
 </html>
