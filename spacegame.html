@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Space Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+        }
+        canvas {
+            border: 2px solid #fff;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Game objects
+        const spaceship = {
+            x: canvas.width / 2,
+            y: canvas.height - 50,
+            width: 40,
+            height: 40,
+            speed: 5
+        };
+
+        const stars = [];
+        const asteroids = [];
+        const particles = [];
+
+        // Generate stars
+        for (let i = 0; i < 100; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5,
+                alpha: Math.random()
+            });
+        }
+
+        // Generate asteroids
+        function generateAsteroid() {
+            asteroids.push({
+                x: Math.random() * canvas.width,
+                y: 0,
+                radius: Math.random() * 20 + 10,
+                speed: Math.random() * 2 + 1
+            });
+        }
+
+        // Particle system
+        function createParticles(x, y) {
+            for (let i = 0; i < 20; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    radius: Math.random() * 3,
+                    color: `hsl(${Math.random() * 60 + 180}, 100%, 50%)`,
+                    velocity: {
+                        x: Math.random() * 4 - 2,
+                        y: Math.random() * 4 - 2
+                    },
+                    alpha: 1
+                });
+            }
+        }
+
+        // Input handling
+        const keys = {};
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.code] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.code] = false;
+        });
+
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            asteroids.forEach((asteroid, index) => {
+                const dx = x - asteroid.x;
+                const dy = y - asteroid.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < asteroid.radius) {
+                    createParticles(asteroid.x, asteroid.y);
+                    asteroids.splice(index, 1);
+                }
+            });
+        });
+
+        // Game loop
+        function gameLoop() {
+            update();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function update() {
+            // Update spaceship position
+            if (keys['ArrowLeft'] && spaceship.x > 0) spaceship.x -= spaceship.speed;
+            if (keys['ArrowRight'] && spaceship.x < canvas.width - spaceship.width) spaceship.x += spaceship.speed;
+            if (keys['ArrowUp'] && spaceship.y > 0) spaceship.y -= spaceship.speed;
+            if (keys['ArrowDown'] && spaceship.y < canvas.height - spaceship.height) spaceship.y += spaceship.speed;
+
+            // Update stars
+            stars.forEach(star => {
+                star.alpha += Math.random() * 0.1 - 0.05;
+                if (star.alpha < 0) star.alpha = 0;
+                if (star.alpha > 1) star.alpha = 1;
+            });
+
+            // Update asteroids
+            if (Math.random() < 0.02) generateAsteroid();
+            asteroids.forEach((asteroid, index) => {
+                asteroid.y += asteroid.speed;
+                if (asteroid.y > canvas.height + asteroid.radius) {
+                    asteroids.splice(index, 1);
+                }
+            });
+
+            // Update particles
+            particles.forEach((particle, index) => {
+                particle.x += particle.velocity.x;
+                particle.y += particle.velocity.y;
+                particle.alpha -= 0.02;
+
+                if (particle.alpha <= 0) {
+                    particles.splice(index, 1);
+                }
+            });
+        }
+
+        function render() {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Render stars
+            stars.forEach(star => {
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Render spaceship
+            ctx.fillStyle = '#0f0';
+            ctx.fillRect(spaceship.x, spaceship.y, spaceship.width, spaceship.height);
+
+            // Render asteroids
+            asteroids.forEach(asteroid => {
+                ctx.fillStyle = '#888';
+                ctx.beginPath();
+                ctx.arc(asteroid.x, asteroid.y, asteroid.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Render particles
+            particles.forEach(particle => {
+                ctx.fillStyle = particle.color;
+                ctx.globalAlpha = particle.alpha;
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            ctx.globalAlpha = 1;
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
