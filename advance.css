@@ -1,129 +1,109 @@
-body {
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-    padding: 1rem;
-    margin: 0;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const root = document.getElementById('root');
 
-.light-mode {
-    background-color: #f7f7f7;
-    color: #333;
-}
+    const state = {
+        isDarkMode: false,
+        isNotePadOpen: false,
+        isLLMChatOpen: false,
+        isMonthView: false,
+        tasks: {
+            'To Do': ['Task 1', 'Task 2', 'Task 3'],
+            'In Progress': ['Task 4', 'Task 5'],
+            'Done': ['Task 6']
+        }
+    };
 
-.dark-mode {
-    background-color: #333;
-    color: #f7f7f7;
-}
+    const render = () => {
+        root.innerHTML = `
+            <div class="${state.isDarkMode ? 'dark-mode' : 'light-mode'}">
+                <div class="header">
+                    <h1>Universitas Pro Productivity Tool</h1>
+                    <div>
+                        <span>${state.isDarkMode ? 'Dark' : 'Light'} Mode</span>
+                        <button onclick="toggleDarkMode()">Switch</button>
+                    </div>
+                </div>
+                <div class="card ${state.isDarkMode ? 'dark-mode' : ''}">
+                    <div class="card-content">
+                        <div class="flex items-center justify-between mb-2">
+                            <button onclick="toggleCalendarView()">Toggle Calendar View</button>
+                        </div>
+                        <div class="calendar">
+                            ${renderCalendar()}
+                        </div>
+                    </div>
+                </div>
+                <div class="task-columns">
+                    ${renderTasks()}
+                </div>
+                <div class="fixed-button ${state.isDarkMode ? 'dark-mode' : ''}" style="bottom: 5rem; left: 1rem;" onclick="toggleNotePad()">
+                    ${state.isNotePadOpen ? 'X' : '+'}
+                </div>
+                ${state.isNotePadOpen ? `<div class="note-pad ${state.isDarkMode ? 'dark-mode' : ''}">
+                    <textarea placeholder="Type your notes here..."></textarea>
+                </div>` : ''}
+                <div class="fixed-button ${state.isDarkMode ? 'dark-mode' : ''}" style="bottom: 5rem; right: 1rem;" onclick="toggleLLMChat()">
+                    ${state.isLLMChatOpen ? 'X' : 'C'}
+                </div>
+                ${state.isLLMChatOpen ? `<div class="llm-chat ${state.isDarkMode ? 'dark-mode' : ''}">
+                    <div class="chat-content">
+                        <input type="text" placeholder="Type your message...">
+                        <button>Send</button>
+                    </div>
+                </div>` : ''}
+            </div>
+        `;
+    };
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
+    window.toggleDarkMode = () => {
+        state.isDarkMode = !state.isDarkMode;
+        render();
+    };
 
-.card {
-    background-color: white;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-}
+    window.toggleNotePad = () => {
+        state.isNotePadOpen = !state.isNotePadOpen;
+        render();
+    };
 
-.card.dark-mode {
-    background-color: #444;
-}
+    window.toggleLLMChat = () => {
+        state.isLLMChatOpen = !state.isLLMChatOpen;
+        render();
+    };
 
-.card-content {
-    padding: 1rem;
-}
+    window.toggleCalendarView = () => {
+        state.isMonthView = !state.isMonthView;
+        render();
+    };
 
-button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+    const renderCalendar = () => {
+        if (state.isMonthView) {
+            return Array.from({ length: 31 }, (_, i) => `<div class="calendar-day ${state.isDarkMode ? 'dark-mode' : ''}">${i + 1}</div>`).join('');
+        } else {
+            return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => `<div class="calendar-day ${state.isDarkMode ? 'dark-mode' : ''}">${day}</div>`).join('');
+        }
+    };
 
-button.dark-mode {
-    background-color: #555;
-    color: white;
-}
+    const renderTasks = () => {
+        return Object.keys(state.tasks).map(column => `
+            <div class="task-column ${state.isDarkMode ? 'dark-mode' : ''}">
+                <h3>${column}</h3>
+                ${state.tasks[column].map(task => `<div class="task ${state.isDarkMode ? 'dark-mode' : ''}">
+                    <input type="text" value="${task}" oninput="updateTask('${column}', ${state.tasks[column].indexOf(task)}, this.value)">
+                </div>`).join('')}
+                <button onclick="addTask('${column}')">Add Task</button>
+            </div>
+        `).join('');
+    };
 
-.calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
-}
+    window.addTask = (column) => {
+        state.tasks[column].push('New Task');
+        render();
+    };
 
-.calendar-day {
-    padding: 0.5rem;
-    text-align: center;
-    border-radius: 4px;
-}
+    window.updateTask = (column, index, newValue) => {
+        state.tasks[column][index] = newValue;
+        render();
+    };
 
-.calendar-day.dark-mode {
-    background-color: #555;
-}
-
-.task-columns {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-}
-
-.task-column {
-    padding: 1rem;
-    border-radius: 8px;
-    background-color: #e0e0e0;
-}
-
-.task-column.dark-mode {
-    background-color: #555;
-}
-
-.task {
-    padding: 0.5rem;
-    border-radius: 4px;
-    margin-bottom: 0.5rem;
-    background-color: white;
-}
-
-.task.dark-mode {
-    background-color: #666;
-}
-
-.fixed-button {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.fixed-button:hover {
-    transform: scale(1.1);
-}
-
-.fixed-button.dark-mode {
-    background: linear-gradient(135deg, #4CAF50, #2196F3);
-    color: white;
-}
-
-.note-pad,
-.llm-chat {
-    position: absolute;
-    bottom: 5rem;
-    width: 16rem;
-    height: 16rem;
-    border-radius: 8px;
-    background-color: white;
-    padding: 1rem;
-}
-
-.note-pad.dark-mode,
-.llm-chat.dark-mode {
-    background-color: #444;
-    color: white;
-}
+    render();
+});
