@@ -48,22 +48,22 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     };
 
-    const toggleDarkMode = () => {
+    window.toggleDarkMode = () => {
         state.isDarkMode = !state.isDarkMode;
         render();
     };
 
-    const toggleNotePad = () => {
+    window.toggleNotePad = () => {
         state.isNotePadOpen = !state.isNotePadOpen;
         render();
     };
 
-    const toggleLLMChat = () => {
+    window.toggleLLMChat = () => {
         state.isLLMChatOpen = !state.isLLMChatOpen;
         render();
     };
 
-    const toggleCalendarView = () => {
+    window.toggleCalendarView = () => {
         state.isMonthView = !state.isMonthView;
         render();
     };
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
     };
 
-    const addTask = (column) => {
+    window.addTask = (column) => {
         state.tasks[column].push('New Task');
         render();
     };
