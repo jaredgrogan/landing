@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smooth Spotlight Dance Animation</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: black; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="animationCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('animationCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.z = Math.random() * 1500 + 500;
+                this.opacity = Math.random() * 0.5 + 0.5;
+                this.speed = (Math.random() * 0.5 + 0.5) * 0.5;
+                this.radius = Math.random() * 3 + 1;
+                this.hue = Math.random() * 60 + 200;
+                this.movementAmplitude = Math.random() * 0.5 + 0.5;
+                this.movementFrequency = Math.random() * 0.02 + 0.01;
+            }
+
+            update(time) {
+                this.z -= this.speed;
+                if (this.z < 1) {
+                    this.reset();
+                }
+
+                const scale = 2000 / (2000 - this.z);
+                this.screenX = (this.x - width / 2) * scale + width / 2;
+                this.screenY = (this.y - height / 2) * scale + height / 2;
+
+                // Smooth, subtle movement
+                this.screenX += Math.sin(time * this.movementFrequency) * this.movementAmplitude * scale;
+                this.screenY += Math.cos(time * this.movementFrequency * 1.5) * this.movementAmplitude * scale;
+
+                this.screenRadius = this.radius * scale;
+            }
+
+            draw() {
+                const gradient = ctx.createRadialGradient(
+                    this.screenX, this.screenY, 0,
+                    this.screenX, this.screenY, this.screenRadius
+                );
+                gradient.addColorStop(0, `hsla(${this.hue}, 100%, 50%, ${this.opacity})`);
+                gradient.addColorStop(1, `hsla(${this.hue}, 100%, 50%, 0)`);
+
+                ctx.beginPath();
+                ctx.arc(this.screenX, this.screenY, this.screenRadius, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            }
+        }
+
+        const particleCount = 1000;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate(time) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+
+            particles.forEach(particle => {
+                particle.update(time);
+                particle.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate(0);
+    </script>
+</body>
+</html>
