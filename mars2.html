@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARS THE GAME</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=B612+Mono&display=swap');
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000;
+            color: #fff;
+            font-family: 'B612 Mono', monospace;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 20px;
+            box-sizing: border-box;
+        }
+        #marsButton {
+            width: 50px;
+            height: 50px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #marsButton:hover {
+            transform: scale(1.2);
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        #gameContainer {
+            position: relative;
+        }
+        canvas {
+            border: 2px solid #fff;
+        }
+        #congratsMessage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            text-align: center;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        #bottomLeft, #bottomRight {
+            position: absolute;
+            bottom: 10px;
+            font-size: 14px;
+        }
+        #bottomLeft {
+            left: 10px;
+        }
+        #bottomRight {
+            right: 10px;
+        }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+            position: relative;
+        }
+        #controlButton {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, #8B0000, #4B0000);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #controlButton:hover {
+            transform: scale(1.5);
+        }
+        #controlPad {
+            position: absolute;
+            right: 20px;
+            bottom: 80px;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .controlBtn {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            background-color: #333;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #pauseBtn {
+            background-color: #555;
+        }
+        #menu, #about {
+            position: relative;
+            display: inline-block;
+            margin-left: 20px;
+        }
+        .dropbtn {
+            background-color: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-family: 'B612 Mono', monospace;
+            font-size: 16px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" id="marsButton">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <defs>
+                    <radialGradient id="marsGradient" cx="30%" cy="30%" r="70%" fx="30%" fy="30%">
+                        <stop offset="0%" style="stop-color:#e67a50" />
+                        <stop offset="100%" style="stop-color:#9c3b2e" />
+                    </radialGradient>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="url(#marsGradient)" />
+                <circle cx="35" cy="40" r="8" fill="#9c3b2e" opacity="0.7" />
+                <circle cx="60" cy="30" r="5" fill="#9c3b2e" opacity="0.5" />
+                <circle cx="70" cy="60" r="10" fill="#9c3b2e" opacity="0.6" />
+                <path d="M20 50 Q30 45 40 50 T60 55 Q70 60 80 55" fill="#e67a50" opacity="0.5" />
+            </svg>
+        </a>
+        <h1>MARS THE GAME</h1>
+        <div>
+            <div id="menu">
+                <button class="dropbtn" onclick="toggleDropdown('menuDropdown')">Menu</button>
+                <div id="menuDropdown" class="dropdown-content">
+                    <a href="#">Home</a>
+                    <a href="#">Instructions</a>
+                    <a href="#">Reset</a>
+                    <a href="#">Games</a>
+                </div>
+            </div>
+            <div id="about">
+                <button class="dropbtn" onclick="toggleDropdown('aboutDropdown')">About</button>
+                <div id="aboutDropdown" class="dropdown-content">
+                    <a href="#">About</a>
+                    <a href="#">Story</a>
+                    <a href="#">Community</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="congratsMessage">Next Level!</div>
+        <div id="bottomLeft">Level 1 | Score: 0</div>
+        <div id="bottomRight">Asteroids: 0</div>
+    </div>
+    <footer>
+        <p>www.marsthegame.com</p>
+        <p>© 2024 Reflector Studios</p>
+        <button id="controlButton"></button>
+        <div id="controlPad">
+            <button class="controlBtn" id="upBtn">^</button><br>
+            <button class="controlBtn" id="leftBtn">&lt;</button>
+            <button class="controlBtn" id="pauseBtn">||</button>
+            <button class="controlBtn" id="rightBtn">&gt;</button><br>
+            <button class="controlBtn" id="downBtn">v</button>
+        </div>
+    </footer>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // SVG assets
+        const spaceshipSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 220">
+            <defs>
+                <linearGradient id="rocketGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#e0e0e0" />
+                    <stop offset="50%" style="stop-color:#c0c0c0" />
+                    <stop offset="100%" style="stop-color:#a0a0a0" />
+                </linearGradient>
+            </defs>
+            <path d="M50 0 L70 30 L80 150 L60 170 L40 170 L20 150 L30 30 Z" fill="url(#rocketGradient)" />
+            <path d="M20 150 L10 170 L30 170 Z" fill="#c0c0c0" />
+            <path d="M80 150 L90 170 L70 170 Z" fill="#a0a0a0" />
+            <rect x="40" y="50" width="20" height="10" fill="#333333" />
+            <rect x="40" y="70" width="20" height="10" fill="#333333" />
+            <rect x="40" y="90" width="20" height="10" fill="#333333" />
+            <path d="M35 170 L50 220 L65 170 L57 200 L43 200 Z" fill="#ff6600" />
+            <path d="M40 170 L50 210 L60 170 L55 195 L45 195 Z" fill="#ffcc00" />
+            <path d="M45 170 L50 205 L55 170 L52 190 L48 190 Z" fill="#ffffff" />
+        </svg>`;
+
+        const asteroidSVG1 = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <defs>
+                <radialGradient id="asteroidGradient" cx="50%" cy="50%" r="50%" fx="25%" fy="25%">
+                    <stop offset="0%" style="stop-color:#d4a559" />
+                    <stop offset="70%" style="stop-color:#b7833d" />
+                    <stop offset="100%" style="stop-color:#96682c" />
+                </radialGradient>
+            </defs>
+            <path d="M50 5 C60 10, 80 15, 90 40 C95 60, 90 80, 75 90 C60 100, 30 95, 15 80 C5 65, 10 40, 20 25 C30 10, 40 10, 50 5Z" fill="url(#asteroidGradient)" />
+            <circle cx="30" cy="30" r="8" fill="#96682c" opacity="0.8" />
+            <circle cx="70" cy="40" r="12" fill="#96682c" opacity="0.9" />
+            <circle cx="40" cy="70" r="10" fill="#96682c" opacity="0.7" />
+            <circle cx="60" cy="60" r="6" fill="#4d3416" opacity="0.9" />
+            <circle cx="25" cy="50" r="4" fill="#4d3416" opacity="0.8" />
+            <circle cx="80" cy="70" r="7" fill="#96682c" opacity="0.6" />
+            <circle cx="45" cy="20" r="5" fill="#4d3416" opacity="0.7" />
+            <circle cx="65" cy="85" r="8" fill="#96682c" opacity="0.8" />
+            <circle cx="20" cy="75" r="6" fill="#4d3416" opacity="0.9" />
+        </svg>`;
+
+        const asteroidSVG2 = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <defs>
+                <radialGradient id="newAsteroidGradient" cx="40%" cy="40%" r="60%" fx="30%" fy="30%">
+                    <stop offset="0%" style="stop-color:#d1a988" />
+                    <stop offset="70%" style="stop-color:#ab8b6e" />
+                    <stop offset="100%" style="stop-color:#8e7f73" />
+                </radialGradient>
+            </defs>
+            <path d="M30 20 Q40 10 60 15 T80 40 Q90 60 70 80 T40 85 Q20 80 15 60 T30 20" fill="url(#newAsteroidGradient)" />
+            <circle cx="45" cy="35" r="8" fill="#8e7f73" opacity="0.7" />
+            <circle cx="65" cy="55" r="10" fill="#8e7f73" opacity="0.8" />
+            <circle cx="35" cy="65" r="6" fill="#8e7f73" opacity="0.6" />
+        </svg>`;
+
+        // Create Image objects for the SVGs
+        const spaceshipImg = new Image();
+        spaceshipImg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(spaceshipSVG);
+
+        const asteroidImg1 = new Image();
+        asteroidImg1.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(asteroidSVG1);
+
+        const asteroidImg2 = new Image();
+        asteroidImg2.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(asteroidSVG2);
+
+        // Game objects
+        const spaceship = {
+            x: canvas.width / 2,
+            y: canvas.height - 100,
+            width: 50,
+            height: 110,
+            speed: 5
+        };
+
+        const stars = [];
+        const asteroids = [];
+        const particles = [];
+
+        let level = 1;
+        let score = 0;
+        let destroyedAsteroids = 0;
+        let isGameOver = false;
+        let asteroidSpeedMultiplier = 1;
+        let isPaused = false;
+
+        // Generate stars
+        for (let i = 0; i < 100; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5,
+                alpha: Math.random()
+            });
+        }
+
+        // Generate asteroids
+        function generateAsteroid() {
+            asteroids.push({
+                x: Math.random() * canvas.width,
+                y: 0,
+                radius: Math.random() * 20 + 20,
+                speed: (Math.random() * 2 + 1) * asteroidSpeedMultiplier,
+                type: Math.random() < 0.5 ? 1 : 2,
+                isHighlighted: false
+            });
+        }
+
+        // Particle system
+        function createParticles(x, y) {
+            for (let i = 0; i < 20; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    radius: Math.random() * 3,
+                    color: `hsl(${Math.random() * 60 + 180}, 100%,  50%)`,
+                velocity: {
+                    x: Math.random() * 4 - 2,
+                    y: Math.random() * 4 - 2
+                },
+                alpha: 1
+            });
+        }
+    }
+
+    // Input handling
+    const keys = {};
+
+    document.addEventListener('keydown', (e) => {
+        keys[e.code] = true;
+    });
+
+    document.addEventListener('keyup', (e) => {
+        keys[e.code] = false;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        let isOverAsteroid = false;
+        asteroids.forEach(asteroid => {
+            const dx = mouseX - asteroid.x;
+            const dy = mouseY - asteroid.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < asteroid.radius) {
+                asteroid.isHighlighted = true;
+                isOverAsteroid = true;
+            } else {
+                asteroid.isHighlighted = false;
+            }
+        });
+
+        canvas.style.cursor = isOverAsteroid ? 'pointer' : 'default';
+    });
+
+    canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        asteroids.forEach((asteroid, index) => {
+            const dx = x - asteroid.x;
+            const dy = y - asteroid.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < asteroid.radius) {
+                createParticles(asteroid.x, asteroid.y);
+                asteroids.splice(index, 1);
+                destroyedAsteroids++;
+                score += 10;
+                updateScoreDisplay();
+            }
+        });
+    });
+
+    function checkCollision() {
+        asteroids.forEach((asteroid, index) => {
+            const dx = spaceship.x + spaceship.width / 2 - asteroid.x;
+            const dy = spaceship.y + spaceship.height / 2 - asteroid.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < asteroid.radius + spaceship.width / 2) {
+                createParticles(spaceship.x + spaceship.width / 2, spaceship.y + spaceship.height / 2);
+                isGameOver = true;
+                setTimeout(() => {
+                    isGameOver = false;
+                    spaceship.x = canvas.width / 2;
+                    spaceship.y = canvas.height - 100;
+                    level = 1;
+                    score = 0;
+                    destroyedAsteroids = 0;
+                    asteroidSpeedMultiplier = 1;
+                    asteroids.length = 0;
+                    updateScoreDisplay();
+                }, 1500);
+            }
+        });
+    }
+
+    function checkLevelComplete() {
+        if (spaceship.y + spaceship.height < 0) {
+            level++;
+            score += 100;
+            asteroidSpeedMultiplier *= 1.05; // Increase asteroid speed by 5%
+            updateScoreDisplay();
+            spaceship.y = canvas.height;
+            document.getElementById('congratsMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('congratsMessage').style.display = 'none';
+            }, 2000);
+        }
+    }
+
+    function updateScoreDisplay() {
+        document.getElementById('bottomLeft').textContent = `Level ${level} | Score: ${score}`;
+        document.getElementById('bottomRight').textContent = `Asteroids: ${destroyedAsteroids}`;
+    }
+
+    // Game loop
+    function gameLoop() {
+        if (!isPaused) {
+            update();
+            render();
+        }
+        requestAnimationFrame(gameLoop);
+    }
+
+    function update() {
+        if (!isGameOver) {
+            // Update spaceship position
+            if (keys['ArrowLeft'] && spaceship.x > 0) spaceship.x -= spaceship.speed;
+            if (keys['ArrowRight'] && spaceship.x < canvas.width - spaceship.width) spaceship.x += spaceship.speed;
+            if (keys['ArrowUp'] && spaceship.y > -spaceship.height) spaceship.y -= spaceship.speed;
+            if (keys['ArrowDown'] && spaceship.y < canvas.height - spaceship.height) spaceship.y += spaceship.speed;
+
+            // Update stars
+            stars.forEach(star => {
+                star.alpha += Math.random() * 0.1 - 0.05;
+                if (star.alpha < 0) star.alpha = 0;
+                if (star.alpha > 1) star.alpha = 1;
+            });
+
+            // Update asteroids
+            if (Math.random() < 0.02) generateAsteroid();
+            asteroids.forEach((asteroid, index) => {
+                asteroid.y += asteroid.speed;
+                if (asteroid.y > canvas.height + asteroid.radius) {
+                    asteroids.splice(index, 1);
+                }
+            });
+
+            // Update particles
+            particles.forEach((particle, index) => {
+                particle.x += particle.velocity.x;
+                particle.y += particle.velocity.y;
+                particle.alpha -= 0.02;
+
+                if (particle.alpha <= 0) {
+                    particles.splice(index, 1);
+                }
+            });
+
+            checkCollision();
+            checkLevelComplete();
+        }
+    }
+
+    function render() {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Render stars
+        stars.forEach(star => {
+            ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        // Render spaceship
+        if (!isGameOver) {
+            ctx.drawImage(spaceshipImg, spaceship.x, spaceship.y, spaceship.width, spaceship.height);
+        }
+
+        // Render asteroids
+        asteroids.forEach(asteroid => {
+            const asteroidImg = asteroid.type === 1 ? asteroidImg1 : asteroidImg2;
+            ctx.save();
+            ctx.globalAlpha = asteroid.isHighlighted ? 1.5 : 1;
+            ctx.drawImage(asteroidImg, asteroid.x - asteroid.radius, asteroid.y - asteroid.radius, asteroid.radius * 2, asteroid.radius * 2);
+            ctx.restore();
+        });
+
+        // Render particles
+        particles.forEach(particle => {
+            ctx.fillStyle = particle.color;
+            ctx.globalAlpha = particle.alpha;
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        ctx.globalAlpha = 1;
+    }
+
+    // Control pad functionality
+    document.getElementById('controlButton').addEventListener('click', () => {
+        const controlPad = document.getElementById('controlPad');
+        controlPad.style.display = controlPad.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.getElementById('upBtn').addEventListener('mousedown', () => keys['ArrowUp'] = true);
+    document.getElementById('upBtn').addEventListener('mouseup', () => keys['ArrowUp'] = false);
+    document.getElementById('leftBtn').addEventListener('mousedown', () => keys['ArrowLeft'] = true);
+    document.getElementById('leftBtn').addEventListener('mouseup', () => keys['ArrowLeft'] = false);
+    document.getElementById('rightBtn').addEventListener('mousedown', () => keys['ArrowRight'] = true);
+    document.getElementById('rightBtn').addEventListener('mouseup', () => keys['ArrowRight'] = false);
+    document.getElementById('downBtn').addEventListener('mousedown', () => keys['ArrowDown'] = true);
+    document.getElementById('downBtn').addEventListener('mouseup', () => keys['ArrowDown'] = false);
+    document.getElementById('pauseBtn').addEventListener('click', () => isPaused = !isPaused);
+
+    function toggleDropdown(id) {
+        document.getElementById(id).classList.toggle("show");
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+
+    // Start the game loop once the images are loaded
+    Promise.all([
+        new Promise(resolve => spaceshipImg.onload = resolve),
+        new Promise(resolve => asteroidImg1.onload = resolve),
+        new Promise(resolve => asteroidImg2.onload = resolve)
+    ]).then(() => {
+        gameLoop();
+    });
+</script>
+</body>
+</html>
