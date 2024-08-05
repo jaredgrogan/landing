@@ -68,19 +68,44 @@
             left: 10px;
             z-index: 10;
         }
+        #sandstormWarning {
+            position: absolute;
+            top: 100px;
+            left: 10px;
+            z-index: 10;
+            display: none;
+            background-color: rgba(255, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 5px;
+        }
+        #mapContainer {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+        #achievements, #leaderboard {
+            position: absolute;
+            top: 150px;
+            left: 10px;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
     <h1>MARS THE GAME</h1>
     <h2>- Mars Exploration Mission -</h2>
     <div id="gameContainer">
-        <canvas id="backgroundCanvas" width="1600" height="1200"></canvas> <!-- Expanded dimensions -->
-        <canvas id="terrainCanvas" width="1600" height="1200"></canvas> <!-- Expanded dimensions -->
-        <canvas id="gameCanvas" width="1600" height="1200"></canvas> <!-- Expanded dimensions -->
+        <canvas id="backgroundCanvas" width="1600" height="1200"></canvas>
+        <canvas id="terrainCanvas" width="1600" height="1200"></canvas>
+        <canvas id="gameCanvas" width="1600" height="1200"></canvas>
         <div id="ui">
             <div>Score: <span id="score">0</span></div>
             <div>Health: <span id="health">100</span></div>
             <div id="compass">Heading: <span id="heading">0</span>°</div>
+            <div id="sandstormWarning">Sand Storm!</div>
+        </div>
+        <div id="mapContainer">
+            <canvas id="mapCanvas" width="200" height="200"></canvas>
         </div>
         <div id="mobileControls">
             <button class="controlButton" id="upButton">↑</button><br>
@@ -88,6 +113,22 @@
             <button class="controlButton" id="downButton">↓</button>
             <button class="controlButton" id="rightButton">→</button>
         </div>
+        <div id="achievements">
+            <h3>Achievements</h3>
+            <ul id="achievementList"></ul>
+        </div>
+        <div id="leaderboard">
+            <h3>Leaderboard</h3>
+            <ol id="leaderboardList"></ol>
+        </div>
+        <audio id="backgroundMusic" loop>
+            <source src="background_music.mp3" type="audio/mp3">
+        </audio>
+        <audio id="sandstormSound">
+            <source src="sandstorm_sound.mp3" type="audio/mp3">
+        </audio>
+        <button id="photoModeButton">Photo Mode</button>
+        <canvas id="photoCanvas" width="800" height="600" style="display: none;"></canvas>
     </div>
     <div id="copyright">
         <p>© 2024 REFLECTOR STUDIOS</p>
@@ -95,8 +136,8 @@
     </div>
     <script>
         // Game constants
-        const CANVAS_WIDTH = 1600; // Expanded dimensions
-        const CANVAS_HEIGHT = 1200; // Expanded dimensions
+        const CANVAS_WIDTH = 1600;
+        const CANVAS_HEIGHT = 1200;
         const ROVER_WIDTH = 60;
         const ROVER_HEIGHT = 40;
 
@@ -104,6 +145,14 @@
         let score = 0;
         let health = 100;
         let dustParticles = [];
+        let sandstormParticles = [];
+        let currentWeather = 'clear';
+        let players = [
+            { id: 1, x: 100, y: 100, color: 'red' },
+            { id: 2, x: 200, y: 200, color: 'blue' }
+        ];
+        let achievements = [];
+        let leaderboard = [];
 
         // Canvas and context setup
         const backgroundCanvas = document.getElementById('backgroundCanvas');
@@ -113,6 +162,9 @@
         const gameCanvas = document.getElementById('gameCanvas');
         const gameCtx = gameCanvas.getContext('2d');
 
+        const mapCanvas = document.getElementById('mapCanvas');
+        const mapCtx = mapCanvas.getContext('2d');
+
         // Rover object
         const rover = {
             x: CANVAS_WIDTH / 2 - ROVER_WIDTH / 2,
@@ -120,6 +172,8 @@
             width: ROVER_WIDTH,
             height: ROVER_HEIGHT,
             speed: 0,
+            speedX: 0,
+            speedY: 0,
             acceleration: 0.2,
             maxSpeed: 5,
             friction: 0.95,
@@ -150,6 +204,10 @@
         </svg>`;
 
         const roverImg = new Image();
+        roverImg.onload = function() {
+            console.log('Rover image loaded');
+            gameLoop(); // Start the game loop once the image is loaded
+        };
         roverImg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(roverSVG);
 
         // Create detailed Mars terrain
@@ -305,6 +363,44 @@
             });
         }
 
+        // Generate sandstorm particles
+        function createSandstormParticles() {
+            const particles = [];
+            for (let i = 0; i < 500; i++) {
+                particles.push({
+                    x: Math.random() * CANVAS_WIDTH,
+                    y: Math.random() * CANVAS_HEIGHT,
+                    size: Math.random() * 2,
+                    speed: Math.random() * 2,
+                    direction: Math.random() * 2 * Math.PI,
+                    lifetime: 300,
+                });
+            }
+            return particles;
+        }
+
+        function updateSandstormParticles(particles) {
+            particles.forEach(particle => {
+                particle.x += Math.cos(particle.direction) * particle.speed;
+                particle.y += Math.sin(particle.direction) * particle.speed;
+                particle.lifetime--;
+            });
+            return particles.filter(particle => particle.lifetime > 0);
+        }
+
+        function drawSandstormParticles(particles) {
+            particles.forEach(particle => {
+                gameCtx.fillStyle = `rgba(255, 255, 255, ${particle.lifetime / 300})`;
+                gameCtx.beginPath();
+                gameCtx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                gameCtx.fill();
+            });
+        }
+
+        function toggleSandstormWarning(show) {
+            document.getElementById('sandstormWarning').style.display = show ? 'block' : 'none';
+        }
+
         // Drawing shapes
         function drawShape(type, color, x, y, size) {
             gameCtx.fillStyle = color;
@@ -326,6 +422,129 @@
                     gameCtx.fill();
                     break;
             }
+        }
+
+        function drawMap() {
+            mapCtx.fillStyle = '#333';
+            mapCtx.fillRect(0, 0, 200, 200);
+            mapCtx.fillStyle = '#fff';
+            mapCtx.fillRect(rover.x / 8, rover.y / 8, 5, 5); // Scaled down representation
+        }
+
+        function applyPhysics() {
+            // Gravity
+            rover.speedY += 0.1; // Gravity effect
+            rover.y += rover.speedY;
+
+            // Friction
+            rover.speedX *= 0.98; // Horizontal friction
+            rover.speedY *= 0.98; // Vertical friction
+
+            // Collision detection and response
+            if (rover.y + rover.height > CANVAS_HEIGHT) {
+                rover.y = CANVAS_HEIGHT - rover.height;
+                rover.speedY = 0;
+            }
+            if (rover.x + rover.width > CANVAS_WIDTH) {
+                rover.x = CANVAS_WIDTH - rover.width;
+                rover.speedX = 0;
+            }
+        }
+
+        function updateWeather() {
+            switch (currentWeather) {
+                case 'clear':
+                    toggleSandstormWarning(false);
+                    stopSandstormSound();
+                    break;
+                case 'sandstorm':
+                    sandstormParticles = updateSandstormParticles(sandstormParticles);
+                    drawSandstormParticles(sandstormParticles);
+                    toggleSandstormWarning(true);
+                    playSandstormSound();
+                    break;
+                case 'rain':
+                    // Rain effects and sounds
+                    break;
+            }
+        }
+
+        function changeWeather(newWeather) {
+            currentWeather = newWeather;
+            if (newWeather === 'sandstorm') {
+                sandstormParticles = createSandstormParticles();
+            }
+            toggleSandstormWarning(newWeather === 'sandstorm');
+        }
+
+        function drawPlayers() {
+            players.forEach(player => {
+                gameCtx.fillStyle = player.color;
+                gameCtx.fillRect(player.x, player.y, rover.width, rover.height);
+            });
+        }
+
+        function updatePlayerPositions() {
+            // Placeholder for network logic to update player positions
+        }
+
+        function unlockAchievement(name) {
+            if (!achievements.includes(name)) {
+                achievements.push(name);
+                const achievementList = document.getElementById('achievementList');
+                const newAchievement = document.createElement('li');
+                newAchievement.textContent = name;
+                achievementList.appendChild(newAchievement);
+            }
+        }
+
+        function updateLeaderboard(player) {
+            leaderboard.push(player);
+            leaderboard.sort((a, b) => b.score - a.score);
+            const leaderboardList = document.getElementById('leaderboardList');
+            leaderboardList.innerHTML = '';
+            leaderboard.forEach(entry => {
+                const newEntry = document.createElement('li');
+                newEntry.textContent = `${entry.name}: ${entry.score}`;
+                leaderboardList.appendChild(newEntry);
+            });
+        }
+
+        const photoModeButton = document.getElementById('photoModeButton');
+        const photoCanvas = document.getElementById('photoCanvas');
+        const photoCtx = photoCanvas.getContext('2d');
+
+        photoModeButton.addEventListener('click', () => {
+            photoCanvas.style.display = 'block';
+            photoCtx.drawImage(gameCanvas, 0, 0);
+            // Apply filters (e.g., grayscale)
+            const imageData = photoCtx.getImageData(0, 0, photoCanvas.width, photoCanvas.height);
+            for (let i = 0; i < imageData.data.length; i += 4) {
+                const avg = (imageData.data[i] + imageData.data[i + 1] + imageData.data[i + 2]) / 3;
+                imageData.data[i] = imageData.data[i + 1] = imageData.data[i + 2] = avg;
+            }
+            photoCtx.putImageData(imageData, 0, 0);
+            // Optionally, save the image
+            const link = document.createElement('a');
+            link.href = photoCanvas.toDataURL('image/png');
+            link.download = 'mars_photo.png';
+            link.click();
+        });
+
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const sandstormSound = document.getElementById('sandstormSound');
+
+        function startBackgroundMusic() {
+            backgroundMusic.play();
+        }
+
+        function playSandstormSound() {
+            sandstormSound.play();
+        }
+
+        function stopSandstormSound() {
+            sandstormSound.pause();
+            sandstormSound.currentTime = 0;
         }
 
         // Input handling
@@ -360,13 +579,18 @@
             // Update game state
             updateBackground();
             updateRover();
+            applyPhysics();
             dustParticles = updateDustParticles(dustParticles);
+            updateWeather();
+            updatePlayerPositions();
 
             // Draw game elements
             drawBackground();
             generateTerrain();
             drawRover();
             drawDustParticles(dustParticles);
+            drawMap();
+            drawPlayers();
 
             // Update UI
             document.getElementById('score').textContent = score;
@@ -378,7 +602,7 @@
         // Start the game
         generateTerrain();
         setupMobileControls();
-        gameLoop();
+        startBackgroundMusic();
     </script>
 </body>
 </html>
