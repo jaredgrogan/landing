@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARS EXPLORER</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=B612+Mono&display=swap');
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000;
+            color: #fff;
+            font-family: 'B612 Mono', monospace;
+        }
+        #gameContainer {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            overflow: hidden;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+        }
+        h1, h2 {
+            text-align: center;
+            margin: 10px 0;
+        }
+        #copyright {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+        }
+        #mobileControls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+        }
+        .controlButton {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            border-radius: 25px;
+            margin: 5px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #compass {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <h1>MARS THE GAME</h1>
+    <h2>- Mars Exploration Mission -</h2>
+    <div id="gameContainer">
+        <canvas id="backgroundCanvas" width="1600" height="1200"></canvas> <!-- Expanded dimensions -->
+        <canvas id="terrainCanvas" width="1600" height="1200"></canvas> <!-- Expanded dimensions -->
+        <canvas id="gameCanvas" width="1600" height="1200"></canvas> <!-- Expanded dimensions -->
+        <div id="ui">
+            <div>Score: <span id="score">0</span></div>
+            <div>Health: <span id="health">100</span></div>
+            <div id="compass">Heading: <span id="heading">0</span>°</div>
+        </div>
+        <div id="mobileControls">
+            <button class="controlButton" id="upButton">↑</button><br>
+            <button class="controlButton" id="leftButton">←</button>
+            <button class="controlButton" id="downButton">↓</button>
+            <button class="controlButton" id="rightButton">→</button>
+        </div>
+    </div>
+    <div id="copyright">
+        <p>© 2024 REFLECTOR STUDIOS</p>
+        <p>www.marsthegame.com</p>
+    </div>
+    <script>
+        // Game constants
+        const CANVAS_WIDTH = 1600; // Expanded dimensions
+        const CANVAS_HEIGHT = 1200; // Expanded dimensions
+        const ROVER_WIDTH = 60;
+        const ROVER_HEIGHT = 40;
+
+        // Game variables
+        let score = 0;
+        let health = 100;
+        let dustParticles = [];
+
+        // Canvas and context setup
+        const backgroundCanvas = document.getElementById('backgroundCanvas');
+        const backgroundCtx = backgroundCanvas.getContext('2d');
+        const terrainCanvas = document.getElementById('terrainCanvas');
+        const terrainCtx = terrainCanvas.getContext('2d');
+        const gameCanvas = document.getElementById('gameCanvas');
+        const gameCtx = gameCanvas.getContext('2d');
+
+        // Rover object
+        const rover = {
+            x: CANVAS_WIDTH / 2 - ROVER_WIDTH / 2,
+            y: CANVAS_HEIGHT - ROVER_HEIGHT - 20,
+            width: ROVER_WIDTH,
+            height: ROVER_HEIGHT,
+            speed: 0,
+            acceleration: 0.2,
+            maxSpeed: 5,
+            friction: 0.95,
+            rotation: 0,
+            rotationSpeed: 0.1
+        };
+
+        // Rover SVG
+        const roverSVG = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <defs>
+                <linearGradient id="bodyGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#d4d4d4"/>
+                    <stop offset="100%" style="stop-color:#a0a0a0"/>
+                </linearGradient>
+                <radialGradient id="wheelGradient" cx="50%" cy="50%" r="50%" fx="25%" fy="25%">
+                    <stop offset="0%" style="stop-color:#666"/>
+                    <stop offset="100%" style="stop-color:#333"/>
+                </radialGradient>
+            </defs>
+            <rect x="20" y="30" width="60" height="40" fill="url(#bodyGradient)" />
+            <circle cx="30" cy="25" r="10" fill="url(#wheelGradient)" />
+            <circle cx="70" cy="25" r="10" fill="url(#wheelGradient)" />
+            <circle cx="30" cy="75" r="10" fill="url(#wheelGradient)" />
+            <circle cx="70" cy="75" r="10" fill="url(#wheelGradient)" />
+            <rect x="40" y="10" width="20" height="30" fill="#4169e1" />
+            <circle cx="50" cy="50" r="5" fill="#808080" />
+        </svg>`;
+
+        const roverImg = new Image();
+        roverImg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(roverSVG);
+
+        // Create detailed Mars terrain
+        function createMarsTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 200;
+            canvas.height = 200;
+            const ctx = canvas.getContext('2d');
+
+            // Base color
+            ctx.fillStyle = '#c1440e';
+            ctx.fillRect(0, 0, 200, 200);
+
+            // Add texture
+            for (let i = 0; i < 5000; i++) {
+                ctx.fillStyle = `rgba(${Math.random() * 50 + 150}, ${Math.random() * 30}, ${Math.random() * 10}, ${Math.random() * 0.1})`;
+                ctx.beginPath();
+                ctx.arc(Math.random() * 200, Math.random() * 200, Math.random() * 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Add craters
+            for (let i = 0; i < 20; i++) {
+                const x = Math.random() * 200;
+                const y = Math.random() * 200;
+                const radius = Math.random() * 20 + 5;
+                const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+                gradient.addColorStop(0, 'rgba(100, 30, 0, 0.8)');
+                gradient.addColorStop(1, 'rgba(193, 68, 14, 0)');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            return canvas;
+        }
+
+        // Generate terrain
+        const terrainPattern = createMarsTexture();
+        function generateTerrain() {
+            terrainCtx.fillStyle = terrainCtx.createPattern(terrainPattern, 'repeat');
+            terrainCtx.fillRect(0, 0, CANVAS_WIDTH * 2, CANVAS_HEIGHT * 2); // Expanded dimensions
+        }
+
+        // Parallax background
+        const stars = [];
+        for (let i = 0; i < 100; i++) {
+            stars.push({
+                x: Math.random() * CANVAS_WIDTH,
+                y: Math.random() * CANVAS_HEIGHT,
+                size: Math.random() * 2 + 1,
+                speed: Math.random() * 0.5 + 0.1
+            });
+        }
+
+        function drawBackground() {
+            backgroundCtx.fillStyle = '#000';
+            backgroundCtx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+            backgroundCtx.fillStyle = '#fff';
+            stars.forEach(star => {
+                backgroundCtx.beginPath();
+                backgroundCtx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                backgroundCtx.fill();
+            });
+        }
+
+        function updateBackground() {
+            stars.forEach(star => {
+                star.x -= star.speed;
+                if (star.x < 0) {
+                    star.x = CANVAS_WIDTH;
+                    star.y = Math.random() * CANVAS_HEIGHT;
+                }
+            });
+        }
+
+        // Rover movement
+        function updateRover() {
+            // Apply acceleration
+            if (keys.ArrowUp && rover.speed < rover.maxSpeed) {
+                rover.speed += rover.acceleration;
+                dustParticles = dustParticles.concat(createDustParticles()); // Add dust particles when moving
+            }
+            if (keys.ArrowDown && rover.speed > -rover.maxSpeed / 2) {
+                rover.speed -= rover.acceleration;
+            }
+
+            // Apply rotation
+            if (keys.ArrowLeft) {
+                rover.rotation -= rover.rotationSpeed;
+            }
+            if (keys.ArrowRight) {
+                rover.rotation += rover.rotationSpeed;
+            }
+
+            // Apply friction
+            rover.speed *= rover.friction;
+
+            // Update position
+            rover.x += Math.cos(rover.rotation) * rover.speed;
+            rover.y += Math.sin(rover.rotation) * rover.speed;
+
+            // Keep rover on screen
+            rover.x = Math.max(0, Math.min(CANVAS_WIDTH - rover.width, rover.x));
+            rover.y = Math.max(0, Math.min(CANVAS_HEIGHT - rover.height, rover.y));
+
+            // Update heading
+            const heading = (rover.rotation * 180 / Math.PI + 360) % 360;
+            document.getElementById('heading').textContent = Math.round(heading);
+        }
+
+        function drawRover() {
+            gameCtx.save();
+            gameCtx.translate(rover.x + rover.width / 2, rover.y + rover.height / 2);
+            gameCtx.rotate(rover.rotation);
+            gameCtx.drawImage(roverImg, -rover.width / 2, -rover.height / 2, rover.width, rover.height);
+            gameCtx.restore();
+        }
+
+        // Generate dust particles
+        function createDustParticles() {
+            const particles = [];
+            for (let i = 0; i < 10; i++) {
+                particles.push({
+                    x: rover.x + rover.width / 2,
+                    y: rover.y + rover.height / 2,
+                    size: Math.random() * 2,
+                    speed: Math.random() * 2,
+                    lifetime: 50,
+                    direction: rover.rotation + Math.PI
+                });
+            }
+            return particles;
+        }
+
+        function updateDustParticles(particles) {
+            particles.forEach(particle => {
+                particle.x += Math.cos(particle.direction) * particle.speed;
+                particle.y += Math.sin(particle.direction) * particle.speed;
+                particle.lifetime--;
+            });
+            return particles.filter(particle => particle.lifetime > 0);
+        }
+
+        function drawDustParticles(particles) {
+            particles.forEach(particle => {
+                gameCtx.fillStyle = `rgba(255, 255, 255, ${particle.lifetime / 50})`;
+                gameCtx.beginPath();
+                gameCtx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                gameCtx.fill();
+            });
+        }
+
+        // Drawing shapes
+        function drawShape(type, color, x, y, size) {
+            gameCtx.fillStyle = color;
+            switch(type) {
+                case 'circle':
+                    gameCtx.beginPath();
+                    gameCtx.arc(x, y, size, 0, Math.PI * 2);
+                    gameCtx.fill();
+                    break;
+                case 'square':
+                    gameCtx.fillRect(x, y, size, size);
+                    break;
+                case 'triangle':
+                    gameCtx.beginPath();
+                    gameCtx.moveTo(x, y);
+                    gameCtx.lineTo(x + size, y);
+                    gameCtx.lineTo(x + size / 2, y - size);
+                    gameCtx.closePath();
+                    gameCtx.fill();
+                    break;
+            }
+        }
+
+        // Input handling
+        const keys = {};
+        document.addEventListener('keydown', (e) => keys[e.code] = true);
+        document.addEventListener('keyup', (e) => keys[e.code] = false);
+
+        // Mobile controls
+        function setupMobileControls() {
+            const mobileControls = document.getElementById('mobileControls');
+            if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+                mobileControls.style.display = 'block';
+                ['upButton', 'downButton', 'leftButton', 'rightButton'].forEach(id => {
+                    const button = document.getElementById(id);
+                    button.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        keys[`Arrow${id.charAt(0).toUpperCase() + id.slice(1, -6)}`] = true;
+                    });
+                    button.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        keys[`Arrow${id.charAt(0).toUpperCase() + id.slice(1, -6)}`] = false;
+                    });
+                });
+            }
+        }
+
+        // Game loop
+        function gameLoop() {
+            // Clear canvases
+            gameCtx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+            // Update game state
+            updateBackground();
+            updateRover();
+            dustParticles = updateDustParticles(dustParticles);
+
+            // Draw game elements
+            drawBackground();
+            generateTerrain();
+            drawRover();
+            drawDustParticles(dustParticles);
+
+            // Update UI
+            document.getElementById('score').textContent = score;
+            document.getElementById('health').textContent = health;
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game
+        generateTerrain();
+        setupMobileControls();
+        gameLoop();
+    </script>
+</body>
+</html>
