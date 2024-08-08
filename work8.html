@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discover the Universe</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .dark-mode {
+      background-color: #111111; /* Updated dark mode background */
+      color: white;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6; 
+      color: #111827;
+    }
+
+    .logo-container {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: none;
+      background: none;
+      transition: transform 0.3s;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      transition: transform 0.3s;
+    }
+
+    .logo-container:hover,
+    .button-circle:hover {
+      transform: scale(1.5);
+    }
+
+    .button-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      transition: transform 0.3s;
+    }
+
+    .button-circle#calendarBtn {
+      background: linear-gradient(to right, #ff7e5f, #feb47b);
+    }
+
+    .button-circle svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* New styles for formatting toolbar */
+    .formatting-toolbar {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 5px;
+    }
+
+    .formatting-toolbar button {
+      padding: 5px 10px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .formatting-toolbar button:hover {
+      background-color: #e0e0e0;
+    }
+
+    #saveIndicator {
+      font-size: 0.8em;
+      color: #888;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="min-h-screen light-mode">
+    <div class="container mx-auto p-4">
+      <!-- Header remains the same -->
+      <header class="flex justify-between items-center mb-8">
+        <!-- ... (header content remains unchanged) ... -->
+      </header>
+
+      <main class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="md:col-span-2">
+          <!-- Updated Calendar Component -->
+          <div id="calendarCard" class="bg-white shadow rounded-lg">
+            <div class="flex flex-row justify-between items-center p-4 border-b">
+              <h3 class="flex items-center text-lg leading-6 font-medium text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Calendar
+              </h3>
+              <button id="minimizeCalendarBtn" class="p-1 rounded-md hover:bg-gray-200" onclick="toggleCalendar()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                  <polyline points="4 14 10 14 10 20"></polyline>
+                  <polyline points="20 10 14 10 14 4"></polyline>
+                </svg>
+              </button>
+            </div>
+            <div class="p-4">
+              <div id="calendarGrid" class="grid grid-cols-7 gap-2">
+                <!-- Calendar days will be generated here -->
+              </div>
+            </div>
+          </div>
+
+          <div id="briefingCard" class="hidden bg-white shadow rounded-lg">
+            <div class="p-4 border-b">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">Today's Briefing</h3>
+            </div>
+            <div class="p-4">
+              <ul id="todaysBriefing" class="space-y-2">
+                <!-- Today's briefing items will be generated here -->
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white shadow rounded-lg">
+          <div class="p-4 border-b">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Upcoming Events</h3>
+          </div>
+          <div class="p-4">
+            <ul id="upcomingEvents" class="space-y-2">
+              <!-- Upcoming event items will be generated here -->
+            </ul>
+          </div>
+        </div>
+      </main>
+
+      <footer class="mt-8 text-center text-sm text-white">
+        <p>Connected with Gmail, Outlook, and iCloud</p>
+        <p class="mt-2">© 2024 Universitas AI. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- Bottom Buttons -->
+    <div class="fixed bottom-5 left-0 right-0 flex justify-center space-x-4 px-5">
+      <!-- ... (bottom buttons remain unchanged) ... -->
+    </div>
+
+    <!-- Updated Chat Component -->
+    <div id="chatCard" class="hidden fixed bottom-20 left-5 w-64 h-96 bg-white shadow rounded-lg flex">
+      <div class="w-3/4 flex flex-col">
+        <div class="flex flex-row justify-between items-center py-2 px-4 border-b">
+          <h3 class="text-sm">Chat with Herakles</h3>
+          <button class="p-1 rounded-md hover:bg-gray-200" onclick="toggleChat()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div id="chatMessages" class="flex-grow overflow-y-auto p-4">
+          <!-- Chat messages will be generated here -->
+        </div>
+        <form onsubmit="handleSendMessage(event)" class="p-2">
+          <input type="text" id="messageInput" class="w-full px-3 py-2 text-gray-700 rounded-md focus:outline-none" placeholder="Type a message...">
+        </form>
+        <div class="p-2">
+          <input type="file" id="fileUpload" class="hidden" onchange="handleFileUpload(event)">
+          <label for="fileUpload" class="cursor-pointer bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600">Upload Document</label>
+        </div>
+      </div>
+      <div id="chatHistory" class="w-1/4 border-l p-2 overflow-y-auto">
+        <input type="text" id="chatHistorySearch" class="w-full px-2 py-1 text-sm text-gray-700 rounded-md focus:outline-none mb-2" placeholder="Search history...">
+        <ul id="chatHistoryList">
+          <!-- Chat history items will be generated here -->
+        </ul>
+      </div>
+    </div>
+
+    <!-- Updated Notepad Component -->
+    <div id="notepadCard" class="hidden fixed bottom-20 right-5 w-64 h-96 bg-white shadow rounded-lg">
+      <div class="flex flex-row justify-between items-center py-2 px-4 border-b">  
+        <h3 class="text-sm">Notepad</h3>
+        <button class="p-1 rounded-md hover:bg-gray-200" onclick="toggleNotepad()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="p-4">
+        <div class="formatting-toolbar">
+          <button onclick="formatText('bold')"><strong>B</strong></button>
+          <button onclick="formatText('italic')"><em>I</em></button>
+          <button onclick="formatText('underline')"><u>U</u></button>
+        </div>
+        <div id="editor" class="w-full h-64 border rounded-md p-2" contenteditable="true"></div>
+        <div class="mt-2 flex items-center">
+          <button id="saveNoteBtn" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Save</button>
+          <span id="saveIndicator" class="ml-2"></span>
+        </div>
+      </div>  
+    </div>
+
+    <!-- Updated Media Viewer Component -->
+    <div id="mediaViewerCard" class="hidden fixed bottom-20 right-5 w-full md:w-3/4 h-1/2 rounded-t-lg overflow-hidden" style="background: linear-gradient(to right, rgb(124, 58, 237), rgb(79, 70, 229))">
+      <div class="flex justify-between items-center p-4 text-white">
+        <h3 class="text-xl font-bold">Media Viewer</h3>
+        <div>
+          <button id="toggleScreensBtn" class="px-2 py-1 bg-white text-purple-600 rounded-md mr-2">1 Screen</button>
+          <button class="p-1 rounded-md hover:bg-gray-200" onclick="toggleMediaViewer()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div id="mediaScreens" class="flex space-x-4 p-4">
+        <!-- Media screens will be generated here -->
+      </div>
+      <div class="p-4">
+        <input type="text" id="mediaSearch" class="w-full px-3 py-2 text-gray-700 rounded-md focus:outline-none" placeholder="Search media...">
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const app = document.getElementById('app');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const darkModeSwitch = document.getElementById('darkModeSwitch');
+    const calendarCard = document.getElementById('calendarCard');
+    const briefingCard = document.getElementById('briefingCard');
+    const minimizeCalendarBtn = document.getElementById('minimizeCalendarBtn');
+    const calendarGrid = document.getElementById('calendarGrid');
+    const upcomingEvents = document.getElementById('upcomingEvents');
+    const todaysBriefing = document.getElementById('todaysBriefing');
+    const chatCard = document.getElementById('chatCard');
+    const chatMessages = document.getElementById('chatMessages');
+    const messageInput = document.getElementById('messageInput');
+    const notepadCard = document.getElementById('notepadCard');
+    const mediaViewerCard = document.getElementById('mediaViewerCard');
+
+    let isDarkMode = false;
+    let isCalendarMinimized = false;
+    let isChatOpen = false;
+    let isNotepadOpen = false;
+    let isMediaViewerOpen = false;
+
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+      darkModeSwitch.checked = isDarkMode;
+    }
+
+    function toggleCalendar() {
+      isCalendarMinimized = !isCalendarMinimized;
+      if (isCalendarMinimized) {
+        calendarCard.classList.add('hidden');
+        briefingCard.classList.remove('hidden');
+      } else {
+        calendarCard.classList.remove('hidden');
+        briefingCard.classList.add('hidden');
+      }
+    }
+
+   function toggleChat() {
+  isChatOpen = !isChatOpen;
+  chatCard.classList.toggle('hidden');
+}
+
+function toggleNotepad() {
+  isNotepadOpen = !isNotepadOpen;
+  notepadCard.classList.toggle('hidden');
+  if (!isNotepadOpen) {
+    loadSavedNote();
+  }
+}
+
+function toggleMediaViewer() {
+  isMediaViewerOpen = !isMediaViewerOpen;
+  mediaViewerCard.classList.toggle('hidden');
+}
+
+// Calendar functionality
+let currentView = 'month';
+
+function toggleCalendarView() {
+  currentView = currentView === 'month' ? 'week' : 'month';
+  updateCalendarView();
+}
+
+function updateCalendarView() {
+  calendarGrid.innerHTML = '';
+  if (currentView === 'month') {
+    for (let i = 1; i <= 35; i++) {
+      const day = document.createElement('div');
+      day.classList.add('text-center', 'p-2', 'border', 'rounded-md', 'cursor-pointer');
+      day.textContent = i;
+      day.addEventListener('click', toggleCalendarView);
+      calendarGrid.appendChild(day);
+    }
+  } else {
+    for (let i = 1; i <= 7; i++) {
+      const day = document.createElement('div');
+      day.classList.add('text-center', 'p-2', 'border', 'rounded-md', 'cursor-pointer');
+      day.textContent = `Day ${i}`;
+      day.addEventListener('click', toggleCalendarView);
+      calendarGrid.appendChild(day);
+    }
+  }
+}
+
+// Notepad functionality
+const editor = document.getElementById('editor');
+const saveNoteBtn = document.getElementById('saveNoteBtn');
+const saveIndicator = document.getElementById('saveIndicator');
+let autoSaveTimeout;
+
+function formatText(command) {
+  document.execCommand(command, false, null);
+  editor.focus();
+}
+
+function autoSave() {
+  clearTimeout(autoSaveTimeout);
+  autoSaveTimeout = setTimeout(() => {
+    saveNote();
+    saveIndicator.textContent = 'Auto-saved';
+    setTimeout(() => {
+      saveIndicator.textContent = '';
+    }, 2000);
+  }, 2000);
+}
+
+function saveNote() {
+  const content = editor.innerHTML;
+  localStorage.setItem('savedNote', content);
+}
+
+function loadSavedNote() {
+  const savedContent = localStorage.getItem('savedNote');
+  if (savedContent) {
+    editor.innerHTML = savedContent;
+  }
+}
+
+editor.addEventListener('input', autoSave);
+
+saveNoteBtn.addEventListener('click', () => {
+  saveNote();
+  saveIndicator.textContent = 'Saved';
+  setTimeout(() => {
+    saveIndicator.textContent = '';
+  }, 2000);
+});
+
+// Media Viewer functionality
+const toggleScreensBtn = document.getElementById('toggleScreensBtn');
+const mediaScreens = document.getElementById('mediaScreens');
+let isDoubleScreen = false;
+
+toggleScreensBtn.addEventListener('click', () => {
+  isDoubleScreen = !isDoubleScreen;
+  toggleScreensBtn.textContent = isDoubleScreen ? '2 Screens' : '1 Screen';
+  updateMediaScreens();
+});
+
+function updateMediaScreens() {
+  mediaScreens.innerHTML = '';
+  const screenCount = isDoubleScreen ? 2 : 1;
+  for (let i = 0; i < screenCount; i++) {
+    const screen = document.createElement('div');
+    screen.classList.add('w-full', 'h-64', 'bg-black', 'flex', 'items-center', 'justify-center', 'text-white');
+    screen.innerHTML = `
+      <select class="bg-gray-800 text-white p-2 rounded-md">
+        <option>YouTube</option>
+        <option>Amazon Prime</option>
+      </select>
+      <iframe width="100%" height="100%" src="https://www.youtube.com/embed/VIDEO_ID" title="Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    `;
+    mediaScreens.appendChild(screen);
+  }
+}
+
+// Enhanced Chat functionality
+const fileUpload = document.getElementById('fileUpload');
+const chatHistoryList = document.getElementById('chatHistoryList');
+const chatHistorySearch = document.getElementById('chatHistorySearch');
+
+function handleSendMessage(e) {
+  e.preventDefault();
+  const message = messageInput.value.trim();
+  if (message !== '') {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('mb-2', 'text-green-500');
+    messageElement.innerHTML = `<strong>User:</strong> ${message}`;
+    chatMessages.appendChild(messageElement);
+    messageInput.value = '';
+    
+    // Simulated AI response
+    const aiReply = "I'm just a demo AI, I can't reply yet!";
+    const replyElement = document.createElement('div');
+    replyElement.classList.add('mb-2', 'text-blue-500');
+    replyElement.innerHTML = `<strong>AI:</strong> ${aiReply}`;
+    chatMessages.appendChild(replyElement);
+    
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+}
+
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (file) {
+    console.log('File uploaded:', file.name);
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('mb-2', 'text-green-500');
+    messageElement.innerHTML = `<strong>User:</strong> Uploaded file: ${file.name}`;
+    chatMessages.appendChild(messageElement);
+  }
+}
+
+// Chat history
+const chatHistory = [
+  'Previous chat 1',
+  'Previous chat 2',
+  'Previous chat 3',
+  'Previous chat 4',
+  'Previous chat 5'
+];
+
+function populateChatHistory() {
+  chatHistoryList.innerHTML = '';
+  chatHistory.forEach((chat, index) => {
+    const li = document.createElement('li');
+    li.textContent = chat;
+    li.classList.add('cursor-pointer', 'hover:bg-gray-200', 'p-1', 'rounded');
+    li.addEventListener('click', () => loadChat(index));
+    chatHistoryList.appendChild(li);
+  });
+}
+
+function loadChat(index) {
+  console.log('Loading chat:', chatHistory[index]);
+  // Here you would typically load the selected chat
+}
+
+chatHistorySearch.addEventListener('input', (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+  const filteredHistory = chatHistory.filter(chat => chat.toLowerCase().includes(searchTerm));
+  chatHistoryList.innerHTML = '';
+  filteredHistory.forEach((chat, index) => {
+    const li = document.createElement('li');
+    li.textContent = chat;
+    li.classList.add('cursor-pointer', 'hover:bg-gray-200', 'p-1', 'rounded');
+    li.addEventListener('click', () => loadChat(index));
+    chatHistoryList.appendChild(li);
+  });
+});
+
+// Initialize components
+updateCalendarView();
+loadSavedNote();
+updateMediaScreens();
+populateChatHistory();
+
+// Generate calendar days
+for (let i = 1; i <= 35; i++) {
+  const day = document.createElement('div');
+  day.classList.add('text-center', 'p-2', 'border', 'rounded-md');
+  day.textContent = i;
+  calendarGrid.appendChild(day);
+}
+
+// Generate upcoming events
+const events = [
+  { id: 1, title: 'Team Meeting', date: '2024-07-31', time: '10:00 AM' },
+  { id: 2, title: 'Project Deadline', date: '2024-08-02', time: '5:00 PM' },
+];
+
+events.forEach(event => {
+  const eventItem = document.createElement('li');
+  eventItem.classList.add('flex', 'items-center');
+  eventItem.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <polyline points="12 6 12 12 16 14"></polyline>
+    </svg>
+    <span>${event.title} - ${event.date} at ${event.time}</span>
+  `;
+  upcomingEvents.appendChild(eventItem);
+});
+
+// Generate today's briefing
+const briefingItems = [
+  'Review lecture notes for Advanced AI Ethics',
+  'Complete research paper draft', 
+  'Attend virtual lab meeting at 2 PM',
+  'Submit grant proposal for quantum computing project',
+];
+
+briefingItems.forEach(item => {
+  const briefingItem = document.createElement('li');
+  briefingItem.classList.add('flex', 'items-center');
+  briefingItem.innerHTML = `<span>• ${item}</span>`;
+  todaysBriefing.appendChild(briefingItem);
+});
+
+// Initialize chat messages
+const chatInitialMessages = [
+  { sender: 'AI', message: "Hi, I'm Herakles" }
+];
+
+chatInitialMessages.forEach(msg => {
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('mb-2', msg.sender === 'AI' ? 'text-blue-500' : 'text-green-500');
+  messageElement.innerHTML = `<strong>${msg.sender}:</strong> ${msg.message}`;
+  chatMessages.appendChild(messageElement);
+});
+
+</script>
+</body>
+</html>
