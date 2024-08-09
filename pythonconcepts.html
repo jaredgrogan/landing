@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Concepts - Universitas AI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
+        :root {
+            --color-space-black: #111111;
+            --color-cosmic-white: #FFFFFF;
+            --gradient-green-blue: linear-gradient(to right, #4CAF50, #2196F3);
+            --font-primary: 'Roboto', sans-serif;
+            --font-monospace: 'Courier Prime', monospace;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-cosmic-white);
+            color: var(--color-space-black);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.night-mode {
+            background-color: var(--color-space-black);
+            color: var(--color-cosmic-white);
+        }
+
+        .header {
+            background-color: var(--color-cosmic-white);
+            color: var(--color-space-black);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.night-mode .header {
+            background-color: var(--color-space-black);
+            color: var(--color-cosmic-white);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.5);
+        }
+
+        .tagline {
+            font-family: var(--font-monospace);
+            font-size: 1.2rem;
+        }
+
+        .mode-toggle {
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: var(--font-monospace);
+            text-align: center;
+        }
+
+        .concept-node {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .concept-node.selected {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .concept-node.related {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        body.night-mode .concept-node {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        body.night-mode .concept-node.selected {
+            background-color: #4CAF50;
+        }
+
+        body.night-mode .concept-node.related {
+            background-color: #2196F3;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        footer {
+            background-color: var(--color-space-black);
+            color: var(--color-cosmic-white);
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        nav {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        nav a {
+            color: var(--color-cosmic-white);
+            text-decoration: none;
+            margin: 0 15px;
+            font-family: var(--font-primary);
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            transform: scale(1.5);
+        }
+
+        .copyright {
+            font-family: var(--font-monospace);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="favicon5.svg" alt="Universitas AI Logo" class="logo">
+            </a>
+            <div class="tagline">// Discover the Universe</div>
+        </div>
+        <div class="mode-toggle" id="modeToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <h1>Python Concepts Relationship Diagram</h1>
+        <p>Click on a concept to see its relationships. Click again to deselect.</p>
+        <div id="concept-diagram" class="concept-grid"></div>
+        <div id="selected-concept-info"></div>
+    </div>
+
+    <footer>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="app.html">About</a>
+            <a href="chat.html">Launch</a>
+            <a href="features.html">Features</a>
+            <a href="pricing.html">Join</a>
+        </nav>
+        <div class="copyright">© 2024 Universitas AI</div>
+    </footer>
+
+    <script>
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('night-mode');
+            const sunIcon = modeToggle.querySelector('svg');
+            if (body.classList.contains('night-mode')) {
+                sunIcon.style.transform = 'rotate(180deg)';
+            } else {
+                sunIcon.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        const concepts = [
+            { id: 1, name: "Decorators", related: [2, 14] },
+            { id: 2, name: "Closures", related: [1, 14] },
+            { id: 3, name: "Generators", related: [4, 8] },
+            { id: 4, name: "Iterators", related: [3, 8] },
+            { id: 5, name: "Metaclasses", related: [7, 15] },
+            { id: 6, name: "Context Managers", related: [1, 3] },
+            { id: 7, name: "OOP Concepts", related: [5, 13] },
+            { id: 8, name: "Functional Programming", related: [3, 4, 14] },
+            { id: 9, name: "Memory Management", related: [10] },
+            { id: 10, name: "Garbage Collection", related: [9] },
+            { id: 11, name: "Multithreading", related: [12] },
+            { id: 12, name: "Multiprocessing", related: [11] },
+            { id: 13, name: "MRO", related: [7] },
+            { id: 14, name: "Scopes", related: [2, 8] },
+            { id: 15, name: "Reflection", related: [5, 7] }
+        ];
+
+        const diagramContainer = document.getElementById('concept-diagram');
+        const selectedConceptInfo = document.getElementById('selected-concept-info');
+        let selectedConcept = null;
+
+        function createConceptNode(concept) {
+            const node = document.createElement('div');
+            node.className = 'concept-node';
+            node.textContent = concept.name;
+            node.addEventListener('click', () => selectConcept(concept));
+            return node;
+        }
+
+        function selectConcept(concept) {
+            if (selectedConcept === concept) {
+                selectedConcept = null;
+                updateDiagram();
+                selectedConceptInfo.innerHTML = '';
+            } else {
+                selectedConcept = concept;
+                updateDiagram();
+                selectedConceptInfo.innerHTML = `
+                    <h3>${concept.name}</h3>
+                    <p>Related concepts: ${concept.related.map(id => concepts.find(c => c.id === id).name).join(', ')}</p>
+                `;
+            }
+        }
+
+        function updateDiagram() {
+            diagramContainer.innerHTML = '';
+            concepts.forEach(concept => {
+                const node = createConceptNode(concept);
+                if (selectedConcept) {
+                    if (concept === selectedConcept) {
+                        node.classList.add('selected');
+                    } else if (selectedConcept.related.includes(concept.id)) {
+                        node.classList.add('related');
+                    }
+                }
+                diagramContainer.appendChild(node);
+            });
+        }
+
+        updateDiagram();
+    </script>
+</body>
+</html>
