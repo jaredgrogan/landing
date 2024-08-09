@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TensorFlow Image Classification Tutorial</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --header-bg: #f0f0f0;
+            --card-bg: #ffffff;
+            --border-color: #dddddd;
+            --primary-color: #FF6F00;
+            --secondary-color: #455A64;
+        }
+
+        .night-mode {
+            --bg-color: linear-gradient(to bottom, #111111, #333333);
+            --text-color: #ffffff;
+            --header-bg: #111111;
+            --card-bg: #444444;
+            --border-color: #888888;
+        }
+
+        body {
+            font-family: 'Berkeley Mono', Courier New, monospace;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.1);
+        }
+
+        .logo span {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .date-time-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-time {
+            font-family: 'Courier New', monospace;
+        }
+
+        .night-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 24px;
+            height: 24px;
+        }
+
+        .night-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .night-mode-toggle svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--text-color);
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        nav {
+            background: var(--secondary-color);
+            color: white;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            padding: 0;
+            list-style: none;
+            text-align: center;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .title {
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+
+        .section {
+            background: var(--card-bg);
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        code {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--primary-color);
+            color: var(--text-color);
+            page-break-inside: avoid;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 1.6em;
+            max-width: 100%;
+            overflow: auto;
+            padding: 1em 1.5em;
+            display: block;
+            word-wrap: break-word;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #8A2BE2, #4169E1);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .footer {
+            background-color: var(--header-bg);
+            color: var(--text-color);
+            padding: 20px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            transition: background-color 0.3s;
+        }
+
+        .footer nav a {
+            font-family: 'Roboto', sans-serif;
+            margin: 0 10px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: transform 0.3s ease;
+        }
+
+        .footer nav a:hover {
+            transform: scale(1.5);
+        }
+
+        #resources a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        #resources a:hover {
+            transform: scale(1.5);
+        }
+
+        body:not(.night-mode) .footer nav a {
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="favicon5.svg" alt="Logo"></a>
+            <span>// Discover the Universe</span>
+        </div>
+        <div class="date-time-toggle">
+            <span id="date-time-display"></span>
+            <button class="night-mode-toggle" id="night-mode-toggle">
+                <svg viewBox="0 0 24 24" id="mode-icon">
+                    <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#tutorial">Tutorial</a></li>
+            <li><a href="#exercises">Exercises</a></li>
+            <li><a href="#resources">Additional Resources</a></li>
+        </ul>
+    </nav>
+
+    <div class="title">TensorFlow Image Classification Tutorial</div>
+
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2>Introduction</h2>
+            <p>Welcome to our TensorFlow Image Classification Tutorial! In this hands-on guide, you'll learn how to build and train a convolutional neural network (CNN) for image classification using the CIFAR-10 dataset. This tutorial will walk you through the process of creating a deep learning model that can recognize and categorize images into predefined classes.</p>
+        </section>
+        
+        <section id="prerequisites" class="section">
+            <h2>Prerequisites</h2>
+            <ul>
+                <li>Basic understanding of Python programming</li>
+                <li>Familiarity with neural networks and deep learning concepts</li>
+                <li>TensorFlow 2.x installed on your system</li>
+                <li>Jupyter Notebook or Google Colab for running the code</li>
+            </ul>
+        </section>
+        
+        <section id="tutorial" class="section">
+            <h2>Tutorial</h2>
+            <h3>Step 1: Load and Preprocess the Data</h3>
+            <p>We'll start by loading the CIFAR-10 dataset and preprocessing the images:</p>
+            <code>
+import tensorflow as tf
+from tensorflow.keras.datasets import cifar10
+
+(train_images, train_labels), (test_images, test_labels) = cifar10.load_data()
+
+# Normalize pixel values to be between 0 and 1
+train_images, test_images = train_images / 255.0, test_images / 255.0
+            </code>
+            
+            <h3>Step 2: Build the CNN Model</h3>
+            <p>Next, we'll create our CNN model using Keras:</p>
+            <code>
+from tensorflow.keras import layers, models
+
+model = models.Sequential([
+    layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.Flatten(),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(10)
+])
+            </code>
+            
+            <h3>Step 3: Compile the Model</h3>
+            <p>Now, let's compile our model with an optimizer, loss function, and metrics:</p>
+            <code>
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+            </code>
+            
+            <h3>Step 4: Train the Model</h3>
+            <p>It's time to train our model on the training data:</p>
+            <code>
+history = model.fit(train_images, train_labels, epochs=10, 
+                    validation_data=(test_images, test_labels))
+            </code>
+            
+            <h3>Step 5: Evaluate the Model</h3>
+            <p>Finally, let's evaluate our model's performance on the test set:</p>
+            <code>
+test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+print(f"\nTest accuracy: {test_acc}")
+            </code>
+        </section>
+        
+        <section id="exercises" class="section">
+            <h2>Exercises</h2>
+            <p>To deepen your understanding, try these exercises:</p>
+            <ol>
+                <li>Adjust the model architecture (e.g., add more layers or change the number of filters).</li>
+                <li>Experiment with different optimization algorithms (e.g., SGD, RMSprop).</li>
+                <li>Implement data augmentation to improve model performance.</li>
+                <li>Use transfer learning with a pre-trained model like VGG16 or ResNet.</li>
+                <li>Visualize the activations of different layers to understand what the model is learning.</li>
+            </ol>
+        </section>
+        
+        <section id="resources" class="section">
+            <h2>Additional Resources</h2>
+            <ul>
+                <li><a href="https://www.tensorflow.org/tutorials">TensorFlow Tutorials</a></li>
+                <li><a href="https://www.coursera.org/specializations/tensorflow-in-practice">DeepLearning.AI TensorFlow Developer Specialization</a></li>
+                <li><a href="https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/">Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow</a></li>
+            </ul>
+        </section>
+        
+        <a href="#" class="btn">Back to Top</a>
+    </div>
+
+    <footer class="footer">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="app.html">Launch</a>
+            <a href="product.html">Product</a>
+            <a href="discover.html">Discover</a>
+            <a href="pricing.html">Join</a>
+        </nav>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+<script>
+        // Night mode toggle
+        const nightModeToggle = document.getElementById('night-mode-toggle');
+        const body = document.body;
+        const modeIcon = document.getElementById('mode-icon');
+
+        nightModeToggle.addEventListener('click', () => {
+            body.classList.toggle('night-mode');
+            updateModeIcon();
+        });
+
+        function updateModeIcon() {
+            if (body.classList.contains('night-mode')) {
+                modeIcon.innerHTML = '<path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />';
+            } else {
+                modeIcon.innerHTML = '<path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />';
+            }
+        }
+
+        // Display Current Date and Time
+        function updateDateTime() {
+            const dateTimeDisplay = document.getElementById('date-time-display');
+            const now = new Date();
+            dateTimeDisplay.innerText = now.toLocaleString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Back to top button functionality
+        const backToTopButton = document.querySelector('.btn');
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Show/hide back to top button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+
+        // Initialize night mode based on user's system preferences
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            body.classList.add('night-mode');
+            updateModeIcon();
+        }
+
+        // Listen for changes in system color scheme preference
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (e.matches) {
+                body.classList.add('night-mode');
+            } else {
+                body.classList.remove('night-mode');
+            }
+            updateModeIcon();
+        });
+
+        // Initialize syntax highlighting if Prism.js is available
+        if (typeof Prism !== 'undefined') {
+            Prism.highlightAll();
+        }
+
+        // Add copy functionality to code blocks
+        document.querySelectorAll('code').forEach((block) => {
+            const button = document.createElement('button');
+            button.innerText = 'Copy';
+            button.classList.add('copy-button');
+            block.parentNode.insertBefore(button, block.nextSibling);
+
+            button.addEventListener('click', () => {
+                navigator.clipboard.writeText(block.innerText).then(() => {
+                    button.innerText = 'Copied!';
+                    setTimeout(() => {
+                        button.innerText = 'Copy';
+                    }, 2000);
+                }, () => {
+                    button.innerText = 'Failed to copy';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
