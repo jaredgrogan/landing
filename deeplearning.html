@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Learning Mastery - Universitas AI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
+        :root {
+            --color-space-black: #111111;
+            --color-cosmic-white: #FFFFFF;
+            --gradient-green-blue: linear-gradient(to right, #4CAF50, #2196F3);
+            --font-primary: 'Roboto', sans-serif;
+            --font-monospace: 'Courier Prime', monospace;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-cosmic-white);
+            color: var(--color-space-black);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.night-mode {
+            background-color: var(--color-space-black);
+            color: var(--color-cosmic-white);
+        }
+
+        .header {
+            background-color: var(--color-cosmic-white);
+            color: var(--color-space-black);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.night-mode .header {
+            background-color: var(--color-space-black);
+            color: var(--color-cosmic-white);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.5);
+        }
+
+        .tagline {
+            font-family: var(--font-monospace);
+            font-size: 1.2rem;
+        }
+
+        .mode-toggle {
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1, h2 {
+            font-family: var(--font-monospace);
+            text-align: center;
+        }
+
+        .section {
+            background-color: #f4f4f4;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        body.night-mode .section {
+            background-color: #2c3e50;
+        }
+
+        .section h3 {
+            background-image: var(--gradient-green-blue);
+            color: var(--color-cosmic-white);
+            padding: 15px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .section-details {
+            display: none;
+            padding: 15px;
+        }
+
+        footer {
+            background-color: var(--color-space-black);
+            color: var(--color-cosmic-white);
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        nav {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        nav a {
+            color: var(--color-cosmic-white);
+            text-decoration: none;
+            margin: 0 15px;
+            font-family: var(--font-primary);
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            transform: scale(1.5);
+        }
+
+        .copyright {
+            font-family: var(--font-monospace);
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="favicon5.svg" alt="Universitas AI Logo" class="logo">
+            </a>
+            <div class="tagline">// Discover Deep Learning</div>
+        </div>
+        <div class="mode-toggle" id="modeToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <h1>Deep Learning Mastery</h1>
+        <p>Master deep learning with our comprehensive tutorial series covering Caffe, PyTorch, Keras, and TensorFlow.</p>
+
+        <div class="section">
+            <h3>Course Modules</h3>
+            <div class="section-details">
+                <ul>
+                    <li>Introduction to Deep Learning</li>
+                    <li>Caffe Framework</li>
+                    <li>PyTorch Essentials</li>
+                    <li>Keras and TensorFlow</li>
+                    <li>Advanced Topics in Deep Learning</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Interactive Visualizations</h3>
+            <div class="section-details">
+                <h4>Loss Function Visualization</h4>
+                <div>
+                    <label for="learningRate">Learning Rate: <span id="learningRateValue">0.1</span></label>
+                    <input type="range" id="learningRate" min="0.01" max="1" step="0.01" value="0.1">
+                </div>
+                <canvas id="lossChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Your Progress</h3>
+            <div class="section-details">
+                <canvas id="progressChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#launch">Launch</a>
+            <a href="#features">Features</a>
+            <a href="#join">Join</a>
+        </nav>
+        <div class="copyright">© 2024 Universitas AI</div>
+    </footer>
+
+    <script>
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('night-mode');
+            const sunIcon = modeToggle.querySelector('svg');
+            if (body.classList.contains('night-mode')) {
+                sunIcon.style.transform = 'rotate(180deg)';
+            } else {
+                sunIcon.style.transform = 'rotate(0deg)';
+            }
+            updateChartsTheme();
+        });
+
+        document.querySelectorAll('.section h3').forEach(header => {
+            header.addEventListener('click', () => {
+                const details = header.nextElementSibling;
+                details.style.display = details.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        // Loss Function Chart
+        const lossCtx = document.getElementById('lossChart').getContext('2d');
+        const lossChart = new Chart(lossCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 100}, (_, i) => i + 1),
+                datasets: [{
+                    label: 'Loss',
+                    data: Array.from({length: 100}, (_, i) => Math.exp(-0.1 * i) * Math.sin(i / 10) + 0.5),
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Learning Rate Slider
+        const learningRateSlider = document.getElementById('learningRate');
+        const learningRateValue = document.getElementById('learningRateValue');
+        learningRateSlider.addEventListener('input', (e) => {
+            const learningRate = parseFloat(e.target.value);
+            learningRateValue.textContent = learningRate.toFixed(2);
+            lossChart.data.datasets[0].data = Array.from({length: 100}, (_, i) => Math.exp(-learningRate * i) * Math.sin(i / 10) + 0.5);
+            lossChart.update();
+        });
+
+        // Progress Chart
+        const progressCtx = document.getElementById('progressChart').getContext('2d');
+        const progressChart = new Chart(progressCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Intro to DL', 'Caffe', 'PyTorch', 'Keras', 'TensorFlow'],
+                datasets: [{
+                    label: 'Progress',
+                    data: [100, 75, 50, 25, 10],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(255, 205, 86, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgb(75, 192, 192)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        function updateChartsTheme() {
+            const textColor = body.classList.contains('night-mode') ? '#FFFFFF' : '#111111';
+            [lossChart, progressChart].forEach(chart => {
+                chart.options.scales.x.ticks.color = textColor;
+                chart.options.scales.y.ticks.color = textColor;
+                chart.options.plugins.legend.labels.color = textColor;
+                chart.update();
+            });
+        }
+
+        updateChartsTheme();
+    </script>
+</body>
+</html>
