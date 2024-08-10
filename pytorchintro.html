@@ -345,11 +345,13 @@ print(x)
             </ul>
         </section>
 
-        <section id="glossary" class="section">
+    <section id="glossary" class="section">
             <h2>Glossary of Essential PyTorch Terms</h2>
             <div id="glossary-carousel">
                 <!-- Glossary items will be dynamically inserted here -->
             </div>
+            <button id="prev-term" class="btn">Previous Term</button>
+            <button id="next-term" class="btn">Next Term</button>
         </section>
 
         <div class="quiz">
@@ -362,4 +364,164 @@ print(x)
             <h2>Additional Resources</h2>
             <ul>
                 <li><a href="#">PyTorch Documentation</a></li>
-                <li><a href="#">N
+                <li><a href="#">NLP with PyTorch (Book)</a></li>
+                <li><a href="#">Community Forum</a></li>
+            </ul>
+        </div>
+        
+        <a href="#" class="btn">Back to Top</a>
+    </div>
+
+    <footer class="footer">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="app.html">Launch</a>
+            <a href="product.html">Product</a>
+            <a href="discover.html">Discover</a>
+            <a href="pricing.html">Join</a>
+        </nav>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script>
+        // Night mode toggle
+        const nightModeToggle = document.getElementById('night-mode-toggle');
+        const body = document.body;
+        const modeIcon = document.getElementById('mode-icon');
+
+        nightModeToggle.addEventListener('click', () => {
+            body.classList.toggle('night-mode');
+            updateModeIcon();
+        });
+
+        function updateModeIcon() {
+            if (body.classList.contains('night-mode')) {
+                modeIcon.innerHTML = '<path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />';
+            } else {
+                modeIcon.innerHTML = '<path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />';
+            }
+        }
+
+        // Display Current Date and Time
+        function updateDateTime() {
+            const dateTimeDisplay = document.getElementById('date-time-display');
+            const now = new Date();
+            dateTimeDisplay.innerText = now.toLocaleString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Back to top button functionality
+        const backToTopButton = document.querySelector('.btn');
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Show/hide back to top button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+
+        // Glossary functionality
+        const glossaryTerms = [
+            { term: "Tensor", definition: "A multi-dimensional array, similar to a matrix but generalized to more dimensions. In PyTorch, tensors are the fundamental building blocks used to store data and perform operations." },
+            { term: "Autograd", definition: "A system that automatically calculates the gradients of tensors involved in the computation. This is essential for optimizing neural networks." },
+            { term: "Computational Graph", definition: "A directed graph where nodes represent operations and edges represent tensors (data). PyTorch dynamically builds this graph as operations are performed." },
+            { term: "Neural Network", definition: "A collection of layers that process input data through weighted connections to produce an output. Each layer typically consists of neurons that apply activation functions to input data." },
+            { term: "Optimizer", definition: "An algorithm that updates the parameters of a neural network to minimize the loss function. It adjusts the weights and biases based on gradients computed during backpropagation." },
+            { term: "Loss Function", definition: "A function that measures the difference between the predicted output of a neural network and the actual target value. The goal of training is to minimize this loss." },
+            { term: "Backpropagation", definition: "A key algorithm used to train neural networks. It calculates the gradient of the loss function with respect to each weight by propagating the error backward through the network." },
+            { term: "Gradient Descent", definition: "An optimization algorithm that iteratively adjusts the model parameters to minimize the loss function. It moves the parameters in the direction of the steepest decrease in loss." },
+            { term: "Dataset", definition: "A collection of data samples and their corresponding labels used for training or evaluating a model. PyTorch provides tools to easily load and preprocess datasets." },
+            { term: "DataLoader", definition: "A utility that loads data in batches, allowing for efficient and flexible data handling during training. It can shuffle, sample, and parallelize data loading." },
+            { term: "Epoch", definition: "A full pass through the entire dataset during the training process. Training for multiple epochs allows the model to learn from the data iteratively." },
+            { term: "Batch", definition: "A subset of the dataset processed together during one iteration of training. Training in batches allows for faster computation and more stable updates to the model's parameters." },
+            { term: "Forward Pass", definition: "The process of passing input data through the layers of a neural network to produce an output. It involves applying weights and activation functions to the input." },
+            { term: "Backward Pass", definition: "The phase in training where gradients are calculated by propagating the loss backward through the network. This step is crucial for updating the model's parameters." },
+            { term: "Learning Rate", definition: "A hyperparameter that controls the step size at which the optimizer updates the model's parameters during training." },
+            { term: "Activation Function", definition: "A function that introduces non-linearity into a neural network, allowing it to learn and model complex data patterns. Common examples include ReLU, Sigmoid, and Tanh." },
+            { term: "Dropout", definition: "A regularization technique used to prevent overfitting in neural networks. It randomly 'drops out' a fraction of neurons during training." },
+            { term: "Embedding", definition: "A learned representation of categorical data, like words or items, in a continuous vector space. Used to convert sparse input data into dense vectors." },
+            { term: "RNN (Recurrent Neural Network)", definition: "A class of neural networks designed for sequential data, where connections between nodes form a directed graph along a sequence." },
+            { term: "LSTM (Long Short-Term Memory)", definition: "A type of RNN that mitigates the vanishing gradient problem by introducing gates to control the flow of information." },
+            { term: "Transfer Learning", definition: "A technique that involves taking a pre-trained model and adapting it to a new, related task. This approach leverages existing knowledge for faster and more efficient training." },
+            { term: "Fine-tuning", definition: "A process in transfer learning where a pre-trained model is slightly adjusted by training it on a new dataset." },
+            { term: "Tokenization", definition: "The process of converting text into smaller units, like words or subwords, which are then converted into numerical representations." },
+            { term: "Padding", definition: "The process of adding extra elements to ensure that all inputs to a neural network have the same length, enabling efficient batch processing." },
+            { term: "Attention Mechanism", definition: "A technique that allows a model to focus on specific parts of the input when making decisions, enabling more effective handling of tasks like language translation." },
+            { term: "Transformer", definition: "A neural network architecture that relies on self-attention mechanisms to process input data in parallel. It's the foundation for many advanced NLP models." },
+            { term: "BERT", definition: "Bidirectional Encoder Representations from Transformers, a pre-trained transformer model designed to understand the context of words in text by processing input sequences bidirectionally." },
+            { term: "Overfitting", definition: "A situation where a model learns the training data too well, including noise and outliers, leading to poor generalization to new data." },
+            { term: "Underfitting", definition: "A situation where a model is too simple to capture the underlying patterns in the data, resulting in poor performance on both training and test datasets." },
+            { term: "Regularization", definition: "A technique used to reduce overfitting by adding a penalty to the loss function. This discourages the model from fitting the noise in the training data." }
+        ];
+
+        const glossaryCarousel = document.getElementById('glossary-carousel');
+        const prevTermButton = document.getElementById('prev-term');
+        const nextTermButton = document.getElementById('next-term');
+        let currentTermIndex = 0;
+
+        function displayGlossaryTerm(index) {
+            const term = glossaryTerms[index];
+            glossaryCarousel.innerHTML = `
+                <div class="glossary-item">
+                    <h3>${term.term}</h3>
+                    <p>${term.definition}</p>
+                </div>
+            `;
+        }
+
+        function nextTerm() {
+            currentTermIndex = (currentTermIndex + 1) % glossaryTerms.length;
+            displayGlossaryTerm(currentTermIndex);
+        }
+
+        function prevTerm() {
+            currentTermIndex = (currentTermIndex - 1 + glossaryTerms.length) % glossaryTerms.length;
+            displayGlossaryTerm(currentTermIndex);
+        }
+
+        nextTermButton.addEventListener('click', nextTerm);
+        prevTermButton.addEventListener('click', prevTerm);
+
+        // Initialize the first term
+        displayGlossaryTerm(currentTermIndex);
+
+        // Glossary term highlighting
+        document.querySelectorAll('.glossary-term').forEach(term => {
+            term.addEventListener('click', function() {
+                const termName = this.getAttribute('data-term');
+                const termIndex = glossaryTerms.findIndex(item => item.term === termName);
+                if (termIndex !== -1) {
+                    currentTermIndex = termIndex;
+                    displayGlossaryTerm(currentTermIndex);
+                    document.getElementById('glossary').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
