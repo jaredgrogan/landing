@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Chatbots with Rasa Tutorial</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --header-bg: #f0f0f0;
+            --card-bg: #ffffff;
+            --border-color: #dddddd;
+            --primary-color: #FF6F00;
+            --secondary-color: #455A64;
+        }
+
+        .night-mode {
+            --bg-color: linear-gradient(to bottom, #111111, #333333);
+            --text-color: #ffffff;
+            --header-bg: #111111;
+            --card-bg: #444444;
+            --border-color: #888888;
+        }
+
+        body {
+            font-family: 'Berkeley Mono', Courier New, monospace;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.1);
+        }
+
+        .logo span {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .date-time-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-time {
+            font-family: 'Courier New', monospace;
+        }
+
+        .night-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 24px;
+            height: 24px;
+        }
+
+        .night-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .night-mode-toggle svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--text-color);
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        nav {
+            background: var(--secondary-color);
+            color: white;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            padding: 0;
+            list-style: none;
+            text-align: center;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .title {
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+
+        .section {
+            background: var(--card-bg);
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        code {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--primary-color);
+            color: var(--text-color);
+            page-break-inside: avoid;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 1.6em;
+            max-width: 100%;
+            overflow: auto;
+            padding: 1em 1.5em;
+            display: block;
+            word-wrap: break-word;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #8A2BE2, #4169E1);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .footer {
+            background-color: var(--header-bg);
+            color: var(--text-color);
+            padding: 20px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            transition: background-color 0.3s;
+        }
+
+        .footer nav a {
+            font-family: 'Roboto', sans-serif;
+            margin: 0 10px;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .footer nav a:hover {
+            transform: scale(1.5);
+        }
+
+        #resources a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        #resources a:hover {
+            transform: scale(1.5);
+        }
+
+        body:not(.night-mode) .footer nav a {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="favicon5.svg" alt="Logo"></a>
+            <span>// Discover the Universe</span>
+        </div>
+        <div class="date-time-toggle">
+            <span id="date-time-display"></span>
+            <button class="night-mode-toggle" id="night-mode-toggle">
+                <svg viewBox="0 0 24 24" id="mode-icon">
+                    <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#setup">Setup</a></li>
+            <li><a href="#nlu">Natural Language Understanding</a></li>
+            <li><a href="#dialogue">Dialogue Management</a></li>
+            <li><a href="#training">Training the Bot</a></li>
+            <li><a href="#exercises">Exercises</a></li>
+        </ul>
+    </nav>
+
+    <div class="title">Building Chatbots with Rasa Tutorial</div>
+
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2>Introduction to Rasa</h2>
+            <p>Rasa is an open-source machine learning framework designed for developing intelligent, conversational bots capable of handling both text and voice interactions. It provides tools for natural language understanding (NLU) and dialogue management, making it easier to create sophisticated and engaging conversational agents.</p>
+        </section>
+        
+        <section id="setup" class="section">
+            <h2>Setup</h2>
+            <p>To get started with Rasa, you first need to install it and initialize a new project. Here's how to do it:</p>
+            <h3>Install Rasa:</h3>
+            <p>You can install Rasa using pip, which is a package manager for Python. Open your terminal and run the following command:</p>
+            <code>pip install rasa</code>
+            <h3>Initialize a New Project:</h3>
+            <p>Once Rasa is installed, create a new Rasa project by running:</p>
+            <code>rasa init</code>
+            <p>This command sets up a basic Rasa project structure with example files and a pre-configured sample bot. Follow the prompts to set up your initial configuration.</p>
+        </section>
+        
+        <section id="nlu" class="section">
+            <h2>Natural Language Understanding (NLU)</h2>
+            <p>NLU is responsible for interpreting user inputs and extracting meaningful information, such as intents and entities. Here's how to configure your NLU model:</p>
+            <h3>Edit the nlu.yml File:</h3>
+            <p>This file is where you define your intents and their training examples. Open <code>nlu.yml</code> and add your intents as shown below:</p>
+            <code>
+nlu:
+  - intent: greet
+    examples: |
+      - hey
+      - hello
+      - hi
+      - hello there
+  - intent: goodbye
+    examples: |
+      - bye
+      - see you later
+      - goodbye
+      - take care
+            </code>
+            <p>In this example, we've added a new intent called <code>goodbye</code> with several variations of goodbye messages.</p>
+        </section>
+        
+        <section id="dialogue" class="section">
+            <h2>Dialogue Management</h2>
+            <p>Dialogue management handles the flow of conversation, determining how the bot should respond to user inputs based on the recognized intents and conversation context.</p>
+            <h3>Edit the stories.yml File:</h3>
+            <p>Define the conversation paths and actions in this file. Open <code>stories.yml</code> and configure it as follows:</p>
+            <code>
+stories:
+  - story: greet user
+    steps:
+      - intent: greet
+        action: utter_greet
+  - story: say goodbye
+    steps:
+      - intent: goodbye
+        action: utter_goodbye
+            </code>
+            <p>In this example, we've added a story for handling a goodbye intent, where the bot will respond with the <code>utter_goodbye</code> action.</p>
+        </section>
+        
+        <section id="training" class="section">
+            <h2>Training the Bot</h2>
+            <p>Once you've configured your NLU and dialogue management, you need to train your Rasa model. This process uses the data defined in <code>nlu.yml</code> and <code>stories.yml</code> to create a model that can understand and manage conversations.</p>
+            <h3>Train Your Model:</h3>
+            <p>Run the following command in your terminal:</p>
+            <code>rasa train</code>
+            <p>This command will train a model based on your current configuration and data. Training can take a few minutes depending on the complexity of your data.</p>
+        </section>
+        
+        <section id="exercises" class="section">
+            <h2>Exercises</h2>
+            <h3>1. Create a New Intent:</h3>
+            <p>Add a new intent to <code>nlu.yml</code>, such as <code>thank_you</code>, and include several example phrases that users might use to express gratitude.</p>
+            <h3>2. Expand Your Stories:</h3>
+            <p>Update <code>stories.yml</code> to include more detailed conversation paths, such as handling multiple intents in a single conversation or incorporating additional actions and responses.</p>
+            <h3>3. Test Your Bot:</h3>
+            <p>Use the Rasa shell to interact with your bot and test its responses. Run:</p>
+            <code>rasa shell</code>
+            <p>Engage in conversation with your bot to see how well it handles different inputs and follows the defined stories.</p>
+            <h3>4. Deploy Your Bot Using Rasa X:</h3>
+            <p>Rasa X is a tool that helps with improving and deploying Rasa chatbots. Install Rasa X using pip:</p>
+            <code>pip install rasa-x --extra-index-url https://pypi.rasa.com/simple</code>
+            <p>Launch Rasa X with:</p>
+            <code>rasa x</code>
+            <p>Follow the instructions to deploy and test your bot in a more user-friendly interface.</p>
+        </section>
+        
+        <a href="#" class="btn">Back to Top</a>
+    </div>
+
+    <footer class="footer">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="app.html">Launch</a>
+            <a href="product.html">Product</a>
+            <a href="discover.html">Discover</a>
+            <a href="pricing.html">Join</a>
+        </nav>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script>
+        // Night mode toggle
+        const nightModeToggle = document.getElementById('night-mode-toggle');
+        const body = document.body;
+        const modeIcon = document.getElementById('mode-icon');
+
+        nightModeToggle.addEventListener('click', () => {
+            body.classList.toggle('night-mode');
+            updateModeIcon();
+        });
+
+        function updateModeIcon() {
+            if (body.classList.contains('night-mode')) {
+                modeIcon.innerHTML = '<path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />';
+            } else {
+                modeIcon.innerHTML = '<path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />';
+            }
+        }
+
+        // Display Current Date and Time
+        function updateDateTime() {
+            const dateTimeDisplay = document.getElementById('date-time-display');
+            const now = new Date();
+            dateTimeDisplay.innerText = now.toLocaleString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Back to top button functionality
+        const backToTopButton = document.querySelector('.btn');
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Show/hide back to top button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+
+        // Initialize night mode based on user's system preferences
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            body.classList.add('night-mode');
+            updateModeIcon();
+        }
+
+        // Listen for changes in system color scheme preference
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (e.matches) {
+                body.classList.add('night-mode');
+            } else {
+                body.classList.remove('night-mode');
+            }
+            updateModeIcon();
+        });
+
+        // Initialize syntax highlighting if Prism.js is available
+        if (typeof Prism !== 'undefined') {
+            Prism.highlightAll();
+        }
+
+        // Add copy functionality to code blocks
+        document.querySelectorAll('code').forEach((block) => {
+            const button = document.createElement('button');
+            button.innerText = 'Copy';
+            button.classList.add('copy-button');
+            block.parentNode.insertBefore(button, block.nextSibling);
+
+            button.addEventListener('click', () => {
+                navigator.clipboard.writeText(block.innerText).then(() => {
+                    button.innerText = 'Copied!';
+                    setTimeout(() => {
+                        button.innerText = 'Copy';
+                    }, 2000);
+                }, () => {
+                    button.innerText = 'Failed to copy';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
