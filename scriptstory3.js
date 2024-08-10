@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "to learn and thrive.",
         "// Discover the Universe",
         "Universitas Pro",
-        "Coming 09.09.2024",
+        "Coming 10.10.2024",
         "Your Cognitive Computer."
     ];
     let index = 0;
