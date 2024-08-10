@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Console</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* Dark Theme */
+    body {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .chat-container {
+      max-width: 600px;
+      margin: 100px auto 0 auto; /* Added 100px padding from top */
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 120px); /* Adjusted height to account for padding */
+    }
+
+    .chat-bubble {
+      padding: 10px 15px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      max-width: 80%;
+      word-wrap: break-word;
+      position: relative;
+      display: flex;
+      align-items: center;
+      color: white;
+      font-size: 14px;
+      border: 2px dotted grey; /* Grey dotted line around chat bubbles */
+    }
+
+    .chat-bubble.user {
+      background: linear-gradient(to right, #4CAF50, #42A5F5); /* Green to Blue */
+      align-self: flex-end;
+    }
+
+    .chat-bubble.ai {
+      background: linear-gradient(to right, #42A5F5, #9C27B0); /* Blue to Purple */
+      align-self: flex-start;
+    }
+
+    .typing-indicator {
+      width: 40px;
+      height: 10px;
+      background-color: #555;
+      border-radius: 5px;
+      position: relative;
+      margin-left: 15px;
+      animation: typing 1s infinite;
+    }
+
+    @keyframes typing {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(5px);
+      }
+    }
+
+    .voice-input-btn, .send-message-btn {
+      background: linear-gradient(to right, #4CAF50, #42A5F5); /* Green to Blue Gradient */
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      transition: background-color 0.3s;
+    }
+
+    .voice-input-btn:hover, .send-message-btn:hover {
+      background: linear-gradient(to right, #66BB6A, #42A5F5); /* Lighter Green to Blue */
+    }
+
+    .response-suggestions {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+
+    .response-suggestions button {
+      background: #333;
+      color: white;
+      border-radius: 20px;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .response-suggestions button:hover {
+      background: #444;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid #555;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      margin-right: 10px;
+      background: #2a2a2a;
+      color: white;
+    }
+
+    .input-container input:focus {
+      outline: none;
+    }
+
+    .input-container .attachment-btn {
+      background: none;
+      border: none;
+      margin-right: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .input-container .attachment-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .dropzone {
+      border: 2px dashed grey; /* Changed to grey */
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      color: #888;
+    }
+
+    .dropzone.dragover {
+      border-color: #42A5F5;
+      color: #42A5F5;
+    }
+
+    /* Day/Night Mode Toggle Button */
+    .toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    /* Favicon and Heading */
+    .header-container {
+      position: absolute;
+      top: 20px;
+      left: 20px; /* Moved closer to the left edge */
+      display: flex;
+      align-items: center;
+    }
+
+    .header-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 20px; /* Add space between the logo and the text */
+    }
+
+    .header-container h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 27px; /* Font size set to 27px */
+      font-weight: bold;
+      color: white; /* Default to white for night mode */
+      transition: color 0.3s;
+    }
+  </style>
+</head>
+<body class="dark-mode" id="app">
+  <!-- Favicon and Heading in the Header -->
+  <div class="header-container">
+    <a href="index.html">
+      <img src="favicon5.svg" alt="Favicon">
+    </a>
+    <h1 id="headerText">// Discover the Universe</h1>
+  </div>
+
+  <!-- Day/Night Mode Toggle Button -->
+  <div class="toggle-container">
+    <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+      <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="chat-container">
+    <div class="response-suggestions">
+      <button>How can I help?</button>
+      <button>Tell me more</button>
+      <button>What's next?</button>
+    </div>
+    
+    <div id="chatBox" class="dropzone">
+      <div class="chat-bubble ai">
+        Hi, how can I assist you today?
+      </div>
+    </div>
+    
+    <div class="typing-indicator hidden" id="typingIndicator"></div>
+    
+    <div class="input-container">
+      <button class="attachment-btn" id="attachmentBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip">
+          <path d="M21.44 11.05l-9.19 9.19a5.64 5.64 0 0 1-7.98-7.98l9.19-9.19a4 4 0 1 1 5.66 5.66L9.64 16.34a2.82 2.82 0 1 1-4-4l8.48-8.48"></path>
+        </svg>
+      </button>
+      <input type="file" id="fileInput" style="display:none;"> <!-- Hidden file input -->
+      <input type="text" id="messageInput" placeholder="Type a message...">
+      <button class="voice-input-btn" id="voiceInputBtn">
+        <svg id="micIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic">
+          <path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="23"></line>
+          <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
+      </button>
+      <button class="send-message-btn" id="sendMessageBtn">
+        &#x27A4;
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const app = document.getElementById('app');
+    const chatBox = document.getElementById('chatBox');
+    const messageInput = document.getElementById('messageInput');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const voiceInputBtn = document.getElementById('voiceInputBtn');
+    const attachmentBtn = document.getElementById('attachmentBtn');
+    const fileInput = document.getElementById('fileInput');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const headerText = document.getElementById('headerText');
+
+    let isDarkMode = true;
+
+    sendMessageBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    // File picker functionality
+    attachmentBtn.addEventListener('click', function() {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function() {
+      if (fileInput.files.length > 0) {
+        alert('File selected: ' + fileInput.files[0].name);
+        // Implement file upload or handling logic here
+      }
+    });
+
+    function sendMessage() {
+      const message = messageInput.value.trim();
+      if (message) {
+        // Add user's message to chat
+        const userBubble = document.createElement('div');
+        userBubble.classList.add('chat-bubble', 'user');
+        userBubble.textContent = message;
+        chatBox.appendChild(userBubble);
+        messageInput.value = '';
+
+        // Simulate AI typing
+        simulateTyping();
+      }
+    }
+
+    function simulateTyping() {
+      typingIndicator.classList.remove('hidden');
+      setTimeout(() => {
+        typingIndicator.classList.add('hidden');
+
+        // Add AI's response
+        const aiBubble = document.createElement('div');
+        aiBubble.classList.add('chat-bubble', 'ai');
+        aiBubble.textContent = "I'm here to help! What can I do for you?";
+        chatBox.appendChild(aiBubble);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 2000); // Simulating 2 seconds delay for AI response
+    }
+
+    // Voice input (uses Web Speech API if supported)
+    voiceInputBtn.addEventListener('click', function() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const transcript = Array.from(event.results)
+          .map(result => result[0])
+          .map(result => result.transcript)
+          .join('');
+
+        messageInput.value = transcript;
+
+        if (event.results[0].isFinal) {
+          sendMessage();
+        }
+      };
+
+      recognition.onerror = function(event) {
+        console.error('Speech recognition error:', event.error);
+      };
+    });
+
+    // Handle file attachment button click
+    attachmentBtn.addEventListener('click', () => {
+      alert('Attachment button clicked! Implement file picker here.');
+      // You can implement a file picker here
+    });
+
+    // Handle drag and drop for file attachments
+    chatBox.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      chatBox.classList.add('dragover');
+    });
+
+    chatBox.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      chatBox.classList.remove('dragover');
+    });
+
+    chatBox.addEventListener('drop', (e) => {
+      e.preventDefault();
+      chatBox.classList.remove('dragover');
+      alert('File dropped! Implement file handling here.');
+      // Implement file handling here
+    });
+
+    // Day/Night mode toggle
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+        attachmentBtn.style.color = 'white';
+        headerText.style.color = 'white';
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+        attachmentBtn.style.color = 'black';
+        headerText.style.color = 'black';
+      }
+    }
+  </script>
+</body>
+</html>
