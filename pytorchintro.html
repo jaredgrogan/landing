@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyTorch for NLP: A Beginner's Guide</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --header-bg: #f0f0f0;
+            --card-bg: #ffffff;
+            --border-color: #dddddd;
+            --primary-color: #FF6F00;
+            --secondary-color: #455A64;
+        }
+
+        .night-mode {
+            --bg-color: linear-gradient(to bottom, #111111, #333333);
+            --text-color: #ffffff;
+            --header-bg: #111111;
+            --card-bg: #444444;
+            --border-color: #888888;
+        }
+
+        body {
+            font-family: 'Berkeley Mono', Courier New, monospace;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.1);
+        }
+
+        .logo span {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .date-time-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-time {
+            font-family: 'Courier New', monospace;
+        }
+
+        .night-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 24px;
+            height: 24px;
+        }
+
+        .night-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .night-mode-toggle svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--text-color);
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        nav {
+            background: var(--secondary-color);
+            color: white;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            padding: 0;
+            list-style: none;
+            text-align: center;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .title {
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+
+        .section {
+            background: var(--card-bg);
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        code {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--primary-color);
+            color: var(--text-color);
+            page-break-inside: avoid;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 1.6em;
+            max-width: 100%;
+            overflow: auto;
+            padding: 1em 1.5em;
+            display: block;
+            word-wrap: break-word;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #8A2BE2, #4169E1);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .footer {
+            background-color: var(--header-bg);
+            color: var(--text-color);
+            padding: 20px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            transition: background-color 0.3s;
+        }
+
+        .footer nav a {
+            font-family: 'Roboto', sans-serif;
+            margin: 0 10px;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .footer nav a:hover {
+            transform: scale(1.5);
+        }
+
+        .interactive-example {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .quiz {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .resources {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .glossary-term {
+            cursor: pointer;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .glossary-definition {
+            display: none;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+
+        #glossary-carousel {
+            overflow: hidden;
+            white-space: nowrap;
+            margin-top: 20px;
+        }
+
+        .glossary-item {
+            display: inline-block;
+            width: 100%;
+            transition: transform 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="favicon5.svg" alt="Logo"></a>
+            <span>// Discover the Universe</span>
+        </div>
+        <div class="date-time-toggle">
+            <span id="date-time-display"></span>
+            <button class="night-mode-toggle" id="night-mode-toggle">
+                <svg viewBox="0 0 24 24" id="mode-icon">
+                    <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#setup">Setup</a></li>
+            <li><a href="#basics">PyTorch Basics</a></li>
+            <li><a href="#data-processing">Data Processing</a></li>
+            <li><a href="#sentiment-analysis">Sentiment Analysis</a></li>
+            <li><a href="#ner">Named Entity Recognition</a></li>
+            <li><a href="#advanced-topics">Advanced Topics</a></li>
+            <li><a href="#glossary">Glossary</a></li>
+        </ul>
+    </nav>
+
+    <div class="title">PyTorch for NLP: A Beginner's Guide</div>
+
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2>1. Introduction to PyTorch and its applications in NLP</h2>
+            <p>PyTorch is an open-source machine learning library developed by Facebook's AI Research lab. It's particularly well-suited for Natural Language Processing (NLP) tasks due to its dynamic computational graphs and intuitive design.</p>
+            <div class="interactive-example">
+                <h3>Interactive Example: Your First PyTorch <span class="glossary-term" data-term="Tensor">Tensor</span></h3>
+                <pre><code>
+import torch
+
+# Create a tensor
+x = torch.tensor([1, 2, 3, 4, 5])
+print(x)
+                </code></pre>
+            </div>
+        </section>
+        
+        <section id="setup" class="section">
+            <h2>2. Setting up the PyTorch environment</h2>
+            <p>Learn how to install PyTorch on your local machine or use Google Colab for cloud-based development.</p>
+            <ul>
+                <li><a href="#">Local Installation Guide</a></li>
+                <li><a href="#">Google Colab Setup</a></li>
+            </ul>
+        </section>
+        
+        <section id="basics" class="section">
+            <h2>3. PyTorch basics</h2>
+            <ul>
+                <li><a href="#">Tensors and operations</a></li>
+                <li><a href="#"><span class="glossary-term" data-term="Autograd">Autograd</span> and <span class="glossary-term" data-term="Computational Graph">computational graphs</span></a></li>
+                <li><a href="#">Building and using <span class="glossary-term" data-term="Neural Network">neural networks</span></a></li>
+            </ul>
+        </section>
+        
+        <section id="data-processing" class="section">
+            <h2>4. Data processing for NLP</h2>
+            <ul>
+                <li><a href="#">Loading and preprocessing text data</a></li>
+                <li><a href="#">Creating <span class="glossary-term" data-term="Dataset">datasets</span> and <span class="glossary-term" data-term="DataLoader">dataloaders</span></a></li>
+            </ul>
+        </section>
+        
+        <section id="sentiment-analysis" class="section">
+            <h2>5. Building a sentiment analysis model</h2>
+            <ul>
+                <li><a href="#">Implementing a simple neural network for text classification</a></li>
+                <li><a href="#"><span class="glossary-term" data-term="Forward Pass">Forward pass</span> and <span class="glossary-term" data-term="Backward Pass">backward pass</span></a></li>
+                <li><a href="#">Training and evaluation process</a></li>
+                <li><a href="#">Hyperparameter tuning and optimization techniques</a></li>
+            </ul>
+        </section>
+        
+        <section id="ner" class="section">
+            <h2>6. Named Entity Recognition</h2>
+            <ul>
+                <li><a href="#">Implementing a neural network for NER</a></li>
+                <li><a href="#">Training and evaluation process</a></li>
+                <li><a href="#">Optimization and customization</a></li>
+                <li><a href="#">Applications of NER</a></li>
+            </ul>
+        </section>
+        
+        <section id="advanced-topics" class="section">
+            <h2>7. Advanced topics</h2>
+            <ul>
+                <li><a href="#"><span class="glossary-term" data-term="Embedding">Word embeddings</span> in PyTorch</a></li>
+                <li><a href="#"><span class="glossary-term" data-term="RNN (Recurrent Neural Network)">Recurrent Neural Networks (RNNs)</span> and <span class="glossary-term" data-term="LSTM (Long Short-Term Memory)">Long Short-Term Memory (LSTM)</span> networks</a></li>
+                <li><a href="#"><span class="glossary-term" data-term="Transfer Learning">Transfer learning</span> with pre-trained models</a></li>
+            </ul>
+        </section>
+
+        <section id="glossary" class="section">
+            <h2>Glossary of Essential PyTorch Terms</h2>
+            <div id="glossary-carousel">
+                <!-- Glossary items will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <div class="quiz">
+            <h2>Quiz: Test Your PyTorch Knowledge</h2>
+            <p>Take this quiz to check your understanding of PyTorch basics.</p>
+            <a href="#" class="btn">Start Quiz</a>
+        </div>
+
+        <div class="resources">
+            <h2>Additional Resources</h2>
+            <ul>
+                <li><a href="#">PyTorch Documentation</a></li>
+                <li><a href="#">N
