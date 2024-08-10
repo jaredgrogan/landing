@@ -1,632 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Discover the Universe</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    .dark-mode {
-      background-color: #111111;
-      color: #e0e0e0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cutting-Edge Minimalist Website</title>
+    <link rel="stylesheet" href="innovate3.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Existing styles */
+        #chat-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            display: none; /* Initially hidden */
+        }
 
-    .dark-mode .bg-white {
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-    }
+        #chat-header {
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .dark-mode .text-gray-900 {
-      color: #e0e0e0;
-    }
+        #chat-body {
+            padding: 20px;
+        }
 
-    .dark-mode footer {
-      color: white;
-    }
+        #chat-input-container {
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+        }
 
-    .light-mode {
-      background-color: #f3f4f6; 
-      color: #111827;
-    }
+        #chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
 
-    .logo-container {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: none;
-      background: none;
-      transition: transform 0.3s;
-    }
+        #chat-send {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px; /* Rounded edges for chat send button */
+        }
 
-    .logo {
-      width: 50px;
-      height: 50px;
-      transition: transform 0.3s;
-    }
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #4caf50, #2196f3);
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
 
-    .logo-container:hover,
-    .button-circle:hover {
-      transform: scale(1.5);
-    }
+        #chat-icon:hover {
+            transform: scale(1.5);
+        }
 
-    .button-circle {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      transition: transform 0.3s;
-    }
+        .chat-icon-content {
+            color: white;
+            font-size: 1.5em;
+        }
 
-    .button-circle#calendarBtn {
-      background: linear-gradient(to right, #ff7e5f, #feb47b);
-    }
+        /* Padding adjustments */
+        .bars {
+            padding-bottom: 10px; /* Added padding below the bars */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
-    .button-circle svg {
-      width: 24px;
-      height: 24px;
-    }
+        .bars a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: 600px; /* Increased width to 600px (100% wider) */
+            margin: 10px;
+        }
 
-    .hidden {
-      display: none;
-    }
+        .bar {
+            background: #f5f5f5;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 15px; /* Rounded edges for bars */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
 
-    #notepadCard {
-      width: 432px;
-      height: 648px;
-      resize: both;
-      overflow: auto;
-    }
+        .bar:hover {
+            transform: translateY(-5px);
+        }
 
-    #notepadContent {
-      height: calc(100% - 140px);
-    }
+        footer {
+            padding-top: 15px; /* Added padding above the footer nav */
+        }
 
-    #chatCard {
-      width: 500px;
-      height: 440px;
-    }
+        footer p {
+            padding-top: 15px; /* Added padding between footer nav and copyright */
+        }
 
-    #chatHistoryPanel {
-      width: 200px;
-      border-left: 1px solid #e0e0e0;
-      background-color: white;
-      color: black;
-    }
+        /* Reduce font size for date-time */
+        #date-time {
+            font-size: 80%; /* Reduced font size by 20% */
+        }
 
-    .dark-mode #chatHistoryPanel {
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      border-left: 1px solid #111111;
-    }
+        /* Adjust wave animation duration to slow it down */
+        .wave {
+            animation: wave-animation 30s linear infinite; /* Increased duration to 30s */
+        }
 
-    .upload-button {
-      transition: background-color 0.3s, transform 0.3s;
-    }
+        @keyframes wave-animation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
 
-    .upload-button:hover {
-      background-color: #3b82f6;
-      transform: scale(1.1);
-    }
+        /* Additional spacing below the main heading */
+        #home h1 {
+            margin-bottom: 10px; /* Added 10px buffer below the heading */
+        }
 
-    .today {
-      background-color: #3b82f6;
-      color: white;
-    }
-  </style>
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        body.dark-mode header {
+            background-color: #1e1e1e;
+        }
+
+        body.dark-mode #chat-box {
+            background-color: #1e1e1e;
+            border-color: #333;
+        }
+
+        body.dark-mode .bar {
+            background-color: #2a2a2a;
+            border-color: #333;
+        }
+
+        body.dark-mode #chat-header {
+            background-color: #333;
+        }
+
+        /* Dark mode toggle */
+        #dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #dark-mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* Updated styles */
+        #discover-text {
+            font-weight: bold;
+        }
+
+        body.dark-mode #discover-text {
+            color: white;
+        }
+
+        body.dark-mode #date-time {
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        body.dark-mode #dark-mode-toggle .moon-icon {
+            fill: white;
+        }
+
+        /* Favicon padding */
+        #favicon {
+            padding-top: 20px;
+            padding-left: 20px;
+        }
+    </style>
 </head>
 <body>
-  <div id="app" class="min-h-screen light-mode">
-    <div class="container mx-auto p-4">
-      <header class="flex justify-between items-center mb-8">
-        <div class="flex items-center">
-          <a href="index.html" class="logo-container">
-            <img src="favicon5.svg" alt="Logo" class="logo">
-          </a>
-          <h1 class="text-3xl font-bold" style="font-family: 'Courier New', monospace; padding-left: 10px;">
-            // Discover the Universe
-          </h1>
+    <canvas id="particle-canvas"></canvas>
+    <div id="background-animation">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    <header>
+        <div class="header-left">
+            <a href="index.html" id="favicon-link">
+                <img src="favicon5.svg" alt="Favicon" id="favicon">
+            </a>
+            <span id="discover-text">// Discover the Universe</span>
         </div>
-        <div class="flex items-center space-x-4">
-          <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
-            <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-          </button>
-          <label class="inline-flex items-center cursor-pointer">
-            <div class="relative">
-              <input id="darkModeSwitch" type="checkbox" class="sr-only" onchange="toggleDarkMode()">
-              <div class="block bg-gray-600 w-8 h-5 rounded-full"></div>
-              <div class="absolute left-0 bg-white w-5 h-5 rounded-full transition"></div>
-            </div>
-          </label>
+        <div class="header-center">
+            <div id="date-time"></div>
         </div>
-      </header>
-
-      <main class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="md:col-span-2">
-          <div id="calendarCard" class="bg-white shadow rounded-lg">
-            <div class="flex flex-row justify-between items-center p-4 border-b">
-              <h3 class="flex items-center text-lg leading-6 font-medium text-gray-900">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
-                Calendar
-              </h3>
-              <button id="minimizeCalendarBtn" class="p-1 rounded-md hover:bg-gray-200" onclick="toggleCalendar()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
-                  <polyline points="4 14 10 14 10 20"></polyline>
-                  <polyline points="20 10 14 10 14 4"></polyline>
-                </svg>
-              </button>
-            </div>
-            <div class="p-4">
-              <div id="calendarGrid" class="grid grid-cols-7 gap-2">
-                <div class="text-center font-bold">Sun</div>
-                <div class="text-center font-bold">Mon</div>
-                <div class="text-center font-bold">Tue</div>
-                <div class="text-center font-bold">Wed</div>
-                <div class="text-center font-bold">Thu</div>
-                <div class="text-center font-bold">Fri</div>
-                <div class="text-center font-bold">Sat</div>
-                <!-- Calendar days will be generated here -->
-              </div>
-            </div>
-          </div>
-
-          <div id="briefingCard" class="hidden bg-white shadow rounded-lg">
-            <div class="p-4 border-b">
-              <h3 class="text-lg leading-6 font-medium text-gray-900">Today's Briefing</h3>
-            </div>
-            <div class="p-4">
-              <ul id="todaysBriefing" class="space-y-2">
-                <!-- Today's briefing items will be generated here -->
-              </ul>
-            </div>
-          </div>
+    </header>
+    <main>
+        <section id="home">
+            <h1>Your Cognitive Computer</h1>
+            <p id="typing-effect">Explore our cutting-edge solutions designed with a minimalist touch.</p>
+        </section>
+        <div class="bars">
+            <a href="index.html">
+                <div class="bar">
+                    <h2>AI Task Assistant</h2>
+                    <p>Manages your notes and calendar. Personal briefings. Task extractions, actions, and reminders.</p>
+                </div>
+            </a>
+            <a href="chat.html">
+                <div class="bar">
+                    <h2>Projectspace</h2>
+                    <p>Save unique project spaces to organize your thoughts with your AI Assistant.</p>
+                </div>
+            </a>
+            <a href="nocode.html">
+                <div class="bar">
+                    <h2>AI Engineer</h2>
+                    <p>Natural Language environment to build skills in programming. No Code.</p>
+                </div>
+            </a>
+            <a href="voiceui.html">
+                <div class="bar">
+                    <h2>AI Voice Assistant</h2>
+                    <p>Discover how our voice assistant can help with research and streamline tasks.</p>
+                </div>
+            </a>
+            <a href="tutorials.html">
+                <div class="bar">
+                    <h2>Tutorials</h2>
+                    <p>Master Python for AI and Deep Learning.</p>
+                </div>
+            </a>
+            <a href="math2.html">
+                <div class="bar">
+                    <h2>Math for AI</h2>
+                    <p>Foundations for AI and Deep Learning.</p>
+                </div>
+            </a>
+            <a href="careers.html">
+                <div class="bar">
+                    <h2>Careers</h2>
+                    <p>Explore careers in AI / Deep Learning.</p>
+                </div>
+            </a>
+            <a href="ragsearch.html">
+                <div class="bar">
+                    <h2>Advanced Search</h2>
+                    <p>Advanced AI powered Search via Retrieval Augmented Generation.</p>
+                </div>
+            </a>
+            <a href="visual2.html">
+                <div class="bar">
+                    <h2>Data Visualization</h2>
+                    <p>Extract Data and find powerful ways to communicate via Data Visualization.</p>
+                </div>
+            </a>
         </div>
-
-        <div class="bg-white shadow rounded-lg">
-          <div class="p-4 border-b">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">Upcoming Events</h3>
-          </div>
-          <div class="p-4">
-            <ul id="upcomingEvents" class="space-y-2">
-              <!-- Upcoming event items will be generated here -->
+    </main>
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="about.html">About</a></li>
+                <li><a href="chat.html">Launch</a></li>
+                <li><a href="product.html">Product</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="pricing.html">Join</a></li>
             </ul>
-          </div>
+        </nav>
+        <p>© 2024 UNIVERSITAS AI</p>
+    </footer>
+    <div id="chat-box">
+        <div id="chat-header">
+            <span>Chat with Us!</span>
+            <button id="chat-close">−</button>
         </div>
-      </main>
-
-      <footer class="mt-8 text-center text-sm text-black">
-        <p>Connected with Gmail, Outlook, and iCloud</p>
-        <p class="mt-2">© 2024 Universitas AI. All rights reserved.</p>
-      </footer>
+        <div id="chat-body">
+            <p>How can we assist you today?</p>
+        </div>
+        <div id="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type your message here...">
+            <button id="chat-send">Send</button>
+        </div>
     </div>
-
-    <!-- Bottom Buttons -->
-    <div class="fixed bottom-5 left-0 right-0 flex justify-center space-x-4 px-5">
-      <button 
-        id="chatBtn"
-        class="button-circle bg-gradient-to-r from-green-400 to-blue-500"
-        onclick="toggleChat()"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-        </svg>
-      </button>
-      <button
-        id="calendarBtn"
-        class="button-circle bg-gradient-to-r from-lime-300 to-lime-500"
-        onclick="toggleCalendar()"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-          <line x1="16" y1="2" x2="16" y2="6"></line>
-          <line x1="8" y1="2" x2="8" y2="6"></line>
-          <line x1="3" y1="10" x2="21" y2="10"></line>
-        </svg>
-      </button>
-      <button
-        id="notepadBtn"
-        class="button-circle bg-red-500" 
-        onclick="toggleNotepad()"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-          <polyline points="14 2 14 8 20 8"></polyline>
-          <line x1="16" y1="13" x2="8" y2="13"></line>
-          <line x1="16" y1="17" x2="8" y2="17"></line>
-          <polyline points="10 9 9 9 8 9"></polyline>
-        </svg>
-      </button>
-      <button
-        id="mediaViewerBtn" 
-        class="button-circle bg-gradient-to-r from-purple-400 to-blue-500"
-        onclick="toggleMediaViewer()"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
-          <line x1="7" y1="2" x2="7" y2="22"></line>
-          <line x1="17" y1="2" x2="17" y2="22"></line>
-          <line x1="2" y1="12" x2="22" y2="12"></line>
-          <line x1="2" y1="7" x2="7" y2="7"></line>
-          <line x1="2" y1="17" x2="7" y2="17"></line>
-          <line x1="17" y1="17" x2="22" y2="17"></line>
-          <line x1="17" y1="7" x2="22" y2="7"></line>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Chat Component -->
-    <div id="chatCard" class="hidden fixed bottom-20 left-5 bg-white shadow rounded-lg flex">
-      <div class="flex-grow">
-        <div class="flex flex-row justify-between items-center py-2 px-4 border-b">
-          <h3 class="text-sm">Chat with Herakles</h3>
-          <button class="p-1 rounded-md hover:bg-gray-200" onclick="toggleChat()">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
+    <div id="chat-icon">
+        <span class="chat-icon-content">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic">
+                <path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
             </svg>
-          </button>
-        </div>
-        <div id="chatMessages" class="h-64 overflow-y-auto p-4">
-        <!-- Chat messages will be generated here -->
-        </div>
-        <form onsubmit="handleSendMessage(event)" class="p-2">
-          <input type="text" id="messageInput" class="w-full px-3 py-2 text-gray-700 rounded-md focus:outline-none" placeholder="Type a message...">
-        </form>
-        <div class="p-2">
-          <input type="file" id="fileUpload" class="hidden" onchange="handleFileUpload(event)">
-          <label for="fileUpload" class="cursor-pointer bg-blue-500 text-white p-2 rounded-full inline-flex items-center justify-center upload-button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="17 8 12 3 7 8"></polyline>
-              <line x1="12" y1="3" x2="12" y2="15"></line>
-            </svg>
-          </label>
-        </div>
-      </div>
-      <div id="chatHistoryPanel" class="p-4">
-        <h4 class="font-bold mb-2">Chat History</h4>
-        <ul id="chatHistoryList">
-          <!-- Chat history items will be generated here -->
-        </ul>
-      </div>
+        </span>
     </div>
-
-    <!-- Notepad Component -->
-    <div id="notepadCard" class="hidden fixed bottom-20 right-5 bg-white shadow rounded-lg">
-      <div class="flex flex-row justify-between items-center py-2 px-4 border-b">  
-        <h3 class="text-sm">Notepad</h3>
-        <button class="p-1 rounded-md hover:bg-gray-200" onclick="toggleNotepad()">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-      <div class="p-4">
-        <input type="text" id="noteTitle" placeholder="Note Title" class="w-full mb-2 p-1 border rounded">
-        <input type="text" id="noteTags" placeholder="Tags (comma-separated)" class="w-full mb-2 p-1 border rounded">
-        <div id="notepadToolbar" class="mb-2 flex flex-wrap">
-          <button onclick="applyFormat('bold')" class="mr-1 p-1 border rounded">B</button>
-          <button onclick="applyFormat('italic')" class="mr-1 p-1 border rounded">I</button>
-          <button onclick="applyFormat('underline')" class="mr-1 p-1 border rounded">U</button>
-          <select id="fontSize" onchange="changeFont()" class="mr-1 p-1 border rounded">
-            <option value="12px">12</option>
-            <option value="14px">14</option>
-            <option value="16px">16</option>
-            <option value="18px">18</option>
-          </select>
-          <button onclick="applyFormat('justifyLeft')" class="mr-1 p-1 border rounded">⇤</button>
-          <button onclick="applyFormat('justifyCenter')" class="mr-1 p-1 border rounded">↔</button>
-          <button onclick="applyFormat('justifyRight')" class="mr-1 p-1 border rounded">⇥</button>
-          <button onclick="applyFormat('insertUnorderedList')" class="mr-1 p-1 border rounded">•</button>
-          <button onclick="applyFormat('insertOrderedList')" class="mr-1 p-1 border rounded">1.</button>
-        </div>
-        <div id="notepadContent" contenteditable="true" class="w-full border p-2 overflow-y-auto"></div>
-      </div>  
-    </div>
-
-    <!-- Media Viewer Component -->
-    <div id="mediaViewerCard" class="hidden fixed bottom-20 right-5 w-full md:w-3/4 h-1/2 rounded-t-lg overflow-hidden" style="background: linear-gradient(to right, rgb(124, 58, 237), rgb(79, 70, 229))">
-      <div class="flex justify-between items-center p-4 text-white">
-        <h3 class="text-xl font-bold">Media Viewer</h3>
-        <div class="flex items-center space-x-4">
-          <select id="mediaSource" class="bg-white bg-opacity-20 text-white rounded-md px-2 py-1">
-            <option value="youtube">YouTube</option>
-            <option value="amazon">Amazon Prime</option>
-          </select>
-          <button id="toggleSecondScreen" class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-md">
-            Toggle Second Screen
-          </button>
-          <button class="p-1 rounded-md hover:bg-gray-200 hover:text-gray-800" onclick="toggleMediaViewer()">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div class="flex flex-col space-y-4 p-4">
-        <div id="mediaScreens" class="flex space-x-4">
-          <div id="primaryScreen" class="w-full h-64 bg-black flex items-center justify-center text-white">
-            <iframe id="primaryPlayer" width="100%" height="100%" src="https://www.youtube.com/embed/VIDEO_ID" title="Media Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-          <div id="secondaryScreen" class="hidden w-full h-64 bg-black flex items-center justify-center text-white">
-            <iframe id="secondaryPlayer" width="100%" height="100%" src="https://www.youtube.com/embed/VIDEO_ID" title="Secondary Media Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="px-10 pt-4">
-          <input type="text" placeholder="Search media..." class="w-full px-4 py-2 rounded-full bg-white bg-opacity-20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const app = document.getElementById('app');
-    const darkModeBtn = document.getElementById('darkModeBtn');
-    const darkModeIcon = document.getElementById('darkModeIcon');
-    const darkModeSwitch = document.getElementById('darkModeSwitch');
-    const calendarCard = document.getElementById('calendarCard');
-    const briefingCard = document.getElementById('briefingCard');
-    const minimizeCalendarBtn = document.getElementById('minimizeCalendarBtn');
-    const calendarGrid = document.getElementById('calendarGrid');
-    const upcomingEvents = document.getElementById('upcomingEvents');
-    const todaysBriefing = document.getElementById('todaysBriefing');
-    const chatCard = document.getElementById('chatCard');
-    const chatMessages = document.getElementById('chatMessages');
-    const messageInput = document.getElementById('messageInput');
-    const notepadCard = document.getElementById('notepadCard'); 
-    const mediaViewerCard = document.getElementById('mediaViewerCard');
-    const chatHistoryList = document.getElementById('chatHistoryList');
-    const mediaSource = document.getElementById('mediaSource');
-    const toggleSecondScreen = document.getElementById('toggleSecondScreen');
-    const mediaScreens = document.getElementById('mediaScreens');
-    const secondaryScreen = document.getElementById('secondaryScreen');
-    const primaryPlayer = document.getElementById('primaryPlayer');
-    const secondaryPlayer = document.getElementById('secondaryPlayer');
-
-    let isDarkMode = false;
-    let isCalendarMinimized = false;
-    let isChatOpen = false;
-    let isNotepadOpen = false;
-    let isMediaViewerOpen = false;
-    let isSecondScreenVisible = false;
-
-    function toggleDarkMode() {
-      isDarkMode = !isDarkMode;
-      console.log('Dark Mode:', isDarkMode); // Debugging line
-
-      if (isDarkMode) {
-        app.classList.remove('light-mode');
-        app.classList.add('dark-mode');
-        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
-      } else {
-        app.classList.remove('dark-mode');
-        app.classList.add('light-mode');
-        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-      }
-      darkModeSwitch.checked = isDarkMode;
-    }
-
-    function toggleCalendar() {
-      isCalendarMinimized = !isCalendarMinimized;
-      if (isCalendarMinimized) {
-        calendarCard.classList.add('hidden');
-        briefingCard.classList.remove('hidden');
-      } else {
-        calendarCard.classList.remove('hidden');
-        briefingCard.classList.add('hidden');
-      }
-    }
-
-    function toggleChat() {
-      isChatOpen = !isChatOpen;
-      chatCard.classList.toggle('hidden');
-    }
-
-    function toggleNotepad() {
-      isNotepadOpen = !isNotepadOpen;
-      notepadCard.classList.toggle('hidden');
-    }
-
-    function toggleMediaViewer() {
-      isMediaViewerOpen = !isMediaViewerOpen;
-      mediaViewerCard.classList.toggle('hidden');
-    }
-
-    function handleSendMessage(e) {
-      e.preventDefault();
-      const message = messageInput.value.trim();
-      if (message !== '') {
-        addMessageToChat('User', message);
-        messageInput.value = '';
-        
-        // Here you would typically send the message to your AI backend and get a response
-        const aiReply = "I'm just a demo AI, I can't reply yet!";
-        addMessageToChat('AI', aiReply);
-      }
-    }
-
-    function addMessageToChat(sender, message) {
-      const messageElement = document.createElement('div');
-      messageElement.classList.add('mb-2', sender === 'User' ? 'text-green-500' : 'text-blue-500');
-      messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
-      chatMessages.appendChild(messageElement);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-      // Add to chat history
-      addToChatHistory(sender, message);
-    }
-
-    function addToChatHistory(sender, message) {
-      const historyItem = document.createElement('li');
-      historyItem.textContent = `${sender}: ${message.substring(0, 20)}...`;
-      chatHistoryList.appendChild(historyItem);
-    }
-
-    function handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        addMessageToChat('User', `Uploaded file: ${file.name}`);
-        // Here you would typically handle the file upload to your backend
-      }
-    }
-
-    function toggleSecondScreenView() {
-      isSecondScreenVisible = !isSecondScreenVisible;
-      if (isSecondScreenVisible) {
-        secondaryScreen.classList.remove('hidden');
-        mediaScreens.classList.remove('flex-col');
-        mediaScreens.classList.add('flex-row');
-      } else {
-        secondaryScreen.classList.add('hidden');
-        mediaScreens.classList.remove('flex-row');
-        mediaScreens.classList.add('flex-col');
-      }
-    }
-
-    function updateMediaSource() {
-      const source = mediaSource.value;
-      let primarySrc, secondarySrc;
-
-      if (source === 'youtube') {
-        primarySrc = "https://www.youtube.com/embed/VIDEO_ID";
-        secondarySrc = "https://www.youtube.com/embed/ANOTHER_VIDEO_ID";
-      } else if (source === 'amazon') {
-        // Note: This is a placeholder. Amazon Prime doesn't allow embedding like this.
-        primarySrc = "https://www.amazon.com/gp/video/embed/VIDEO_ID";
-        secondarySrc = "https://www.amazon.com/gp/video/embed/ANOTHER_VIDEO_ID";
-      }
-
-      primaryPlayer.src = primarySrc;
-      secondaryPlayer.src = secondarySrc;
-    }
-
-    // Generate calendar days for August 2024
-    const today = new Date(2024, 7, 10); // August 10, 2024
-    const startDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
-    const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-
-    for (let i = 0; i < startDay; i++) {
-      const emptyDay = document.createElement('div');
-      calendarGrid.appendChild(emptyDay);
-    }
-
-    for (let i = 1; i <= daysInMonth; i++) {
-      const day = document.createElement('div');
-      day.classList.add('text-center', 'p-2', 'border', 'rounded-md');
-      if (i === today.getDate()) {
-        day.classList.add('today');
-      }
-      day.textContent = i;
-      calendarGrid.appendChild(day);
-    }
-
-    // Generate upcoming events
-    const events = [
-      { id: 1, title: 'Team Meeting', date: '2024-08-10', time: '10:00 AM' },
-      { id: 2, title: 'Project Deadline', date: '2024-08-15', time: '5:00 PM' },
-    ];
-
-    events.forEach(event => {
-      const eventItem = document.createElement('li');
-      eventItem.classList.add('flex', 'items-center');
-      eventItem.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
+    <!-- Dark mode toggle button -->
+    <button id="dark-mode-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+            <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
         </svg>
-        <span>${event.title} - ${event.date} at ${event.time}</span>
-      `;
-      upcomingEvents.appendChild(eventItem);
-    });
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon" style="display:none;">
+            <path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" />
+        </svg>
+    </button>
+    <script>
+        document.getElementById('chat-icon').addEventListener('click', function() {
+            document.getElementById('chat-box').style.display = 'block';
+            document.getElementById('chat-icon').style.display = 'none';
+        });
 
-    // Generate today's briefing
-    const briefingItems = [
-      'Review lecture notes for Advanced AI Ethics',
-      'Complete research paper draft', 
-      'Attend virtual lab meeting at 2 PM',
-      'Submit grant proposal for quantum computing project',
-    ];
+        document.getElementById('chat-close').addEventListener('click', function() {
+            document.getElementById('chat-box').style.display = 'none';
+            document.getElementById('chat-icon').style.display = 'flex';
+        });
 
-    briefingItems.forEach(item => {
-      const briefingItem = document.createElement('li');
-      briefingItem.classList.add('flex', 'items-center');
-      briefingItem.innerHTML = `<span>• ${item}</span>`;
-      todaysBriefing.appendChild(briefingItem);
-    });
+        function typeEffect(element, text, speed) {
+            let i = 0;
+            element.innerHTML = ""; // Clear previous content to avoid duplication
+            function typing() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typing, speed);
+                }
+            }
+            typing();
+        }
 
-    // Initialize chat messages
-    const chatInitialMessages = [
-      { sender: 'AI', message: "Hi, I'm Herakles. How can I assist you today?" }
-    ];
+        document.addEventListener("DOMContentLoaded", function() {
+            typeEffect(document.getElementById('typing-effect'), 'Discover Cognitive Computing throughout the Universitas ecosystem.', 90); // Increased speed by 10%
+        });
 
-    chatInitialMessages.forEach(msg => {
-      addMessageToChat(msg.sender, msg.message);
-    });
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+        const sunIcon = document.querySelector('.sun-icon');
+        const moonIcon = document.querySelector('.moon-icon');
 
-    // Notepad formatting functions
-    function applyFormat(format) {
-      document.execCommand(format, false, null);
-    }
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        });
 
-    function changeFont() {
-      var size = document.getElementById('fontSize').value;
-      document.execCommand('fontSize', false, size);
-    }
-
-    // Autosave functionality for notepad
-    const notepadContent = document.getElementById('notepadContent');
-    const noteTitle = document.getElementById('noteTitle');
-    const noteTags = document.getElementById('noteTags');
-
-    function saveNote() {
-      localStorage.setItem('notepadContent', notepadContent.innerHTML);
-      localStorage.setItem('noteTitle', noteTitle.value);
-      localStorage.setItem('noteTags', noteTags.value);
-    }
-
-    notepadContent.addEventListener('input', saveNote);
-    noteTitle.addEventListener('input', saveNote);
-    noteTags.addEventListener('input', saveNote);
-
-    // Load saved content on page load
-    window.addEventListener('load', function() {
-      const savedContent = localStorage.getItem('notepadContent');
-      const savedTitle = localStorage.getItem('noteTitle');
-      const savedTags = localStorage.getItem('noteTags');
-      if (savedContent) notepadContent.innerHTML = savedContent;
-      if (savedTitle) noteTitle.value = savedTitle;
-      if (savedTags) noteTags.value = savedTags;
-
-      // Initialize other components
-      updateMediaSource();
-    });
-
-    // Event listeners
-    darkModeBtn.addEventListener('click', toggleDarkMode);
-    darkModeSwitch.addEventListener('change', toggleDarkMode);
-    minimizeCalendarBtn.addEventListener('click', toggleCalendar);
-    toggleSecondScreen.addEventListener('click', toggleSecondScreenView);
-    mediaSource.addEventListener('change', updateMediaSource);
-
-    // Example of a global error handler
-    window.onerror = function(message, source, lineno, colno, error) {
-      console.error('An error occurred:', message, 'at', source, lineno, colno);
-      // You could send this error to your server for logging
-    };
-  </script>
+        // Adjust video playback duration
+        const video = document.querySelector('video');
+        if (video) {
+            video.addEventListener('loadedmetadata', () => {
+                const originalDuration = video.duration;
+                const newDuration = originalDuration + 12; // Add 12 seconds
+                video.playbackRate = originalDuration / newDuration;
+            });
+        }
+    </script>
+    <script src="innovate3.js"></script>
 </body>
 </html>
