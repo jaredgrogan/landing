@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cutting-Edge Minimalist Website</title>
+    <link rel="stylesheet" href="innovate3.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Existing styles */
+        #chat-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            display: none; /* Initially hidden */
+        }
+
+        #chat-header {
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chat-body {
+            padding: 20px;
+        }
+
+        #chat-input-container {
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+        }
+
+        #chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        #chat-send {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px; /* Rounded edges for chat send button */
+        }
+
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            padding: 10px; /* Added 10px padding inside the button */
+            background: linear-gradient(45deg, #4caf50, #2196f3);
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        #chat-icon:hover {
+            transform: scale(1.5);
+        }
+
+        /* Padding adjustments */
+        .bars {
+            padding-bottom: 10px; /* Added padding below the bars */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .bars a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: 600px; /* Increased width to 600px (100% wider) */
+            margin: 10px;
+        }
+
+        .bar {
+            background: #f5f5f5;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 15px; /* Rounded edges for bars */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .bar:hover {
+            transform: translateY(-5px);
+        }
+
+        footer {
+            padding-top: 15px; /* Added padding above the footer nav */
+        }
+
+        footer p {
+            padding-top: 15px; /* Added padding between footer nav and copyright */
+        }
+
+        /* Reduce font size for date-time */
+        #date-time {
+            font-size: 80%; /* Reduced font size by 20% */
+        }
+
+        /* Adjust wave animation duration to slow it down */
+        .wave {
+            animation: wave-animation 42s linear infinite; /* Increased duration to 42s */
+        }
+
+        @keyframes wave-animation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Additional spacing below the main heading */
+        #home h1 {
+            margin-bottom: 10px; /* Added 10px buffer below the heading */
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        body.dark-mode header {
+            background-color: #1e1e1e;
+        }
+
+        body.dark-mode #chat-box {
+            background-color: #1e1e1e;
+            border-color: #333;
+        }
+
+        body.dark-mode .bar {
+            background-color: #2a2a2a;
+            border-color: #333;
+        }
+
+        body.dark-mode #chat-header {
+            background-color: #333;
+        }
+
+        /* Dark mode toggle */
+        #dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #dark-mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* Updated styles */
+        #discover-text {
+            font-weight: bold;
+        }
+
+        body.dark-mode #discover-text {
+            color: white;
+        }
+
+        body.dark-mode #date-time {
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        body.dark-mode #dark-mode-toggle .moon-icon {
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+    <div id="background-animation">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    <header>
+        <div class="header-left">
+            <a href="index.html" id="favicon-link">
+                <img src="favicon5.svg" alt="Favicon" id="favicon">
+            </a>
+            <span id="discover-text">// Discover the Universe</span>
+        </div>
+        <div class="header-center">
+            <div id="date-time"></div>
+        </div>
+    </header>
+    <main>
+        <section id="home">
+            <h1>Your Cognitive Computer</h1>
+            <p id="typing-effect">Explore our cutting-edge solutions designed with a minimalist touch.</p>
+        </section>
+        <div class="bars">
+            <a href="index.html">
+                <div class="bar">
+                    <h2>AI Task Assistant</h2>
+                    <p>Manages your notes and calendar. Personal briefings. Task extractions, actions, and reminders.</p>
+                </div>
+            </a>
+            <a href="chat.html">
+                <div class="bar">
+                    <h2>Projectspace</h2>
+                    <p>Save unique project spaces to organize your thoughts with your AI Assistant.</p>
+                </div>
+            </a>
+            <a href="nocode.html">
+                <div class="bar">
+                    <h2>AI Engineer</h2>
+                    <p>Natural Language environment to build skills in programming. No Code.</p>
+                </div>
+            </a>
+            <a href="voiceui.html">
+                <div class="bar">
+                    <h2>AI Voice Assistant</h2>
+                    <p>Discover how our voice assistant can help with research and streamline tasks.</p>
+                </div>
+            </a>
+            <a href="tutorials.html">
+                <div class="bar">
+                    <h2>Tutorials</h2>
+                    <p>Master Python for AI and Deep Learning.</p>
+                </div>
+            </a>
+            <a href="math2.html">
+                <div class="bar">
+                    <h2>Math for AI</h2>
+                    <p>Foundations for AI and Deep Learning.</p>
+                </div>
+            </a>
+            <a href="careers.html">
+                <div class="bar">
+                    <h2>Careers</h2>
+                    <p>Explore careers in AI / Deep Learning.</p>
+                </div>
+            </a>
+            <a href="ragsearch.html">
+                <div class="bar">
+                    <h2>Advanced Search</h2>
+                    <p>Advanced AI powered Search via Retrieval Augmented Generation.</p>
+                </div>
+            </a>
+            <a href="visual2.html">
+                <div class="bar">
+                    <h2>Data Visualization</h2>
+                    <p>Extract Data and find powerful ways to communicate via Data Visualization.</p>
+                </div>
+            </a>
+        </div>
+    </main>
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="about.html">About</a></li>
+                <li><a href="chat.html">Launch</a></li>
+                <li><a href="product.html">Product</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="pricing.html">Join</a></li>
+            </ul>
+        </nav>
+        <p>© 2024 UNIVERSITAS AI</p>
+    </footer>
+    <div id="chat-box">
+        <div id="chat-header">
+            <span>Chat with Us!</span>
+            <button id="chat-close">−</button>
+        </div>
+        <div id="chat-body">
+            <p>How can we assist you today?</p>
+        </div>
+        <div id="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type your message here...">
+            <button id="chat-send">Send</button>
+        </div>
+    </div>
+    <div id="chat-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic">
+            <path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
+    </div>
+    <!-- Dark mode toggle button -->
+    <button id="dark-mode-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+            <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon" style="display:none;">
+            <path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" />
+        </svg>
+    </button>
+    <script>
+        document.getElementById('chat-icon').addEventListener('click', function() {
+            document.getElementById('chat-box').style.display = 'block';
+            document.getElementById('chat-icon').style.display = 'none';
+        });
+
+        document.getElementById('chat-close').addEventListener('click', function() {
+            document.getElementById('chat-box').style.display = 'none';
+            document.getElementById('chat-icon').style.display = 'flex';
+        });
+
+        function typeEffect(element, text, speed) {
+            let i = 0;
+            element.innerHTML = ""; // Clear previous content to avoid duplication
+            function typing() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typing, speed);
+                }
+            }
+            typing();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            typeEffect(document.getElementById('typing-effect'), 'Discover Cognitive Computing throughout the Universitas ecosystem.', 90); // Increased speed by 10%
+        });
+
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+        const sunIcon = document.querySelector('.sun-icon');
+        const moonIcon = document.querySelector('.moon-icon');
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        });
+
+        // Adjust video playback duration
+        const video = document.querySelector('video');
+        if (video) {
+            video.addEventListener('loadedmetadata', () => {
+                const originalDuration = video.duration;
+                const newDuration = originalDuration + 12; // Add 12 seconds
+                video.playbackRate = originalDuration / newDuration;
+            });
+        }
+    </script>
+    <script src="innovate3.js"></script>
+</body>
+</html>
