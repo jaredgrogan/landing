@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Console</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* Dark Theme */
+    body {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .chat-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .chat-bubble {
+      padding: 10px 15px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      max-width: 80%;
+      word-wrap: break-word;
+      position: relative;
+      color: white;
+      font-size: 14px;
+    }
+
+    .chat-bubble.user {
+      background: linear-gradient(to right, #4CAF50, #66BB6A);
+      align-self: flex-end;
+    }
+
+    .chat-bubble.ai {
+      background: linear-gradient(to right, #2196F3, #42A5F5);
+      align-self: flex-start;
+    }
+
+    .typing-indicator {
+      width: 40px;
+      height: 10px;
+      background-color: #555;
+      border-radius: 5px;
+      position: relative;
+      margin-left: 15px;
+      animation: typing 1s infinite;
+    }
+
+    @keyframes typing {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(5px);
+      }
+    }
+
+    .voice-input-btn {
+      background: none;
+      border: none;
+      color: #e0e0e0;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .response-suggestions {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+
+    .response-suggestions button {
+      background: #333;
+      color: white;
+      border-radius: 20px;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .response-suggestions button:hover {
+      background: #444;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid #555;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      margin-right: 10px;
+      background: #2a2a2a;
+      color: white;
+    }
+
+    .input-container input:focus {
+      outline: none;
+    }
+
+    .input-container button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+
+    .input-container button:hover {
+      background: #66BB6A;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="response-suggestions">
+      <button>How can I help?</button>
+      <button>Tell me more</button>
+      <button>What's next?</button>
+    </div>
+    
+    <div id="chatBox">
+      <div class="chat-bubble ai">Hi, how can I assist you today?</div>
+    </div>
+    
+    <div class="typing-indicator hidden" id="typingIndicator"></div>
+    
+    <div class="input-container">
+      <input type="text" id="messageInput" placeholder="Type a message...">
+      <button class="voice-input-btn" id="voiceInputBtn">&#x1F3A4;</button>
+      <button id="sendMessageBtn">&#x27A4;</button>
+    </div>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById('chatBox');
+    const messageInput = document.getElementById('messageInput');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const voiceInputBtn = document.getElementById('voiceInputBtn');
+    
+    sendMessageBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    function sendMessage() {
+      const message = messageInput.value.trim();
+      if (message) {
+        // Add user's message to chat
+        const userBubble = document.createElement('div');
+        userBubble.classList.add('chat-bubble', 'user');
+        userBubble.textContent = message;
+        chatBox.appendChild(userBubble);
+        messageInput.value = '';
+
+        // Simulate AI typing
+        simulateTyping();
+      }
+    }
+
+    function simulateTyping() {
+      typingIndicator.classList.remove('hidden');
+      setTimeout(() => {
+        typingIndicator.classList.add('hidden');
+
+        // Add AI's response
+        const aiBubble = document.createElement('div');
+        aiBubble.classList.add('chat-bubble', 'ai');
+        aiBubble.textContent = "I'm here to help! What can I do for you?";
+        chatBox.appendChild(aiBubble);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 2000); // Simulating 2 seconds delay for AI response
+    }
+
+    // Voice input (uses Web Speech API if supported)
+    voiceInputBtn.addEventListener('click', function() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const transcript = Array.from(event.results)
+          .map(result => result[0])
+          .map(result => result.transcript)
+          .join('');
+
+        messageInput.value = transcript;
+
+        if (event.results[0].isFinal) {
+          sendMessage();
+        }
+      };
+
+      recognition.onerror = function(event) {
+        console.error('Speech recognition error:', event.error);
+      };
+    });
+  </script>
+</body>
+</html>
