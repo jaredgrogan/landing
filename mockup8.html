@@ -1,0 +1,173 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discover the Universe</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .dark-mode {
+      background-color: #111111; /* Ensure this color is applied */
+      color: #e0e0e0;
+    }
+
+    .dark-mode .bg-white {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .text-gray-900 {
+      color: #e0e0e0;
+    }
+
+    .dark-mode footer {
+      color: white;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6; 
+      color: #111827;
+    }
+
+    .logo-container {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: none;
+      background: none;
+      transition: transform 0.3s;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      transition: transform 0.3s;
+    }
+
+    .logo-container:hover,
+    .button-circle:hover {
+      transform: scale(1.5);
+    }
+
+    .button-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      transition: transform 0.3s;
+    }
+
+    .button-circle#calendarBtn {
+      background: linear-gradient(to right, #ff7e5f, #feb47b);
+    }
+
+    .button-circle svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #notepadCard {
+      width: 432px;
+      height: 648px;
+      resize: both;
+      overflow: auto;
+    }
+
+    #notepadContent {
+      height: calc(100% - 140px);
+    }
+
+    #chatCard {
+      width: 500px;
+      height: 440px;
+    }
+
+    #chatHistoryPanel {
+      width: 200px;
+      border-left: 1px solid #e0e0e0;
+      background-color: white;
+      color: black;
+    }
+
+    .dark-mode #chatHistoryPanel {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      border-left: 1px solid #111111;
+    }
+
+    .upload-button {
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .upload-button:hover {
+      background-color: #3b82f6;
+      transform: scale(1.1);
+    }
+
+    .today {
+      background-color: #3b82f6;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="min-h-screen light-mode">
+    <div class="container mx-auto p-4">
+      <header class="flex justify-between items-center mb-8">
+        <div class="flex items-center">
+          <a href="index.html" class="logo-container">
+            <img src="favicon5.svg" alt="Logo" class="logo">
+          </a>
+          <h1 class="text-3xl font-bold" style="font-family: 'Courier New', monospace; padding-left: 10px;">
+            // Discover the Universe
+          </h1>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+            <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Other content remains unchanged -->
+
+      <footer class="mt-8 text-center text-sm text-black">
+        <p>Connected with Gmail, Outlook, and iCloud</p>
+        <p class="mt-2">© 2024 Universitas AI. All rights reserved.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const app = document.getElementById('app');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+
+    let isDarkMode = false;
+
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+    }
+  </script>
+</body>
+</html>
