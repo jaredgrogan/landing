@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Console</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <style>
+    /* Berkeley Mono Font */
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .chat-container {
+      max-width: 600px;
+      margin: 100px auto 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 120px);
+    }
+
+    .chat-bubble {
+      padding: 10px 15px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      max-width: 80%;
+      word-wrap: break-word;
+      position: relative;
+      display: flex;
+      align-items: center;
+      color: white;
+      font-size: 14px;
+      border: 2px dotted grey;
+    }
+
+    .chat-bubble.user {
+      background: linear-gradient(to right, #4CAF50, #42A5F5);
+      align-self: flex-end;
+    }
+
+    .chat-bubble.ai {
+      background: linear-gradient(to right, #42A5F5, #9C27B0);
+      align-self: flex-start;
+    }
+
+    .typing-indicator {
+      width: 40px;
+      height: 10px;
+      background-color: #555;
+      border-radius: 5px;
+      position: relative;
+      margin-left: 15px;
+      animation: typing 1s infinite;
+    }
+
+    @keyframes typing {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      50% {
+        transform: translateX(5px);
+      }
+    }
+
+    .voice-input-btn,
+    .send-message-btn {
+      background: linear-gradient(to right, #4CAF50, #42A5F5);
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      transition: background-color 0.3s;
+    }
+
+    .voice-input-btn {
+      margin-right: 10px;
+    }
+
+    .voice-input-btn:hover,
+    .send-message-btn:hover {
+      background: linear-gradient(to right, #66BB6A, #42A5F5);
+    }
+
+    .response-suggestions {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+
+    .response-suggestions button {
+      background: #333;
+      color: white;
+      border-radius: 20px;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .response-suggestions button:hover {
+      background: #444;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid #555;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      margin-right: 10px;
+      background: #d3d3d3; /* Light grey background for Day mode */
+      color: black; /* Black text */
+      height: 160px;
+    }
+
+    .light-mode .input-container input {
+      background: #d3d3d3; /* Light grey background in Day mode */
+      color: black; /* Black text in Day mode */
+    }
+
+    .dark-mode .input-container input {
+      background: #2a2a2a; /* Dark background for Night mode */
+      color: white; /* White text for Night mode */
+    }
+
+    .input-container input:focus {
+      outline: none;
+    }
+
+    .input-container .attachment-btn {
+      background: none;
+      border: none;
+      margin-right: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .input-container .attachment-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .dropzone {
+      border: 2px dashed grey;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      color: #888;
+      overflow-y: auto;
+    }
+
+    .dropzone.dragover {
+      border-color: #42A5F5;
+      color: #42A5F5;
+    }
+
+    /* Day/Night Mode Toggle Button */
+    .toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    /* Language Selection Dropdown */
+    .language-select {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      z-index: 100;
+    }
+
+    .language-select select {
+      background: none;
+      color: inherit;
+      border: 1px solid currentColor;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    .language-select select:focus {
+      outline: none;
+    }
+
+    /* Favicon and Heading */
+    .header-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+
+    .header-container h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 27px;
+      font-weight: bold;
+      color: black;
+      transition: color 0.3s;
+    }
+
+    /* Responsive Heading for Mobile */
+    @media (max-width: 640px) {
+      .header-container h1 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 455px) {
+      .header-container h1 {
+        font-size: 18px;
+        display: none;
+      }
+
+      .header-container::after {
+        content: "//";
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        color: black;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .header-container h1 {
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: none;
+      }
+
+      /* Display just "//" on very small screens */
+      .header-container::after {
+        content: "//";
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+        color: black;
+      }
+    }
+
+    /* Navigation Header */
+    .nav-header {
+      position: fixed;
+      top: 24px;
+      right: 230px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-header ul {
+      display: flex
