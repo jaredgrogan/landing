@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET UNIVERSITAS PRO</title>
+    <link rel="stylesheet" href="styles4.css">
+    <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .minilogo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+        .minilogo:hover {
+            transform: scale(1.5);
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.5);
+            transition: transform 0.3s ease;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        a:visited, a:active {
+            color: inherit;
+        }
+        .circle {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            line-height: 100px;
+            text-align: center;
+            font-size: 5rem;
+        }
+        .u {
+            color: #000; /* Default color for day mode */
+            font-size: 5rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .night-mode .u {
+            color: #fff; /* Change to white in night mode */
+        }
+        .title {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 4rem; /* Ultra-large font size */
+            font-weight: 700; /* Bold weight */
+            color: #000; /* Default color for day mode */
+            margin: 0;
+        }
+        .night-mode .title {
+            color: #fff; /* Change to white in night mode */
+        }
+        .banner {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #000; /* Default color for day mode */
+            text-align: left;
+            position: absolute;
+            top: 80px; /* Adjusted to line up with the base of the "U" in the favicon */
+            left: 80px; /* To align it properly with the minilogo */
+        }
+        .night-mode .banner {
+            color: #fff; /* Change to white in night mode */
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <a href="index.html" class="minilogo">
+        <img src="/favicon5.svg" alt="miniLogo">
+    </a>
+    <div class="banner">// Discover the Universe</div>
+    <div class="container">
+        <a href="app.html">
+            <div class="logo">
+                <div class="circle">
+                    <span class="u">U</span>
+                </div>
+            </div>
+        </a>
+        <div class="content">
+            <button class="enter-btn" onclick="launchApp()">
+                <h1 class="title">Your Cognitive Computer.</h1>
+            </button>
+        </div>
+        <div class="mode-toggle" onclick="toggleMode()">
+            <span id="mode-text">&#9728;</span> <!-- Sun icon -->
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </div>
+    <script src="script4.js"></script>
+</body>
+</html>
