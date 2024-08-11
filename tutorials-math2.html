@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math for AI Tutorials</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --header-bg: #fff;
+            --card-bg: #fff;
+            --border-color: #ddd;
+        }
+
+        .night-mode {
+            --bg-color: #111111;
+            --text-color: #fff;
+            --header-bg: #444444;
+            --card-bg: #444444;
+            --border-color: #888888;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.1);
+        }
+
+        .logo span {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .date-time-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-time {
+            font-family: 'Courier New', monospace;
+        }
+
+        .night-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 24px;
+            height: 24px;
+        }
+
+        .night-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .night-mode-toggle svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--text-color);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(120deg, var(--bg-color), var(--header-bg));
+            transition: background 0.3s;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        .cta-button {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            padding: 13px 20px; /* Updated padding */
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        .search-bar {
+            margin: 20px auto;
+            width: 50%;
+            text-align: center;
+        }
+
+        .search-bar input {
+            width: 80%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            outline: none;
+            transition: box-shadow 0.3s ease;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .search-bar input:focus {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .filter-section {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .filter-dropdown {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .filter-dropdown:focus {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .learning-outcomes {
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .learning-outcomes h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .learning-outcomes-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 10px;
+            padding: 10px;
+            animation: scroll 30s linear infinite;
+        }
+
+        .learning-outcomes-carousel div {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .learning-outcomes-carousel div:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        .tutorials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .tutorial-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tutorial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tutorial-card h3 {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        .footer {
+            background-color: var(--header-bg);
+            color: var(--text-color);
+            padding: 20px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            transition: background-color 0.3s;
+        }
+
+        .footer nav a {
+            font-family: 'Roboto', sans-serif;
+            margin: 0 10px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: transform 0.3s ease;
+        }
+
+        .footer nav a:hover {
+            transform: scale(1.5);
+        }
+
+        .chat-bot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            padding: 13px; /* Updated padding */
+            background: linear-gradient(to right, #4CAF50, #2196F3);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-bot:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-bot-content {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            max-height: 500px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-bot-content h3 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+        }
+
+        .chat-bot-content #chat-content {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .chat-bot-content input {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            outline: none;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="favicon5.svg" alt="Logo"></a>
+            <span>Universitas AI</span>
+        </div>
+        <div class="date-time-toggle">
+            <span id="date-time-display"></span>
+            <button class="night-mode-toggle" id="night-mode-toggle">
+                <svg viewBox="0 0 24 24" id="mode-icon">
+                    <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Master Math for AI</h1>
+        <p>Hands-on tutorials and projects to build your skills.</p>
+        <button class="cta-button">Sign Up Now</button>
+    </section>
+
+    <section class="search-bar">
+        <input type="text" placeholder="Search tutorials, courses, projects..." id="search-input">
+    </section>
+
+    <section class="filter-section">
+        <select class="filter-dropdown" id="category-filter">
+            <option value="">All Categories</option>
+            <option value="Linear Algebra">Linear Algebra</option>
+            <option value="Probability">Probability</option>
+            <option value="Statistics">Statistics</option>
+            <option value="Calculus">Calculus</option>
+            <option value="Discrete Math">Discrete Math</option>
+        </select>
+        <select class="filter-dropdown" id="difficulty-filter">
+            <option value="">All Difficulties</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+        </select>
+        <select class="filter-dropdown" id="framework-filter">
+            <option value="">All Frameworks</option>
+            <option value="NumPy">NumPy</option>
+            <option value="SciPy">SciPy</option>
+            <option value="PyMC3">PyMC3</option>
+            <option value="TensorFlow Probability">TensorFlow Probability</option>
+            <option value="Built-in Python data structures">Built-in Python data structures</option>
+            <option value="Built-in Python libraries">Built-in Python libraries</option>
+            <option value="TensorFlow">TensorFlow</option>
+            <option value="PyTorch">PyTorch</option>
+            <option value="Scikit-learn">Scikit-learn</option>
+            <option value="NetworkX">NetworkX</option>
+        </select>
+    </section>
+
+    <section class="learning-outcomes">
+        <h2>Learning Outcomes</h2>
+        <div class="learning-outcomes-carousel" id="outcomes-list">
+            <!-- Carousel items will be auto-populated here -->
+        </div>
+    </section>
+
+    <section class="tutorials-grid" id="tutorials-grid">
+        <!-- Tutorial cards will be dynamically added here -->
+    </section>
+
+    <footer class="footer">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="app.html">Launch</a>
+            <a href="product.html">Product</a>
+            <a href="discover.html">Discover</a>
+            <a href="pricing.html">Join</a>
+        </nav>
+        <p>&copy; 2024 Universitas AI</p>
+    </footer>
+
+    <div class="chat-bot" onclick="toggleChatBot()">
+        <!-- Updated to Chat Bubble Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+    </div>
+    <div class="chat-bot-content" id="chat-bot-content">
+        <h3>How can I help you?</h3>
+        <div id="chat-content">
+            <!-- Chat content here -->
+        </div>
+        <input type="text" placeholder="Type your question here..." id="chat-input">
+    </div>
+
+    <script>
+        // Night mode toggle
+        const nightModeToggle = document.getElementById('night-mode-toggle');
+        const body = document.body;
+        const modeIcon = document.getElementById('mode-icon');
+
+        nightModeToggle.addEventListener('click', () => {
+            body.classList.toggle('night-mode');
+            updateModeIcon();
+        });
+
+        function updateModeIcon() {
+            if (body.classList.contains('night-mode')) {
+                modeIcon.innerHTML = '<path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />';
+            } else {
+                modeIcon.innerHTML = '<path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />';
+            }
+        }
+
+        // Display Current Date and Time
+        function updateDateTime() {
+            const dateTimeDisplay = document.getElementById('date-time-display');
+            const now = new Date();
+            dateTimeDisplay.innerText = now.toLocaleString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Tutorial data
+        const tutorials = [
+            { title: "Introduction to Matrix Multiplication", category: "Linear Algebra", difficulty: "Beginner", framework: "NumPy, SciPy" },
+            { title: "Basic Linear Algebra Applications in AI", category: "Linear Algebra", difficulty: "Beginner", framework: "NumPy, SciPy" },
+            { title: "Fundamentals of Probability", category: "Probability", difficulty: "Beginner", framework: "NumPy, SciPy" },
+            { title: "Introduction to Bayesian Methods", category: "Probability", difficulty: "Intermediate", framework: "PyMC3, TensorFlow Probability" },
+            { title: "Basic Data Structures", category: "Discrete Math", difficulty: "Beginner", framework: "Built-in Python data structures" },
+            { title: "Advanced Matrix Operations", category: "Linear Algebra", difficulty: "Intermediate", framework: "NumPy, SciPy" },
+            { title: "Linear Algebra in Machine Learning", category: "Linear Algebra", difficulty: "Intermediate", framework: "NumPy, SciPy" },
+            { title: "Probability Distributions and Their Applications", category: "Probability", difficulty: "Intermediate", framework: "NumPy, SciPy" },
+            { title: "Bayesian Inference and Applications", category: "Probability", difficulty: "Intermediate", framework: "PyMC3, TensorFlow Probability" },
+            { title: "Algorithm Structures in AI", category: "Discrete Math", difficulty: "Intermediate", framework: "Built-in Python libraries" },
+            { title: "Model Architecture Design", category: "Calculus", difficulty: "Intermediate", framework: "TensorFlow, PyTorch" },
+            { title: "Understanding Loss Functions", category: "Calculus", difficulty: "Intermediate", framework: "TensorFlow, PyTorch" },
+            { title: "Gradient Descent Optimization", category: "Calculus", difficulty: "Intermediate", framework: "TensorFlow, PyTorch" },
+            { title: "Ensemble Methods in Machine Learning", category: "Statistics", difficulty: "Intermediate", framework: "Scikit-learn" },
+            { title: "Advanced Data Structures", category: "Discrete Math", difficulty: "Intermediate", framework: "Built-in Python libraries" },
+            { title: "Discrete Mathematics for AI", category: "Discrete Math", difficulty: "Intermediate", framework: "NetworkX" },
+            { title: "Backpropagation Algorithms", category: "Calculus", difficulty: "Intermediate", framework: "TensorFlow, PyTorch" },
+            { title: "Feed Forward Neural Networks", category: "Calculus", difficulty: "Intermediate", framework: "TensorFlow, PyTorch" },
+            { title: "Convolutional Neural Networks (CNNs)", category: "Calculus", difficulty: "Intermediate", framework: "TensorFlow, PyTorch" },
+            { title: "Recurrent Neural Networks (RNNs)", category: "Calculus", difficulty: "Intermediate", framework: "TensorFlow, PyTorch" },
+            { title: "Transformers in Deep Learning", category: "Calculus", difficulty: "Intermediate", framework: "TensorFlow, PyTorch" },
+            { title: "Advanced Gradient Descent Techniques", category: "Calculus", difficulty: "Intermediate", framework: "TensorFlow, PyTorch" },
+            { title: "Vector Math in Machine Learning", category: "Linear Algebra", difficulty: "Intermediate", framework: "NumPy, SciPy" },
+            { title: "Advanced Ensemble Methods", category: "Statistics", difficulty: "Intermediate", framework: "Scikit-learn" },
+            { title: "Decision Trees and Random Forests", category: "Statistics", difficulty: "Intermediate", framework: "Scikit-learn" },
+        ];
+
+        // Populate tutorials
+        function populateTutorials(filteredTutorials = tutorials) {
+            const grid = document.getElementById('tutorials-grid');
+            grid.innerHTML = ''; // Clear existing tutorials
+
+            filteredTutorials.forEach(tutorial => {
+                const card = document.createElement('div');
+                card.className = 'tutorial-card fade-in';
+                card.innerHTML = `
+                    <h3>${tutorial.title}</h3>
+                    <p>Category: ${tutorial.category}</p>
+                    <p>Difficulty: ${tutorial.difficulty}</p>
+                    <p>Framework: ${tutorial.framework}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter tutorials
+        function filterTutorials() {
+            const categoryFilter = document.getElementById('category-filter').value;
+            const difficultyFilter = document.getElementById('difficulty-filter').value;
+            const frameworkFilter = document.getElementById('framework-filter').value;
+            const searchInput = document.getElementById('search-input').value.toLowerCase();
+
+            const filteredTutorials = tutorials.filter(tutorial => 
+                (categoryFilter === '' || tutorial.category === categoryFilter) &&
+                (difficultyFilter === '' || tutorial.difficulty === difficultyFilter) &&
+                (frameworkFilter === '' || tutorial.framework.includes(frameworkFilter)) &&
+                (tutorial.title.toLowerCase().includes(searchInput) || 
+                 tutorial.category.toLowerCase().includes(searchInput) || 
+                 tutorial.framework.toLowerCase().includes(searchInput))
+            );
+
+            populateTutorials(filteredTutorials);
+        }
+
+        // Add event listeners for filters and search
+        document.getElementById('category-filter').addEventListener('change', filterTutorials);
+        document.getElementById('difficulty-filter').addEventListener('change', filterTutorials);
+        document.getElementById('framework-filter').addEventListener('change', filterTutorials);
+        document.getElementById('search-input').addEventListener('input', filterTutorials);
+
+        // Populate learning outcomes carousel
+        function populateLearningOutcomes() {
+            const outcomes = [
+                "Implement a CNN for image classification using PyTorch",
+                "Build an LSTM model for sentiment analysis using Keras",
+                "Develop a time series forecasting model with TensorFlow",
+                "Master tensor operations and autograd in PyTorch",
+                "Implement transformer architectures for NLP with Hugging Face Transformers",
+                "Create advanced computer vision applications using TensorFlow",
+                "Implement a basic blockchain and cryptocurrency in Python",
+                "Generate synthetic images using GANs with PyTorch/TensorFlow",
+                "Apply LSTM networks to complex time series problems",
+                "Develop an RL agent for game environments with OpenAI Gym"
+            ];
+
+            const outcomesList = document.getElementById('outcomes-list');
+            outcomes.forEach(outcome => {
+                const item = document.createElement('div');
+                item.textContent = outcome;
+                outcomesList.appendChild(item);
+            });
+        }
+
+        // Chat bot toggle function
+        function toggleChatBot() {
+            const chatContent = document.getElementById('chat-bot-content');
+            chatContent.style.display = chatContent.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Initial population of tutorials and learning outcomes
+        populateTutorials();
+        populateLearningOutcomes();
+    </script>
+</body>
+</html>
