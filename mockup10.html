@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET UNIVERSITAS PRO</title>
+    <link rel="stylesheet" href="styles4.css">
+    <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
+    <style>
+        .minilogo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+        .minilogo:hover {
+            transform: scale(1.5);
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.5);
+            transition: transform 0.3s ease;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        a:visited, a:active {
+            color: inherit;
+        }
+        .circle {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            line-height: 100px;
+            text-align: center;
+            font-size: 5rem;
+        }
+        .u {
+            color: #000; /* Default color for day mode */
+            font-size: 5rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .night-mode .u {
+            color: #fff; /* Change to white in night mode */
+        }
+
+        /* Day/Night mode icons */
+        .mode-toggle {
+            cursor: pointer;
+            font-size: 24px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <a href="index.html" class="minilogo">
+        <img src="/favicon5.svg" alt="miniLogo">
+    </a>
+    <div class="banner">// Discover the Universe</div>
+    <div class="container">
+        <a href="app.html">
+            <div class="logo">
+                <div class="circle">
+                    <span class="u">U</span>
+                </div>
+            </div>
+        </a>
+        <div class="content">
+            <button class="enter-btn" onclick="launchApp()">
+                <h1 class="title">Your Cognitive Computer.</h1>
+            </button>
+        </div>
+        <div class="mode-toggle" id="modeToggle">
+            <!-- Sun and Moon Icons for Day/Night Mode -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-icon">
+                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="moon-icon" style="display: none;">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </div>
+
+    <script>
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+        const sunIcon = modeToggle.querySelector('.sun-icon');
+        const moonIcon = modeToggle.querySelector('.moon-icon');
+
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('night-mode');
+            if (body.classList.contains('night-mode')) {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        });
+    </script>
+    <script src="script4.js"></script>
+</body>
+</html>
