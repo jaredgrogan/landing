@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Learning Dashboard - Universitas Pro</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            padding: 20px 0 0 20px;
+        }
+        .slogan {
+            margin-left: 20px;
+            font-style: italic;
+        }
+        .mode-toggle {
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 15px;
+            transition: background-color 0.3s;
+        }
+        .content-wrapper {
+            display: flex;
+            flex-grow: 1;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .nav-item:hover {
+            background-color: #e9ecef;
+        }
+        .nav-item i {
+            margin-right: 10px;
+        }
+        .search-bar {
+            margin: 20px 0;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #007bff, #4da3ff);
+            width: 0%;
+            transition: width 0.5s ease-out;
+        }
+        .btn {
+            padding: 10px 15px;
+            background: linear-gradient(to right, #007bff, #4da3ff);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .quick-link {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .quick-link:hover {
+            background-color: #e9ecef;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s;
+        }
+        body.night-mode {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        body.night-mode .header,
+        body.night-mode .sidebar,
+        body.night-mode .footer {
+            background-color: #2a2a2a;
+        }
+        body.night-mode .card,
+        body.night-mode .quick-link {
+            background-color: #2a2a2a;
+        }
+        body.night-mode .nav-item:hover,
+        body.night-mode .quick-link:hover {
+            background-color: #3a3a3a;
+        }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+            .main-content {
+                order: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-container">
+                <img src="favicon5.svg" alt="Logo" class="logo">
+                <div class="slogan">// Discover the Universe.</div>
+            </div>
+            <div class="mode-toggle" id="modeToggle">🌞</div>
+        </header>
+        <div class="content-wrapper">
+            <div class="sidebar">
+                <nav>
+                    <div class="nav-item"><i>🏠</i> Foundations of ML</div>
+                    <div class="nav-item"><i>🧠</i> Neural Networks</div>
+                    <div class="nav-item"><i>💻</i> Deep Learning</div>
+                    <div class="nav-item"><i>🌐</i> AI Applications</div>
+                </nav>
+            </div>
+            <div class="main-content">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search topics...">
+                </div>
+                <h1>AI and Deep Learning Dashboard</h1>
+                <div class="card">
+                    <h2>Your Progress: PyTorch for NLP</h2>
+                    <div class="progress-bar">
+                        <div class="progress" id="progressBar"></div>
+                    </div>
+                    <p>You're <span id="progressText">0%</span> through the course. Keep it up!</p>
+                    <button class="btn">Continue Learning →</button>
+                </div>
+                <div class="card">
+                    <h2>Key Concept Spotlight</h2>
+                    <p id="keyConcept">Backpropagation</p>
+                    <button class="btn">Learn More</button>
+                </div>
+                <div class="card">
+                    <h2>Quick Links</h2>
+                    <div class="quick-links">
+                        <div class="quick-link">📚 Learning Resources</div>
+                        <div class="quick-link">💻 Coding Exercises</div>
+                        <div class="quick-link">🧠 AI Concepts</div>
+                        <div class="quick-link">🌐 Community Forum</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            Copyright 2024 UNIVERSITAS AI
+        </footer>
+    </div>
+
+    <script>
+        // Simulating progress update
+        let progress = 0;
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        setInterval(() => {
+            if (progress < 100) {
+                progress += 1;
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `${progress}%`;
+            }
+        }, 1000);
+
+        // Key concept rotation
+        const concepts = ["Backpropagation", "Convolutional Neural Networks", "Recurrent Neural Networks", "Transformers", "Reinforcement Learning"];
+        let conceptIndex = 0;
+        const keyConceptElement = document.getElementById('keyConcept');
+        setInterval(() => {
+            conceptIndex = (conceptIndex + 1) % concepts.length;
+            keyConceptElement.textContent = concepts[conceptIndex];
+        }, 5000);
+
+        // Day/Night mode toggle
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+
+        function enableNightMode() {
+            body.classList.add('night-mode');
+            modeToggle.textContent = '🌙';
+        }
+
+        function enableDayMode() {
+            body.classList.remove('night-mode');
+            modeToggle.textContent = '🌞';
+        }
+
+        modeToggle.addEventListener('click', () => {
+            if (body.classList.contains('night-mode')) {
+                enableDayMode();
+            } else {
+                enableNightMode();
+            }
+        });
+    </script>
+</body>
+</html>
