@@ -540,18 +540,19 @@
             document.querySelector('footer').style.backgroundColor = '#1e1e1e';
             document.querySelector('footer').style.color = 'white';
           } else {
-            app.classList.remove('dark-mode');
-            app.classList.add('light-mode');
-            darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-            headerText.style.color = 'black';
-            navMenuItem.style.color = 'black';
-            document.querySelector('nav').style.backgroundColor = '#f3f4f6';
-            document.querySelector('nav a').style.color = 'black';
-            document.querySelector('footer').style.backgroundColor = '#f3f4f6';
-            document.querySelector('footer').style.color = 'black';
-          }
-        }
-
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+        headerText.style.color = 'black';
+        navMenuItem.style.color = 'black';
+        document.querySelector('nav').style.backgroundColor = '#f3f4f6';
+        document.querySelectorAll('nav a').forEach(function(navLink) {
+            navLink.style.color = 'black'; // Ensure nav font is black in day mode
+        });
+        document.querySelector('footer').style.backgroundColor = '#f3f4f6';
+        document.querySelector('footer').style.color = 'black';
+    }
+}
         // Initialize the page with the default language
         updateLanguage();
     </script>
