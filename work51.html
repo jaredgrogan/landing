@@ -466,22 +466,45 @@
       }
     }
 
-    function updateCalendar() {
-      calendarGrid.innerHTML = '';
-      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      daysOfWeek.forEach(day => {
-        const dayElement = document.createElement('div');
-        dayElement.classList.add('text-center', 'font-bold');
-        dayElement.textContent = translations[currentLanguage][day] || day;
-        calendarGrid.appendChild(dayElement);
-      });
-      for (let i = 1; i <= 35; i++) {
-        const day = document.createElement('div');
-        day.classList.add('text-center', 'p-2', 'border', 'rounded-md');
-        day.textContent = i;
-        calendarGrid.appendChild(day);
-      }
+function updateCalendar() {
+  calendarGrid.innerHTML = '';
+  const currentDate = new Date(2024, 7, 12); // August 12, 2024
+  const firstDayOfMonth = new Date(2024, 7, 1);
+  const lastDayOfMonth = new Date(2024, 8, 0);
+  const daysInMonth = lastDayOfMonth.getDate();
+  const startingDayOfWeek = firstDayOfMonth.getDay();
+
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  daysOfWeek.forEach(day => {
+    const dayElement = document.createElement('div');
+    dayElement.classList.add('text-center', 'font-bold');
+    dayElement.textContent = translations[currentLanguage][day] || day;
+    calendarGrid.appendChild(dayElement);
+  });
+
+  // Add empty cells for days before the 1st
+  for (let i = 0; i < startingDayOfWeek; i++) {
+    const emptyDay = document.createElement('div');
+    emptyDay.classList.add('text-center', 'p-2', 'border', 'rounded-md', 'text-gray-400');
+    calendarGrid.appendChild(emptyDay);
+  }
+
+  // Add days of the month
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dayElement = document.createElement('div');
+    dayElement.classList.add('text-center', 'p-2', 'border', 'rounded-md');
+    dayElement.textContent = day;
+
+    if (day === currentDate.getDate()) {
+      dayElement.classList.add('bg-blue-500', 'text-white', 'font-bold');
     }
+
+    calendarGrid.appendChild(dayElement);
+  }
+}
+
+// Call updateCalendar when the page loads
+document.addEventListener('DOMContentLoaded', updateCalendar);
 
     function updateEvents() {
       upcomingEvents.innerHTML = '';
