@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Template</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .header-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+
+    .header-container h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 27px;
+      font-weight: bold;
+      color: black;
+      transition: color 0.3s;
+    }
+
+    @media (max-width: 640px) {
+      .header-container h1 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 455px) {
+      .header-container h1 {
+        font-size: 18px;
+        display: none;
+      }
+
+      .header-container::after {
+        content: "//";
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        color: black;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .header-container h1 {
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: none;
+      }
+
+      .header-container::after {
+        content: "";
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+        color: black;
+      }
+    }
+
+    .nav-header {
+      position: fixed;
+      top: 24px;
+      right: 230px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-header ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .nav-header ul li {
+      position: relative;
+    }
+
+    .nav-header ul li a {
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .nav-header ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #d5d5d5;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .nav-header ul li ul li a {
+      font-weight: normal;
+      font-size: 14px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      display: block;
+      color: #111827;
+    }
+
+    .nav-header ul li ul li a:hover,
+    .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .light-mode .nav-header ul li ul {
+      background-color: #d5d5d5;
+    }
+
+    .light-mode .nav-header ul li ul li a {
+      color: #111827;
+    }
+
+    .light-mode .nav-header ul li ul li a:hover,
+    .light-mode .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .dark-mode .nav-header ul li ul {
+      background-color: #333;
+    }
+
+    .dark-mode .nav-header ul li ul li a {
+      color: #e0e0e0;
+    }
+
+    .dark-mode .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: #e0e0e0;
+    }
+
+    .nav-header ul li:hover ul {
+      display: block;
+    }
+
+    .light-mode .nav-header ul li a {
+      color: black;
+    }
+
+    .dark-mode .nav-header ul li a {
+      color: white;
+    }
+
+    .light-mode .header-container h1 {
+      color: black;
+    }
+
+    .dark-mode .header-container h1 {
+      color: white;
+    }
+
+    .dark-mode .language-select select {
+      border: 1px solid white;
+    }
+
+    .dark-mode .toggle-container button {
+      border: 1px solid white;
+    }
+
+    .toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .toggle-container button {
+      border: 1px solid #111827;
+    }
+
+    .language-select {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      z-index: 100;
+    }
+
+    .language-select select {
+      background: none;
+      color: inherit;
+      border: 1px solid #111827;
+      border-radius: 5px;
+      padding: 5px;
+      outline-color: #007bff;
+    }
+
+    .language-select select:focus {
+      outline: 2px solid #007bff;
+    }
+
+    .hero-section {
+      height: 70vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    footer {
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <!-- Favicon and Heading in the Header -->
+  <div class="header-container">
+    <a href="index.html">
+      <img src="favicon5.svg" alt="Favicon">
+    </a>
+    <h1 id="headerText">// Discover the Universe</h1>
+  </div>
+
+  <!-- Navigation Header with Day/Night Toggle -->
+  <div class="nav-header">
+    <ul id="navMenu">
+      <li>
+        <a href="javascript:void(0)" id="navMenuItem">Menu</a>
+        <ul>
+          <li><a href="product.html" id="navAppsItem">Apps</a></li>
+          <li><a href="tutorials.html" id="navLearnItem">Learn</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Language Selection Dropdown -->
+  <div class="language-select">
+    <select id="languageSelect" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+
+  <!-- Day/Night Mode Toggle Button -->
+  <div class="toggle-container">
+    <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+      <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Blank Hero Section -->
+  <div class="hero-section"></div>
+
+  <!-- Copyright Notice -->
+  <footer>
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <script>
+    const app = document.getElementById('app');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const headerText = document.getElementById('headerText');
+    const languageSelect = document.getElementById('languageSelect');
+    const navMenuItem = document.getElementById('navMenuItem');
+    const navAppsItem = document.getElementById('navAppsItem');
+    const navLearnItem = document.getElementById('navLearnItem');
+
+    let isDarkMode = false;
+    let language = 'en';
+
+    const translations = {
+      en: {
+        header: "// Discover the Universe",
+        navMenu: "Menu",
+        navApps: "Apps",
+        navLearn: "Learn",
+      },
+      es: {
+        header: "// Descubre el Universo",
+        navMenu: "Menú",
+        navApps: "Aplicaciones",
+        navLearn: "Aprender",
+      },
+    };
+
+    function changeLanguage() {
+      language = languageSelect.value;
+      updateLanguage();
+    }
+
+    function updateLanguage() {
+      headerText.textContent = translations[language].header;
+      navMenuItem.textContent = translations[language].navMenu;
+      navAppsItem.textContent = translations[language].navApps;
+      navLearnItem.textContent = translations[language].navLearn;
+    }
+
+    // Day/Night mode toggle
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+        headerText.style.color = 'white';
+        navMenuItem.style.color = 'white';
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+        headerText.style.color = 'black';
+        navMenuItem.style.color = 'black';
+      }
+    }
+
+    // Initialize the page with the default language
+    updateLanguage();
+  </script>
+</body>
+
+</html>
