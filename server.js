@@ -1,53 +1,14 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const AWS = require('aws-sdk');
 const axios = require('axios');
+require('dotenv').config();
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
-
-AWS.config.update({
-  region: process.env.AWS_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-});
-
-const lambda = new AWS.Lambda();
-
-app.post('/api/chat', async (req, res) => {
-  try {
-    const params = {
-      FunctionName: process.env.AWS_LAMBDA_ARN,
-      InvocationType: 'RequestResponse'
-    };
-    const decryptResult = await lambda.invoke(params).promise();
-    const openaiApiKey = JSON.parse(decryptResult.Payload).decryptedKey;
-
-    const openaiResponse = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
-      {
-        model: process.env.OPENAI_MODEL_ID,
-        messages: [{ role: 'user', content: req.body.message }]
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${openaiApiKey}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-
-    res.json({ response: openaiResponse.data.choices[0].message.content });
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'An error occurred' });
-  }
-});
-
-const AWS = require('aws-sdk');
-const axios = require('axios');
 
 // Configure AWS SDK
 AWS.config.update({
@@ -58,6 +19,7 @@ AWS.config.update({
 
 const lambda = new AWS.Lambda();
 
+// Chat endpoint
 app.post('/api/chat', async (req, res) => {
   try {
     // Decrypt OpenAI API Key
@@ -72,7 +34,7 @@ app.post('/api/chat', async (req, res) => {
     const openaiResponse = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: process.env.OPENAI_MODEL_ID,
+        model: process.env.OPENAI_MODEL_ID || 'gpt-3.5-turbo',
         messages: [{ role: 'user', content: req.body.message }]
       },
       {
@@ -86,8 +48,34 @@ app.post('/api/chat', async (req, res) => {
     res.json({ response: openaiResponse.data.choices[0].message.content });
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'An error occurred' });
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.error(error.response.data);
+      console.error(error.response.status);
+      console.error(error.response.headers);
+      res.status(error.response.status).json({ error: 'An error occurred with the OpenAI API' });
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error(error.request);
+      res.status(500).json({ error: 'No response received from the OpenAI API' });
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.error('Error', error.message);
+      res.status(500).json({ error: 'An error occurred while processing your request' });
+    }
   }
+});
+
+// Health check route
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
 });
 
 const PORT = process.env.PORT || 3000;
