@@ -1,4 +1,4 @@
-const axios = require('axios');  // Import the axios library
+const axios = require('axios');
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -6,12 +6,16 @@ export default async function handler(req, res) {
       const { message } = req.body;
 
       if (!message) {
+        console.error('No message provided');
         return res.status(400).json({ error: 'Message is required' });
       }
 
       console.log('Received message:', message);
 
-      // Call API Gateway to decrypt the OpenAI API key
+      // Log environment variables (ensure sensitive data is handled appropriately)
+      console.log('API Gateway URL:', process.env.API_GATEWAY_URL);
+      console.log('OpenAI Model ID:', process.env.OPENAI_MODEL_ID);
+
       const decryptResponse = await axios.post(
         process.env.API_GATEWAY_URL,
         {},
@@ -22,7 +26,8 @@ export default async function handler(req, res) {
         }
       );
 
-      console.log('Decrypt response:', decryptResponse.data);
+      console.log('Decrypt response status:', decryptResponse.status);
+      console.log('Decrypt response data:', decryptResponse.data);
 
       const decryptedApiKey = decryptResponse.data.decryptedKey;
 
@@ -30,7 +35,6 @@ export default async function handler(req, res) {
         throw new Error('Decryption failed or key not found in the response.');
       }
 
-      // Call the OpenAI API with the decrypted key
       const openaiResponse = await axios.post(
         'https://api.openai.com/v1/chat/completions',
         {
@@ -45,12 +49,13 @@ export default async function handler(req, res) {
         }
       );
 
-      console.log('OpenAI response:', openaiResponse.data);
+      console.log('OpenAI response status:', openaiResponse.status);
+      console.log('OpenAI response data:', openaiResponse.data);
 
-      // Send the AI's response back to the client
       res.json({ response: openaiResponse.data.choices[0].message.content });
     } catch (error) {
-      console.error('Error in /api/chat:', error);
+      console.error('Error in /api/chat:', error.message);
+      console.error('Stack trace:', error.stack);
       res.status(500).json({
         error: 'An error occurred while processing your request',
         details: error.message,
@@ -58,6 +63,7 @@ export default async function handler(req, res) {
       });
     }
   } else {
+    console.error('Invalid request method:', req.method);
     res.status(405).json({ error: 'Method not allowed' });
   }
 }
