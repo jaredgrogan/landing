@@ -44,7 +44,7 @@ app.post('/api/chat', async (req, res) => {
       }
     );
 
-    const decryptedApiKey = decryptResponse.data.decryptedKey;
+    const decryptedApiKey = decryptResponse.data; // Use the decrypted key directly from the response
 
     // Log the decrypted API key for debugging (ensure this is removed after debugging!)
     console.log('Decrypted API Key:', decryptedApiKey);
