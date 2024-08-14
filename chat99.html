@@ -8,399 +8,406 @@
   <title>Chat Console</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
-  <style>
-     .error-message {
-    color: red;
-    margin: 10px 0;
+
+<style>
+  /* Berkeley Mono Font */
+  body {
+    background-color: #f3f4f6;
+    color: #111827;
+    font-family: 'Berkeley Mono', monospace;
   }
-    /* Berkeley Mono Font */
-    body {
-      background-color: #f3f4f6;
-      color: #111827;
-      font-family: 'Berkeley Mono', monospace;
-    }
 
-    .light-mode {
-      background-color: #f3f4f6;
-      color: #111827;
-    }
+  .light-mode {
+    background-color: #f3f4f6;
+    color: #111827;
+  }
 
-    .dark-mode {
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-    }
+  .dark-mode {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+  }
 
-    .chat-container {
-      max-width: 600px;
-      margin: 100px auto 0 auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      height: calc(100vh - 120px);
-    }
+  .chat-container {
+    max-width: 600px;
+    margin: 100px auto 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 120px);
+  }
 
-    .chat-bubble {
-      padding: 10px 15px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-      max-width: 80%;
-      word-wrap: break-word;
-      position: relative;
-      display: flex;
-      align-items: center;
-      color: white;
-      font-size: 14px;
-      border: 2px dotted grey;
-    }
+  .chat-bubble {
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    border: 2px dotted grey;
+  }
 
-    .chat-bubble.user {
-      background: linear-gradient(to right, #4CAF50, #42A5F5);
-      align-self: flex-end;
-    }
+  .chat-bubble.user {
+    background: linear-gradient(to right, #4CAF50, #42A5F5);
+    align-self: flex-end;
+  }
 
-    .chat-bubble.ai {
-      background: linear-gradient(to right, #42A5F5, #9C27B0);
-      align-self: flex-start;
-    }
+  .chat-bubble.ai {
+    background: linear-gradient(to right, #42A5F5, #9C27B0);
+    align-self: flex-start;
+  }
 
-    .typing-indicator {
-      width: 40px;
-      height: 10px;
-      background-color: #555;
-      border-radius: 5px;
-      position: relative;
-      margin-left: 15px;
-      animation: typing 1s infinite;
-    }
+  .typing-indicator {
+    width: 40px;
+    height: 10px;
+    background-color: #555;
+    border-radius: 5px;
+    position: relative;
+    margin-left: 15px;
+    animation: typing 1s infinite;
+  }
 
-    @keyframes typing {
-      0%,
-      100% {
-        transform: translateX(0);
-      }
+  @keyframes typing {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+  }
 
-      50% {
-        transform: translateX(5px);
-      }
-    }
+  .voice-input-btn,
+  .send-message-btn {
+    background: linear-gradient(to right, #4CAF50, #42A5F5);
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+  }
 
-    .voice-input-btn,
-    .send-message-btn {
-      background: linear-gradient(to right, #4CAF50, #42A5F5);
-      border: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      transition: background-color 0.3s;
-    }
+  .voice-input-btn {
+    margin-right: 10px;
+  }
 
-    .voice-input-btn {
-      margin-right: 10px;
-    }
+  .voice-input-btn:hover,
+  .send-message-btn:hover {
+    background: linear-gradient(to right, #66BB6A, #42A5F5);
+  }
 
-    .voice-input-btn:hover,
-    .send-message-btn:hover {
-      background: linear-gradient(to right, #66BB6A, #42A5F5);
-    }
+  .response-suggestions {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+  }
 
-    .response-suggestions {
-      display: flex;
-      gap: 5px;
-      margin-bottom: 15px;
-    }
+  .response-suggestions button {
+    background: #333;
+    color: white;
+    border-radius: 20px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
 
-    .response-suggestions button {
-      background: #333;
-      color: white;
-      border-radius: 20px;
-      padding: 5px 10px;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
+  .response-suggestions button:hover {
+    background: #444;
+  }
 
-    .response-suggestions button:hover {
-      background: #444;
-    }
+  .input-container {
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #555;
+  }
 
-    .input-container {
-      display: flex;
-      align-items: center;
-      margin-top: auto;
-      padding-top: 10px;
-      border-top: 1px solid #555;
-    }
+  .input-container input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    margin-right: 10px;
+    background: #d5d5d5;
+    color: black;
+    height: 160px;
+  }
 
-    .input-container input {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 20px;
-      margin-right: 10px;
-      background: #d5d5d5; /* Updated to d5d5d5 in Day mode */
-      color: black; /* Black text in Day mode */
-      height: 160px;
-    }
+  .light-mode .input-container input {
+    background: #d5d5d5;
+    color: black;
+  }
 
-    .light-mode .input-container input {
-      background: #d5d5d5; /* Updated to d5d5d5 in Day mode */
-      color: black; /* Black text in Day mode */
-    }
+  .dark-mode .input-container input {
+    background: #2a2a2a;
+    color: white;
+  }
 
-    .dark-mode .input-container input {
-      background: #2a2a2a; /* Dark background for Night mode */
-      color: white; /* White text for Night mode */
-    }
+  .input-container input:focus {
+    outline: none;
+  }
 
-    .input-container input:focus {
-      outline: none;
-    }
+  .input-container .attachment-btn {
+    background: none;
+    border: none;
+    margin-right: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+  }
 
-    .input-container .attachment-btn {
-      background: none;
-      border: none;
-      margin-right: 10px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: black; /* Changed to black for day mode */
-    }
+  .input-container .attachment-btn svg {
+    width: 24px;
+    height: 24px;
+  }
 
-    .input-container .attachment-btn svg {
-      width: 24px;
-      height: 24px;
-    }
+  .dropzone {
+    border: 2px dashed grey;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    color: #888;
+    overflow-y: auto;
+  }
 
-    .dropzone {
-      border: 2px dashed grey;
-      border-radius: 10px;
-      padding: 20px;
-      text-align: center;
-      color: #888;
-      overflow-y: auto;
-    }
+  .dropzone.dragover {
+    border-color: #42A5F5;
+    color: #42A5F5;
+  }
 
-    .dropzone.dragover {
-      border-color: #42A5F5;
-      color: #42A5F5;
-    }
+  /* Day/Night Mode Toggle Button */
+  .toggle-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+  }
 
-    /* Day/Night Mode Toggle Button */
-    .toggle-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-    }
+  .toggle-container button {
+    border: 1px solid #111827;
+  }
 
-    .toggle-container button {
-      border: 1px solid #111827; /* Updated to #111827 for consistency */
-    }
+  /* Language Selection Dropdown */
+  .language-select {
+    position: fixed;
+    top: 20px;
+    right: 80px;
+    z-index: 100;
+  }
 
-    /* Language Selection Dropdown */
-    .language-select {
-      position: fixed;
-      top: 20px;
-      right: 80px;
-      z-index: 100;
-    }
+  .language-select select {
+    background: none;
+    color: inherit;
+    border: 1px solid #111827;
+    border-radius: 5px;
+    padding: 5px;
+    outline-color: #007bff;
+  }
 
-    .language-select select {
-      background: none;
-      color: inherit;
-      border: 1px solid #111827; /* Consistent border color */
-      border-radius: 5px;
-      padding: 5px;
-      outline-color: #007bff; /* Consistent blue highlight */
-    }
+  .language-select select:focus {
+    outline: 2px solid #007bff;
+  }
 
-    .language-select select:focus {
-      outline: 2px solid #007bff; /* Consistent blue highlight */
-    }
+  /* Favicon and Heading */
+  .header-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+  }
 
-    /* Favicon and Heading */
-    .header-container {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      display: flex;
-      align-items: center;
-    }
+  .header-container img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
 
-    .header-container img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 20px;
-    }
+  .header-container h1 {
+    font-family: 'Courier New', monospace;
+    font-size: 27px;
+    font-weight: bold;
+    color: black;
+    transition: color 0.3s;
+  }
 
+  /* Responsive Heading for Mobile */
+  @media (max-width: 640px) {
     .header-container h1 {
-      font-family: 'Courier New', monospace;
-      font-size: 27px;
-      font-weight: bold;
-      color: black;
-      transition: color 0.3s;
+      font-size: 20px;
     }
+  }
 
-    /* Responsive Heading for Mobile */
-    @media (max-width: 640px) {
-      .header-container h1 {
-        font-size: 20px;
-      }
-    }
-
-    @media (max-width: 455px) {
-      .header-container h1 {
-        font-size: 18px;
-        display: none;
-      }
-
-      .header-container::after {
-        content: "";
-        font-family: 'Courier New', monospace;
-        font-size: 18px;
-        color: black;
-      }
-    }
-
-    @media (max-width: 360px) {
-      .header-container h1 {
-        font-size: 16px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: none;
-      }
-
-      /* Display just "//" on very small screens */
-      .header-container::after {
-        content: "";
-        font-family: 'Courier New', monospace;
-        font-size: 16px;
-        color: black;
-      }
-    }
-
-    /* Navigation Header */
-    .nav-header {
-      position: fixed;
-      top: 24px;
-      right: 230px;
-      display: flex;
-      align-items: center;
-      z-index: 100;
-    }
-
-    .nav-header ul {
-      display: flex;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      gap: 20px;
-      font-family: 'Berkeley Mono', monospace;
-    }
-
-    .nav-header ul li {
-      position: relative;
-    }
-
-    .nav-header ul li a {
-      text-decoration: none;
-      font-size: 16px;
-      transition: color 0.3s;
-    }
-
-    /* Updated panel dropdown color for Day mode */
-    .nav-header ul li ul {
+  @media (max-width: 455px) {
+    .header-container h1 {
+      font-size: 18px;
       display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background-color: #d5d5d5; /* Updated to d5d5d5 in Day mode */
-      border-radius: 5px;
-      padding: 10px;
     }
 
-    .nav-header ul li ul li a {
-      font-weight: normal;
-      font-size: 14px;
-      padding: 5px 10px;
-      border-radius: 4px;
-      display: block;
-      color: #111827; /* Dark text color for Day mode */
-    }
-
-    .nav-header ul li ul li a:hover,
-    .nav-header ul li ul li a:focus {
-      background-color: #007bff; /* Slightly darker light grey on hover */
-      color: #111827;
-    }
-
-    .light-mode .nav-header ul li ul {
-      background-color: #d5d5d5; /* Updated to d5d5d5 in Day mode */
-    }
-
-    .light-mode .nav-header ul li ul li a {
-      color: #111827; /* Dark text in Day mode */
-    }
-
-.light-mode .nav-header ul li ul li a:hover,
-.light-mode .nav-header ul li ul li a:focus {
-  background-color: #007bff; /* Blue highlight */
-  color: white; /* White font color */
-}
-
-    .dark-mode .nav-header ul li ul {
-      background-color: #333; /* Dark background in Night mode */
-    }
-
-    .dark-mode .nav-header ul li ul li a {
-      color: #e0e0e0; /* Light text in Night mode */
-    }
-
-    /* Updated highlight selector color for Night mode */
-    .dark-mode .nav-header ul li ul li a:focus {
-      background-color: #007bff; /* Blue highlight */
-      color: #e0e0e0; /* Ensure light text color in Night mode */
-    }
-
-    .nav-header ul li:hover ul {
-      display: block;
-    }
-
-    /* Day/Night mode specific styles */
-    .light-mode .nav-header ul li a {
+    .header-container::after {
+      content: "";
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
       color: black;
     }
+  }
 
-    .dark-mode .nav-header ul li a {
-      color: white;
+  @media (max-width: 360px) {
+    .header-container h1 {
+      font-size: 16px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: none;
     }
 
-    .light-mode .header-container h1 {
+    /* Display just "//" on very small screens */
+    .header-container::after {
+      content: "";
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
       color: black;
     }
+  }
 
-    .dark-mode .header-container h1 {
-      color: white;
-    }
+  /* Navigation Header */
+  .nav-header {
+    position: fixed;
+    top: 24px;
+    right: 230px;
+    display: flex;
+    align-items: center;
+    z-index: 100;
+  }
 
-    /* Updated borders for Language Selector and Night/Day Toggle in Night Mode */
-    .dark-mode .language-select select {
-      border: 1px solid white; /* White border in Night mode */
-    }
+  .nav-header ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 20px;
+    font-family: 'Berkeley Mono', monospace;
+  }
 
-    .dark-mode .toggle-container button {
-      border: 1px solid white; /* White border in Night mode */
-    }
-  </style>
+  .nav-header ul li {
+    position: relative;
+  }
+
+  .nav-header ul li a {
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+  }
+
+  .nav-header ul li ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #d5d5d5;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  .nav-header ul li ul li a {
+    font-weight: normal;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: block;
+    color: #111827;
+  }
+
+  .nav-header ul li ul li a:hover,
+  .nav-header ul li ul li a:focus {
+    background-color: #007bff;
+    color: #111827;
+  }
+
+  .light-mode .nav-header ul li ul {
+    background-color: #d5d5d5;
+  }
+
+  .light-mode .nav-header ul li ul li a {
+    color: #111827;
+  }
+
+  .light-mode .nav-header ul li ul li a:hover,
+  .light-mode .nav-header ul li ul li a:focus {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .dark-mode .nav-header ul li ul {
+    background-color: #333;
+  }
+
+  .dark-mode .nav-header ul li ul li a {
+    color: #e0e0e0;
+  }
+
+  .dark-mode .nav-header ul li ul li a:focus {
+    background-color: #007bff;
+    color: #e0e0e0;
+  }
+
+  .nav-header ul li:hover ul {
+    display: block;
+  }
+
+  .light-mode .nav-header ul li a {
+    color: black;
+  }
+
+  .dark-mode .nav-header ul li a {
+    color: white;
+  }
+
+  .light-mode .header-container h1 {
+    color: black;
+  }
+
+  .dark-mode .header-container h1 {
+    color: white;
+  }
+
+  .dark-mode .language-select select {
+    border: 1px solid white;
+  }
+
+  .dark-mode .toggle-container button {
+    border: 1px solid white;
+  }
+
+  .error-message {
+    color: #ff4444;
+    background-color: #ffe5e5;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .dark-mode .error-message {
+    background-color: #3a0404;
+    color: #ff8888;
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
+  
 </head>
 
 <body class="light-mode" id="app">
