@@ -7,6 +7,8 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Message is required' });
       }
 
+      console.log('Received message:', message);
+
       const decryptResponse = await axios.post(
         process.env.API_GATEWAY_URL,
         {},
@@ -16,6 +18,8 @@ export default async function handler(req, res) {
           },
         }
       );
+
+      console.log('Decrypt response:', decryptResponse.data);
 
       const decryptedApiKey = decryptResponse.data.decryptedKey;
 
@@ -37,21 +41,15 @@ export default async function handler(req, res) {
         }
       );
 
-      const contentType = openaiResponse.headers['content-type'];
-      if (contentType && contentType.indexOf('application/json') === -1) {
-        throw new Error(`Received non-JSON response: ${openaiResponse.data.substring(0, 100)}... Status: ${openaiResponse.status}`);
-      }
-
-      if (!openaiResponse.data || !openaiResponse.data.choices || !openaiResponse.data.choices[0] || !openaiResponse.data.choices[0].message) {
-        throw new Error('Unexpected response from OpenAI API');
-      }
+      console.log('OpenAI response:', openaiResponse.data);
 
       res.json({ response: openaiResponse.data.choices[0].message.content });
     } catch (error) {
-      console.error('Error in /api/chat:', error.message);
+      console.error('Error in /api/chat:', error);
       res.status(500).json({
         error: 'An error occurred while processing your request',
         details: error.message,
+        stack: error.stack,
       });
     }
   } else {
