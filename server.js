@@ -19,67 +19,25 @@ AWS.config.update({
 
 const lambda = new AWS.Lambda();
 
-// Chat endpoint
-app.post('/api/chat', async (req, res) => {
+// Debugging route
+app.get('/debug', async (req, res) => {
   try {
-    // Decrypt OpenAI API Key
-    const params = {
-      FunctionName: process.env.AWS_LAMBDA_ARN,
-      InvocationType: 'RequestResponse'
+    const debugInfo = {
+      awsRegion: process.env.AWS_REGION,
+      lambdaArn: process.env.AWS_LAMBDA_ARN,
+      openaiModelId: process.env.OPENAI_MODEL_ID || 'gpt-3.5-turbo'
     };
-    const decryptResult = await lambda.invoke(params).promise();
-    const openaiApiKey = JSON.parse(decryptResult.Payload).decryptedKey;
-
-    // Call OpenAI API
-    const openaiResponse = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
-      {
-        model: process.env.OPENAI_MODEL_ID || 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: req.body.message }]
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${openaiApiKey}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-
-    res.json({ response: openaiResponse.data.choices[0].message.content });
+    res.json(debugInfo);
   } catch (error) {
-    console.error('Error:', error);
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      console.error(error.response.data);
-      console.error(error.response.status);
-      console.error(error.response.headers);
-      res.status(error.response.status).json({ error: 'An error occurred with the OpenAI API' });
-    } else if (error.request) {
-      // The request was made but no response was received
-      console.error(error.request);
-      res.status(500).json({ error: 'No response received from the OpenAI API' });
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.error('Error', error.message);
-      res.status(500).json({ error: 'An error occurred while processing your request' });
-    }
+    res.status(500).json({ error: 'Debug route error', message: error.message });
   }
 });
 
-// Health check route
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK' });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
+// Chat endpoint
 app.post('/api/chat', async (req, res) => {
+  console.log('Received chat request');
   try {
-    // Decrypt OpenAI API Key
+    // Step 1: Decrypt OpenAI API Key
     console.log('Attempting to decrypt OpenAI API Key...');
     const params = {
       FunctionName: process.env.AWS_LAMBDA_ARN,
@@ -93,8 +51,8 @@ app.post('/api/chat', async (req, res) => {
       throw new Error('Failed to decrypt OpenAI API Key');
     }
 
+    // Step 2: Call OpenAI API
     console.log('Making request to OpenAI API...');
-    // Call OpenAI API
     const openaiResponse = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
@@ -121,6 +79,17 @@ app.post('/api/chat', async (req, res) => {
       res.status(500).json({ error: 'An error occurred while processing your request', details: error.message });
     }
   }
+});
+
+// Health check route
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!', details: err.message });
 });
 
 const PORT = process.env.PORT || 3000;
