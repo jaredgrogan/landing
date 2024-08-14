@@ -1,0 +1,6 @@
+PORT=3000
+AWS_REGION=us-east-2
+AWS_ACCESS_KEY_ID=your_access_key_id
+AWS_SECRET_ACCESS_KEY=your_secret_access_key
+AWS_LAMBDA_ARN=arn:aws:lambda:us-east-2:009160044456:function:DecryptOpenAIApiKey
+OPENAI_MODEL_ID=gpt-3.5-turbo
