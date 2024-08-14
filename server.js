@@ -26,14 +26,16 @@ app.get('/health', (req, res) => {
 app.post('/api/chat', async (req, res) => {
   try {
     const { message } = req.body;
-    
+
     if (!message) {
       return res.status(400).json({ error: 'Message is required' });
     }
 
     console.log('Decrypting OpenAI API Key using API Gateway...');
+
+    // API Gateway call to decrypt the API key
     const decryptResponse = await axios.post(
-      process.env.API_GATEWAY_URL, // Use the API Gateway URL from your environment variables
+      process.env.API_GATEWAY_URL, // No URL hardcoding, keeping it secure in environment variables
       {},
       {
         headers: {
@@ -44,11 +46,29 @@ app.post('/api/chat', async (req, res) => {
 
     const decryptedApiKey = decryptResponse.data.decryptedKey;
 
+    // Log the decrypted API key for debugging (ensure this is removed after debugging!)
+    console.log('Decrypted API Key:', decryptedApiKey);
+
     if (!decryptedApiKey) {
       throw new Error('Decryption failed or key not found in the response.');
     }
 
     console.log('Calling OpenAI API...');
+    
+    // Log the details of the request being sent to OpenAI API
+    console.log('OpenAI API Request:', {
+      url: 'https://api.openai.com/v1/chat/completions',
+      headers: {
+        Authorization: `Bearer ${decryptedApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: {
+        model: process.env.OPENAI_MODEL_ID || 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: message }],
+      }
+    });
+
+    // OpenAI API call
     const openaiResponse = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
@@ -57,11 +77,14 @@ app.post('/api/chat', async (req, res) => {
       },
       {
         headers: {
-          'Authorization': `Bearer ${decryptedApiKey}`,
+          Authorization: `Bearer ${decryptedApiKey}`,
           'Content-Type': 'application/json'
         }
       }
     );
+
+    // Log the response from OpenAI
+    console.log('OpenAI API Response:', openaiResponse.data);
 
     // Check for non-JSON response
     const contentType = openaiResponse.headers['content-type'];
@@ -73,13 +96,13 @@ app.post('/api/chat', async (req, res) => {
       throw new Error('Unexpected response from OpenAI API');
     }
 
-    console.log('OpenAI API response received');
     res.json({ response: openaiResponse.data.choices[0].message.content });
   } catch (error) {
     console.error('Error in /api/chat:', error.message);
     res.status(500).json({ 
       error: 'An error occurred while processing your request',
-      details: error.message
+      details: error.message,
+      stack: error.stack // Include the stack trace for better debugging
     });
   }
 });
