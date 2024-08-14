@@ -77,6 +77,51 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
+app.post('/api/chat', async (req, res) => {
+  try {
+    // Decrypt OpenAI API Key
+    console.log('Attempting to decrypt OpenAI API Key...');
+    const params = {
+      FunctionName: process.env.AWS_LAMBDA_ARN,
+      InvocationType: 'RequestResponse'
+    };
+    const decryptResult = await lambda.invoke(params).promise();
+    console.log('Decryption result received');
+    const openaiApiKey = JSON.parse(decryptResult.Payload).decryptedKey;
+    
+    if (!openaiApiKey) {
+      throw new Error('Failed to decrypt OpenAI API Key');
+    }
+
+    console.log('Making request to OpenAI API...');
+    // Call OpenAI API
+    const openaiResponse = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: process.env.OPENAI_MODEL_ID || 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: req.body.message }]
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${openaiApiKey}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    console.log('OpenAI API response received');
+    res.json({ response: openaiResponse.data.choices[0].message.content });
+  } catch (error) {
+    console.error('Error in /api/chat:', error);
+    if (error.response) {
+      console.error('OpenAI API error:', error.response.data);
+      res.status(error.response.status).json({ error: 'An error occurred with the OpenAI API', details: error.response.data });
+    } else {
+      console.error('Server error:', error.message);
+      res.status(500).json({ error: 'An error occurred while processing your request', details: error.message });
+    }
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
