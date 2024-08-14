@@ -690,6 +690,58 @@
     } else {
       attachmentBtn.style.color = 'black';
     }
+    async function sendMessage() {
+  const message = messageInput.value;
+  
+  if (!validateInput(message)) {
+    showError("Please enter a valid message (1-500 characters).");
+    return;
+  }
+
+  // Display user message
+  const userBubble = document.createElement('div');
+  userBubble.classList.add('chat-bubble', 'user');
+  userBubble.textContent = message;
+  chatBox.appendChild(userBubble);
+  messageInput.value = '';
+
+  // Show typing indicator
+  typingIndicator.classList.remove('hidden');
+
+  try {
+    const response = await fetch('https://universitas.pro/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      const data = await response.json();
+      
+      // Hide typing indicator
+      typingIndicator.classList.add('hidden');
+
+      // Display AI response
+      const aiBubble = document.createElement('div');
+      aiBubble.classList.add('chat-bubble', 'ai');
+      aiBubble.textContent = data.response;
+      chatBox.appendChild(aiBubble);
+    } else {
+      const text = await response.text();
+      throw new Error(`Received non-JSON response: ${text.substring(0, 100)}...`);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    typingIndicator.classList.add('hidden');
+    showError(`An error occurred: ${error.message}`);
+  }
+
+  // Scroll to bottom
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
   </script>
 </body>
 
