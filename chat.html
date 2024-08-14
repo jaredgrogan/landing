@@ -693,15 +693,6 @@ if (isDarkMode) {
 } else {
   attachmentBtn.style.color = 'black';
 }
-    catch (error) {
-  console.error('Error:', error);
-  typingIndicator.classList.add('hidden');
-  if (error.response && error.response.data && error.response.data.details) {
-    showError(`An error occurred: ${error.response.data.details}`);
-  } else {
-    showError("An error occurred. Please try again later.");
-  }
-}
   </script>
 </body>
 
