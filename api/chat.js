@@ -16,6 +16,7 @@ export default async function handler(req, res) {
       console.log('API Gateway URL:', process.env.API_GATEWAY_URL);
       console.log('OpenAI Model ID:', process.env.OPENAI_MODEL_ID);
 
+      // API Gateway call to decrypt the API key
       const decryptResponse = await axios.post(
         process.env.API_GATEWAY_URL,
         {},
@@ -29,7 +30,8 @@ export default async function handler(req, res) {
       console.log('Decrypt response status:', decryptResponse.status);
       console.log('Decrypt response data:', decryptResponse.data);
 
-      const decryptedApiKey = decryptResponse.data.decryptedKey;
+      // Use the decrypted key directly from the response
+      const decryptedApiKey = decryptResponse.data;  // Since the response is a string
 
       if (!decryptedApiKey) {
         throw new Error('Decryption failed or key not found in the response.');
