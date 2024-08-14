@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Pro — AI and Deep Learning</title>
+    <link rel="icon" href="/favicon9.svg" type="image/svg+xml">
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --primary-color: #4a90e2;
+            --secondary-color: #f0f0f0;
+            --accent-color: #ff6b6b;
+        }
+
+        body.night-mode {
+            --bg-color: #1e1e1e;
+            --text-color: #ffffff;
+            --primary-color: #3a7bd5;
+            --secondary-color: #2c2c2c;
+            --accent-color: #ff8e8e;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            height: 40px;
+        }
+
+        .slogan {
+            font-style: italic;
+        }
+
+        main {
+            display: flex;
+            min-height: calc(100vh - 100px);
+        }
+
+        .side-panel {
+            width: 250px;
+            padding: 1rem;
+            background-color: var(--secondary-color);
+        }
+
+        .main-workspace {
+            flex-grow: 1;
+            padding: 1rem;
+        }
+
+        .gradient-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .gradient-button:hover {
+            opacity: 0.8;
+        }
+
+        .expandable-item {
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .expandable-item:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .definition {
+            display: none;
+            padding: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+
+        .spacer {
+            height: 1rem;
+        }
+
+        .spacer.small {
+            height: 0.5rem;
+        }
+
+        .spacer.large {
+            height: 2rem;
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        .mode-toggle:hover {
+            background-color: var(--accent-color);
+        }
+
+        .mode-toggle svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .concept-display {
+            background-color: var(--secondary-color);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .news-section {
+            background-color: var(--secondary-color);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .chat-section {
+            background-color: var(--secondary-color);
+            padding: 1rem;
+            border-radius: 5px;
+        }
+
+        .chat-prompt {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid var(--primary-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            resize: vertical;
+        }
+
+        .chat-button {
+            margin-top: 0.5rem;
+        }
+
+        #image-classifier-demo {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <img src="favicon5.svg" alt="Logo" class="logo">
+        </a>
+        <div class="slogan">// Discover the Universe.</div>
+    </header>
+    
+    <main>
+        <aside class="side-panel left-panel">
+            <div class="top-buttons">
+                <button class="gradient-button">Note +</button>
+                <button class="gradient-button">Task +</button>
+                <button class="gradient-button">Project +</button>
+            </div>
+            <div class="spacer small"></div>
+            <h2>Key Topics</h2>
+            <ul id="key-topics">
+                <!-- Key topics will be dynamically inserted here -->
+            </ul>
+            <div class="spacer"></div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button class="gradient-button">Search</button>
+            </div>
+            <div class="upload-panel">
+                <div class="upload-box">
+                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <span>Assets Here</span>
+                </div>
+            </div>
+        </aside>
+        
+        <section class="main-workspace">
+            <div class="concept-display">
+                <div class="concept">
+                    <strong class="concept-title"></strong>
+                    <p class="definition"></p>
+                </div>
+            </div>
+            <div class="news-section">
+                <h3>News</h3>
+                <ul class="news-list">
+                    <!-- News items will be dynamically inserted here -->
+                </ul>
+            </div>
+            <div id="image-classifier-demo"></div>
+            <div class="spacer large"></div>
+            <div class="chat-section">
+                <textarea class="chat-prompt" rows="3" placeholder="Ask Herakles about Deep Learning..."></textarea>
+                <button class="chat-button gradient-button">Chat</button>
+            </div>
+        </section>
+
+        <aside class="side-panel right-panel">
+            <div class="top-buttons">
+                <button class="gradient-button">Quiz</button>
+                <button class="gradient-button">Interview</button>
+                <button class="gradient-button">Citation</button>
+            </div>
+            <div class="spacer small"></div>
+            <h2>Resources</h2>
+            <ul>
+                <li class="expandable-item"><a href="education.html">Learning Outcomes</a></li>
+                <li class="expandable-item"><a href="pythonconcepts.html">Python Concepts</a></li>
+                <li class="expandable-item"><a href="deeplearning.html">Deep Learning</a></li>
+                <li class="expandable-item"><a href="visual2.html">Knowledge Graph</a></li>
+            </ul>
+            
+            <h2>Tutorials</h2>
+            <ul>
+                <li class="expandable-item"><a href="pytorchintro.html">Intro to PyTorch for NLP</a></li>
+                <li class="expandable-item"><a href="pytorch3.html">PyTorch</a></li>
+                <li class="expandable-item"><a href="tensor7.html">TensorFlow</a></li>
+                <li class="expandable-item"><a href="nltk2.html">Text Extraction</a></li>
+                <li class="expandable-item"><a href="wordembeddings.html">Word 2 Vector</a></li>
+                <li class="expandable-item"><a href="rasachatbots.html">Chatbot</a></li>
+            </ul>
+            <h2>Classic Papers</h2>
+            <div class="citations-list">
+                <!-- Citations will be dynamically inserted here -->
+            </div>
+        </aside>
+    </main>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chat.html">Launch</a>
+        <a href="app.html">About</a>
+        <a href="features.html">Features</a>
+        <a href="pricing.html">Join</a>
+        <a href="discover.html">Discover</a>
+    </nav>
+
+    <footer>
+        <div>© <span id="copyright-year"></span> UNIVERSITAS AI</div>
+    </footer>
+
+    <div class="mode-toggle" id="modeToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun-icon">
+            <path d="M12 7a5 5 0 100 10 5 5 0 000-10zM2 13h2a1 1 0 100-2H2a1 1 0 100 2zm18 0h2a1 1 0 100-2h-2a1 1 0 100 2zM11 2v2a1 1 0 102 0V2a1 1 0 10-2 0zm0 18v2a1 1 0 102 0v-2a1 1 0 10-2 0zM5.99 4.58a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 10-1.41 1.41l1.06 1.06a1 1 0 101.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 10-1.41-1.41l-1.06 1.06a1 1 0 101.41 1.41l1.06-1.06z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon-icon" style="display:none;">
+            <path d="M21.64 13a1 1 0 00-1.05-.14 8.05 8.05 0 01-3.37.73 8.15 8.15 0 01-8.14-8.14 8.59 8.59 0 01.25-2A1 1 0 008 2.36a10.14 10.14 0 1014 11.69 1 1 0 00-.36-1.05zM20 12a8 8 0 01-11.83 7 9.45 9.45 0 001.63-5.18 9.45 9.45 0 005.18-1.63A8 8 0 0120 12z"/>
+        </svg>
+    </div>
+
+    <script type="text/babel">
+        // React component for the image classifier
+        const ImageClassifier = () => {
+            const [selectedImage, setSelectedImage] = React.useState(null);
+            const [prediction, setPrediction] = React.useState(null);
+            const [isLoading, setIsLoading] = React.useState(false);
+
+            React.useEffect(() => {
+                if (selectedImage) {
+                    setIsLoading(true);
+                    // Simulated image classification
+                    setTimeout(() => {
+                        const classes = ['dog', 'cat', 'bird', 'fish', 'car', 'tree', 'house', 'person'];
+                        const randomClass = classes[Math.floor(Math.random() * classes.length)];
+                        const confidence = (Math.random() * 0.5 + 0.5).toFixed(2);
+                        setPrediction({ class: randomClass, confidence: confidence });
+                        setIsLoading(false);
+                    }, 1500);
+                }
+            }, [selectedImage]);
+
+            const handleImageUpload = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => setSelectedImage(e.target.result);
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            return (
+                <div className="image-classifier">
+                    <h2>Image Classifier Demo</h2>
+                    <div>
+                        <label className="gradient-button">
+                            <lucide-icon name="camera" />
+                            Upload Image
+                            <input type="file" className="hidden" onChange={handleImageUpload} accept="image/*" />
+                        </label>
+                    </div>
+                    
+                    {selectedImage && (
+                        <div className="mt-4">
+                            <img src={selectedImage} alt="Selected" className="max-w-full h-auto rounded" />
+                        </div>
+                    )}
+                    
+                    {isLoading && <p>Analyzing image...</p>}
+                    
+                    {prediction && (
+                        <div className="mt-4">
+                            <h3>Prediction Result</h3>
+                            <p>Class: {prediction.class}</p>
+                            <p>Confidence: {prediction.confidence}</p>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        ReactDOM.render(<ImageClassifier />, document.getElementById('image-classifier-demo'));
+
+        // JavaScript for improved dropdowns and night mode
+        document.addEventListener('DOMContentLoaded', function() {
+            const modeToggle = document.getElementById('modeToggle');
+            const body = document.body;
+            const sunIcon = modeToggle.querySelector('.sun-icon');
+            const moonIcon = modeToggle.querySelector('.moon-icon');
+
+            modeToggle.addEventListener('click', () => {
+                body.classList.toggle('night-mode');
+                sunIcon.style.display = body.classList.contains('night-mode') ? 'none' : 'block';
+                moonIcon.style.display = body.classList.contains('night-mode') ? 'block' : 'none';
+            });
+
+            // Dynamic copyright year
+            document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+            // Improved expandable items
+            const expandableItems = document.querySelectorAll('.expandable-item');
+            expandableItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const definition = item.querySelector('.definition');
+                    if (definition) {
+                        definition.style.display = definition.style.display === 'block' ? 'none' : 'block';
+                    }
+                });
+            });
+
+            // Auto-generated content for key topics
+            const keyTopics = [
+                { title: "Neural Networks", definition: "Computational models inspired by biological neural networks, consisting of interconnected nodes (neurons) that process and transmit information." },
+                { title: "Machine Learning", definition: "A subset of AI that focuses on developing algorithms and statistical models that enable computer systems to improve their performance on a specific task through experience." },
+                { title: "Deep Learning", definition: "A subset of machine learning using multi-layer neural networks to automatically learn hierarchical representations of data." },
+                { title: "Natural Language Processing", definition: "A field of AI that focuses on the interaction between computers and human language, enabling machines to understand, interpret, generate, and manipulate human language." },
+                { title: "Computer Vision", definition: "A field of AI that trains computers to interpret and understand visual information from the world, enabling machines to extract high-level understanding from digital images or videos." }
+            ];
+
+            const keyTopicsList = document.getElementById('key-topics');
+            keyTopics.forEach(topic => {
+                const li = document.createElement('li');
+                li.className = 'expandable-item';
+                li.innerHTML = `
+                    ${topic.title}
+                    <div class="definition" style="display: none;">${topic.definition}</div>
+                `;
+                keyTopicsList.appendChild(li);
+            });
+
+            // Auto-generated content for news
+            const newsItems = [
+                "OpenAI announces AI-powered search tool SearchGPT",
+                "OpenAI Tests New AI Search Features in Direct Challenge to Google",
+                "ChatGPT launches AI-powered search engine prototype",
+                "Apple to adopt voluntary AI safeguards established by Biden",
+                "Google DeepMind achieves breakthrough in protein structure prediction"
+            ];
+
+            const newsList = document.querySelector('.news-list');
+            newsItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                newsList.appendChild(li);
+            });
+
+            // Auto-generated content for concepts
+            const concepts = [
+                { title: "Attention Mechanism", definition: "A technique in neural networks that allows the model to focus on different parts of the input when producing each element of the output." },
+                { title: "Transformers", definition: "Advanced neural network architecture that uses self-attention mechanisms to process sequential data, revolutionizing natural language processing and other sequence-based tasks." },
+                { title: "Convolutional Neural Networks (CNNs)", definition: "Deep learning architecture specialized for processing grid-like data, particularly effective for image and video analysis tasks." },
+                { title: "Recurrent Neural Networks (RNNs)", definition: "Neural networks designed to work with sequential data by maintaining an internal state or memory." },
+                { title: "Generative Adversarial Networks (GANs)", definition: "A class of machine learning framework where two neural networks compete to generate new, synthetic instances of data." }
+            ];
+
+            let currentConceptIndex = 0;
+            const conceptTitle = document.querySelector('.concept-title');
+            const conceptDefinition = document.querySelector('.concept .definition');
+
+            function updateConcept() {
+                conceptTitle.textContent = concepts[currentConceptIndex].title;
+                conceptDefinition.textContent = concepts[currentConceptIndex].definition;
+                currentConceptIndex = (currentConceptIndex + 1) % concepts.length;
+            }
+
+            setInterval(updateConcept, 10000); // Change concept every 10 seconds
+            updateConcept(); // Initial update
+
+            // Citations
+            const citations = [
+                "Vaswani, A., et al. (2017). Attention is All You Need.",
+                "He, K., et al. (2016). Deep Residual Learning for Image Recognition.",
+                "Krizhevsky, A., et al. (2012). ImageNet Classification with Deep Convolutional Neural Networks.",
+                "Sutskever, I., et al. (2014). Sequence to Sequence Learning with Neural Networks.",
+                "Jumper, J., et al. (2021). Highly accurate protein structure prediction with AlphaFold."
+            ];
+
+            const citationsList = document.querySelector('.citations-list');
+            let citationIndex = 0;
+
+            function updateCitation() {
+                citationsList.innerHTML = `<p>${citations[citationIndex]}</p>`;
+                citationIndex = (citationIndex + 1) % citations.length;
+            }
+
+            setInterval(updateCitation, 15000); // Change citation every 15 seconds
+            updateCitation(); // Initial update
+        });
+    </script>
+</body>
+</html>
