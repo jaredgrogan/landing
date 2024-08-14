@@ -1,0 +1,383 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Console</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .chat-container {
+      max-width: 600px;
+      margin: 100px auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 140px);
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+    }
+
+    .chat-bubble {
+      padding: 10px 15px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      max-width: 80%;
+      word-wrap: break-word;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .chat-bubble.user {
+      background: linear-gradient(to right, #4CAF50, #42A5F5);
+      color: white;
+      align-self: flex-end;
+    }
+
+    .chat-bubble.ai {
+      background: linear-gradient(to right, #42A5F5, #9C27B0);
+      color: white;
+      align-self: flex-start;
+    }
+
+    .typing-indicator {
+      width: 40px;
+      height: 10px;
+      background-color: #555;
+      border-radius: 5px;
+      margin-left: 15px;
+      animation: typing 1s infinite;
+    }
+
+    @keyframes typing {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(5px);
+      }
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid #ccc;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      margin-right: 10px;
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .input-container input:focus {
+      outline: none;
+      box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    }
+
+    .send-message-btn {
+      background: linear-gradient(to right, #4CAF50, #42A5F5);
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .send-message-btn:hover {
+      background: linear-gradient(to right, #66BB6A, #42A5F5);
+    }
+
+    .toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .toggle-container button {
+      border: 1px solid #111827;
+    }
+
+    .language-select {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      z-index: 100;
+    }
+
+    .language-select select {
+      background: none;
+      color: inherit;
+      border: 1px solid #111827;
+      border-radius: 5px;
+      padding: 5px;
+      outline-color: #007bff;
+    }
+
+    .header-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-container h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 27px;
+      font-weight: bold;
+      color: #111827;
+      margin-left: 10px;
+    }
+
+    @media (max-width: 640px) {
+      .header-container h1 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 455px) {
+      .header-container h1 {
+        font-size: 18px;
+        display: none;
+      }
+    }
+
+    .nav-header {
+      position: fixed;
+      top: 24px;
+      right: 230px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-header ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .nav-header ul li {
+      position: relative;
+    }
+
+    .nav-header ul li a {
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .nav-header ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #e5e7eb;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .nav-header ul li:hover ul {
+      display: block;
+    }
+
+    .nav-header ul li a:hover {
+      color: #007bff;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <div class="header-container">
+    <h1 id="headerText">// Discover the Universe</h1>
+  </div>
+
+  <div class="nav-header">
+    <ul id="navMenu">
+      <li>
+        <a href="javascript:void(0)" id="navMenuItem">Menu</a>
+        <ul>
+          <li><a href="product.html" id="navAppsItem">Apps</a></li>
+          <li><a href="tutorials.html" id="navLearnItem">Learn</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="language-select">
+    <select id="languageSelect" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+
+  <div class="toggle-container">
+    <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+      <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="chat-container">
+    <div id="chatBox" class="dropzone">
+      <div class="chat-bubble ai" id="aiGreeting">
+        Hi, how can I assist you today?
+      </div>
+    </div>
+
+    <div class="typing-indicator hidden" id="typingIndicator"></div>
+
+    <div class="input-container">
+      <input type="text" id="messageInput" placeholder="Type a message...">
+      <button class="send-message-btn" id="sendMessageBtn">&#x27A4;</button>
+    </div>
+  </div>
+
+  <footer style="text-align: center; font-family: 'Courier New', monospace; padding: 20px;">
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <script>
+    const app = document.getElementById('app');
+    const chatBox = document.getElementById('chatBox');
+    const messageInput = document.getElementById('messageInput');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const languageSelect = document.getElementById('languageSelect');
+    const aiGreeting = document.getElementById('aiGreeting');
+
+    let isDarkMode = false;
+    let language = 'en';
+
+    const translations = {
+      en: {
+        header: "// Discover the Universe",
+        aiGreeting: "Hi, how can I assist you today?",
+        messagePlaceholder: "Type a message...",
+      },
+      es: {
+        header: "// Descubre el Universo",
+        aiGreeting: "Hola, ¿cómo puedo asistirte hoy?",
+        messagePlaceholder: "Escribe un mensaje...",
+      },
+    };
+
+    function changeLanguage() {
+      language = languageSelect.value;
+      updateLanguage();
+    }
+
+    function updateLanguage() {
+      document.getElementById('headerText').textContent = translations[language].header;
+      aiGreeting.textContent = translations[language].aiGreeting;
+      messageInput.placeholder = translations[language].messagePlaceholder;
+    }
+
+    sendMessageBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    async function sendMessage() {
+      const message = messageInput.value.trim();
+      if (message) {
+        const userBubble = document.createElement('div');
+        userBubble.classList.add('chat-bubble', 'user');
+        userBubble.textContent = message;
+        chatBox.appendChild(userBubble);
+        messageInput.value = '';
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+        showTypingIndicator();
+
+        try {
+          const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: message }),
+          });
+
+          const data = await response.json();
+          hideTypingIndicator();
+
+          const aiBubble = document.createElement('div');
+          aiBubble.classList.add('chat-bubble', 'ai');
+          aiBubble.textContent = data.response;
+          chatBox.appendChild(aiBubble);
+
+          chatBox.scrollTop = chatBox.scrollHeight;
+
+        } catch (error) {
+          hideTypingIndicator();
+          const aiBubble = document.createElement('div');
+          aiBubble.classList.add('chat-bubble', 'ai');
+          aiBubble.textContent = 'Error connecting to the server. Please try again later.';
+          chatBox.appendChild(aiBubble);
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+      }
+    }
+
+    function showTypingIndicator() {
+      typingIndicator.classList.remove('hidden');
+    }
+
+    function hideTypingIndicator() {
+      typingIndicator.classList.add('hidden');
+    }
+
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      app.classList.toggle('dark-mode', isDarkMode);
+      app.classList.toggle('light-mode', !isDarkMode);
+    }
+
+    updateLanguage();
+  </script>
+</body>
+
+</html>
