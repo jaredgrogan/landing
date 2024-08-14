@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universitas AI Chat Console</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+    .light-mode { background-color: #f3f4f6; color: #111827; }
+    .dark-mode { background-color: #1e1e1e; color: #ffffff; }
+    .chat-container {
+      max-width: 600px;
+      margin: 100px auto 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 120px);
+    }
+    .chat-bubble {
+      padding: 10px 15px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      max-width: 80%;
+      word-wrap: break-word;
+      position: relative;
+      display: flex;
+      align-items: center;
+      color: white;
+      font-size: 14px;
+      border: 2px dotted grey;
+    }
+    .chat-bubble.user { background: linear-gradient(to right, #4CAF50, #42A5F5); align-self: flex-end; }
+    .chat-bubble.ai { background: linear-gradient(to right, #42A5F5, #9C27B0); align-self: flex-start; }
+    .typing-indicator {
+      width: 40px;
+      height: 10px;
+      background-color: #555;
+      border-radius: 5px;
+      position: relative;
+      margin-left: 15px;
+      animation: typing 1s infinite;
+    }
+    @keyframes typing {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(5px); }
+    }
+    .input-container {
+      display: flex;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid #555;
+    }
+    .input-container input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      margin-right: 10px;
+      background: #d5d5d5;
+      color: black;
+      height: 40px;
+    }
+    .light-mode .input-container input { background: #d5d5d5; color: black; }
+    .dark-mode .input-container input { background: #2a2a2a; color: white; }
+    .input-container input:focus { outline: none; }
+    .error-message {
+      color: #ff4444;
+      background-color: #ffe5e5;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+    .dark-mode .error-message {
+      background-color: #3a0404;
+      color: #ff8888;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <div class="chat-container">
+    <div id="chatBox">
+      <div class="chat-bubble ai" id="aiGreeting">
+        Hi, how can I assist you today?
+      </div>
+    </div>
+
+    <div class="typing-indicator hidden" id="typingIndicator"></div>
+
+    <div class="input-container">
+      <input type="text" id="messageInput" placeholder="Type a message...">
+      <button class="send-message-btn" id="sendMessageBtn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById('chatBox');
+    const messageInput = document.getElementById('messageInput');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    function showError(message) {
+      const errorDiv = document.createElement('div');
+      errorDiv.classList.add('error-message');
+      errorDiv.textContent = message;
+      chatBox.appendChild(errorDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      setTimeout(() => errorDiv.remove(), 5000);
+    }
+
+    function validateInput(message) {
+      return message.trim().length > 0 && message.length <= 500;
+    }
+
+    async function sendMessage() {
+      const message = messageInput.value;
+      
+      if (!validateInput(message)) {
+        showError("Please enter a valid message (1-500 characters).");
+        return;
+      }
+
+      const userBubble = document.createElement('div');
+      userBubble.classList.add('chat-bubble', 'user');
+      userBubble.textContent = message;
+      chatBox.appendChild(userBubble);
+      messageInput.value = '';
+
+      typingIndicator.classList.remove('hidden');
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message }),
+        });
+
+        typingIndicator.classList.add('hidden');
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`An error occurred: ${errorText}`);
+        }
+
+        const jsonResponse = await response.json();
+        const aiBubble = document.createElement('div');
+        aiBubble.classList.add('chat-bubble', 'ai');
+        aiBubble.textContent = jsonResponse.response;
+        chatBox.appendChild(aiBubble);
+      } catch (error) {
+        console.error('Error:', error);
+        typingIndicator.classList.add('hidden');
+        showError(`An error occurred: ${error.message}. Please try again later.`);
+      }
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    sendMessageBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
