@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Console - Universitas</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script src="https://unpkg.com/react-draggable@4.4.3/build/web/react-draggable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.1/dist/umd/lucide.min.js"></script>
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .chat-button {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(to right, #4CAF50, #42A5F5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .chat-button:hover {
+      transform: scale(1.5);
+    }
+
+    .chat-icon {
+      width: 30px;
+      height: 30px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .chat-container {
+      width: 300px;
+      height: 400px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-header {
+      background: linear-gradient(to right, #4CAF50, #42A5F5);
+      color: white;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-messages {
+      height: 320px;
+      overflow-y: auto;
+      padding: 10px;
+      background-color: #f0f0f0;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 10px;
+      background-color: white;
+    }
+
+    .chat-input input {
+      flex-grow: 1;
+      border: none;
+      padding: 5px;
+      margin-right: 10px;
+    }
+
+    .chat-input button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <!-- Favicon and Heading in the Header -->
+  <div class="fixed top-5 left-5 flex items-center">
+    <a href="index.html">
+      <img src="favicon5.svg" alt="Favicon" class="w-12 h-12 rounded-full mr-4">
+    </a>
+    <h1 id="headerText" class="text-2xl font-bold">// Discover the Universe</h1>
+  </div>
+
+  <!-- Navigation Header with Day/Night Toggle -->
+  <div class="fixed top-5 right-5 flex items-center space-x-4">
+    <ul id="navMenu" class="flex space-x-4">
+      <li class="relative group">
+        <a href="javascript:void(0)" id="navMenuItem" class="text-black">Menu</a>
+        <ul class="absolute hidden group-hover:block bg-white shadow-md rounded-md mt-2 py-2">
+          <li><a href="product.html" id="navAppsItem" class="block px-4 py-2 hover:bg-gray-100">Apps</a></li>
+          <li><a href="tutorials.html" id="navLearnItem" class="block px-4 py-2 hover:bg-gray-100">Learn</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- Language Selection Dropdown -->
+    <select id="languageSelect" class="bg-white border border-gray-300 rounded-md px-2 py-1">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+      <option value="pt">Português</option>
+    </select>
+
+    <!-- Day/Night Mode Toggle Button -->
+    <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+      <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- React Root -->
+  <div id="react-root"></div>
+
+  <!-- Copyright Notice -->
+  <footer class="fixed bottom-5 left-0 right-0 text-center font-mono">
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { MessageCircle, X, Send, Paperclip, Mic } = lucide;
+
+    const translations = {
+      en: {
+        header: "// Discover the Universe",
+        aiGreeting: "Hi, how can I assist you today?",
+        suggestion1: "Summarize",
+        suggestion2: "Step by Step",
+        suggestion3: "Next Actions",
+        messagePlaceholder: "Type a message...",
+        navMenu: "Menu",
+        navApps: "Apps",
+        navLearn: "Learn",
+      },
+      es: {
+        header: "// Descubre el Universo",
+        aiGreeting: "Hola, ¿cómo puedo asistirte hoy?",
+        suggestion1: "Resumir",
+        suggestion2: "Paso a Paso",
+        suggestion3: "Próximas Acciones",
+        messagePlaceholder: "Escribe un mensaje...",
+        navMenu: "Menú",
+        navApps: "Aplicaciones",
+        navLearn: "Aprender",
+      },
+      fr: {
+        header: "// Découvrez l'Univers",
+        aiGreeting: "Bonjour, comment puis-je vous aider aujourd'hui ?",
+        suggestion1: "Résumer",
+        suggestion2: "Étape par Étape",
+        suggestion3: "Prochaines Actions",
+        messagePlaceholder: "Tapez un message...",
+        navMenu: "Menu",
+        navApps: "Applications",
+        navLearn: "Apprendre",
+      },
+      it: {
+        header: "// Scopri l'Universo",
+        aiGreeting: "Ciao, come posso assisterti oggi?",
+        suggestion1: "Riassumere",
+        suggestion2: "Passo dopo Passo",
+        suggestion3: "Prossime Azioni",
+        messagePlaceholder: "Scrivi un messaggio...",
+        navMenu: "Menu",
+        navApps: "Applicazioni",
+        navLearn: "Imparare",
+      },
+      pt: {
+        header: "// Descubra o Universo",
+        aiGreeting: "Olá, como posso ajudá-lo hoje?",
+        suggestion1: "Resumir",
+        suggestion2: "Passo a Passo",
+        suggestion3: "Próximas Ações",
+        messagePlaceholder: "Digite uma mensagem...",
+        navMenu: "Menu",
+        navApps: "Aplicativos",
+        navLearn: "Aprender",
+      },
+    };
+
+    const ChatConsole = ({ language }) => {
+      const [isExpanded, setIsExpanded] = useState(false);
+      const [messages, setMessages] = useState([]);
+      const [inputMessage, setInputMessage] = useState('');
+
+      useEffect(() => {
+        setMessages([{ text: translations[language].aiGreeting, sender: 'ai' }]);
+      }, [language]);
+
+      const toggleExpanded = () => {
+        setIsExpanded(!isExpanded);
+      };
+
+      const sendMessage = () => {
+        if (inputMessage.trim()) {
+          setMessages([...messages, { text: inputMessage, sender: 'user' }]);
+          setInputMessage('');
+          // Simulating AI response
+          setTimeout(() => {
+            setMessages(prev => [...prev, { text: translations[language].aiGreeting, sender: 'ai' }]);
+          }, 1000);
+        }
+      };
+
+      return (
+        <div className="fixed bottom-4 right-4">
+          {isExpanded ? (
+            <div className="chat-container">
+              <div className="chat-header">
+                <h2>{translations[language].header}</h2>
+                <button onClick={toggleExpanded}>
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="chat-messages">
+                {messages.map((msg, index) => (
+                  <div key={index} className={`mb-2 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
+                    <span className={`inline-block p-2 rounded-lg ${msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-800'}`}>
+                      {msg.text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="chat-input">
+                <button>
+                  <Paperclip size={20} />
+                </button>
+                <input
+                  type="text"
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  placeholder={translations[language].messagePlaceholder}
+                />
+                <button>
+                  <Mic size={20} />
+                </button>
+                <button onClick={sendMessage}>
+                  <Send size={20} />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="chat-button" onClick={toggleExpanded}>
+              <svg className="chat-icon" viewBox="0 0 24 24">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    const App = () => {
+      const [language, setLanguage] = useState('en');
+
+      useEffect(() => {
+        const languageSelect = document.getElementById('languageSelect');
+        languageSelect.addEventListener('change', (e) => {
+          setLanguage(e.target.value);
+        });
+
+        return () => {
+          languageSelect.removeEventListener('change', (e) => {
+            setLanguage(e.target.value);
+          });
+        };
+      }, []);
+
+      useEffect(() => {
+        document.getElementById('headerText').textContent = translations[language].header;
+        document.getElementById('navMenuItem').textContent = translations[language].navMenu;
+        document.getElementById('navAppsItem').textContent = translations[language].navApps;
+        document.getElementById('navLearnItem').textContent = translations[language].navLearn;
+      }, [language]);
+
+      return <ChatConsole language={language} />;
+    };
+
+    ReactDOM.render(<App />, document.getElementById('react-root'));
+  </script>
+
+  <script>
+    function toggleDarkMode() {
+      const app = document.getElementById('app');
+      const darkModeIcon = document.getElementById('darkModeIcon');
+      const headerText = document.getElementById('headerText');
+      const navMenuItem = document.getElementById('navMenuItem');
+
+      app.classList.toggle('dark-mode');
+      app.classList.toggle('light-mode');
+
+      if (app.classList.contains('dark-mode')) {
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+        headerText.style.color = 'white';
+        navMenuItem.style.color = 'white';
+      } else {
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+        headerText.style.color = 'black';
+        navMenuItem.style.color = 'black';
+      }
+    }
+  </script>
+</body>
+
+</html>
