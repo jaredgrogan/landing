@@ -38,6 +38,10 @@
       justify-content: center;
       cursor: pointer;
       transition: transform 0.3s ease;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
     }
 
     .chat-button:hover {
@@ -59,6 +63,10 @@
       overflow: hidden;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       background-color: white;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
       display: none; /* Start minimized */
     }
 
@@ -170,7 +178,7 @@
       };
 
       return (
-        <div className="fixed bottom-4 right-4">
+        <div>
           {isExpanded ? (
             <div className="chat-container" style={{ display: 'block' }}>
               <div className="chat-header">
