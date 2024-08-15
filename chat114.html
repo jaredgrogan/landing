@@ -1,0 +1,155 @@
+// Client-side code (chat.html)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Chat Console</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* ... (previous styles remain unchanged) ... */
+        .chat-bubble.transcribed {
+            background: linear-gradient(to right, #2ECC40, #3D9970);
+            align-self: flex-end;
+            font-style: italic;
+        }
+        .voice-input-btn.recording {
+            background: linear-gradient(to right, #FF4136, #85144b);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <div id="chatBox" class="bg-white p-4 rounded-lg shadow-md mb-4 h-96 overflow-y-auto"></div>
+        <div class="flex items-center">
+            <input type="text" id="messageInput" class="flex-grow mr-2 p-2 border rounded" placeholder="Type a message...">
+            <button id="sendBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Send</button>
+            <button id="voiceBtn" class="ml-2 bg-green-500 text-white px-4 py-2 rounded">
+                <svg id="micIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const micIcon = document.getElementById('micIcon');
+
+        let mediaRecorder;
+        let audioChunks = [];
+
+        function addMessageToChatBox(message, isUser = false) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `chat-bubble ${isUser ? 'user' : 'ai'}`;
+            messageElement.textContent = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessageToChatBox(message, true);
+                messageInput.value = '';
+
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message })
+                    });
+                    const data = await response.json();
+                    addMessageToChatBox(data.response);
+                } catch (error) {
+                    console.error('Error:', error);
+                    addMessageToChatBox('Error: Unable to get response');
+                }
+            }
+        }
+
+        function initializeMediaRecorder() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        mediaRecorder = new MediaRecorder(stream);
+                        
+                        mediaRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
+
+                        mediaRecorder.onstop = async () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            await sendAudioToServer(audioBlob);
+                            audioChunks = [];
+                        };
+                    })
+                    .catch(error => {
+                        console.error('Error accessing microphone:', error);
+                        addMessageToChatBox('Error: Unable to access microphone');
+                    });
+            } else {
+                console.error('MediaRecorder is not supported in this browser.');
+                voiceBtn.disabled = true;
+                voiceBtn.title = 'Voice input not supported in this browser';
+            }
+        }
+
+        function toggleRecording() {
+            if (!mediaRecorder) {
+                addMessageToChatBox('Error: Microphone not initialized');
+                return;
+            }
+
+            if (mediaRecorder.state === 'inactive') {
+                mediaRecorder.start();
+                voiceBtn.classList.add('recording');
+                micIcon.style.fill = 'red';
+            } else {
+                mediaRecorder.stop();
+                voiceBtn.classList.remove('recording');
+                micIcon.style.fill = 'currentColor';
+            }
+        }
+
+        async function sendAudioToServer(audioBlob) {
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'recording.wav');
+
+            try {
+                const response = await fetch('/api/transcribe', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.transcription) {
+                    addMessageToChatBox(`Transcribed: ${data.transcription}`, true);
+                    messageInput.value = data.transcription;
+                    sendMessage();
+                } else {
+                    addMessageToChatBox('Error: Transcription failed');
+                }
+            } catch (error) {
+                console.error('Error sending audio to server:', error);
+                addMessageToChatBox('Error: Unable to transcribe audio');
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        voiceBtn.addEventListener('click', toggleRecording);
+
+        initializeMediaRecorder();
+    </script>
+</body>
+</html>
