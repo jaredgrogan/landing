@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNISE Curriculum Glossary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        #search-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .term {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .term h2 {
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CNISE Curriculum Glossary</h1>
+    <input type="text" id="search-box" placeholder="Search for a term...">
+    <div id="glossary"></div>
+
+    <script>
+        const glossary = [
+            {
+                term: "Semiconductor",
+                definition: "A material with electrical conductivity between a conductor and an insulator. Fundamental to modern electronics, semiconductors form the basis of transistors and integrated circuits, enabling the creation of complex electronic devices and systems."
+            },
+            {
+                term: "Integrated Circuit (IC)",
+                definition: "A miniaturized electronic circuit manufactured on a semiconductor substrate. ICs integrate multiple components (transistors, resistors, capacitors) onto a single chip, enabling complex functionality in a small form factor, crucial for modern computing devices."
+            },
+            {
+                term: "Moore's Law",
+                definition: "An observation that the number of transistors on a microchip doubles about every two years while the cost halves. This principle has driven rapid advancement in computing power and efficiency, shaping the semiconductor industry's roadmap."
+            },
+            {
+                term: "Transistor",
+                definition: "A semiconductor device used to amplify or switch electronic signals. The fundamental building block of modern electronics, transistors are the key components in integrated circuits, enabling the creation of complex logic and memory systems."
+            },
+            {
+                term: "Wafer",
+                definition: "A thin slice of semiconductor material used as the substrate for microelectronic devices. Wafers serve as the foundation for fabricating integrated circuits, with multiple chips produced on a single wafer to maximize manufacturing efficiency."
+            },
+            {
+                term: "Photolithography",
+                definition: "A process used in microfabrication to pattern parts of a thin film or substrate. It uses light to transfer a geometric pattern from a photomask to a photoresist on the substrate, crucial for creating the intricate structures in integrated circuits."
+            },
+            {
+                term: "Nanometer (nm) Scale",
+                definition: "A unit of measurement equal to one billionth of a meter. In semiconductor manufacturing, it refers to the size of transistor features. Smaller nm scales allow for more transistors per chip, increasing performance and efficiency."
+            },
+            {
+                term: "Cleanroom",
+                definition: "A controlled environment with low levels of pollutants such as dust, airborne microbes, and chemical vapors. Essential in semiconductor manufacturing to prevent contamination, ensuring high yield and reliability in chip production."
+            },
+            {
+                term: "Yield",
+                definition: "The percentage of functional chips produced in a manufacturing process. A critical metric in semiconductor production, high yield is essential for cost-effectiveness and profitability in chip manufacturing."
+            },
+            {
+                term: "Design for Manufacturing (DFM)",
+                definition: "The practice of designing products to facilitate easier and more efficient manufacturing. In semiconductor industry, DFM involves optimizing chip designs to improve manufacturability, yield, and reliability."
+            },
+            {
+                term: "Fab (Fabrication Plant)",
+                definition: "A facility where semiconductor devices are manufactured. Fabs house the complex and expensive equipment necessary for wafer processing, requiring stringent environmental controls to maintain the purity of the manufacturing process."
+            },
+            {
+                term: "Foundry",
+                definition: "A semiconductor fabrication plant that manufactures chips designed by other companies. Foundries enable fabless companies to produce chips without owning manufacturing facilities, promoting specialization and innovation in the industry."
+            },
+            {
+                term: "Fabless",
+                definition: "A business model where a company designs and sells hardware chip products but outsources the fabrication to a foundry. This model allows companies to focus on design and innovation without the high costs of maintaining a fab."
+            },
+            {
+                term: "System on Chip (SoC)",
+                definition: "An integrated circuit that integrates all or most components of a computer or electronic system. SoCs combine processing, memory, and specialized functions on a single chip, enabling compact and efficient designs for various applications."
+            },
+            {
+                term: "Microprocessor",
+                definition: "An integrated circuit that contains the logic to perform the basic functions of a computer's central processing unit (CPU). Microprocessors execute instructions, perform calculations, and control the flow of data in computing systems."
+            },
+            {
+                term: "DRAM (Dynamic Random-Access Memory)",
+                definition: "A type of computer memory that stores each bit of data in a separate capacitor. DRAM provides fast read and write speeds, making it ideal for a computer's main memory, but requires regular refreshing to maintain data."
+            },
+            {
+                term: "NAND Flash",
+                definition: "A type of non-volatile storage technology that does not require power to retain data. NAND Flash is widely used in solid-state drives, USB drives, and memory cards, providing fast, compact, and energy-efficient data storage."
+            },
+            {
+                term: "ASIC (Application-Specific Integrated Circuit)",
+                definition: "An integrated circuit customized for a particular use rather than for general-purpose use. ASICs offer optimized performance, power efficiency, and size for specific applications, commonly used in specialized computing tasks."
+            },
+            {
+                term: "FPGA (Field-Programmable Gate Array)",
+                definition: "An integrated circuit designed to be configured after manufacturing. FPGAs provide flexibility for prototyping and specialized applications, allowing hardware functionality to be updated or changed without physical chip alterations."
+            },
+            {
+                term: "EDA (Electronic Design Automation)",
+                definition: "Software tools used for designing electronic systems such as integrated circuits and printed circuit boards. EDA tools are crucial in the semiconductor industry for designing, simulating, and verifying complex chip designs."
+            },
+            {
+                term: "Packaging",
+                definition: "The final stage of semiconductor device fabrication, where the die is encased in a supportive case that prevents physical damage and corrosion. Packaging also provides electrical connections to the chip for integration into larger systems."
+            },
+            {
+                term: "Chiplet",
+                definition: "A small, modular chip that can be combined with other chiplets to form a larger, more complex chip. Chiplets allow for more flexible and cost-effective chip designs, enabling the integration of different process technologies."
+            },
+            {
+                term: "Thermal Management",
+                definition: "The process of regulating the temperature of electronic components and systems. Critical in semiconductor devices to maintain optimal performance, reliability, and lifespan by dissipating heat generated during operation."
+            },
+            {
+                term: "Interconnect",
+                definition: "The conductive connections between various elements in an integrated circuit. Interconnects are crucial for chip performance, determining signal propagation speed and power consumption. Advanced interconnect technologies are key to continued scaling."
+            },
+            {
+                term: "CMOS (Complementary Metal-Oxide-Semiconductor)",
+                definition: "A technology for constructing integrated circuits using complementary pairs of p-type and n-type MOSFETs. CMOS is the dominant technology for modern digital circuits, offering low power consumption and high noise immunity."
+            },
+            {
+                term: "Lithography",
+                definition: "The process of transferring patterns onto a substrate, crucial in semiconductor manufacturing. Advanced lithography techniques, like EUV, enable the creation of ever-smaller transistor features, driving Moore's Law scaling."
+            },
+            {
+                term: "Doping",
+                definition: "The process of intentionally introducing impurities into a semiconductor to modify its electrical properties. Doping is fundamental to creating n-type and p-type regions in semiconductors, enabling the function of transistors and diodes."
+            },
+            {
+                term: "Bandgap",
+                definition: "The energy difference between the valence band and conduction band in a material. The bandgap determines a semiconductor's electrical properties and applications, influencing its conductivity and optical characteristics."
+            },
+            {
+                term: "Process Node",
+                definition: "A specific semiconductor manufacturing technology generation, often denoted by the smallest feature size. Smaller process nodes generally indicate more advanced technology, allowing for higher transistor density and improved performance."
+            },
+            {
+                term: "FinFET (Fin Field-Effect Transistor)",
+                definition: "A type of transistor with a fin-like structure that extends vertically from the substrate. FinFETs offer better performance and power efficiency compared to planar transistors, enabling continued scaling in advanced process nodes."
+            },
+            {
+                term: "Quantum Computing",
+                definition: "A computing paradigm that leverages quantum-mechanical phenomena like superposition and entanglement. Quantum computers promise exponential speedups for certain problems, potentially revolutionizing fields like cryptography and drug discovery."
+            },
+            {
+                term: "AI Accelerators",
+                definition: "Specialized hardware designed to accelerate artificial intelligence and machine learning tasks. AI accelerators optimize operations common in neural network processing, enabling faster and more efficient AI computations."
+            },
+            {
+                term: "GPU (Graphics Processing Unit)",
+                definition: "A specialized processor designed to accelerate graphics rendering. Modern GPUs are also widely used for parallel computing tasks, particularly in machine learning and scientific simulations, due to their high computational throughput."
+            },
+            {
+                term: "RISC-V",
+                definition: "An open-source instruction set architecture (ISA) based on reduced instruction set computer (RISC) principles. RISC-V enables custom processor designs without licensing fees, fostering innovation in specialized and general-purpose computing."
+            },
+            {
+                term: "ARM Architecture",
+                definition: "A family of reduced instruction set computing (RISC) architectures for computer processors. ARM designs are widely used in mobile devices and embedded systems due to their energy efficiency and performance characteristics."
+            },
+            {
+                term: "IoT (Internet of Things)",
+                definition: "A network of interconnected physical devices embedded with electronics, software, and network connectivity. IoT enables data collection and exchange between devices, driving applications in smart homes, industrial automation, and urban infrastructure."
+            },
+            {
+                term: "Edge Computing",
+                definition: "A distributed computing paradigm that brings computation and data storage closer to the data sources. Edge computing reduces latency and bandwidth use, enabling real-time processing for IoT devices and time-sensitive applications."
+            },
+            {
+                term: "Supply Chain Resilience",
+                definition: "The ability of a supply chain to resist disruptions and recover quickly. In the semiconductor industry, it involves diversifying suppliers, increasing inventory, and developing alternative manufacturing capabilities to ensure consistent chip supply."
+            },
+            {
+                term: "Substrate",
+                definition: "The base material upon which a semiconductor device is fabricated. Substrates provide mechanical support and often play a role in the electrical characteristics of the device. Common substrates include silicon wafers and compound semiconductors."
+            },
+            {
+                term: "Die",
+                definition: "An individual chip cut from a semiconductor wafer. The die contains the integrated circuit and undergoes packaging to become a finished semiconductor device. Multiple dies are typically produced on a single wafer."
+            },
+            {
+                term: "Metrology",
+                definition: "The science of measurement applied to semiconductor manufacturing. Metrology tools and techniques ensure precise control of critical dimensions, film thicknesses, and other parameters essential for producing high-quality semiconductor devices."
+            },
+            {
+                term: "AI Chips",
+                definition: "Specialized integrated circuits designed to accelerate artificial intelligence workloads. AI chips optimize operations common in neural network processing, enabling faster and more efficient execution of AI algorithms in various applications."
+            },
+            {
+                term: "Reliability Engineering",
+                definition: "The study and practice of ensuring that a product performs its intended function over its lifetime. In semiconductors, it involves designing for durability, testing for potential failure modes, and predicting device lifespans."
+            },
+            {
+                term: "Memory Hierarchy",
+                definition: "The arrangement of memory types in a computing system, from fast, small capacity memory close to the processor to slower, larger capacity storage. Optimizing the memory hierarchy is crucial for balancing performance and cost in computer systems."
+            },
+            {
+                term: "Semiconductor Materials",
+                definition: "Materials with electrical conductivity between conductors and insulators. Common semiconductor materials include silicon, germanium, and compound semiconductors like gallium arsenide, each with unique properties suited for different applications."
+            },
+            {
+                term: "Machine Learning (ML)",
+                definition: "A subset of artificial intelligence focused on algorithms that improve through experience. ML enables systems to learn from data, recognize patterns, and make decisions with minimal human intervention, driving advancements in various fields."
+            },
+            {
+                term: "Deep Learning (DL)",
+                definition: "A subset of machine learning based on artificial neural networks with multiple layers. Deep learning excels at tasks like image and speech recognition, natural language processing, and complex pattern identification in large datasets."
+            },
+            {
+                term: "Neural Networks",
+                definition: "Computing systems inspired by biological neural networks, consisting of interconnected nodes (neurons) that process and transmit information. Neural networks form the basis of many machine learning and deep learning algorithms."
+            },
+            {
+                term: "Data Preprocessing",
+                definition: "The process of transforming raw data into a suitable format for machine learning models. It includes cleaning, normalization, encoding, and feature extraction, crucial for improving model performance and generalization."
+            },
+            {
+                term: "Model Training",
+                definition: "The process of teaching a machine learning model to make predictions or decisions based on input data. It involves adjusting model parameters to minimize the difference between predicted and actual outputs using training datasets."
+            },
+            {
+                term: "Model Evaluation",
+                definition: "The process of assessing a trained machine learning model's performance and generalization ability. It involves using metrics and techniques to measure how well the model performs on unseen data, guiding model selection and improvement."
+            },
+            {
+                term: "Hyperparameter Tuning",
+                definition: "The process of optimizing the configuration settings for machine learning algorithms. Hyperparameter tuning involves systematically searching for the best combination of parameters to improve model performance and generalization."
+            },
+            {
+                term: "Natural Language Processing (NLP)",
+                definition: "A field of AI focused on enabling computers to understand, interpret, and generate human language. NLP drives applications like machine translation, sentiment analysis, and conversational AI, bridging human-computer interaction."
+            },
+            {
+                term: "Computer Vision",
+                definition: "A field of AI that enables computers to derive meaningful information from digital images and videos. Computer vision powers applications like facial recognition, autonomous vehicles, and medical image analysis."
+            },
+            {
+                term: "Data Augmentation",
+                definition: "A technique to increase the diversity of training data by applying transformations to existing samples. Data augmentation helps improve model generalization and performance, especially when working with limited datasets."
+            },
+            {
+                term: "Transfer Learning",
+                definition: "A machine learning technique where a model trained on one task is repurposed for a related task. Transfer learning enables leveraging knowledge from pre-trained models, reducing training time and data requirements for new tasks."
+            },
+            {
+                    term: "Reinforcement Learning (RL)",
+                definition: "A type of machine learning where an agent learns to make decisions by interacting with an environment. RL is used in game playing, robotics, and optimization problems, learning optimal strategies through trial and error."
+            },
+            {
+                term: "Edge AI",
+                definition: "The deployment of AI algorithms on edge devices, such as smartphones or IoT devices. Edge AI enables real-time processing, improved privacy, and reduced bandwidth usage by performing computations closer to the data source."
+            },
+            {
+                term: "Inference",
+                definition: "The process of using a trained machine learning model to make predictions or decisions on new, unseen data. Inference is crucial for deploying AI models in real-world applications, often optimized for speed and efficiency."
+            },
+            {
+                term: "Data Pipelines",
+                definition: "A series of data processing steps that move data from various sources through cleaning, transformation, and loading stages. Efficient data pipelines are crucial for preparing and managing data for machine learning and analytics applications."
+            },
+            {
+                term: "API Integration",
+                definition: "The process of connecting different software applications through their APIs (Application Programming Interfaces). In AI and ML, API integration enables seamless data exchange and functionality sharing between various tools and platforms."
+            },
+            {
+                term: "Federated Learning",
+                definition: "A machine learning technique that trains algorithms across multiple decentralized devices or servers holding local data samples. It enables model training on distributed datasets without exchanging raw data, enhancing privacy and data security."
+            },
+            {
+                term: "Explainable AI (XAI)",
+                definition: "AI systems designed to be interpretable and understandable by humans. XAI aims to make AI decision-making processes transparent, crucial for building trust and enabling deployment in sensitive applications like healthcare and finance."
+            },
+            {
+                term: "Automated Machine Learning (AutoML)",
+                definition: "The process of automating the end-to-end process of applying machine learning to real-world problems. AutoML tools aim to make ML more accessible by automating tasks like feature selection, algorithm selection, and hyperparameter tuning."
+            },
+            {
+                term: "Silicon (Si)",
+                definition: "A semiconductor material fundamental to the electronics industry. Silicon's abundance, stable properties, and ability to form a high-quality oxide make it the primary material for most integrated circuits and solar cells."
+            },
+            {
+                term: "Gallium Arsenide (GaAs)",
+                definition: "A compound semiconductor used in high-frequency and optoelectronic applications. GaAs offers higher electron mobility than silicon, making it suitable for fast transistors and efficient solar cells in spacecraft and telecommunications."
+            },
+            {
+                term: "Silicon Carbide (SiC)",
+                definition: "A compound semiconductor with a wide bandgap, high thermal conductivity, and high breakdown field strength. SiC is used in high-power, high-temperature electronics, particularly in electric vehicles and power conversion systems."
+            },
+            {
+                term: "Germanium (Ge)",
+                definition: "A semiconductor material used in early transistors and now finding applications in high-speed devices and infrared optics. Germanium's lower bandgap compared to silicon makes it useful in specific optoelectronic applications."
+            },
+            {
+                term: "Indium Phosphide (InP)",
+                definition: "A compound semiconductor used in high-speed electronics and photonics. InP's properties make it excellent for high-frequency transistors, laser diodes, and photodetectors, particularly in fiber-optic communication systems."
+            },
+            {
+                term: "Epitaxy",
+                definition: "A method of depositing a crystalline layer on a crystalline substrate. Epitaxy is crucial in semiconductor manufacturing for creating precisely controlled layers with specific electrical properties, essential for advanced device structures."
+            },
+            {
+                term: "Oxide Layer",
+                definition: "A thin layer of oxide grown or deposited on a semiconductor surface. In silicon-based devices, the silicon dioxide layer serves as an insulator, gate dielectric, and passivation layer, critical for transistor operation and reliability."
+            },
+            {
+                term: "Polysilicon",
+                definition: "Polycrystalline silicon used in semiconductor device fabrication. Polysilicon serves as a gate electrode in MOSFETs, a conductive layer in integrated circuits, and a structural material in MEMS devices."
+            },
+            {
+                term: "Thin Film Deposition",
+                definition: "Techniques used to deposit thin layers of material onto a substrate. In semiconductor manufacturing, thin film deposition is crucial for creating various layers in integrated circuits, including insulators, conductors, and semiconductors."
+            },
+            {
+                term: "Chemical Vapor Deposition (CVD)",
+                definition: "A deposition method where reactive gases chemically react to form a solid film on a substrate. CVD is widely used in semiconductor manufacturing for depositing various materials with precise thickness and composition control."
+            },
+            {
+                term: "Physical Vapor Deposition (PVD)",
+                definition: "A variety of vacuum deposition methods used to deposit thin films by the condensation of a vaporized form of the material onto substrates. PVD techniques like sputtering are crucial in semiconductor and coating industries."
+            },
+            {
+                term: "Crystal Defects",
+                definition: "Imperfections in the crystal structure of a material. In semiconductors, controlling and engineering crystal defects is crucial as they can significantly affect electrical and optical properties, influencing device performance and reliability."
+            },
+            {
+                term: "Thermal Conductivity",
+                definition: "A material's ability to conduct heat. In semiconductor devices, thermal conductivity is crucial for managing heat dissipation, affecting performance and reliability. Materials like SiC with high thermal conductivity are valuable for power electronics."
+            },
+            {
+                term: "Annealing",
+                definition: "A heat treatment process used to alter material properties. In semiconductor manufacturing, annealing is used to activate dopants, repair crystal damage, and modify film properties, crucial for optimizing device characteristics."
+            },
+            {
+                term: "Semiconductor Alloy",
+                definition: "A material composed of two or more semiconductor elements. Semiconductor alloys like SiGe or InGaAs allow for bandgap engineering and lattice matching, enabling the creation of advanced heterostructure devices with tailored properties."
+            },
+            {
+                term: "Vertical Integration",
+                definition: "A business strategy where a company controls multiple stages of production. In the semiconductor industry, vertical integration involves owning design, fabrication, and sometimes packaging capabilities, offering greater control over the supply chain."
+            },
+            {
+                term: "Fabless Model",
+                definition: "A semiconductor company business model focusing on chip design while outsourcing manufacturing. The fabless model allows companies to innovate in design without the high capital costs of owning and operating fabrication facilities."
+            },
+            {
+                term: "Monolithic 3D ICs",
+                definition: "Integrated circuits with multiple layers of active electronic components integrated vertically and horizontally into a single circuit. Monolithic 3D ICs offer potential for higher density, performance, and energy efficiency compared to traditional 2D ICs."
+            },
+            {
+                term: "Heterogeneous Integration",
+                definition: "The assembly of multiple, separately manufactured components into a higher-level system. In advanced packaging, it involves combining different types of chips or technologies to create more capable and efficient systems."
+            },
+            {
+                term: "Spintronics",
+                definition: "A field exploiting the intrinsic spin of electrons and its associated magnetic moment. Spintronics has potential for creating more efficient memory and logic devices, possibly overcoming limitations of conventional charge-based electronics."
+            },
+            {
+                term: "Neuromorphic Computing",
+                definition: "Computing architectures inspired by biological neural systems. Neuromorphic systems aim to mimic the brain's efficiency in processing and learning, potentially offering advantages in AI applications and low-power computing."
+            },
+            {
+                term: "Advanced Packaging",
+                definition: "Technologies and methods for assembling, packaging, and interconnecting integrated circuits. Advanced packaging enables higher performance, smaller form factors, and better thermal management in modern electronic systems."
+            },
+            {
+                term: "Extreme Ultraviolet Lithography (EUV)",
+                definition: "An advanced semiconductor manufacturing process using extreme ultraviolet light. EUV enables the creation of smaller transistor features, crucial for continuing Moore's Law scaling in leading-edge semiconductor processes."
+            },
+            {
+                term: "Photonic Integrated Circuits (PICs)",
+                definition: "Devices that integrate multiple photonic functions on a single chip. PICs manipulate light for applications in optical communications, sensing, and quantum computing, offering potential for high-speed, low-power data processing."
+            },
+            {
+                term: "High-Performance Computing (HPC)",
+                definition: "The use of supercomputers and parallel processing techniques to solve complex computational problems. HPC is crucial in scientific simulations, AI training, and data analytics, driving advancements in computer architecture and algorithms."
+            },
+            {
+                term: "Quantum Dot Technology",
+                definition: "Nanoscale semiconductor structures that confine electrons in three dimensions. Quantum dots have applications in displays, solar cells, and quantum computing, offering unique optical and electronic properties."
+            },
+            {
+                term: "Meta-heuristic Algorithms in EDA",
+                definition: "Optimization techniques used in Electronic Design Automation for complex problems like chip placement and routing. Meta-heuristics like genetic algorithms help find near-optimal solutions in large design spaces efficiently."
+            },
+            {
+                term: "Sub-Threshold Voltage Operation",
+                definition: "Operating transistors below their threshold voltage for extremely low power consumption. Sub-threshold design is crucial for ultra-low-power applications like IoT sensors, trading off speed for significant energy savings."
+            },
+            {
+                term: "Optoelectronics",
+                definition: "The study and application of electronic devices that source, detect, and control light. Optoelectronics is crucial in fiber-optic communications, displays, and sensors, bridging electronic and optical technologies."
+            },
+            {
+                term: "High Bandwidth Memory (HBM)",
+                definition: "A high-performance RAM interface for 3D-stacked DRAM. HBM offers significantly higher bandwidth and lower power consumption compared to traditional memory technologies, crucial for graphics cards and high-performance computing."
+            },
+            {
+                term: "MEMS (Micro-Electro-Mechanical Systems)",
+                definition: "Miniaturized devices combining electrical and mechanical components. MEMS technology enables various sensors and actuators used in smartphones, automotive systems, and medical devices, bridging the physical and digital worlds."
+            },
+            {
+                term: "3D NAND",
+                definition: "A type of non-volatile flash memory where memory cells are stacked vertically. 3D NAND allows for higher storage density and lower cost per bit compared to planar NAND, crucial for solid-state drives and mobile devices."
+            },
+            {
+                term: "Wide Bandgap Semiconductors",
+                definition: "Semiconductor materials with a larger bandgap than silicon. Materials like SiC and GaN enable high-power, high-frequency, and high-temperature applications, crucial for power electronics and 5G communications."
+            },
+            {
+                term: "System-in-Package (SiP)",
+                definition: "A packaging technology that combines multiple integrated circuits in a single package. SiP allows for higher integration density and performance in a smaller form factor, crucial for mobile and IoT devices."
+            },
+            {
+                term: "Thermal Interface Materials (TIMs)",
+                definition: "Materials used to enhance heat transfer between heat-generating components and heat sinks. TIMs are crucial in thermal management of electronic systems, ensuring reliable operation of high-performance chips."
+            },
+            {
+                term: "Electrostatic Discharge (ESD) Protection",
+                definition: "Measures to protect electronic devices from damage caused by sudden electrostatic discharge. ESD protection is crucial in chip design and manufacturing to ensure reliability and yield in semiconductor devices."
+            },
+            {
+                term: "5G/6G Advanced Wireless",
+                definition: "Next-generation cellular network technologies offering high data rates, low latency, and massive connectivity. 5G/6G drive innovations in semiconductor design for mobile devices, base stations, and edge computing applications."
+            }
+        ];
+
+        function displayGlossary(terms) {
+            const glossaryDiv = document.getElementById('glossary');
+            glossaryDiv.innerHTML = '';
+            terms.forEach(item => {
+                const termDiv = document.createElement('div');
+                termDiv.className = 'term';
+                termDiv.innerHTML = `
+                    <h2>${item.term}</h2>
+                    <p>${item.definition}</p>
+                `;
+                glossaryDiv.appendChild(termDiv);
+            });
+        }
+
+        function searchGlossary() {
+            const searchTerm = document.getElementById('search-box').value.toLowerCase();
+            const filteredTerms = glossary.filter(item => 
+                item.term.toLowerCase().includes(searchTerm) || 
+                item.definition.toLowerCase().includes(searchTerm)
+            );
+            displayGlossary(filteredTerms);
+        }
+
+        document.getElementById('search-box').addEventListener('input', searchGlossary);
+
+        // Initial display of all terms
+        displayGlossary(glossary);
+    </script>
+</body>
+</html>
