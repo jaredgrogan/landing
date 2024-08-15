@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Console - Universitas</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script src="https://unpkg.com/react-draggable@4.4.3/build/web/react-draggable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.1/dist/umd/lucide.min.js"></script>
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    /* Add any additional styles from the original chat.html here */
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <!-- Favicon and Heading in the Header -->
+  <div class="header-container fixed top-5 left-5 flex items-center">
+    <a href="index.html">
+      <img src="favicon5.svg" alt="Favicon" class="w-12 h-12 rounded-full mr-4">
+    </a>
+    <h1 id="headerText" class="text-2xl font-bold">// Discover the Universe</h1>
+  </div>
+
+  <!-- Navigation Header with Day/Night Toggle -->
+  <div class="nav-header fixed top-5 right-5 flex items-center space-x-4">
+    <ul id="navMenu" class="flex space-x-4">
+      <li class="relative group">
+        <a href="javascript:void(0)" id="navMenuItem" class="text-black">Menu</a>
+        <ul class="absolute hidden group-hover:block bg-white shadow-md rounded-md mt-2 py-2">
+          <li><a href="product.html" id="navAppsItem" class="block px-4 py-2 hover:bg-gray-100">Apps</a></li>
+          <li><a href="tutorials.html" id="navLearnItem" class="block px-4 py-2 hover:bg-gray-100">Learn</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- Language Selection Dropdown -->
+    <select id="languageSelect" class="bg-white border border-gray-300 rounded-md px-2 py-1">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+      <option value="pt">Português</option>
+    </select>
+
+    <!-- Day/Night Mode Toggle Button -->
+    <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+      <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- React Root -->
+  <div id="react-root"></div>
+
+  <!-- Copyright Notice -->
+  <footer class="fixed bottom-5 left-0 right-0 text-center font-mono">
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { MessageCircle, X, Send } = lucide;
+
+    // Paste the entire ChatConsole component code here
+    const ChatConsole = () => {
+      // ... (paste the entire ChatConsole component code here)
+    };
+
+    ReactDOM.render(<ChatConsole />, document.getElementById('react-root'));
+  </script>
+
+  <script>
+  import React, { useState, useEffect } from 'react';
+import Draggable from 'react-draggable';
+import { MessageCircle, X, Send, Paperclip } from 'lucide-react';
+
+const ChatConsole = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    const savedState = localStorage.getItem('chatConsoleState');
+    if (savedState) {
+      const { isExpanded, position, messages, unreadCount } = JSON.parse(savedState);
+      setIsExpanded(isExpanded);
+      setPosition(position);
+      setMessages(messages);
+      setUnreadCount(unreadCount);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('chatConsoleState', JSON.stringify({
+      isExpanded,
+      position,
+      messages,
+      unreadCount
+    }));
+  }, [isExpanded, position, messages, unreadCount]);
+
+  const handleDrag = (e, data) => {
+    setPosition({ x: data.x, y: data.y });
+  };
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+    if (!isExpanded) {
+      setUnreadCount(0);
+    }
+  };
+
+  const sendMessage = () => {
+    if (inputMessage.trim()) {
+      setMessages([...messages, { text: inputMessage, sender: 'user' }]);
+      setInputMessage('');
+      // Simulating AI response
+      setTimeout(() => {
+        setMessages(prev => [...prev, { text: "I'm an AI assistant. How can I help you?", sender: 'ai' }]);
+        if (!isExpanded) {
+          setUnreadCount(prev => prev + 1);
+        }
+      }, 1000);
+    }
+  };
+
+  return (
+    <Draggable
+      position={position}
+      onDrag={handleDrag}
+      disabled={isExpanded}
+    >
+      <div className={`fixed bottom-4 right-4 ${isExpanded ? 'w-80 h-96' : 'w-16 h-16'} bg-gradient-to-r from-blue-500 to-green-500 rounded-full shadow-lg transition-all duration-300 ease-in-out overflow-hidden`}>
+        {isExpanded ? (
+          <div className="flex flex-col h-full">
+            <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-600 to-green-600">
+              <h2 className="text-white font-bold">Chat Console</h2>
+              <button onClick={toggleExpanded} className="text-white">
+                <X size={24} />
+              </button>
+            </div>
+            <div className="flex-grow overflow-y-auto p-4 bg-gray-100">
+              {messages.map((msg, index) => (
+                <div key={index} className={`mb-2 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
+                  <span className={`inline-block p-2 rounded-lg ${msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-800'}`}>
+                    {msg.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="p-4 bg-white">
+              <div className="flex">
+                <input
+                  type="text"
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  className="flex-grow mr-2 p-2 border border-gray-300 rounded"
+                  placeholder="Type a message..."
+                />
+                <button onClick={sendMessage} className="p-2 bg-blue-500 text-white rounded">
+                  <Send size={20} />
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <button onClick={toggleExpanded} className="w-full h-full flex items-center justify-center relative">
+            <MessageCircle size={30} color="white" />
+            {unreadCount > 0 && (
+              <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                {unreadCount}
+              </span>
+            )}
+          </button>
+        )}
+      </div>
+    </Draggable>
+  );
+};
+
+export default ChatConsole;
+    function toggleDarkMode() {
+      const app = document.getElementById('app');
+      const darkModeIcon = document.getElementById('darkModeIcon');
+      const headerText = document.getElementById('headerText');
+      const navMenuItem = document.getElementById('navMenuItem');
+
+      app.classList.toggle('dark-mode');
+      app.classList.toggle('light-mode');
+
+      if (app.classList.contains('dark-mode')) {
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+        headerText.style.color = 'white';
+        navMenuItem.style.color = 'white';
+      } else {
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+        headerText.style.color = 'black';
+        navMenuItem.style.color = 'black';
+      }
+    }
+
+    // Language handling
+    const languageSelect = document.getElementById('languageSelect');
+    languageSelect.addEventListener('change', function() {
+      const language = this.value;
+      // Implement language change logic here
+    });
+  </script>
+</body>
+
+</html>
