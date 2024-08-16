@@ -1,6 +1,9 @@
+// Universitas AI Chat Console - Unified JavaScript Document
+
+// Translations
 const translations = {
     en: {
-        aiGreeting: "Hi, how can I assist you today?",
+        aiGreeting: "Hi, I'm Herakles — Your AI Assistant. What do you want to learn?",
         summarize: "Summarize",
         bullets: "Bullets",
         explain: "Explain",
@@ -12,6 +15,8 @@ const translations = {
         improvements: "Improvements",
         extractDetails: "Extract Details",
         actions: "Actions",
+        nextActions: "Next Actions",
+        actionPlan: "Action Plan",
         webSearch: "Web Search",
         resources: "Resources",
         quiz: "Quiz",
@@ -27,14 +32,195 @@ const translations = {
         offlineMessage: "You are currently offline. Some features may not be available.",
         chatHistory: "Chat History"
     },
-    // Add translations for es, fr, it, de, pt, ar here
+    es: {
+        aiGreeting: "Hola, soy Herakles — Tu Asistente de IA. ¿Qué quieres aprender?",
+        summarize: "Resumir",
+        bullets: "Viñetas",
+        explain: "Explicar",
+        explainConcepts: "Explicar Conceptos",
+        stepByStep: "Paso a Paso",
+        glossary: "Glosario",
+        analyze: "Analizar",
+        evaluate: "Evaluar",
+        improvements: "Mejoras",
+        extractDetails: "Extraer Detalles",
+        actions: "Acciones",
+        nextActions: "Próximas Acciones",
+        actionPlan: "Plan de Acción",
+        webSearch: "Búsqueda Web",
+        resources: "Recursos",
+        quiz: "Cuestionario",
+        inLanguage: "En Español",
+        newChat: "Nueva Conversación",
+        messagePlaceholder: "Escribe un mensaje...",
+        navMenu: "Menú",
+        navApps: "Aplicaciones",
+        navLearn: "Aprender",
+        errorMessage: "Ocurrió un error. Por favor, inténtalo de nuevo.",
+        browserNotSupported: "Tu navegador no admite la grabación de audio",
+        microphoneError: "Error al acceder al micrófono. Por favor, verifica tu configuración e inténtalo de nuevo.",
+        offlineMessage: "Actualmente estás desconectado. Algunas funciones pueden no estar disponibles.",
+        chatHistory: "Historial de Chat"
+    },
+    fr: {
+        aiGreeting: "Bonjour, je suis Herakles — Votre Assistant IA. Que voulez-vous apprendre ?",
+        summarize: "Résumer",
+        bullets: "Puces",
+        explain: "Expliquer",
+        explainConcepts: "Expliquer les Concepts",
+        stepByStep: "Étape par Étape",
+        glossary: "Glossaire",
+        analyze: "Analyser",
+        evaluate: "Évaluer",
+        improvements: "Améliorations",
+        extractDetails: "Extraire les Détails",
+        actions: "Actions",
+        nextActions: "Prochaines Actions",
+        actionPlan: "Plan d'Action",
+        webSearch: "Recherche Web",
+        resources: "Ressources",
+        quiz: "Quiz",
+        inLanguage: "En Français",
+        newChat: "Nouvelle Conversation",
+        messagePlaceholder: "Tapez un message...",
+        navMenu: "Menu",
+        navApps: "Applications",
+        navLearn: "Apprendre",
+        errorMessage: "Une erreur s'est produite. Veuillez réessayer.",
+        browserNotSupported: "Votre navigateur ne prend pas en charge l'enregistrement audio",
+        microphoneError: "Erreur d'accès au microphone. Veuillez vérifier vos paramètres et réessayer.",
+        offlineMessage: "Vous êtes actuellement hors ligne. Certaines fonctionnalités peuvent ne pas être disponibles.",
+        chatHistory: "Historique des Conversations"
+    },
+    it: {
+        aiGreeting: "Ciao, sono Herakles — Il tuo Assistente IA. Cosa vuoi imparare?",
+        summarize: "Riassumere",
+        bullets: "Punti Elenco",
+        explain: "Spiegare",
+        explainConcepts: "Spiegare Concetti",
+        stepByStep: "Passo dopo Passo",
+        glossary: "Glossario",
+        analyze: "Analizzare",
+        evaluate: "Valutare",
+        improvements: "Miglioramenti",
+        extractDetails: "Estrarre Dettagli",
+        actions: "Azioni",
+        nextActions: "Prossime Azioni",
+        actionPlan: "Piano d'Azione",
+        webSearch: "Ricerca Web",
+        resources: "Risorse",
+        quiz: "Quiz",
+        inLanguage: "In Italiano",
+        newChat: "Nuova Conversazione",
+        messagePlaceholder: "Scrivi un messaggio...",
+        navMenu: "Menu",
+        navApps: "Applicazioni",
+        navLearn: "Imparare",
+        errorMessage: "Si è verificato un errore. Per favore riprova.",
+        browserNotSupported: "Il tuo browser non supporta la registrazione audio",
+        microphoneError: "Errore nell'accesso al microfono. Controlla le tue impostazioni e riprova.",
+        offlineMessage: "Sei attualmente offline. Alcune funzionalità potrebbero non essere disponibili.",
+        chatHistory: "Cronologia Chat"
+    },
+    de: {
+        aiGreeting: "Hallo, ich bin Herakles — Dein KI-Assistent. Was möchtest du lernen?",
+        summarize: "Zusammenfassen",
+        bullets: "Aufzählungspunkte",
+        explain: "Erklären",
+        explainConcepts: "Konzepte Erklären",
+        stepByStep: "Schritt für Schritt",
+        glossary: "Glossar",
+        analyze: "Analysieren",
+        evaluate: "Auswerten",
+        improvements: "Verbesserungen",
+        extractDetails: "Details Extrahieren",
+        actions: "Aktionen",
+        nextActions: "Nächste Schritte",
+        actionPlan: "Aktionsplan",
+        webSearch: "Websuche",
+        resources: "Ressourcen",
+        quiz: "Quiz",
+        inLanguage: "Auf Deutsch",
+        newChat: "Neuer Chat",
+        messagePlaceholder: "Schreibe eine Nachricht...",
+        navMenu: "Menü",
+        navApps: "Anwendungen",
+        navLearn: "Lernen",
+        errorMessage: "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+        browserNotSupported: "Dein Browser unterstützt keine Audioaufnahmen",
+        microphoneError: "Fehler beim Zugriff auf das Mikrofon. Bitte überprüfe deine Einstellungen und versuche es erneut.",
+        offlineMessage: "Du bist derzeit offline. Einige Funktionen sind möglicherweise nicht verfügbar.",
+        chatHistory: "Chat-Verlauf"
+    },
+    pt: {
+        aiGreeting: "Olá, sou Herakles — Seu Assistente de IA. O que você quer aprender?",
+        summarize: "Resumir",
+        bullets: "Marcadores",
+        explain: "Explicar",
+        explainConcepts: "Explicar Conceitos",
+        stepByStep: "Passo a Passo",
+        glossary: "Glossário",
+        analyze: "Analisar",
+        evaluate: "Avaliar",
+        improvements: "Melhorias",
+        extractDetails: "Extrair Detalhes",
+        actions: "Ações",
+        nextActions: "Próximas Ações",
+        actionPlan: "Plano de Ação",
+        webSearch: "Pesquisa Web",
+        resources: "Recursos",
+        quiz: "Questionário",
+        inLanguage: "Em Português",
+        newChat: "Nova Conversa",
+        messagePlaceholder: "Digite uma mensagem...",
+        navMenu: "Menu",
+        navApps: "Aplicativos",
+        navLearn: "Aprender",
+        errorMessage: "Ocorreu um erro. Por favor, tente novamente.",
+        browserNotSupported: "Seu navegador não suporta gravação de áudio",
+        microphoneError: "Erro ao acessar o microfone. Por favor, verifique suas configurações e tente novamente.",
+        offlineMessage: "Você está offline no momento. Alguns recursos podem não estar disponíveis.",
+        chatHistory: "Histórico de Conversas"
+    },
+    ar: {
+        aiGreeting: "مرحبًا، أنا هيراكليس — مساعدك الذكي. ماذا تريد أن تتعلم؟",
+        summarize: "تلخيص",
+        bullets: "نقاط",
+        explain: "شرح",
+        explainConcepts: "شرح المفاهيم",
+        stepByStep: "خطوة بخطوة",
+        glossary: "قاموس المصطلحات",
+        analyze: "تحليل",
+        evaluate: "تقييم",
+        improvements: "تحسينات",
+        extractDetails: "استخراج التفاصيل",
+        actions: "إجراءات",
+        nextActions: "الإجراءات التالية",
+        actionPlan: "خطة العمل",
+        webSearch: "بحث الويب",
+        resources: "موارد",
+        quiz: "اختبار",
+        inLanguage: "بالعربية",
+        newChat: "محادثة جديدة",
+        messagePlaceholder: "اكتب رسالة...",
+        navMenu: "القائمة",
+        navApps: "التطبيقات",
+        navLearn: "تعلم",
+        errorMessage: "حدث خطأ. يرجى المحاولة مرة أخرى.",
+        browserNotSupported: "متصفحك لا يدعم تسجيل الصوت",
+        microphoneError: "خطأ في الوصول إلى الميكروفون. يرجى التحقق من إعداداتك والمحاولة مرة أخرى.",
+        offlineMessage: "أنت غير متصل بالإنترنت حاليًا. قد لا تتوفر بعض الميزات.",
+        chatHistory: "سجل المحادثات"
+    }
 };
 
+// Global variables
 let language = 'en';
 let isDarkMode = false;
 let isRecording = false;
 let currentChatId = null;
 
+// DOM Elements
 const app = document.getElementById('app');
 const chatBox = document.getElementById('chatBox');
 const messageInput = document.getElementById('messageInput');
@@ -45,13 +231,13 @@ const fileInput = document.getElementById('fileInput');
 const darkModeBtn = document.getElementById('darkModeBtn');
 const darkModeIcon = document.getElementById('darkModeIcon');
 const languageSelect = document.getElementById('languageSelect');
-const aiGreeting = document.getElementById('aiGreeting');
 const newChatBtn = document.getElementById('newChatBtn');
 const sidebar = document.getElementById('sidebar');
 const sidebarToggle = document.getElementById('sidebarToggle');
 const closeSidebarBtn = document.getElementById('closeSidebarBtn');
 const chatList = document.getElementById('chatList');
 
+// Functions
 function updateLanguage() {
     document.querySelectorAll('[data-translate]').forEach(element => {
         const key = element.getAttribute('data-translate');
@@ -65,11 +251,8 @@ function updateLanguage() {
     updateButtonText('analyzeBtn', 'analyze');
     updateButtonText('actionsBtn', 'actions');
 
-    if (['ar'].includes(language)) {
-        document.body.classList.add('rtl');
-    } else {
-        document.body.classList.remove('rtl');
-    }
+    updateChatLanguage();
+    setRTL();
 }
 
 function updateButtonText(buttonId, translationKey) {
@@ -79,7 +262,31 @@ function updateButtonText(buttonId, translationKey) {
     }
 }
 
+function updateChatLanguage() {
+    const chatBubbles = chatBox.querySelectorAll('.chat-bubble');
+    chatBubbles.forEach(bubble => {
+        if (bubble.classList.contains('ai') && Object.values(translations).some(lang => lang.aiGreeting === bubble.textContent)) {
+            bubble.textContent = translations[language].aiGreeting;
+        }
+    });
+}
+
+function setRTL() {
+    if (['ar'].includes(language)) {
+        document.body.classList.add('rtl');
+        chatBox.style.direction = 'rtl';
+    } else {
+        document.body.classList.remove('rtl');
+        chatBox.style.direction = 'ltr';
+    }
+}
+
 function populateMenu(menu, options) {
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+        return;
+    }
+
     menu.innerHTML = '';
     options.forEach(option => {
         const button = document.createElement('button');
@@ -90,14 +297,24 @@ function populateMenu(menu, options) {
         });
         menu.appendChild(button);
     });
+
+    // Close all other menus
+    document.querySelectorAll('.language-menu').forEach(otherMenu => {
+        if (otherMenu !== menu) {
+            otherMenu.style.display = 'none';
+        }
+    });
+
+    menu.style.display = 'block';
 }
 
 function showMenu(menu, event) {
-    menu.style.display = 'block';
-    menu.style.left = `${event.clientX}px`;
-    menu.style.top = `${event.clientY}px`;
+    const rect = event.target.getBoundingClientRect();
+    menu.style.left = `${rect.left}px`;
+    menu.style.top = `${rect.bottom + 5}px`;
 }
 
+// Event Listeners for auto-suggestion buttons
 document.getElementById('summarizeBtn').addEventListener('click', (event) => {
     event.stopPropagation();
     populateMenu(document.getElementById('summarizeMenu'), ['summarize', 'bullets']);
@@ -118,7 +335,7 @@ document.getElementById('analyzeBtn').addEventListener('click', (event) => {
 
 document.getElementById('actionsBtn').addEventListener('click', (event) => {
     event.stopPropagation();
-    populateMenu(document.getElementById('actionsMenu'), ['actions']);
+    populateMenu(document.getElementById('actionsMenu'), ['nextActions', 'actionPlan']);
     showMenu(document.getElementById('actionsMenu'), event);
 });
 
@@ -140,15 +357,23 @@ document.getElementById('moreBtn').addEventListener('click', (event) => {
 
 // Close all menus when clicking outside
 document.addEventListener('click', () => {
-    const menus = ['summarizeMenu', 'explainMenu', 'analyzeMenu', 'actionsMenu', 'translateMenu', 'moreMenu'];
-    menus.forEach(menuId => {
-        document.getElementById(menuId).style.display = 'none';
+    document.querySelectorAll('.language-menu').forEach(menu => {
+        menu.style.display = 'none';
+    });
+});
+
+// Prevent closing when clicking inside the menu
+document.querySelectorAll('.language-menu').forEach(menu => {
+    menu.addEventListener('click', (event) => {
+        event.stopPropagation();
     });
 });
 
 languageSelect.addEventListener('change', function() {
     language = this.value;
     updateLanguage();
+    updateGreeting();
+    saveChatHistory(); // Save the updated chat with new language
 });
 
 function toggleDarkMode() {
@@ -257,17 +482,11 @@ async function handleVoiceInput(audioBlob) {
     formData.append('audio', audioBlob, 'recording.webm');
 
     try {
-        const response = await fetch('/api/transcribe', {
+        const response = await safeFetch('/api/transcribe', {
             method: 'POST',
             body: formData
         });
-
-        if (!response.ok) {
-            throw new Error('Transcription failed');
-        }
-
-        const data = await response.json();
-        messageInput.value = data.transcription;
+        messageInput.value = response.transcription;
     } catch (error) {
         handleError(error);
     }
@@ -277,6 +496,11 @@ function createChatBubble(text, isUser = false) {
     const bubble = document.createElement('div');
     bubble.classList.add('chat-bubble', isUser ? 'user' : 'ai');
     bubble.textContent = text;
+    
+    // Add accessibility attributes
+    bubble.setAttribute('role', 'log');
+    bubble.setAttribute('aria-live', 'polite');
+    
     chatBox.appendChild(bubble);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
@@ -286,16 +510,10 @@ async function handleFileUpload(file) {
     formData.append('file', file);
 
     try {
-        const response = await fetch('/api/upload', {
+        const response = await safeFetch('/api/upload', {
             method: 'POST',
             body: formData
         });
-
-        if (!response.ok) {
-            throw new Error('File upload failed');
-        }
-
-        const data = await response.json();
         createChatBubble(`File uploaded: ${file.name}`, true);
         const aiResponse = await callGPT35API(`Analyze the uploaded file: ${file.name}`);
         createChatBubble(aiResponse, false);
@@ -306,20 +524,14 @@ async function handleFileUpload(file) {
 
 async function callGPT35API(message) {
     try {
-        const response = await fetch('/api/gpt', {
+        const response = await safeFetch('/api/gpt', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ message, language, chatId: currentChatId })
         });
-
-        if (!response.ok) {
-            throw new Error('API request failed');
-        }
-
-        const data = await response.json();
-        return data.response;
+        return response.response;
     } catch (error) {
         handleError(error);
         return translations[language].errorMessage;
@@ -472,12 +684,31 @@ function debounce(func, wait) {
     };
 }
 
-// Initialize the page
-updateLanguage();
-handleResize();
-handleNetworkChange();
-startNewChat();
-handleDarkModeChange(darkModeMediaQuery);
+// Safe fetch function with error handling
+async function safeFetch(url, options) {
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
+    }
+}
+
+// Initialize the application
+function initApp() {
+    updateLanguage();
+    handleResize();
+    handleNetworkChange();
+    startNewChat();
+    handleDarkModeChange(darkModeMediaQuery);
+}
+
+// Call initApp when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initApp);
 
 // Ensure proper cleanup when the page is unloaded
 window.addEventListener('beforeunload', () => {
