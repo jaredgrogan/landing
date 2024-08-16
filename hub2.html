@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Computing Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+        #sidebar {
+            width: 250px;
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        #sidebar.collapsed {
+            width: 60px;
+        }
+        #main-content {
+            flex-grow: 1;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        #cognitive-hub {
+            width: 600px;
+            height: 600px;
+            margin: 0 auto;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+        .cognitive-function {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            font-weight: bold;
+        }
+        .cognitive-function:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        #function-chain {
+            margin-top: 20px;
+            border: none;
+            padding: 20px;
+            min-height: 100px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .suggestion-bubble {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .suggestion-bubble.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        button {
+            background: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        #function-list div {
+            color: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+        #function-list div:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .chain-item {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .chain-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h2>Functions</h2>
+        <div id="function-list"></div>
+    </div>
+    <div id="main-content">
+        <h1>Cognitive Computing Platform</h1>
+        <div id="cognitive-hub"></div>
+        <div id="function-chain">
+            <h3>Function Chain</h3>
+            <p>Drag and drop functions here to create a sequence.</p>
+        </div>
+    </div>
+    <div class="suggestion-bubble" id="suggestion-bubble">
+        <p id="suggestion-text"></p>
+        <button onclick="dismissSuggestion()">Dismiss</button>
+        <button onclick="useSuggestion()">Use</button>
+    </div>
+
+    <script>
+        const cognitiveFunction = [
+            {name: "Summarize & Synthesize", gradient: "linear-gradient(135deg, #FF6B6B 0%, #FFA07A 100%)"},
+            {name: "Analyze & Evaluate", gradient: "linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%)"},
+            {name: "Generate & Innovate", gradient: "linear-gradient(135deg, #45B7D1 0%, #2C3E50 100%)"},
+            {name: "Compare & Contrast", gradient: "linear-gradient(135deg, #FFA07A 0%, #FFD700 100%)"},
+            {name: "Explain & Teach", gradient: "linear-gradient(135deg, #98D8C8 0%, #45B7D1 100%)"},
+            {name: "Predict & Model", gradient: "linear-gradient(135deg, #F7DC6F 0%, #F39C12 100%)"},
+            {name: "Organize & Prioritize", gradient: "linear-gradient(135deg, #D98880 0%, #C0392B 100%)"},
+            {name: "Research & Validate", gradient: "linear-gradient(135deg, #A569BD 0%, #8E44AD 100%)"},
+            {name: "Visualize & Present", gradient: "linear-gradient(135deg, #5DADE2 0%, #3498DB 100%)"}
+        ];
+
+        function createCognitiveHub() {
+            const hub = document.getElementById('cognitive-hub');
+            cognitiveFunction.forEach((func, index) => {
+                const angle = (index / cognitiveFunction.length) * 2 * Math.PI;
+                const x = 240 + 220 * Math.cos(angle);
+                const y = 240 + 220 * Math.sin(angle);
+                
+                const element = document.createElement('div');
+                element.className = 'cognitive-function';
+                element.style.left = `${x}px`;
+                element.style.top = `${y}px`;
+                element.style.background = func.gradient;
+                element.innerText = func.name;
+                element.draggable = true;
+                element.addEventListener('dragstart', drag);
+                element.addEventListener('click', () => expandFunction(func.name));
+                
+                hub.appendChild(element);
+            });
+        }
+
+        function expandFunction(funcName) {
+            alert(`Expanding ${funcName} functionality...`);
+            // Here you would implement the expansion of the function,
+            // perhaps showing a modal with more details or options
+        }
+
+        function populateSidebar() {
+            const functionList = document.getElementById('function-list');
+            cognitiveFunction.forEach(func => {
+                const element = document.createElement('div');
+                element.innerText = func.name;
+                element.draggable = true;
+                element.addEventListener('dragstart', drag);
+                element.style.background = func.gradient;
+                functionList.appendChild(element);
+            });
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text/plain", ev.target.innerText);
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text/plain");
+            const chainItem = document.createElement('span');
+            chainItem.className = 'chain-item';
+            chainItem.innerText = data;
+            ev.target.appendChild(chainItem);
+            animateChainItem(chainItem);
+        }
+
+        function animateChainItem(item) {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                item.style.transition = 'all 0.3s ease';
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+            }, 50);
+        }
+
+        function showSuggestion() {
+            const suggestions = [
+                "Consider summarizing your current work.",
+                "This might be a good time to analyze your data.",
+                "Have you tried visualizing your results?",
+                "Organizing your thoughts could help at this stage.",
+                "It might be beneficial to compare your findings with previous work."
+            ];
+            const suggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+            document.getElementById('suggestion-text').innerText = suggestion;
+            const suggestionBubble = document.getElementById('suggestion-bubble');
+            suggestionBubble.classList.add('show');
+        }
+
+        function dismissSuggestion() {
+            document.getElementById('suggestion-bubble').classList.remove('show');
+        }
+
+        function useSuggestion() {
+            alert("Implementing suggestion...");
+            dismissSuggestion();
+        }
+
+        let isHubExpanded = false;
+        function toggleHubSize() {
+            const hub = document.getElementById('cognitive-hub');
+            isHubExpanded = !isHubExpanded;
+            hub.style.transform = isHubExpanded ? 'scale(1.2)' : 'scale(1)';
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        createCognitiveHub();
+        populateSidebar();
+        document.getElementById('function-chain').addEventListener('dragover', allowDrop);
+        document.getElementById('function-chain').addEventListener('drop', drop);
+
+        // Simulate context-aware suggestions
+        setInterval(showSuggestion, 30000);
+
+        // Add event listeners for new features
+        document.getElementById('cognitive-hub').addEventListener('click', toggleHubSize);
+        document.querySelector('#sidebar h2').addEventListener('click', toggleSidebar);
+    </script>
+</body>
+</html>
