@@ -87,18 +87,122 @@ const translations = {
         offlineMessage: "Vous êtes actuellement hors ligne. Certaines fonctionnalités peuvent ne pas être disponibles.",
         chatHistory: "Historique des Conversations"
     },
-    // Add other languages (it, de, pt, ar) here following the same pattern
-};
-
-// Language names for the translation menu
-const languageNames = {
-    en: "In English",
-    es: "En Español",
-    fr: "En Français",
-    it: "In Italiano",
-    de: "Auf Deutsch",
-    pt: "Em Português",
-    ar: "بالعربية"
+    it: {
+        aiGreeting: "Ciao, sono Herakles — Il tuo Assistente IA. Cosa vuoi imparare?",
+        summarize: "Riassumere",
+        bullets: "Elenchi puntati",
+        explain: "Spiegare",
+        explainConcepts: "Spiegare Concetti",
+        stepByStep: "Passo dopo Passo",
+        glossary: "Glossario",
+        analyze: "Analizzare",
+        evaluate: "Valutare",
+        improvements: "Miglioramenti",
+        extractDetails: "Estrarre Dettagli",
+        actions: "Azioni",
+        nextActions: "Prossime Azioni",
+        actionPlan: "Piano d'Azione",
+        webSearch: "Ricerca Web",
+        resources: "Risorse",
+        quiz: "Quiz",
+        newChat: "Nuova Conversazione",
+        messagePlaceholder: "Scrivi un messaggio...",
+        navMenu: "Menu",
+        navApps: "Applicazioni",
+        navLearn: "Imparare",
+        errorMessage: "Si è verificato un errore. Per favore riprova.",
+        browserNotSupported: "Il tuo browser non supporta la registrazione audio",
+        microphoneError: "Errore nell'accesso al microfono. Controlla le tue impostazioni e riprova.",
+        offlineMessage: "Sei attualmente offline. Alcune funzionalità potrebbero non essere disponibili.",
+        chatHistory: "Cronologia Chat"
+    },
+    pt: {
+        aiGreeting: "Olá, sou Herakles — Seu Assistente de IA. O que você quer aprender?",
+        summarize: "Resumir",
+        bullets: "Marcadores",
+        explain: "Explicar",
+        explainConcepts: "Explicar Conceitos",
+        stepByStep: "Passo a Passo",
+        glossary: "Glossário",
+        analyze: "Analisar",
+        evaluate: "Avaliar",
+        improvements: "Melhorias",
+        extractDetails: "Extrair Detalhes",
+        actions: "Ações",
+        nextActions: "Próximas Ações",
+        actionPlan: "Plano de Ação",
+        webSearch: "Pesquisa Web",
+        resources: "Recursos",
+        quiz: "Questionário",
+        newChat: "Nova Conversa",
+        messagePlaceholder: "Digite uma mensagem...",
+        navMenu: "Menu",
+        navApps: "Aplicativos",
+        navLearn: "Aprender",
+        errorMessage: "Ocorreu um erro. Por favor, tente novamente.",
+        browserNotSupported: "Seu navegador não suporta gravação de áudio",
+        microphoneError: "Erro ao acessar o microfone. Verifique suas configurações e tente novamente.",
+        offlineMessage: "Você está offline no momento. Alguns recursos podem não estar disponíveis.",
+        chatHistory: "Histórico de Chat"
+    },
+    de: {
+        aiGreeting: "Hallo, ich bin Herakles — Dein KI-Assistent. Was möchtest du lernen?",
+        summarize: "Zusammenfassen",
+        bullets: "Aufzählungspunkte",
+        explain: "Erklären",
+        explainConcepts: "Konzepte Erklären",
+        stepByStep: "Schritt für Schritt",
+        glossary: "Glossar",
+        analyze: "Analysieren",
+        evaluate: "Bewerten",
+        improvements: "Verbesserungen",
+        extractDetails: "Details Extrahieren",
+        actions: "Aktionen",
+        nextActions: "Nächste Schritte",
+        actionPlan: "Aktionsplan",
+        webSearch: "Websuche",
+        resources: "Ressourcen",
+        quiz: "Quiz",
+        newChat: "Neuer Chat",
+        messagePlaceholder: "Nachricht eingeben...",
+        navMenu: "Menü",
+        navApps: "Anwendungen",
+        navLearn: "Lernen",
+        errorMessage: "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+        browserNotSupported: "Dein Browser unterstützt keine Audioaufnahmen",
+        microphoneError: "Fehler beim Zugriff auf das Mikrofon. Bitte überprüfe deine Einstellungen und versuche es erneut.",
+        offlineMessage: "Du bist derzeit offline. Einige Funktionen sind möglicherweise nicht verfügbar.",
+        chatHistory: "Chat-Verlauf"
+    },
+    ar: {
+        aiGreeting: "مرحبًا، أنا هيراكليس — مساعدك الذكي. ماذا تريد أن تتعلم؟",
+        summarize: "تلخيص",
+        bullets: "نقاط",
+        explain: "شرح",
+        explainConcepts: "شرح المفاهيم",
+        stepByStep: "خطوة بخطوة",
+        glossary: "قاموس المصطلحات",
+        analyze: "تحليل",
+        evaluate: "تقييم",
+        improvements: "تحسينات",
+        extractDetails: "استخراج التفاصيل",
+        actions: "إجراءات",
+        nextActions: "الإجراءات التالية",
+        actionPlan: "خطة العمل",
+        webSearch: "بحث على الويب",
+        resources: "موارد",
+        quiz: "اختبار",
+        newChat: "محادثة جديدة",
+        messagePlaceholder: "اكتب رسالة...",
+        navMenu: "القائمة",
+        navApps: "التطبيقات",
+        navLearn: "تعلم",
+        errorMessage: "حدث خطأ. يرجى المحاولة مرة أخرى.",
+        browserNotSupported: "متصفحك لا يدعم تسجيل الصوت",
+        microphoneError: "خطأ في الوصول إلى الميكروفون. يرجى التحقق من إعداداتك والمحاولة مرة أخرى.",
+        offlineMessage: "أنت حاليًا غير متصل بالإنترنت. قد لا تتوفر بعض الميزات.",
+        chatHistory: "سجل المحادثات"
+    }
 };
 
 // Global variables
@@ -159,7 +263,7 @@ function updateChatLanguage() {
 }
 
 function setRTL() {
-    if (['ar'].includes(language)) {
+    if (language === 'ar') {
         document.body.classList.add('rtl');
         chatBox.style.direction = 'rtl';
     } else {
@@ -175,29 +279,15 @@ function populateMenu(menu, options) {
     }
 
     menu.innerHTML = '';
-    if (menu.id === 'translateMenu') {
-        Object.entries(languageNames).forEach(([lang, name]) => {
-            const button = document.createElement('button');
-            button.textContent = name;
-            button.addEventListener('click', () => {
-                messageInput.value = name;
-                menu.style.display = 'none';
-            });
-            menu.appendChild(button);
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = translations[language][option];
+        button.addEventListener('click', () => {
+            messageInput.value = translations[language][option];
+            menu.style.display = 'none';
         });
-    } else {
-        Object.keys(translations).forEach(lang => {
-            options.forEach(option => {
-                const button = document.createElement('button');
-                button.textContent = `${languageNames[lang]}: ${translations[lang][option]}`;
-                button.addEventListener('click', () => {
-                    messageInput.value = translations[lang][option];
-                    menu.style.display = 'none';
-                });
-                menu.appendChild(button);
-            });
-        });
-    }
+        menu.appendChild(button);
+    });
 
     // Close all other menus
     document.querySelectorAll('.language-menu').forEach(otherMenu => {
@@ -242,8 +332,19 @@ document.getElementById('actionsBtn').addEventListener('click', (event) => {
 
 document.getElementById('translateBtn').addEventListener('click', (event) => {
     event.stopPropagation();
-    populateMenu(document.getElementById('translateMenu'));
-    showMenu(document.getElementById('translateMenu'), event);
+    const translateMenu = document.getElementById('translateMenu');
+    translateMenu.innerHTML = '';
+    Object.keys(translations).forEach(lang => {
+        const button = document.createElement('button');
+        button.textContent = translations[lang].summarize; // Use 'summarize' as an example of how the language looks
+        button.addEventListener('click', () => {
+            language = lang;
+            updateLanguage();
+            translateMenu.style.display = 'none';
+        });
+        translateMenu.appendChild(button);
+    });
+    showMenu(translateMenu, event);
 });
 
 document.getElementById('webSearchBtn').addEventListener('click', () => {
