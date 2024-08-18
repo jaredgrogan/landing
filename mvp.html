@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="mvp.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="light-mode" id="app">
     <div class="header-wrapper">
@@ -20,18 +20,18 @@
         </div>
         <div class="header-right">
             <div class="nav-header">
-                <ul id="navMenu">
+                <ul>
                     <li>
-                        <a href="javascript:void(0)" id="navMenuItem">Menu</a>
-                        <ul>
-                            <li><a href="product.html" id="navAppsItem">Apps</a></li>
-                            <li><a href="tutorials.html" id="navLearnItem">Learn</a></li>
+                        <a href="#" id="navMenuItem" data-translate="navMenu">Menu</a>
+                        <ul id="navSubmenu" class="nav-submenu">
+                            <li><a href="product.html" id="navAppsItem" data-translate="navApps">Apps</a></li>
+                            <li><a href="tutorials.html" id="navLearnItem" data-translate="navLearn">Learn</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
             <div class="language-select">
-                <select id="languageSelect" onchange="changeLanguage()">
+                <select id="languageSelect">
                     <option value="en">English</option>
                     <option value="es">Español</option>
                     <option value="fr">Français</option>
@@ -42,7 +42,7 @@
                 </select>
             </div>
             <div class="toggle-container">
-                <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+                <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2">
                     <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
@@ -54,7 +54,7 @@
     <div class="chat-container">
         <div class="response-suggestions">
             <button id="summarizeBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="21" y1="10" x2="3" y2="10"></line>
                     <line x1="21" y1="6" x2="3" y2="6"></line>
                     <line x1="21" y1="14" x2="3" y2="14"></line>
@@ -63,7 +63,7 @@
                 <span data-translate="summarize">Summarize</span>
             </button>
             <button id="explainBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" y1="16" x2="12" y2="12"></line>
                     <line x1="12" y1="8" x2="12.01" y2="8"></line>
@@ -71,21 +71,21 @@
                 <span data-translate="explain">Explain</span>
             </button>
             <button id="analyzeBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
                 <span data-translate="analyze">Analyze</span>
             </button>
             <button id="actionsBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 11 12 14 22 4"></polyline>
                     <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
                 </svg>
                 <span data-translate="actions">Actions</span>
             </button>
             <button id="translateBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="2" y1="12" x2="22" y2="12"></line>
                     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -93,14 +93,14 @@
                 <span data-translate="translate">Translate</span>
             </button>
             <button id="webSearchBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
                 <span data-translate="webSearch">Web Search</span>
             </button>
             <button id="moreBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="1"></circle>
                     <circle cx="19" cy="12" r="1"></circle>
                     <circle cx="5" cy="12" r="1"></circle>
@@ -108,13 +108,6 @@
                 <span data-translate="more">More</span>
             </button>
         </div>
-
-        <div id="summarizeMenu" class="language-menu"></div>
-        <div id="explainMenu" class="language-menu"></div>
-        <div id="analyzeMenu" class="language-menu"></div>
-        <div id="actionsMenu" class="language-menu"></div>
-        <div id="translateMenu" class="language-menu"></div>
-        <div id="moreMenu" class="language-menu"></div>
 
         <div id="chatBox" class="dropzone">
             <div class="chat-bubble ai" id="aiGreeting">
@@ -131,7 +124,7 @@
             <input type="file" id="fileInput" style="display:none;">
             <input type="text" id="messageInput" placeholder="Type a message...">
             <button class="voice-input-btn" id="voiceInputBtn">
-                <svg id="micIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic">
+                <svg id="micIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic">
                     <path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z"></path>
                     <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
                     <line x1="12" y1="19" x2="12" y2="23"></line>
@@ -150,7 +143,7 @@
 
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
-            <h2>Chat History</h2>
+            <h2 data-translate="chatHistory">Chat History</h2>
             <button id="closeSidebarBtn">&times;</button>
         </div>
         <input type="text" id="searchInput" placeholder="Search chats...">
@@ -163,10 +156,20 @@
         <i class="fas fa-history"></i>
     </button>
 
+    <div id="translateMenu" class="language-menu">
+        <button data-lang="en">In English</button>
+        <button data-lang="es">En Español</button>
+        <button data-lang="fr">En Français</button>
+        <button data-lang="it">In Italiano</button>
+        <button data-lang="pt">Em Português</button>
+        <button data-lang="de">Auf Deutsch</button>
+        <button data-lang="ar">بالعربية</button>
+    </div>
+
     <footer style="text-align: center; font-family: 'Courier New', monospace; padding: 20px;">
         &copy; 2024 UNIVERSITAS AI
     </footer>
 
-    <script src="mvp-script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
