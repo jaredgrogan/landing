@@ -74,7 +74,7 @@ const translations = {
         translate: "Traducir",
         more: "Más"
     },
-     fr: {
+    fr: {
         aiGreeting: "Bonjour, je suis Herakles — Votre Assistant IA. Que voulez-vous apprendre ?",
         summarize: "Résumer",
         bullets: "Puces",
@@ -266,8 +266,7 @@ let language = 'en';
 let isDarkMode = false;
 let isRecording = false;
 let currentChatId = null;
-let mediaRecorder = null;
-let audioChunks = [];
+let recognition;
 
 // DOM Elements
 const app = document.getElementById('app');
@@ -288,6 +287,8 @@ const chatList = document.getElementById('chatList');
 const searchInput = document.getElementById('searchInput');
 const tagInput = document.getElementById('tagInput');
 const addTagBtn = document.getElementById('addTagBtn');
+const navMenuItem = document.getElementById('navMenuItem');
+const navSubmenu = document.getElementById('navSubmenu');
 
 // Functions
 function updateLanguage() {
@@ -302,6 +303,11 @@ function updateLanguage() {
     darkModeBtn.title = translations[language].darkMode;
     sidebarToggle.title = translations[language].sidebar;
     closeSidebarBtn.title = translations[language].closeSidebar;
+
+    // Update header menu items
+    navMenuItem.textContent = translations[language].navMenu;
+    document.getElementById('navAppsItem').textContent = translations[language].navApps;
+    document.getElementById('navLearnItem').textContent = translations[language].navLearn;
 
     updateButtonText('summarizeBtn', 'summarize');
     updateButtonText('explainBtn', 'explain');
@@ -344,27 +350,44 @@ function setRTL() {
 function toggleDarkMode() {
     isDarkMode = !isDarkMode;
     if (isDarkMode) {
-        app.classList.remove('light-mode');
-        app.classList.add('dark-mode');
-        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+        document.body.classList.remove('light-mode');
+        document.body.classList.add('dark-mode');
+        darkModeIcon.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>`;
     } else {
-        app.classList.remove('dark-mode');
-        app.classList.add('light-mode');
-        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+        document.body.classList.remove('dark-mode');
+        document.body.classList.add('light-mode');
+        darkModeIcon.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>`;
     }
+    localStorage.setItem('darkMode', isDarkMode);
 }
 
 function handleAutoSuggestion(suggestion) {
     const userInput = messageInput.value.trim();
-    const autoSuggestionText = `\n\n[${suggestion}]`;
+    const autoSuggestionText = `\n\n*${suggestion}:* `;
     messageInput.value = userInput + autoSuggestionText;
+    messageInput.focus();
+    messageInput.setSelectionRange(messageInput.value.length, messageInput.value.length);
 }
 
 async function sendMessage() {
     const message = messageInput.value.trim();
     if (message) {
-        const [userMessage, autoSuggestion] = message.split('\n\n[');
-        const cleanedSuggestion = autoSuggestion ? autoSuggestion.slice(0, -1) : '';
+        const [userMessage, autoSuggestion] = message.split(/\n\n\*(\w+):\*/);
+        const cleanedSuggestion = autoSuggestion ? autoSuggestion.trim() : '';
 
         createChatBubble(message, true);
         messageInput.value = '';
@@ -384,16 +407,8 @@ function createChatBubble(text, isUser = false) {
     bubble.classList.add('chat-bubble', isUser ? 'user' : 'ai');
     
     const messageText = document.createElement('span');
-    messageText.textContent = text.split('\n\n[')[0];
+    messageText.innerHTML = text.replace(/\*(\w+):\*/g, '<em>$1:</em>');
     bubble.appendChild(messageText);
-
-    const suggestion = text.match(/\n\n\[(.*?)\]$/);
-    if (suggestion) {
-        const suggestionSpan = document.createElement('span');
-        suggestionSpan.classList.add('auto-suggestion');
-        suggestionSpan.textContent = suggestion[1];
-        bubble.appendChild(suggestionSpan);
-    }
     
     bubble.setAttribute('role', 'log');
     bubble.setAttribute('aria-live', 'polite');
@@ -577,69 +592,56 @@ function closeSidebar() {
     sidebar.classList.remove('open');
 }
 
-function toggleRecording() {
-    if (isRecording) {
-        stopRecording();
-    } else {
-        startRecording();
-    }
-}
+function initSpeechRecognition() {
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
 
-function startRecording() {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        alert(translations[language].browserNotSupported);
-        return;
-    }
-
-    navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-            mediaRecorder = new MediaRecorder(stream);
-            audioChunks = [];
-
-            mediaRecorder.ondataavailable = (event) => {
-                audioChunks.push(event.data);
-            };
-
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                sendAudioToServer(audioBlob);
-            };
-
-            mediaRecorder.start();
-            isRecording = true;
+        recognition.onstart = function() {
             voiceInputBtn.classList.add('recording');
-        })
-        .catch(error => {
-            console.error('Error accessing microphone:', error);
-            alert(translations[language].microphoneError);
-        });
+        };
+
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            messageInput.value += transcript;
+        };
+
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error:', event.error);
+            stopDictation();
+        };
+
+        recognition.onend = function() {
+            stopDictation();
+        };
+    } else {
+        console.error('Speech recognition not supported');
+        voiceInputBtn.style.display = 'none';
+    }
 }
 
-function stopRecording() {
-    if (mediaRecorder && isRecording) {
-        mediaRecorder.stop();
-        isRecording = false;
+function startDictation() {
+    if (recognition) {
+        recognition.lang = language;
+        recognition.start();
+    } else {
+        alert(translations[language].browserNotSupported);
+    }
+}
+
+function stopDictation() {
+    if (recognition) {
+        recognition.stop();
         voiceInputBtn.classList.remove('recording');
     }
 }
 
-async function sendAudioToServer(audioBlob) {
-    const formData = new FormData();
-    formData.append('audio', audioBlob, 'recording.wav');
-
-    try {
-        const response = await safeFetch('/api/transcribe', {
-            method: 'POST',
-            body: formData
-        });
-        if (response.transcription) {
-            messageInput.value = response.transcription;
-        } else {
-            throw new Error('Transcription failed');
-        }
-    } catch (error) {
-        console.error('Error sending audio to server:', error);
-        alert(translations[language].errorMessage);
+function toggleDictation() {
+    if (recognition && recognition.isRecording) {
+        stopDictation();
+    } else {
+        startDictation();
     }
 }
 
@@ -684,94 +686,138 @@ async function safeFetch(url, options) {
 }
 
 // Event Listeners
-document.getElementById('summarizeBtn').addEventListener('click', () => handleAutoSuggestion('Summarize'));
-document.getElementById('explainBtn').addEventListener('click', () => handleAutoSuggestion('Explain'));
-document.getElementById('analyzeBtn').addEventListener('click', () => handleAutoSuggestion('Analyze'));
-document.getElementById('actionsBtn').addEventListener('click', () => handleAutoSuggestion('Actions'));
-document.getElementById('webSearchBtn').addEventListener('click', () => handleAutoSuggestion('Web Search'));
-document.getElementById('moreBtn').addEventListener('click', () => handleAutoSuggestion('More'));
-
-document.getElementById('translateBtn').addEventListener('click', (event) => {
-    event.stopPropagation();
-    const translateMenu = document.getElementById('translateMenu');
-    translateMenu.style.display = translateMenu.style.display === 'block' ? 'none' : 'block';
-});
-
-document.querySelectorAll('#translateMenu button').forEach(button => {
-    button.addEventListener('click', (event) => {
-        const selectedLang = event.target.getAttribute('data-lang');
-        handleAutoSuggestion(`Translate to ${translations[selectedLang].languageName}`);
-        document.getElementById('translateMenu').style.display = 'none';
+document.addEventListener('DOMContentLoaded', function() {
+    navMenuItem.addEventListener('click', function(e) {
+        e.preventDefault();
+        navSubmenu.style.display = navSubmenu.style.display === 'block' ? 'none' : 'block';
     });
-});
 
-sendMessageBtn.addEventListener('click', sendMessage);
-messageInput.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        sendMessage();
-    }
-});
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!navMenuItem.contains(e.target) && !navSubmenu.contains(e.target)) {
+            navSubmenu.style.display = 'none';
+        }
+    });
 
-attachmentBtn.addEventListener('click', function() {
-    fileInput.click();
-});
+    document.getElementById('summarizeBtn').addEventListener('click', () => handleAutoSuggestion('Summarize'));
+    document.getElementById('explainBtn').addEventListener('click', () => handleAutoSuggestion('Explain'));
+    document.getElementById('analyzeBtn').addEventListener('click', () => handleAutoSuggestion('Analyze'));
+    document.getElementById('actionsBtn').addEventListener('click', () => handleAutoSuggestion('Actions'));
+    document.getElementById('webSearchBtn').addEventListener('click', () => handleAutoSuggestion('Web Search'));
+    document.getElementById('moreBtn').addEventListener('click', () => handleAutoSuggestion('More'));
 
-fileInput.addEventListener('change', function() {
-    if (fileInput.files.length > 0) {
-        handleFileUpload(fileInput.files[0]);
-    }
-});
+    document.getElementById('translateBtn').addEventListener('click', (event) => {
+        event.stopPropagation();
+        const translateMenu = document.getElementById('translateMenu');
+        translateMenu.style.display = translateMenu.style.display === 'block' ? 'none' : 'block';
+    });
 
-voiceInputBtn.addEventListener('click', toggleRecording);
-darkModeBtn.addEventListener('click', toggleDarkMode);
-newChatBtn.addEventListener('click', startNewChat);
-sidebarToggle.addEventListener('click', openSidebar);
-closeSidebarBtn.addEventListener('click', closeSidebar);
-languageSelect.addEventListener('change', function() {
-    language = this.value;
-    updateLanguage();
-});
+    document.querySelectorAll('#translateMenu button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const selectedLang = event.target.getAttribute('data-lang');
+            handleAutoSuggestion(`Translate to ${translations[selectedLang].languageName}`);
+            document.getElementById('translateMenu').style.display = 'none';
+        });
+    });
 
-searchInput.addEventListener('input', (e) => searchChats(e.target.value));
+    sendMessageBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
 
-addTagBtn.addEventListener('click', () => {
-    if (tagInput.value.trim() && currentChatId) {
-        addChatTag(`chat_${currentChatId}`, tagInput.value.trim());
-        tagInput.value = '';
-    }
-});
+    attachmentBtn.addEventListener('click', function() {
+        fileInput.click();
+    });
 
-window.addEventListener('online', handleNetworkChange);
-window.addEventListener('offline', handleNetworkChange);
+    fileInput.addEventListener('change', function() {
+        if (fileInput.files.length > 0) {
+            handleFileUpload(fileInput.files[0]);
+        }
+    });
 
-chatBox.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    chatBox.classList.add('dragover');
-});
+    voiceInputBtn.addEventListener('click', toggleDictation);
+    darkModeBtn.addEventListener('click', toggleDarkMode);
+    newChatBtn.addEventListener('click', startNewChat);
+    sidebarToggle.addEventListener('click', openSidebar);
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    
+    languageSelect.addEventListener('change', function() {
+        language = this.value;
+        updateLanguage();
+    });
 
-chatBox.addEventListener('dragleave', (e) => {
-    e.preventDefault();
-    chatBox.classList.remove('dragover');
-});
+    searchInput.addEventListener('input', (e) => searchChats(e.target.value));
 
-chatBox.addEventListener('drop', (e) => {
-    e.preventDefault();
-    chatBox.classList.remove('dragover');
-    if (e.dataTransfer.files.length > 0) {
-        handleFileUpload(e.dataTransfer.files[0]);
-    }
+    addTagBtn.addEventListener('click', () => {
+        if (tagInput.value.trim() && currentChatId) {
+            addChatTag(`chat_${currentChatId}`, tagInput.value.trim());
+            tagInput.value = '';
+        }
+    });
+
+    window.addEventListener('online', handleNetworkChange);
+    window.addEventListener('offline', handleNetworkChange);
+
+    chatBox.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        chatBox.classList.add('dragover');
+    });
+
+    chatBox.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        chatBox.classList.remove('dragover');
+    });
+
+    chatBox.addEventListener('drop', (e) => {
+        e.preventDefault();
+        chatBox.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) {
+            handleFileUpload(e.dataTransfer.files[0]);
+        }
+    });
+
+    initApp();
 });
 
 // Initialize the application
 function initApp() {
+    // Set initial language based on browser settings or default to English
+    const browserLang = navigator.language.split('-')[0];
+    language = translations[browserLang] ? browserLang : 'en';
+    languageSelect.value = language;
+
     updateLanguage();
     handleNetworkChange();
     startNewChat();
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    if (darkModeMediaQuery.matches) {
+    initSpeechRecognition();
+
+    // Initialize dark mode based on saved preference or system preference
+    isDarkMode = localStorage.getItem('darkMode') === 'true' || 
+                 (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    if (isDarkMode) {
         toggleDarkMode();
     }
+
+    // Add listener for system color scheme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
+        if (e.matches) {
+            if (!isDarkMode) toggleDarkMode();
+        } else {
+            if (isDarkMode) toggleDarkMode();
+        }
+    });
 }
 
-// Call initApp when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', initApp);
+// Network status change handler
+function handleNetworkChange() {
+    if (navigator.onLine) {
+        // Enable all interactive elements
+        document.querySelectorAll('button, input, select').forEach(el => el.disabled = false);
+    } else {
+        // Disable elements that require network connection
+        document.querySelectorAll('button:not(#darkModeBtn):not(#closeSidebarBtn), input, select').forEach(el => el.disabled = true);
+        alert(translations[language].offlineMessage);
+    }
+}
