@@ -30,10 +30,12 @@ body {
 
 .light-mode .header-wrapper {
     background-color: #f3f4f6;
+    border-bottom: 1px solid #d1d5db;
 }
 
 .dark-mode .header-wrapper {
     background-color: #1e1e1e;
+    border-bottom: 1px solid #4b5563;
 }
 
 .header-left {
@@ -47,13 +49,66 @@ body {
     gap: 10px;
 }
 
+.nav-header {
+    position: relative;
+}
+
+.nav-header ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-header ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.nav-submenu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 10px 0;
+}
+
+.dark-mode .nav-submenu {
+    background-color: #333;
+    box-shadow: 0 2px 10px rgba(255,255,255,0.1);
+}
+
+.nav-submenu li {
+    display: block;
+    margin: 0;
+}
+
+.nav-submenu li a {
+    display: block;
+    padding: 5px 20px;
+    color: #333;
+    text-decoration: none;
+}
+
+.dark-mode .nav-submenu li a {
+    color: #e0e0e0;
+}
+
+.nav-submenu li a:hover {
+    background-color: #f3f4f6;
+}
+
+.dark-mode .nav-submenu li a:hover {
+    background-color: #4a4a4a;
+}
+
 .chat-container {
     max-width: 800px;
-    margin: 100px auto 0 auto;
+    margin: 80px auto 0 auto;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 120px);
+    height: calc(100vh - 100px);
 }
 
 .chat-bubble {
@@ -67,7 +122,6 @@ body {
     align-items: center;
     color: white;
     font-size: 14px;
-    border: 2px dotted grey;
     opacity: 0;
     transform: translateY(20px);
     animation: bounce-in 0.5s ease forwards;
@@ -89,49 +143,9 @@ body {
     align-self: flex-start;
 }
 
-.chat-bubble .auto-suggestion {
+.chat-bubble em {
     font-style: italic;
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 2px 5px;
-    border-radius: 3px;
-    margin-top: 5px;
-    display: inline-block;
-}
-
-.voice-input-btn,
-.send-message-btn {
-    background: linear-gradient(to right, #4CAF50, #42A5F5);
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    transition: background 0.3s;
-}
-
-.voice-input-btn {
-    margin-right: 10px;
-}
-
-.voice-input-btn:hover,
-.send-message-btn:hover {
-    background: linear-gradient(to right, #66BB6A, #42A5F5);
-}
-
-.voice-input-btn.recording {
-    background: linear-gradient(to right, #FF0000, #FF4500);
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+    opacity: 0.8;
 }
 
 .response-suggestions {
@@ -142,22 +156,20 @@ body {
 }
 
 .response-suggestions button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: #333;
     color: white;
+    border: none;
     border-radius: 20px;
     padding: 8px 12px;
-    border: none;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
-    margin-bottom: 5px;
     font-size: 14px;
+    display: flex;
+    align-items: center;
 }
 
 .response-suggestions button:hover {
-    background-color: #444;
+    background-color: #555;
     transform: scale(1.05);
 }
 
@@ -200,93 +212,40 @@ body {
     color: white;
 }
 
-.input-container .attachment-btn {
-    background: none;
+.voice-input-btn,
+.send-message-btn {
+    background: linear-gradient(to right, #4CAF50, #42A5F5);
     border: none;
-    margin-right: 10px;
+    color: white;
+    font-size: 24px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: background 0.3s;
 }
 
-.light-mode .input-container .attachment-btn {
-    color: black;
+.voice-input-btn {
+    margin-right: 10px;
 }
 
-.dark-mode .input-container .attachment-btn {
-    color: white;
+.voice-input-btn:hover,
+.send-message-btn:hover {
+    background: linear-gradient(to right, #66BB6A, #42A5F5);
 }
 
-.input-container .attachment-btn:hover {
-    transform: scale(1.1);
+.voice-input-btn.recording {
+    background: linear-gradient(to right, #FF0000, #FF4500);
+    animation: pulse 1.5s infinite;
 }
 
-.input-container .attachment-btn svg {
-    width: 24px;
-    height: 24px;
-}
-
-.dropzone {
-    border: 2px dashed grey;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    color: #888;
-    overflow-y: auto;
-    transition: border-color 0.3s, color 0.3s;
-}
-
-.dropzone.dragover {
-    border-color: #42A5F5;
-    color: #42A5F5;
-}
-
-.toggle-container button {
-    background: none;
-    border: 1px solid;
-    border-radius: 5px;
-    padding: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.light-mode .toggle-container button {
-    border-color: #111827;
-    color: #111827;
-}
-
-.dark-mode .toggle-container button {
-    border-color: #e0e0e0;
-    color: #e0e0e0;
-}
-
-.toggle-container button:hover {
-    transform: scale(1.1);
-}
-
-.language-select select {
-    background: none;
-    border: 1px solid;
-    border-radius: 5px;
-    padding: 5px;
-    outline-color: #007bff;
-    transition: box-shadow 0.3s;
-}
-
-.light-mode .language-select select {
-    color: #111827;
-    border-color: #111827;
-}
-
-.dark-mode .language-select select {
-    color: #e0e0e0;
-    border-color: #e0e0e0;
-}
-
-.language-select select:focus {
-    box-shadow: 0 0 0 2px #007bff;
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
 }
 
 .sidebar {
@@ -303,10 +262,12 @@ body {
 
 .light-mode .sidebar {
     background-color: #f3f4f6;
+    border-right: 1px solid #d1d5db;
 }
 
 .dark-mode .sidebar {
     background-color: #2a2a2a;
+    border-right: 1px solid #4b5563;
 }
 
 .sidebar.open {
@@ -359,6 +320,10 @@ body {
     background-color: #f5f5f5;
 }
 
+.dark-mode .chat-item:hover {
+    background-color: #3a3a3a;
+}
+
 .star-rating {
     color: #ffd700;
     font-size: 18px;
@@ -376,11 +341,19 @@ body {
     font-size: 12px;
 }
 
+.dark-mode .chat-tags span {
+    background-color: #4a4a4a;
+}
+
 .sidebar h3 {
     margin-top: 20px;
     margin-bottom: 10px;
     font-size: 16px;
     color: #666;
+}
+
+.dark-mode .sidebar h3 {
+    color: #aaa;
 }
 
 .sidebar-toggle {
@@ -406,35 +379,22 @@ body {
     transform: scale(1.1);
 }
 
+.rtl {
+    direction: rtl;
+}
+
+.rtl .chat-bubble.user {
+    align-self: flex-start;
+}
+
+.rtl .chat-bubble.ai {
+    align-self: flex-end;
+}
+
 @media (max-width: 768px) {
-    .header-wrapper {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-    }
-
-    .header-right {
-        width: auto;
-        margin-top: 0;
-        display: flex;
-        align-items: center;
-    }
-
-    .nav-header {
-        margin-right: 10px;
-    }
-
-    .language-select {
-        margin-right: 10px;
-    }
-
-    .toggle-container {
-        margin-left: auto;
-    }
-
     .chat-container {
-        margin-top: 80px;
+        margin-top: 60px;
+        padding: 10px;
     }
 
     .sidebar {
@@ -448,7 +408,7 @@ body {
 
     .response-suggestions button {
         font-size: 12px;
-        padding: 5px 8px;
+        padding: 6px 10px;
     }
 
     .input-container {
@@ -468,48 +428,7 @@ body {
     }
 
     .sidebar-toggle {
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
-    }
-}
-
-@media (max-width: 480px) {
-    .header-wrapper {
-        padding: 5px;
-    }
-
-    .chat-container {
-        margin-top: 70px;
-        padding: 10px;
-    }
-
-    .response-suggestions button {
-        font-size: 10px;
-        padding: 4px 6px;
-    }
-
-    .chat-bubble {
-        font-size: 12px;
-        padding: 8px 12px;
-    }
-
-    .input-container input {
-        font-size: 14px;
-    }
-
-    .voice-input-btn,
-    .send-message-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 18px;
-    }
-
-    .sidebar-toggle {
-        width: 32px;
-        height: 32px;
-        font-size: 16px;
-        bottom: 10px;
         left: 10px;
+        bottom: 10px;
     }
 }
