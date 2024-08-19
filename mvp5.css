@@ -1,0 +1,165 @@
+body {
+    font-family: 'Berkeley Mono', monospace;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.light-mode {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+.dark-mode {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+.header-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    z-index: 100;
+    transition: background-color 0.3s ease;
+}
+
+.light-mode .header-wrapper {
+    background-color: #f3f4f6;
+    border-bottom: 1px solid #d1d5db;
+}
+
+.dark-mode .header-wrapper {
+    background-color: #1e1e1e;
+    border-bottom: 1px solid #4b5563;
+}
+
+.header-logo {
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+}
+
+.chat-container {
+    max-width: 800px;
+    margin: 80px auto 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100px);
+}
+
+.auto-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    display: flex;
+    align-items: center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dropdown-btn:hover, .dropdown-btn:focus {
+    background-color: #45a049;
+}
+
+.dropdown-btn svg {
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.show {
+    display: block;
+}
+
+.icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.icon-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.icon-btn:hover, .icon-btn:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .icon-btn:hover, .dark-mode .icon-btn:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Add more styles for other elements as needed */
+
+@media (max-width: 768px) {
+    .auto-suggestions {
+        justify-content: center;
+    }
+
+    .dropdown-btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .dropdown-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .icon-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .icon-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+}
