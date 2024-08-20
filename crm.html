@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic CRM Platform</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-right: 1rem;
+        }
+        .content {
+            flex: 1;
+            padding: 1rem;
+        }
+        .dashboard {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 1rem;
+        }
+        .metric {
+            background-color: #f0f0f0;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            margin-bottom: 1rem;
+        }
+        input, textarea {
+            margin-bottom: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        .chat-interface {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            margin-bottom: 0.5rem;
+        }
+        .settings label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        @media (max-width: 600px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            .metric {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+        <a href="#" onclick="showSection('contacts')">Contacts</a>
+        <a href="#" onclick="showSection('reports')">Reports</a>
+        <a href="#" onclick="showSection('settings')">Settings</a>
+    </nav>
+    
+    <div class="content" id="content">
+        <!-- Content will be dynamically populated by JavaScript -->
+    </div>
+
+    <script>
+        // JavaScript code
+        let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+
+        function showSection(section) {
+            const content = document.getElementById('content');
+            content.innerHTML = '';
+            switch (section) {
+                case 'dashboard':
+                    showDashboard();
+                    break;
+                case 'contacts':
+                    showContacts();
+                    break;
+                case 'reports':
+                    showReports();
+                    break;
+                case 'settings':
+                    showSettings();
+                    break;
+            }
+        }
+
+        function showDashboard() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2>Dashboard</h2>
+                <div class="dashboard">
+                    <div class="metric">
+                        <h3>Total Contacts</h3>
+                        <p>${contacts.length}</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Recent Interactions</h3>
+                        <p>${Math.floor(Math.random() * 100)}</p>
+                    </div>
+                </div>
+                <canvas id="interactionsChart"></canvas>
+            `;
+            createChart();
+        }
+
+        function createChart() {
+            const ctx = document.getElementById('interactionsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Interactions',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                }
+            });
+        }
+
+        function showContacts() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2>Contacts</h2>
+                <input type="text" id="searchBar" placeholder="Search contacts" oninput="filterContacts()">
+                <form onsubmit="addContact(event)">
+                    <input type="text" id="name" placeholder="Name" required>
+                    <input type="email" id="email" placeholder="Email" required>
+                    <input type="tel" id="phone" placeholder="Phone">
+                    <textarea id="notes" placeholder="Notes"></textarea>
+                    <button type="submit">Add Contact</button>
+                </form>
+                <table id="contactsTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortContacts('name')">Name</th>
+                            <th onclick="sortContacts('email')">Email</th>
+                            <th onclick="sortContacts('phone')">Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            `;
+            displayContacts();
+        }
+
+        function addContact(event) {
+            event.preventDefault();
+            const newContact = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                notes: document.getElementById('notes').value
+            };
+            contacts.push(newContact);
+            localStorage.setItem('contacts', JSON.stringify(contacts));
+            displayContacts();
+            event.target.reset();
+        }
+
+        function displayContacts(filteredContacts = contacts) {
+            const tbody = document.querySelector('#contactsTable tbody');
+            tbody.innerHTML = '';
+            filteredContacts.forEach(contact => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = contact.name;
+                row.insertCell(1).textContent = contact.email;
+                row.insertCell(2).textContent = contact.phone;
+            });
+        }
+
+        function filterContacts() {
+            const query = document.getElementById('searchBar').value.toLowerCase();
+            const filteredContacts = contacts.filter(contact => 
+                contact.name.toLowerCase().includes(query) ||
+                contact.email.toLowerCase().includes(query) ||
+                contact.phone.includes(query)
+            );
+            displayContacts(filteredContacts);
+        }
+
+        function sortContacts(field) {
+            contacts.sort((a, b) => a[field].localeCompare(b[field]));
+            displayContacts();
+        }
+
+        function showReports() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2>Reports</h2>
+                <input type="file" accept=".xlsx,.xls,.csv" onchange="handleFileUpload(event)">
+                <div id="fileContent"></div>
+            `;
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            document.getElementById('fileContent').textContent = `File "${file.name}" uploaded. (Note: No actual processing is done in this demo)`;
+        }
+
+        function showSettings() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2>Settings</h2>
+                <div class="settings">
+                    <label>
+                        <input type="checkbox" id="notifications"> Enable notifications
+                    </label>
+                    <label>
+                        <input type="checkbox" id="darkMode"> Dark mode
+                    </label>
+                </div>
+                <div class="chat-interface">
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <input type="text" id="chatInput" placeholder="Ask the AI assistant...">
+                    <button onclick="sendChatMessage()">Send</button>
+                </div>
+            `;
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value;
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+            chatMessages.innerHTML += `<p><strong>AI:</strong> This is a placeholder response. No actual AI processing is done in this demo.</p>`;
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Initialize the dashboard on page load
+        showDashboard();
+    </script>
+</body>
+</html>
