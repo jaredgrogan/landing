@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced CRM Platform</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --primary-color: #4a90e2;
+            --secondary-color: #50c878;
+            --accent-color: #ff6b6b;
+            --night-bg-color: #1e1e1e;
+            --night-text-color: #f0f0f0;
+        }
+
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.night-mode {
+            --bg-color: var(--night-bg-color);
+            --text-color: var(--night-text-color);
+        }
+
+        .navbar {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-right: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        .navbar a:hover {
+            opacity: 0.8;
+        }
+
+        #nightModeToggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .night-mode-icon {
+            width: 24px;
+            height: 24px;
+            stroke: white;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .metric:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Berkeley Mono', monospace;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .chat-interface {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+        }
+
+        .chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        #moduleToggles label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div>
+            <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+            <a href="#" onclick="showSection('contacts')">Contacts</a>
+            <a href="#" onclick="showSection('tasks')">Tasks</a>
+            <a href="#" onclick="showSection('calendar')">Calendar</a>
+            <a href="#" onclick="showSection('email')">Email</a>
+            <a href="#" onclick="showSection('reports')">Reports</a>
+            <a href="#" onclick="showSection('ai_assistant')">AI Assistant</a>
+        </div>
+        <button id="nightModeToggle" onclick="toggleNightMode()">
+            <svg class="night-mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </nav>
+    
+    <div class="content" id="content">
+        <!-- Content will be dynamically populated by JavaScript -->
+    </div>
+
+    <script>
+        const CRM_MODULES = {
+            contact_management: {
+                init: function() {
+                    const content = document.getElementById('content');
+                    content.innerHTML = `
+                        <h2>Contacts</h2>
+                        <input type="text" id="searchBar" placeholder="Search contacts" oninput="CRM_MODULES.contact_management.filterContacts()">
+                        <form onsubmit="CRM_MODULES.contact_management.addContact(event)">
+                            <input type="text" id="name" placeholder="Name" required>
+                            <input type="email" id="email" placeholder="Email" required>
+                            <input type="tel" id="phone" placeholder="Phone">
+                            <textarea id="notes" placeholder="Notes"></textarea>
+                            <button type="submit">Add Contact</button>
+                        </form>
+                        <table id="contactsTable">
+                            <thead>
+                                <tr>
+                                    <th onclick="CRM_MODULES.contact_management.sortContacts('name')">Name</th>
+                                    <th onclick="CRM_MODULES.contact_management.sortContacts('email')">Email</th>
+                                    <th onclick="CRM_MODULES.contact_management.sortContacts('phone')">Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    `;
+                    this.displayContacts();
+                },
+                addContact: function(event) {
+                    event.preventDefault();
+                    const contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
+                    const newContact = {
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('phone').value,
+                        notes: document.getElementById('notes').value
+                    };
+                    contacts.push(newContact);
+                    localStorage.setItem('contacts', JSON.stringify(contacts));
+                    this.displayContacts();
+                    event.target.reset();
+                },
+                displayContacts: function(filteredContacts) {
+                    const contacts = filteredContacts || JSON.parse(localStorage.getItem('contacts') || '[]');
+                    const tbody = document.querySelector('#contactsTable tbody');
+                    tbody.innerHTML = '';
+                    contacts.forEach(contact => {
+                        const row = tbody.insertRow();
+                        row.insertCell(0).textContent = contact.name;
+                        row.insertCell(1).textContent = contact.email;
+                        row.insertCell(2).textContent = contact.phone;
+                    });
+                },
+                filterContacts: function() {
+                    const query = document.getElementById('searchBar').value.toLowerCase();
+                    const contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
+                    const filteredContacts = contacts.filter(contact => 
+                        contact.name.toLowerCase().includes(query) ||
+                        contact.email.toLowerCase().includes(query) ||
+                        contact.phone.includes(query)
+                    );
+                    this.displayContacts(filteredContacts);
+                },
+                sortContacts: function(field) {
+                    const contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
+                    contacts.sort((a, b) => a[field].localeCompare(b[field]));
+                    localStorage.setItem('contacts', JSON.stringify(contacts));
+                    this.displayContacts();
+                }
+            },
+            reporting: {
+                init: function() {
+                    const content = document.getElementById('content');
+                    content.innerHTML = `
+                        <h2>Reports</h2>
+                        <canvas id="interactionsChart"></canvas>
+                    `;
+                    this.createChart();
+                },
+                createChart: function() {
+                    const ctx = document.getElementById('interactionsChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            datasets: [{
+                                label: 'Interactions',
+                                data: [12, 19, 3, 5, 2, 3],
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1
+                            }]
+                        }
+                    });
+                }
+            },
+            ai_chat: {
+                init: function() {
+                    const content = document.getElementById('content');
+                    content.innerHTML += `
+                        <h3>AI Chat</h3>
+                        <div class="chat-interface">
+                            <div class="chat-messages" id="chatMessages"></div>
+                            <input type="text" id="chatInput" placeholder="Ask the AI assistant...">
+                            <button onclick="CRM_MODULES.ai_chat.sendChatMessage()">Send</button>
+                        </div>
+                    `;
+                },
+                sendChatMessage: function() {
+                    const input = document.getElementById('chatInput');
+                    const message = input.value;
+                    const chatMessages = document.getElementById('chatMessages');
+                    chatMessages.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+                    chatMessages.innerHTML += `<p><strong>AI:</strong> This is a placeholder response. No actual AI processing is done in this demo.</p>`;
+                    input.value = '';
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            },
+            task_management: {
+                init: function() {
+                    const content = document.getElementById('content');
+                    content.innerHTML = `
+                        <h2>Tasks</h2>
+                        <form onsubmit="CRM_MODULES.task_management.addTask(event)">
+                            <input type="text" id="taskName" placeholder="Task name" required>
+                            <input type="date" id="taskDueDate" required>
+                            <button type="submit">Add Task</button>
+                        </form>
+                        <ul id="taskList"></ul>
+                    `;
+                    this.displayTasks();
+                },
+                addTask: function(event) {
+                    event.preventDefault();
+                    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+                    const newTask = {
+                        name: document.getElementById('taskName').value,
+                        dueDate: document.getElementById('taskDueDate').value,
+                        completed: false
+                    };
+                    tasks.push(newTask);
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                    this.displayTasks();
+                    event.target.reset();
+                },
+                            displayTasks: function() {
+                    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+                    const taskList = document.getElementById('taskList');
+                    taskList.innerHTML = '';
+                    tasks.forEach((task, index) => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <input type="checkbox" onchange="CRM_MODULES.task_management.toggleTask(${index})" ${task.completed ? 'checked' : ''}>
+                            <span class="${task.completed ? 'completed' : ''}">${task.name} (Due: ${task.dueDate})</span>
+                            <button onclick="CRM_MODULES.task_management.deleteTask(${index})">Delete</button>
+                        `;
+                        taskList.appendChild(li);
+                    });
+                },
+                toggleTask: function(index) {
+                    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+                    tasks[index].completed = !tasks[index].completed;
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                    this.displayTasks();
+                },
+                deleteTask: function(index) {
+                    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+                    tasks.splice(index, 1);
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                    this.displayTasks();
+                }
+            },
+            email_integration: {
+                init: function() {
+                    const content = document.getElementById('content');
+                    content.innerHTML = `
+                        <h2>Email Integration</h2>
+                        <form onsubmit="CRM_MODULES.email_integration.sendEmail(event)">
+                            <input type="email" id="emailTo" placeholder="To" required>
+                            <input type="text" id="emailSubject" placeholder="Subject" required>
+                            <textarea id="emailBody" placeholder="Message" required></textarea>
+                            <button type="submit">Send Email</button>
+                        </form>
+                        <div id="emailStatus"></div>
+                    `;
+                },
+                sendEmail: function(event) {
+                    event.preventDefault();
+                    const to = document.getElementById('emailTo').value;
+                    const subject = document.getElementById('emailSubject').value;
+                    const body = document.getElementById('emailBody').value;
+                    // In a real application, this would send an API request to an email service
+                    document.getElementById('emailStatus').textContent = `Email sent to ${to} with subject "${subject}"`;
+                    event.target.reset();
+                }
+            },
+            calendar: {
+                init: function() {
+                    const content = document.getElementById('content');
+                    content.innerHTML = `
+                        <h2>Calendar</h2>
+                        <form onsubmit="CRM_MODULES.calendar.addEvent(event)">
+                            <input type="text" id="eventName" placeholder="Event name" required>
+                            <input type="datetime-local" id="eventDateTime" required>
+                            <button type="submit">Add Event</button>
+                        </form>
+                        <ul id="eventList"></ul>
+                    `;
+                    this.displayEvents();
+                },
+                addEvent: function(event) {
+                    event.preventDefault();
+                    const events = JSON.parse(localStorage.getItem('events') || '[]');
+                    const newEvent = {
+                        name: document.getElementById('eventName').value,
+                        dateTime: document.getElementById('eventDateTime').value
+                    };
+                    events.push(newEvent);
+                    localStorage.setItem('events', JSON.stringify(events));
+                    this.displayEvents();
+                    event.target.reset();
+                },
+                displayEvents: function() {
+                    const events = JSON.parse(localStorage.getItem('events') || '[]');
+                    const eventList = document.getElementById('eventList');
+                    eventList.innerHTML = '';
+                    events.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
+                    events.forEach((event, index) => {
+                        const li = document.createElement('li');
+                        li.textContent = `${event.name} - ${new Date(event.dateTime).toLocaleString()}`;
+                        eventList.appendChild(li);
+                    });
+                }
+            }
+        };
+
+        let activeModules = JSON.parse(localStorage.getItem('activeModules')) || Object.keys(CRM_MODULES);
+
+        function showSection(section) {
+            const content = document.getElementById('content');
+            content.innerHTML = '<p>Loading...</p>';
+            
+            switch (section) {
+                case 'dashboard':
+                    showDashboard();
+                    break;
+                case 'contacts':
+                    CRM_MODULES.contact_management.init();
+                    break;
+                case 'tasks':
+                    CRM_MODULES.task_management.init();
+                    break;
+                case 'calendar':
+                    CRM_MODULES.calendar.init();
+                    break;
+                case 'email':
+                    CRM_MODULES.email_integration.init();
+                    break;
+                case 'reports':
+                    CRM_MODULES.reporting.init();
+                    break;
+                case 'ai_assistant':
+                    showAIAssistant();
+                    break;
+            }
+        }
+
+        function showDashboard() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2>Dashboard</h2>
+                <div class="dashboard">
+                    <div class="metric">
+                        <h3>Total Contacts</h3>
+                        <p>${JSON.parse(localStorage.getItem('contacts') || '[]').length}</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Open Tasks</h3>
+                        <p>${JSON.parse(localStorage.getItem('tasks') || '[]').filter(task => !task.completed).length}</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Upcoming Events</h3>
+                        <p>${JSON.parse(localStorage.getItem('events') || '[]').length}</p>
+                    </div>
+                </div>
+                <canvas id="interactionsChart"></canvas>
+            `;
+            CRM_MODULES.reporting.createChart();
+        }
+
+        function showAIAssistant() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2>AI Assistant</h2>
+                <h3>Module Manager</h3>
+                <div id="moduleToggles"></div>
+            `;
+            renderModuleToggles();
+            CRM_MODULES.ai_chat.init();
+        }
+
+        function renderModuleToggles() {
+            const moduleToggles = document.getElementById('moduleToggles');
+            moduleToggles.innerHTML = '';
+            Object.keys(CRM_MODULES).forEach(module => {
+                const label = document.createElement('label');
+                label.innerHTML = `
+                    <input type="checkbox" ${activeModules.includes(module) ? 'checked' : ''}
+                           onchange="toggleModule('${module}', this.checked)">
+                    ${module.replace('_', ' ')}
+                `;
+                moduleToggles.appendChild(label);
+            });
+        }
+
+        function toggleModule(module, isActive) {
+            if (isActive && !activeModules.includes(module)) {
+                activeModules.push(module);
+            } else if (!isActive) {
+                activeModules = activeModules.filter(m => m !== module);
+            }
+            localStorage.setItem('activeModules', JSON.stringify(activeModules));
+        }
+
+        function toggleNightMode() {
+            document.body.classList.toggle('night-mode');
+            const icon = document.querySelector('.night-mode-icon');
+            if (document.body.classList.contains('night-mode')) {
+                icon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+            } else {
+                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+            }
+        }
+
+        // Initialize the dashboard on page load
+        showDashboard();
+    </script>
+</body>
+</html>
