@@ -1,1 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearningAI - Your Personal AI-Powered Educational Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(90deg, #4F46E5 0%, #7C3AED 100%);
+        }
+        .transition-300 {
+            transition: all 300ms ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="https://via.placeholder.com/50" alt="LearningAI Logo" class="mr-2">
+                <span class="text-xl font-semibold text-indigo-600">LearningAI</span>
+            </div>
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="#features" class="hover:text-indigo-600 transition-300">Features</a></li>
+                <li><a href="#how-it-works" class="hover:text-indigo-600 transition-300">How It Works</a></li>
+                <li><a href="#pricing" class="hover:text-indigo-600 transition-300">Pricing</a></li>
+            </ul>
+            <div class="flex items-center space-x-4">
+                <a href="#" class="text-indigo-600 hover:text-indigo-800 transition-300">Log In</a>
+                <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-300">Sign Up</a>
+            </div>
+        </nav>
+    </header>
 
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Supercharge Your Learning with AI</h1>
+                <p class="text-xl mb-8">LearningAI is your personal educational assistant, powered by cutting-edge artificial intelligence. Study smarter, not harder.</p>
+                <a href="#" class="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-300">Get Started for Free</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Key Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <i class="fas fa-robot text-4xl text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">AI-Powered Tutoring</h3>
+                    <p>Get instant answers and explanations for any subject, anytime.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <i class="fas fa-tasks text-4xl text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Personalized Study Plans</h3>
+                    <p>Tailored learning paths based on your goals and progress.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <i class="fas fa-search text-4xl text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Intelligent Research Assistant</h3>
+                    <p>Find and summarize relevant sources for your papers and projects.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <i class="fas fa-quiz text-4xl text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Adaptive Quizzes</h3>
+                    <p>Test your knowledge with AI-generated questions that adapt to your level.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <i class="fas fa-chart-line text-4xl text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Progress Tracking</h3>
+                    <p>Visualize your learning journey and identify areas for improvement.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <i class="fas fa-users text-4xl text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Collaborative Study Spaces</h3>
+                    <p>Connect with peers and study together in AI-moderated virtual rooms.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Interface -->
+    <section id="ai-chat" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Ask Anything, Anytime</h2>
+            <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-4 bg-indigo-600 text-white">
+                    <h3 class="text-xl font-semibold">AI Chat</h3>
+                </div>
+                <div class="h-64 overflow-y-auto p-4 space-y-4" id="chat-messages">
+                    <!-- Chat messages will be dynamically added here -->
+                </div>
+                <div class="p-4 border-t">
+                    <form id="chat-form" class="flex">
+                        <input type="text" id="user-input" placeholder="Ask a question..." class="flex-grow px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-md hover:bg-indigo-700 transition-300">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Study Plan Generator -->
+    <section id="study-plan" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Generate Your Personalized Study Plan</h2>
+            <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+                <form id="study-plan-form">
+                    <div class="mb-4">
+                        <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                        <input type="text" id="subject" name="subject" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="e.g., Mathematics, History, Physics">
+                    </div>
+                    <div class="mb-4">
+                        <label for="goal" class="block text-sm font-medium text-gray-700 mb-2">Learning Goal</label>
+                        <input type="text" id="goal" name="goal" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="e.g., Pass final exam, Improve problem-solving skills">
+                    </div>
+                    <div class="mb-4">
+                        <label for="time" class="block text-sm font-medium text-gray-700 mb-2">Available Study Time (hours per week)</label>
+                        <input type="number" id="time" name="time" min="1" max="168" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="e.g., 10">
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-300">Generate Study Plan</button>
+                </form>
+                <div id="study-plan-result" class="mt-8 hidden">
+                    <h3 class="text-xl font-semibold mb-4">Your Personalized Study Plan</h3>
+                    <div id="study-plan-content" class="space-y-4">
+                        <!-- Study plan will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Assistant -->
+    <section id="research-assistant" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Intelligent Research Assistant</h2>
+            <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+                <form id="research-form">
+                    <div class="mb-4">
+                        <label for="research-topic" class="block text-sm font-medium text-gray-700 mb-2">Research Topic</label>
+                        <input type="text" id="research-topic" name="research-topic" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Enter your research topic">
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-300">Find Sources</button>
+                </form>
+                <div id="research-results" class="mt-8 hidden">
+                    <h3 class="text-xl font-semibold mb-4">Research Results</h3>
+                    <div id="research-content" class="space-y-4">
+                        <!-- Research results will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Tracking -->
+    <section id="progress-tracking" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Track Your Progress</h2>
+            <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Study Time</h3>
+                        <canvas id="study-time-chart"></canvas>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Subject Performance</h3>
+                        <canvas id="subject-performance-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">LearningAI</h4>
+                    <p>Empowering learners with AI-powered education tools.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-indigo-400 transition-300">Home</a></li>
+                        <li><a href="#features" class="hover:text-indigo-400 transition-300">Features</a></li>
+                        <li><a href="#pricing" class="hover:text-indigo-400 transition-300">Pricing</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-300">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-indigo-400 transition-300">FAQ</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-300">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-300">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-300">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                   <h4 class="text-lg font-semibold mb-4">Connect With Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-2xl hover:text-indigo-400 transition-300"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-2xl hover:text-indigo-400 transition-300"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-2xl hover:text-indigo-400 transition-300"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-2xl hover:text-indigo-400 transition-300"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-2xl hover:text-indigo-400 transition-300"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="mt-4">
+                    <h5 class="text-sm font-semibold mb-2">Subscribe to our newsletter</h5>
+                    <form class="flex">
+                        <input type="email" placeholder="Enter your email" class="flex-grow px-4 py-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-r-md hover:bg-indigo-700 transition-300">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-gray-700 text-center">
+            <p>&copy; 2024 LearningAI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // AI Chat Interface
+        const chatForm = document.getElementById('chat-form');
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (message) {
+                addMessage('user', message);
+                // Simulate AI response (replace with actual API call in production)
+                setTimeout(() => {
+                    const aiResponse = "I'm sorry, but as an AI language model, I don't have real-time interaction capabilities. In a fully implemented version, this is where you'd receive a response from the AI based on your input.";
+                    addMessage('ai', aiResponse);
+                }, 1000);
+                userInput.value = '';
+            }
+        });
+
+        function addMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('p-3', 'rounded-lg', sender === 'user' ? 'bg-indigo-100' : 'bg-gray-100');
+            messageElement.innerHTML = `<p class="font-semibold">${sender === 'user' ? 'You' : 'AI'}:</p><p>${message}</p>`;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Study Plan Generator
+        const studyPlanForm = document.getElementById('study-plan-form');
+        const studyPlanResult = document.getElementById('study-plan-result');
+        const studyPlanContent = document.getElementById('study-plan-content');
+
+        studyPlanForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const subject = document.getElementById('subject').value;
+            const goal = document.getElementById('goal').value;
+            const time = document.getElementById('time').value;
+
+            // Simulate study plan generation (replace with actual API call in production)
+            const studyPlan = generateStudyPlan(subject, goal, time);
+            displayStudyPlan(studyPlan);
+        });
+
+        function generateStudyPlan(subject, goal, time) {
+            // This is a mock function. In a real application, this would be an API call to the AI.
+            return [
+                `Week 1-2: Introduction to ${subject} fundamentals (${Math.round(time * 0.3)} hours/week)`,
+                `Week 3-4: Deep dive into core concepts (${Math.round(time * 0.4)} hours/week)`,
+                `Week 5-6: Practice problems and application (${Math.round(time * 0.2)} hours/week)`,
+                `Week 7-8: Review and goal-specific preparation (${Math.round(time * 0.1)} hours/week)`
+            ];
+        }
+
+        function displayStudyPlan(plan) {
+            studyPlanContent.innerHTML = '';
+            plan.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                studyPlanContent.appendChild(li);
+            });
+            studyPlanResult.classList.remove('hidden');
+        }
+
+        // Research Assistant
+        const researchForm = document.getElementById('research-form');
+        const researchResults = document.getElementById('research-results');
+        const researchContent = document.getElementById('research-content');
+
+        researchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const topic = document.getElementById('research-topic').value;
+
+            // Simulate research results (replace with actual API call in production)
+            const results = generateResearchResults(topic);
+            displayResearchResults(results);
+        });
+
+        function generateResearchResults(topic) {
+            // This is a mock function. In a real application, this would be an API call to the AI.
+            return [
+                { title: `Introduction to ${topic}`, source: "Wikipedia", summary: `A comprehensive overview of ${topic}, covering its history, key concepts, and current applications.` },
+                { title: `Recent Advancements in ${topic}`, source: "ScienceDirect", summary: `This paper discusses the latest research and breakthroughs in the field of ${topic}, highlighting potential future directions.` },
+                { title: `${topic} in Practice: Case Studies`, source: "Harvard Business Review", summary: `A collection of real-world case studies demonstrating the practical applications and impacts of ${topic} in various industries.` }
+            ];
+        }
+
+        function displayResearchResults(results) {
+            researchContent.innerHTML = '';
+            results.forEach(result => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <h4 class="font-semibold">${result.title}</h4>
+                    <p class="text-sm text-gray-600">Source: ${result.source}</p>
+                    <p>${result.summary}</p>
+                `;
+                researchContent.appendChild(div);
+            });
+            researchResults.classList.remove('hidden');
+        }
+
+        // Progress Tracking Charts
+        const studyTimeCtx = document.getElementById('study-time-chart').getContext('2d');
+        new Chart(studyTimeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Study Hours',
+                    data: [2, 3, 2.5, 4, 3.5, 5, 3],
+                    backgroundColor: 'rgba(99, 102, 241, 0.8)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Hours'
+                        }
+                    }
+                }
+            }
+        });
+
+        const performanceCtx = document.getElementById('subject-performance-chart').getContext('2d');
+        new Chart(performanceCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Math', 'Science', 'History', 'Language', 'Art'],
+                datasets: [{
+                    label: 'Performance',
+                    data: [80, 75, 90, 85, 70],
+                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                    borderColor: 'rgba(99, 102, 241, 1)',
+                    pointBackgroundColor: 'rgba(99, 102, 241, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: false
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
