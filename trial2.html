@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Universal Tutor - Your Personal Learning Companion</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            color: #1a365d;
+        }
+        .bg-primary {
+            background-color: #4c51bf;
+        }
+        .text-primary {
+            color: #4c51bf;
+        }
+        .border-primary {
+            border-color: #4c51bf;
+        }
+        .btn-primary {
+            background-color: #4c51bf;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #434190;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-white shadow-md">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <div class="text-xl font-bold text-primary">AI Universal Tutor</div>
+                <div>
+                    <a href="#features" class="text-gray-800 hover:text-primary mx-3">Features</a>
+                    <a href="#pricing" class="text-gray-800 hover:text-primary mx-3">Pricing</a>
+                    <a href="#how-it-works" class="text-gray-800 hover:text-primary mx-3">How It Works</a>
+                    <a href="#faq" class="text-gray-800 hover:text-primary mx-3">FAQ</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="bg-primary text-white py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl font-bold mb-4">Unlock Your Full Potential with AI-Powered Learning</h1>
+                <p class="text-xl mb-8">Master any subject with your personal AI tutor available 24/7</p>
+                <a href="#" class="bg-white text-primary font-bold py-2 px-4 rounded-full hover:bg-gray-200 transition duration-300">Start Free Trial</a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-8">Key Features</h2>
+                <div class="flex flex-wrap justify-center">
+                    <div class="w-full md:w-1/3 px-4 mb-8">
+                        <div class="text-center">
+                            <img src="/api/placeholder/64/64" alt="Personalized Learning" class="mx-auto mb-4">
+                            <h3 class="text-xl font-semibold mb-2">Personalized Learning Paths</h3>
+                            <p>Adaptive AI technology tailors lessons to your unique learning style and pace.</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 px-4 mb-8">
+                        <div class="text-center">
+                            <img src="/api/placeholder/64/64" alt="Expert Knowledge" class="mx-auto mb-4">
+                            <h3 class="text-xl font-semibold mb-2">Vast Knowledge Base</h3>
+                            <p>Access expert knowledge across various subjects, from STEM to arts and business.</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 px-4 mb-8">
+                        <div class="text-center">
+                            <img src="/api/placeholder/64/64" alt="24/7 Availability" class="mx-auto mb-4">
+                            <h3 class="text-xl font-semibold mb-2">24/7 Availability</h3>
+                            <p>Learn anytime, anywhere with round-the-clock access to your AI tutor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-8">Choose Your Plan</h2>
+                <div class="flex flex-wrap justify-center">
+                    <div class="w-full md:w-1/3 px-4 mb-8">
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h3 class="text-xl font-semibold mb-4">Basic</h3>
+                            <p class="text-3xl font-bold mb-6">$29<span class="text-sm font-normal">/month</span></p>
+                            <ul class="mb-6">
+                                <li class="mb-2">✓ Access to all subjects</li>
+                                <li class="mb-2">✓ Personalized learning paths</li>
+                                <li class="mb-2">✓ 24/7 AI tutor availability</li>
+                                <li class="mb-2">✓ Basic progress tracking</li>
+                            </ul>
+                            <a href="#" class="block text-center bg-primary text-white font-bold py-2 px-4 rounded-full hover:bg-indigo-600 transition duration-300">Choose Basic</a>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 px-4 mb-8">
+                        <div class="bg-white rounded-lg shadow-md p-6 border-2 border-primary">
+                            <h3 class="text-xl font-semibold mb-4">Pro</h3>
+                            <p class="text-3xl font-bold mb-6">$79<span class="text-sm font-normal">/month</span></p>
+                            <ul class="mb-6">
+                                <li class="mb-2">✓ All Basic features</li>
+                                <li class="mb-2">✓ Advanced progress analytics</li>
+                                <li class="mb-2">✓ Customizable learning goals</li>
+                                <li class="mb-2">✓ Priority support</li>
+                                <li class="mb-2">✓ Collaborative learning tools</li>
+                            </ul>
+                            <a href="#" class="block text-center bg-primary text-white font-bold py-2 px-4 rounded-full hover:bg-indigo-600 transition duration-300">Choose Pro</a>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 px-4 mb-8">
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h3 class="text-xl font-semibold mb-4">Enterprise</h3>
+                            <p class="text-3xl font-bold mb-6">Custom</p>
+                            <ul class="mb-6">
+                                <li class="mb-2">✓ All Pro features</li>
+                                <li class="mb-2">✓ Custom AI model training</li>
+                                <li class="mb-2">✓ API access</li>
+                                <li class="mb-2">✓ Dedicated account manager</li>
+                                <li class="mb-2">✓ White-labeling options</li>
+                            </ul>
+                            <a href="#" class="block text-center bg-primary text-white font-bold py-2 px-4 rounded-full hover:bg-indigo-600 transition duration-300">Contact Sales</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-8">How It Works</h2>
+                <div class="flex flex-wrap justify-center">
+                    <div class="w-full md:w-1/4 px-4 mb-8">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary mb-4">1</div>
+                            <h3 class="text-xl font-semibold mb-2">Sign Up</h3>
+                            <p>Create your account and choose your learning goals</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/4 px-4 mb-8">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary mb-4">2</div>
+                            <h3 class="text-xl font-semibold mb-2">Take Assessment</h3>
+                            <p>Complete a brief assessment to customize your learning path</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/4 px-4 mb-8">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary mb-4">3</div>
+                            <h3 class="text-xl font-semibold mb-2">Start Learning</h3>
+                            <p>Begin your personalized lessons with your AI tutor</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/4 px-4 mb-8">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary mb-4">4</div>
+                            <h3 class="text-xl font-semibold mb-2">Track Progress</h3>
+                            <p>Monitor your achievements and adjust your learning path</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+                <div class="max-w-3xl mx-auto">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">What subjects does the AI Universal Tutor cover?</h3>
+                        <p>Our AI tutor covers a wide range of subjects, including STEM fields, programming, business, arts, languages, and more. The knowledge base is constantly expanding to meet learners' needs.</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">How does the AI personalize my learning experience?</h3>
+                        <p>The AI analyzes your learning style, pace, and performance to create a tailored learning path. It adapts in real-time, providing challenges or additional support as needed.</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Can I switch between different subjects or topics?</h3>
+                        <p>Absolutely! You have the flexibility to explore various subjects and switch between topics as you desire. The AI will help you make connections between different areas of study.</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Is there a limit to how much I can use the AI tutor?</h3>
+                        <p>No, there are no usage limits. You can access your AI tutor 24/7, allowing you to learn at your own pace and schedule.</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">How does the free trial work?</h3>
+                        <p>The 7-day free trial gives you full access to all features of the Pro plan. You can cancel anytime during the trial period without being charged.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof Section -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-8">Trusted by Learners Worldwide</h2>
+                <div class="flex flex-wrap justify-center items-center mb-12">
+                    <img src="/api/placeholder/120/60" alt="Company Logo 1" class="m-4">
+                    <img src="/api/placeholder/120/60" alt="Company Logo 2" class="m-4">
+                    <img src="/api/placeholder/120/60" alt="Company Logo 3" class="m-4">
+                    <img src="/api/placeholder/120/60" alt="Company Logo 4" class="m-4">
+                    <img src="/api/placeholder/120/60" alt="Company Logo 5" class="m-4">
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <div class="mb-8 text-center">
+                        <p class="text-xl italic mb-4">"The AI Universal Tutor has revolutionized my learning experience. I've made incredible progress in my studies and feel more confident than ever."</p>
+                        <p class="font-semibold">Sarah T., Computer Science Student</p>
+                    </div>
+                    <div class="mb-8 text-center">
+                        <p class="text-xl italic mb-4">"As a lifelong learner, I've tried many online learning platforms. This AI tutor is by far the most effective and engaging tool I've ever used."</p>
+                        <p class="font-semibold">Mark R., Business Professional</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       <!-- CTA Section -->
+    <section class="bg-primary text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-4">Ready to Transform Your Learning Journey?</h2>
+            <p class="text-xl mb-8">Start your free 7-day trial today and experience the power of AI-driven personalized learning.</p>
+            <a href="#" class="bg-white text-primary font-bold py-3 px-6 rounded-full hover:bg-gray-200 transition duration-300">Start Free Trial</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-1/4 mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">AI Universal Tutor</h3>
+                    <p>Empowering learners worldwide with AI-driven personalized education.</p>
+                </div>
+                <div class="w-full md:w-1/4 mb-6 md:mb-0">
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul>
+                        <li class="mb-2"><a href="#features" class="hover:text-gray-300">Features</a></li>
+                        <li class="mb-2"><a href="#pricing" class="hover:text-gray-300">Pricing</a></li>
+                        <li class="mb-2"><a href="#how-it-works" class="hover:text-gray-300">How It Works</a></li>
+                        <li class="mb-2"><a href="#faq" class="hover:text-gray-300">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/4 mb-6 md:mb-0">
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <p>Email: support@aiuniversaltutor.com</p>
+                    <p>Phone: +1 (555) 123-4567</p>
+                </div>
+                <div class="w-full md:w-1/4">
+                    <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-gray-300">
+                            <span class="sr-only">Facebook</span>
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="#" class="hover:text-gray-300">
+                            <span class="sr-only">Twitter</span>
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                            </svg>
+                        </a>
+                        <a href="#" class="hover:text-gray-300">
+                            <span class="sr-only">LinkedIn</span>
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-sm text-center">
+                <p>&copy; 2024 AI Universal Tutor. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for smooth scrolling -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
