@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering for Indie Hackers</title>
+    <meta name="description" content="Master AI-powered development in 8 weeks with our interactive, personalized Prompt Engineering course for Indie Hackers.">
+    <link href="https://cdnjs.cloudflare.com/2023.1.1/css/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/2023.1.1/js/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f39c12;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+        }
+        .dark-theme {
+            --primary-color: #2980b9;
+            --secondary-color: #e67e22;
+            --background-color: #2c3e50;
+            --text-color: #ecf0f1;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            transition: all 0.3s ease;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            opacity: 0.8;
+            z-index: 0;
+        }
+        header * {
+            position: relative;
+            z-index: 1;
+        }
+        h1, h2, h3 {
+            color: var(--primary-color);
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .cta-button:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .course-week {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .course-week:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        .progress-bar {
+            background-color: #ddd;
+            height: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        .progress {
+            background-color: var(--primary-color);
+            height: 100%;
+            border-radius: 10px;
+            width: 0;
+            transition: width 0.5s ease-in-out;
+        }
+        #chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        #user-input {
+            border: none;
+            border-top: 1px solid #ddd;
+            padding: 10px;
+        }
+        .user, .bot {
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+        .user {
+            background-color: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+        }
+        .bot {
+            background-color: #f1f1f1;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-blue-600 text-white py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold mb-4">Prompt Engineering for Indie Hackers</h1>
+            <p class="text-xl mb-8">Master AI-powered development in 8 weeks</p>
+            <a href="#enroll" class="cta-button bg-yellow-500 hover:bg-yellow-600">Enroll Now</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <section id="course-description" class="mb-12">
+            <h2 class="text-3xl font-bold mb-4">Course Overview</h2>
+            <p class="text-lg mb-4">Unlock the power of AI for your indie hacking projects. Learn to craft effective prompts, optimize AI workflows, and ethically integrate AI into your development process.</p>
+            <div id="course-map" class="mt-8"></div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div class="course-week">
+                <h3 class="text-2xl font-bold mb-4">Week 1: Introduction to Prompt Engineering</h3>
+                <ul class="list-disc pl-5">
+                    <li>Understand prompt engineering basics</li>
+                    <li>Recognize AI potential in indie hacking</li>
+                    <li>Identify key AI application areas</li>
+                </ul>
+            </div>
+            <div class="course-week">
+                <h3 class="text-2xl font-bold mb-4">Week 2: AI Models and Capabilities</h3>
+                <ul class="list-disc pl-5">
+                    <li>Differentiate between AI model types</li>
+                    <li>Understand model strengths and limitations</li>
+                    <li>Choose the right AI model for specific tasks</li>
+                </ul>
+            </div>
+            <div class="course-week">
+                <h3 class="text-2xl font-bold mb-4">Week 3: Crafting Effective Prompts</h3>
+                <ul class="list-disc pl-5">
+                    <li>Learn principles of effective prompt writing</li>
+                    <li>Tailor prompts for indie hacking tasks</li>
+                    <li>Develop prompt iteration skills</li>
+                </ul>
+            </div>
+            <div class="course-week">
+                <h3 class="text-2xl font-bold mb-4">Week 4: Prompt Optimization Techniques</h3>
+                <ul class="list-disc pl-5">
+                    <li>Master advanced prompt engineering</li>
+                    <li>Learn prompt testing and evaluation</li>
+                    <li>Understand iterative refinement</li>
+                </ul>
+            </div>
+            <div class="course-week">
+                <h3 class="text-2xl font-bold mb-4">Week 5: Integrating AI-Generated Content</h3>
+                <ul class="list-disc pl-5">
+                    <li>Use AI in product development</li>
+                    <li>Balance AI and human creativity</li>
+                    <li>Manage AI-human collaboration</li>
+                </ul>
+            </div>
+            <div class="course-week">
+                <h3 class="text-2xl font-bold mb-4">Week 6: Ethical Considerations</h3>
+                <ul class="list-disc pl-5">
+                    <li>Understand AI ethics in indie hacking</li>
+                    <li>Learn responsible AI use practices</li>
+                    <li>Address common ethical challenges</li>
+                </ul>
+            </div>
+            <div class="course-week">
+                <h3 class="text-2xl font-bold mb-4">Week 7: AI Implementation Case Studies</h3>
+                <ul class="list-disc pl-5">
+                    <li>Analyze successful AI integrations</li>
+                    <li>Identify key success factors</li>
+                    <li>Learn from real-world examples</li>
+                </ul>
+            </div>
+            <div class="course-week">
+                <h3 class="text-2xl font-bold mb-4">Week 8: Final Project</h3>
+                <ul class="list-disc pl-5">
+                    <li>Apply concepts to a comprehensive project</li>
+                    <li>Demonstrate prompt engineering proficiency</li>
+                    <li>Reflect on course learnings</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="enroll" class="bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-3xl font-bold mb-4">Ready to Transform Your Indie Hacking Journey?</h2>
+            <p class="text-lg mb-6">Enroll now and start mastering prompt engineering for your projects!</p>
+            <a href="#" class="cta-button bg-yellow-500 hover:bg-yellow-600">Enroll Now</a>
+        </section>
+
+        <div class="progress-bar mt-8">
+            <div class="progress" id="scrollProgress"></div>
+        </div>
+    </main>
+
+    <div id="chatbot" class="hidden">
+        <div id="chat-messages"></div>
+        <input type="text" id="user-input" placeholder="Ask a question...">
+    </div>
+
+    <button id="theme-toggle" class="fixed top-4 right-4 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    </button>
+
+    <script>
+        // Mermaid initialization
+        mermaid.initialize({ startOnLoad: true });
+
+        const courseMap = `
+        graph TD
+          A[Week 1: Introduction] --> B[Week 2: AI Models]
+          B --> C[Week 3: Crafting Prompts]
+          C --> D[Week 4: Optimization]
+          D --> E[Week 5: AI Integration]
+          E --> F[Week 6: Ethics]
+          F --> G[Week 7: Case Studies]
+          G --> H[Week 8: Final Project]
+        `;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('course-map').innerHTML = courseMap;
+            mermaid.init(undefined, document.getElementById('course-map'));
+        });
+
+        // Scroll progress
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollProgress").style.width = scrolled + "%";
+        });
+
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+        });
+
+        // Chatbot functionality (placeholder - replace with actual AI integration)
+        const chatbot = document.getElementById('chatbot');
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+
+        function toggleChatbot() {
+            chatbot.classList.toggle('hidden');
+        }
+
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const message = this.value;
+                displayMessage('user', message);
+                // Here you would typically send the message to your AI backend
+                // For now, we'll just echo the message back
+                setTimeout(() => {
+                    displayMessage('bot', "I'm an AI assistant. How can I help you with prompt engineering?");
+                }, 1000);
+                this.value = '';
+            }
+        });
+
+        function displayMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add(sender);
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Lazy loading images (if you add any)
+        document.addEventListener("DOMContentLoaded", function() {
+            let lazyImages = [].slice.call(document.querySelectorAll("img.lazy-load"));
+            
+            if ("IntersectionObserver" in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImage.classList.remove("lazy-load");
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
