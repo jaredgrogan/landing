@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Trailer Creator</title>
+    <link rel="stylesheet" href="videos1.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="videos1.js" defer></script>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>AI Video Trailer Creator</h1>
+        <p>Your AI filmmaker and visual communication expert</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Intro Section -->
+        <section id="intro">
+            <button id="start-btn">Start New Project</button>
+        </section>
+
+        <!-- Voice Interaction Section -->
+        <section id="voice-interaction" class="hidden">
+            <h2>Let's Create Your Trailer</h2>
+            <button id="record-btn">🎤 Start Voice Input</button>
+            <div id="transcription">
+                <p id="user-input"></p>
+            </div>
+            <button id="confirm-btn" class="hidden">Confirm</button>
+        </section>
+
+        <!-- Project Settings Section -->
+        <section id="project-settings" class="hidden">
+            <h2>Project Settings</h2>
+            <form id="settings-form">
+                <label for="theme">Choose a Theme:</label>
+                <select id="theme" name="theme">
+                    <option value="sci-fi">Sci-Fi</option>
+                    <option value="thriller">Thriller</option>
+                    <option value="mystery">Mystery</option>
+                </select>
+
+                <label for="length">Trailer Length:</label>
+                <select id="length" name="length">
+                    <option value="30">30 Seconds</option>
+                    <option value="60">60 Seconds</option>
+                </select>
+
+                <button type="submit">Generate Trailer</button>
+            </form>
+        </section>
+
+        <!-- Loading and Progress Section -->
+        <section id="progress" class="hidden">
+            <h2>Generating Your Trailer...</h2>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </section>
+
+        <!-- Preview Section -->
+        <section id="preview" class="hidden">
+            <h2>Preview Your Trailer</h2>
+            <video id="trailer-preview" controls></video>
+            <button id="edit-btn">Edit Trailer</button>
+            <button id="download-btn">Download Trailer</button>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 AI Video Trailer Creator. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
