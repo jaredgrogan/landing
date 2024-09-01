@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Learning Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine-ie11.min.js" defer></script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100 text-gray-900" x-data="{ darkMode: false, activeSection: 'home' }" :class="{ 'dark bg-gray-900 text-white': darkMode }">
+    <nav class="bg-blue-600 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#home" class="text-white text-2xl font-bold" @click="activeSection = 'home'">Docker Learning</a>
+            <div class="flex space-x-4">
+                <a href="#home" @click="activeSection = 'home'" class="text-white hover:text-blue-200">Home</a>
+                <a href="#essentials" @click="activeSection = 'essentials'" class="text-white hover:text-blue-200">Essentials</a>
+                <a href="#repetitive-tasks" @click="activeSection = 'repetitiveTasks'" class="text-white hover:text-blue-200">Repetitive Tasks</a>
+                <a href="#impactful-commands" @click="activeSection = 'impactfulCommands'" class="text-white hover:text-blue-200">Impactful Commands</a>
+                <a href="#api-integration" @click="activeSection = 'apiIntegration'" class="text-white hover:text-blue-200">API Integration</a>
+                <a href="#learning-hub" @click="activeSection = 'learningHub'" class="text-white hover:text-blue-200">Learning Hub</a>
+                <a href="#about" @click="activeSection = 'about'" class="text-white hover:text-blue-200">About</a>
+                <a href="#contact" @click="activeSection = 'contact'" class="text-white hover:text-blue-200">Contact</a>
+                <button @click="darkMode = !darkMode" class="text-white">
+                    <svg x-show="!darkMode" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                    <svg x-show="darkMode" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto mt-8 p-4">
+        <!-- Home Section -->
+        <section id="home" x-show="activeSection === 'home'">
+            <div class="flex flex-col items-center">
+                <div class="w-full h-64 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center mb-8">
+                    <h1 class="text-4xl font-bold text-white">Welcome to Docker Learning</h1>
+                </div>
+                
+                <div class="max-w-2xl text-center mb-8">
+                    <p class="text-xl mb-4">
+                        Embark on your Docker journey with our comprehensive learning platform. 
+                        Whether you're a beginner or an advanced user, we've got you covered with 
+                        interactive tutorials, practical examples, and in-depth resources.
+                    </p>
+                    <a href="#essentials" @click="activeSection = 'essentials'" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+                        Get Started
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">Interactive Tutorials</h3>
+                        <p>Learn Docker concepts with hands-on, interactive tutorials tailored for all skill levels.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">Real-world Applications</h3>
+                        <p>Explore practical Docker use cases and applications in various development scenarios.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">API Integration Examples</h3>
+                        <p>Discover how to integrate Docker with popular APIs like OpenAI and WhatsApp.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">Command Simulator</h3>
+                        <p>Practice Docker commands in a safe, virtual environment without affecting your system.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">Comprehensive Learning Hub</h3>
+                        <p>Access a wealth of Docker resources, including a glossary, FAQs, and external references.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">Community-driven Content</h3>
+                        <p>Benefit from continuously updated content based on user feedback and industry trends.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Essentials Section -->
+        <section id="essentials" x-show="activeSection === 'essentials'" x-cloak>
+            <h2 class="text-3xl font-bold mb-6">Docker Essentials</h2>
+            <p class="mb-8">
+                Master these 15 essential Docker actions to build a strong foundation in containerization technology.
+            </p>
+            <div class="space-y-4" x-data="{ expandedAction: null }">
+                <template x-for="(action, index) in essentialActions" :key="index">
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                        <div 
+                            class="bg-gray-100 dark:bg-gray-800 p-4 flex justify-between items-center cursor-pointer"
+                            @click="expandedAction = expandedAction === index ? null : index"
+                        >
+                            <h3 class="text-xl font-semibold" x-text="action.title"></h3>
+                            <svg x-show="expandedAction !== index" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                            <svg x-show="expandedAction === index" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                        </div>
+                        <div x-show="expandedAction === index" class="p-4">
+                            <p class="mb-2" x-text="action.description"></p>
+                            <div class="bg-gray-200 dark:bg-gray-700 p-2 rounded mb-2">
+                                <code x-text="action.command"></code>
+                            </div>
+                            <h4 class="font-semibold mb-1">Use Case:</h4>
+                            <p class="mb-2" x-text="action.useCase"></p>
+                            <h4 class="font-semibold mb-1">Common Pitfall:</h4>
+                            <p x-text="action.pitfall"></p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </section>
+
+        <!-- Repetitive Tasks Section -->
+        <section id="repetitive-tasks" x-show="activeSection === 'repetitiveTasks'" x-cloak>
+            <h2 class="text-3xl font-bold mb-6">Repetitive Docker Tasks</h2>
+            <p class="mb-8">
+                Streamline your workflow with these 15 common Docker tasks that you'll find yourself performing regularly.
+            </p>
+            <!-- Similar structure to Essentials section, but with repetitive tasks content -->
+        </section>
+
+        <!-- Impactful Commands Section -->
+        <section id="impactful-commands" x-show="activeSection === 'impactfulCommands'" x-cloak>
+            <h2 class="text-3xl font-bold mb-6">Impactful Docker Commands</h2>
+            <p class="mb-8">
+                Master these powerful Docker commands to take your containerization skills to the next level.
+            </p>
+            <!-- Command list and simulator placeholder -->
+        </section>
+
+        <!-- API Integration Section -->
+        <section id="api-integration" x-show="activeSection === 'apiIntegration'" x-cloak>
+            <h2 class="text-3xl font-bold mb-6">Docker API Integration</h2>
+            <p class="mb-8">
+                Learn how to integrate Docker with popular APIs to enhance your development workflow.
+            </p>
+            <!-- API integration tutorials placeholder -->
+        </section>
+
+        <!-- Learning Hub Section -->
+        <section id="learning-hub" x-show="activeSection === 'learningHub'" x-cloak>
+            <h2 class="text-3xl font-bold mb-6">Docker Learning Hub</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">Glossary of Terms</h3>
+                    <!-- Glossary placeholder -->
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">Frequently Asked Questions</h3>
+                    <!-- FAQ placeholder -->
+                </div>
+            </div>
+            <div class="mt-8">
+                <h3 class="text-2xl font-semibold mb-4">Additional Resources</h3>
+                <!-- External resources links placeholder -->
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" x-show="activeSection === 'about'" x-cloak>
+            <h2 class="text-3xl font-bold mb-6">About Docker Learning</h2>
+            <p class="mb-4">
+                Docker Learning is a comprehensive platform designed to help developers of all skill levels master Docker containerization technology. Our mission is to provide an engaging, interactive learning experience that combines theoretical knowledge with practical, hands-on exercises.
+            </p>
+            <p class="mb-4">
+                Whether you're just starting out with Docker or looking to deepen your expertise, our curated content, interactive tutorials, and real-world examples will guide you through your learning journey.
+            </p>
+            <p>
+                Join our community of learners and take your containerization skills to the next level!
+            </p>
+        </section>
+
+        <!-- Contact Section (continued) -->
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Send Message
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="bg-blue-600 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            © 2024 Docker Learning Website. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Alpine.js data and functions
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('essentialActions', () => ({
+                actions: [
+                    {
+                        title: "Pulling an Image",
+                        description: "Download a Docker image from a registry.",
+                        command: "docker pull [IMAGE]",
+                        useCase: "Retrieve the latest version of an image before running a container.",
+                        pitfall: "Ensure you have the correct image name and tag to avoid pulling the wrong version."
+                    },
+                    {
+                        title: "Running a Container",
+                        description: "Create and start a container from an image.",
+                        command: "docker run [OPTIONS] [IMAGE] [COMMAND] [ARG...]",
+                        useCase: "Start a new instance of an application or service.",
+                        pitfall: "Forgetting to map ports or volumes can lead to inaccessible services or data loss."
+                    },
+                    {
+                        title: "Listing Containers",
+                        description: "View all running containers or all containers (including stopped ones).",
+                        command: "docker ps [OPTIONS]",
+                        useCase: "Monitor active containers or check the status of previously run containers.",
+                        pitfall: "By default, only running containers are shown. Use '-a' to see all containers."
+                    },
+                    // Add more essential actions here (up to 15 total)
+                ]
+            }))
+        })
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
