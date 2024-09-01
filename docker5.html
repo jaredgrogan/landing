@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Essentials</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Berkeley';
+            src: url('https://fonts.cdnfonts.com/css/berkeley-mono');
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Berkeley', monospace;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a2533 100%);
+            color: #f5f7fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .description {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        .section {
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+        .light-mode .section {
+            background: white;
+        }
+        .dark-mode .section {
+            background: #34495e;
+        }
+        .section h2 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .command-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .command-item {
+            border-radius: 4px;
+            padding: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .light-mode .command-item {
+            background: #f8f9fa;
+        }
+        .dark-mode .command-item {
+            background: #2c3e50;
+        }
+        .command-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            z-index: 100;
+            max-width: 200px;
+        }
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .copyright {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+        @media (max-width: 768px) {
+            .command-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const MoonIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        );
+
+        const SunIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+        );
+
+        const DockerEssentials = () => {
+            const [activeSection, setActiveSection] = React.useState('essential');
+            const [darkMode, setDarkMode] = React.useState(false);
+            const [tooltip, setTooltip] = React.useState({ visible: false, text: '', x: 0, y: 0 });
+
+            React.useEffect(() => {
+                document.body.className = darkMode ? 'dark-mode' : 'light-mode';
+            }, [darkMode]);
+
+            const sections = {
+                essential: {
+                    title: "15 Most Essential Actions in Docker",
+                    items: [
+                        { name: "Install Docker", description: "Set up Docker on your local machine to start using Docker containers." },
+                        { name: "Pull an Image", description: "Download Docker images from registries like Docker Hub using 'docker pull'." },
+                        { name: "Run a Container", description: "Start a new container from an image with 'docker run'." },
+                        { name: "Build an Image", description: "Create a Docker image from a Dockerfile using 'docker build'." },
+                        { name: "Tag Images", description: "Assign tags to images for versioning or identification." },
+                        { name: "Push an Image", description: "Upload a Docker image to a registry with 'docker push'." },
+                        { name: "Stop a Container", description: "Halt a running container using 'docker stop'." },
+                        { name: "Remove a Container", description: "Delete unused containers with 'docker rm'." },
+                        { name: "Remove an Image", description: "Delete Docker images using 'docker rmi'." },
+                        { name: "List Containers", description: "View running or all containers with 'docker ps' commands." },
+                        { name: "List Images", description: "Check existing images on your system with 'docker images'." },
+                        { name: "Inspect Containers", description: "Get detailed container information using 'docker inspect'." },
+                        { name: "View Logs", description: "Access container logs with 'docker logs'." },
+                        { name: "Use Docker Compose", description: "Define and run multi-container applications with docker-compose.yml." },
+                        { name: "Network Management", description: "Create and manage Docker networks for container communication." }
+                    ]
+                },
+                repetitive: {
+                    title: "15 Most Repetitive Tasks or Keystrokes",
+                    items: [
+                        { name: "Starting Containers", description: "docker start my-container", example: "docker start web-server" },
+                        { name: "Stopping Containers", description: "docker stop my-container", example: "docker stop database" },
+                        { name: "Restarting Containers", description: "docker restart my-container", example: "docker restart nginx" },
+                        { name: "Running Containers", description: "docker run -d image-name", example: "docker run -d redis" },
+                        { name: "Listing Containers", description: "docker ps or docker ps -a", example: "docker ps --format 'table {{.Names}}\t{{.Status}}'" },
+                        { name: "Viewing Logs", description: "docker logs -f container-name", example: "docker logs -f app-logs" },
+                        { name: "Building Images", description: "docker build -t image-name .", example: "docker build -t myapp:v1 ." },
+                        { name: "Removing Containers", description: "docker rm container-name", example: "docker rm $(docker ps -aq)" },
+                        { name: "Removing Images", description: "docker rmi image-name", example: "docker rmi $(docker images -q -f dangling=true)" },
+                        { name: "Pulling Images", description: "docker pull image-name", example: "docker pull ubuntu:latest" },
+                        { name: "Executing Commands", description: "docker exec -it container-name command", example: "docker exec -it web-server bash" },
+                        { name: "Checking Container Stats", description: "docker stats", example: "docker stats --format 'table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}'" },
+                        { name: "Using Docker Compose Up", description: "docker-compose up -d", example: "docker-compose up -d --scale web=3" },
+                        { name: "Viewing Resource Usage", description: "docker system df", example: "docker system df -v" },
+                        { name: "Clearing Unused Resources", description: "docker system prune", example: "docker system prune --volumes" }
+                    ]
+                },
+                impactful: {
+                    title: "15 Most Impactful Commands",
+                    items: [
+                        { name: "docker run", description: "Start a new container", example: "docker run -d -p 80:80 nginx" },
+                        { name: "docker build", description: "Build an image from a Dockerfile", example: "docker build -t myapp:latest ." },
+                        { name: "docker pull", description: "Pull an image from a registry", example: "docker pull mongo:4.4" },
+                        { name: "docker push", description: "Push an image to a registry", example: "docker push myregistry.com/myapp:v1" },
+                        { name: "docker ps", description: "List running containers", example: "docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Status}}'" },
+                        { name: "docker exec", description: "Run a command in a running container", example: "docker exec -it mycontainer sh" },
+                        { name: "docker stop", description: "Stop one or more running containers", example: "docker stop $(docker ps -q)" },
+                        { name: "docker start", description: "Start one or more stopped containers", example: "docker start my-postgres" },
+                        { name: "docker rm", description: "Remove one or more containers", example: "docker rm -f $(docker ps -aq)" },
+                        { name: "docker rmi", description: "Remove one or more images", example: "docker rmi $(docker images -q -f dangling=true)" },
+                        { name: "docker logs", description: "Fetch the logs of a container", example: "docker logs --tail 100 -f myapp" },
+                        { name: "docker-compose up", description: "Create and start containers", example: "docker-compose up -d --build" },
+                        { name: "docker-compose down", description: "Stop and remove containers, networks", example: "docker-compose down --volumes" },
+                        { name: "docker network", description: "Manage Docker networks", example: "docker network create --driver overlay mynetwork" },
+                        { name: "docker volume", description: "Manage Docker volumes", example: "docker volume create --driver local mydata" }
+                    ]
+                },
+                terms: {
+                    title: "15 Most Valuable Terms to Understand",
+                    items: [
+                        { name: "Container", description: "A standalone, executable package of software that includes everything needed to run an application." },
+                        { name: "Image", description: "A lightweight, standalone, executable package that includes everything needed to run a piece of software." },
+                        { name: "Dockerfile", description: "A text file that contains all the commands to build a Docker image." },
+                        { name: "Registry", description: "A storage and distribution system for Docker images, like Docker Hub." },
+                        { name: "Volume", description: "A persistent data storage mechanism for containers." },
+                        { name: "Docker Compose", description: "A tool for defining and running multi-container Docker applications." },
+                        { name: "Swarm", description: "A native clustering and orchestration solution for Docker." },
+                        { name: "Namespace", description: "A feature that provides isolation for running processes." },
+                        { name: "Cgroup", description: "A Linux kernel feature that limits, accounts for, and isolates resource usage of process groups." },
+                        { name: "Layer", description: "A modification to an image, represented by an instruction in the Dockerfile." },
+                        { name: "Docker Daemon", description: "The background service running on the host that manages building, running, and distributing Docker containers." },
+                        { name: "Docker Client", description: "The command-line tool that allows users to interact with the Docker daemon." },
+                        { name: "Docker Hub", description: "A cloud-based registry service for building and shipping application or service containers." },
+                        { name: "Orchestration", description: "The automated arrangement, coordination, and management of complex computer systems and services." },
+                        { name: "Container Runtime", description: "The software responsible for running containers." }
+                    ]
+                }
+            };
+
+            const handleMouseEnter = (e, text) => {
+                const rect = e.target.getBoundingClientRect();
+                setTooltip({
+                    visible: true,
+                    text: text,
+                    x: rect.left + window.scrollX,
+                    y: rect.bottom + window.scrollY
+                });
+            };
+ const handleMouseLeave = () => {
+                setTooltip({ visible: false, text: '', x: 0, y: 0 });
+            };
+
+            return (
+                <div className="container">
+                    <button className="mode-toggle" onClick={() => setDarkMode(!darkMode)}>
+                        {darkMode ? <SunIcon /> : <MoonIcon />}
+                    </button>
+                    <h1 className="fade-in">Docker Essentials</h1>
+                    <p className="description fade-in">
+                        Discover the core concepts and commands of Docker. This comprehensive guide covers essential actions, repetitive tasks, impactful commands, and key terms, empowering you to efficiently manage containers and streamline your development workflow.
+                    </p>
+                    <nav style={{marginBottom: '20px', textAlign: 'center'}}>
+                        {Object.keys(sections).map(section => (
+                            <button 
+                                key={section}
+                                onClick={() => setActiveSection(section)}
+                                style={{
+                                    margin: '0 10px',
+                                    padding: '10px 15px',
+                                    background: activeSection === section ? '#3498db' : 'transparent',
+                                    color: activeSection === section ? 'white' : 'inherit',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease'
+                                }}
+                            >
+                                {section.charAt(0).toUpperCase() + section.slice(1)}
+                            </button>
+                        ))}
+                    </nav>
+                    <div className="section fade-in">
+                        <h2>{sections[activeSection].title}</h2>
+                        <div className="command-list">
+                            {sections[activeSection].items.map((item, index) => (
+                                <div 
+                                    key={index} 
+                                    className="command-item"
+                                    onMouseEnter={(e) => handleMouseEnter(e, item.description)}
+                                    onMouseLeave={handleMouseLeave}
+                                >
+                                    <strong>{item.name}</strong>
+                                    {item.example && <p><small>Example: {item.example}</small></p>}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    {tooltip.visible && (
+                        <div 
+                            className="tooltip"
+                            style={{top: `${tooltip.y}px`, left: `${tooltip.x}px`}}
+                        >
+                            {tooltip.text}
+                        </div>
+                    )}
+                    <div className="copyright">
+                        © {new Date().getFullYear()} Universitas AI. All rights reserved.
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<DockerEssentials />, document.getElementById('root'));
+    </script>
+</body>
+</html>
