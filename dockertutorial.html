@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Tutorial: Connecting ChatGPT to WhatsApp</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Berkeley';
+            src: url('https://fonts.cdnfonts.com/css/berkeley-mono');
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Berkeley', monospace;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        code {
+            background: #f8f9fa;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Berkeley', monospace;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .step {
+            border-left: 3px solid #3498db;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        .note {
+            background: #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .workflow-diagram {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const Tutorial = () => {
+            return (
+                <div className="container fade-in">
+                    <h1>Docker Tutorial: Connecting ChatGPT to WhatsApp</h1>
+                    
+                    <div className="section">
+                        <h2>Introduction</h2>
+                        <p>This tutorial will guide you through the process of using Docker to create a containerized application that connects OpenAI's ChatGPT 3.5 Turbo to WhatsApp. By the end, you'll have a Dockerized chatbot that can respond to WhatsApp messages using ChatGPT's AI capabilities.</p>
+                    </div>
+
+                    <div className="section">
+                        <h2>Prerequisites</h2>
+                        <ul>
+                            <li>Docker installed on your system</li>
+                            <li>An OpenAI API key</li>
+                            <li>A WhatsApp Business API account or a Twilio account for WhatsApp access</li>
+                            <li>Basic knowledge of Python and Docker</li>
+                        </ul>
+                    </div>
+
+                    <div className="section">
+                        <h2>Workflow Diagram</h2>
+                        <svg className="workflow-diagram" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="10" y="10" width="780" height="380" fill="#f0f0f0" stroke="#333" strokeWidth="2"/>
+                            <rect x="30" y="30" width="200" height="100" fill="#3498db" rx="10"/>
+                            <text x="130" y="80" textAnchor="middle" fill="white">WhatsApp</text>
+                            <rect x="300" y="30" width="200" height="100" fill="#2ecc71" rx="10"/>
+                            <text x="400" y="80" textAnchor="middle" fill="white">Docker Container</text>
+                            <rect x="570" y="30" width="200" height="100" fill="#e74c3c" rx="10"/>
+                            <text x="670" y="80" textAnchor="middle" fill="white">ChatGPT API</text>
+                            <path d="M230 80 H300" stroke="#333" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                            <path d="M500 80 H570" stroke="#333" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                            <path d="M570 130 Q400 200 230 130" stroke="#333" strokeWidth="2" fill="none" markerEnd="url(#arrowhead)"/>
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" />
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+
+                    <div className="section">
+                        <h2>Step 1: Set Up Project Structure</h2>
+                        <div className="step">
+                            <p>Create a new directory for your project and set up the following structure:</p>
+                            <pre>
+{`chatgpt-whatsapp/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── chatgpt.py
+│   └── whatsapp.py
+├── Dockerfile
+├── requirements.txt
+└── .env
+`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2>Step 2: Install Dependencies</h2>
+                        <div className="step">
+                            <p>Create a <code>requirements.txt</code> file with the following content:</p>
+                            <pre>
+{`fastapi==0.68.0
+uvicorn==0.15.0
+python-dotenv==0.19.0
+httpx==0.19.0
+pydantic==1.8.2
+openai==0.27.0
+twilio==7.9.0
+`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2>Step 3: Set Up Environment Variables</h2>
+                        <div className="step">
+                            <p>Create a <code>.env</code> file with your API keys and configuration:</p>
+                            <pre>
+{`OPENAI_API_KEY=your_openai_api_key
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_WHATSAPP_NUMBER=your_twilio_whatsapp_number
+`}
+                            </pre>
+                            <div className="note">Note: Keep your .env file secure and never commit it to version control.</div>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2>Step 4: Implement ChatGPT Integration</h2>
+                        <div className="step">
+                            <p>Create <code>chatgpt.py</code> with the following content:</p>
+                            <pre>
+{`import openai
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def get_chatgpt_response(message):
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": message}
+            ]
+        )
+        return response.choices[0].message['content'].strip()
+    except Exception as e:
+        print(f"Error in ChatGPT API call: {e}")
+        return "I'm sorry, I couldn't process your request at the moment."
+`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2>Step 5: Implement WhatsApp Integration</h2>
+                        <div className="step">
+                            <p>Create <code>whatsapp.py</code> with the following content:</p>
+                            <pre>
+{`from twilio.rest import Client
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+twilio_number = os.getenv("TWILIO_WHATSAPP_NUMBER")
+
+client = Client(account_sid, auth_token)
+
+def send_whatsapp_message(to_number, message):
+    try:
+        message = client.messages.create(
+            body=message,
+            from_=f"whatsapp:{twilio_number}",
+            to=f"whatsapp:{to_number}"
+        )
+        print(f"Message sent: {message.sid}")
+    except Exception as e:
+        print(f"Error sending WhatsApp message: {e}")
+`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2>Step 6: Create Main Application</h2>
+                        <div className="step">
+                            <p>Create <code>main.py</code> with the following content:</p>
+                            <pre>
+{`from fastapi import FastAPI, Request
+from pydantic import BaseModel
+from chatgpt import get_chatgpt_response
+from whatsapp import send_whatsapp_message
+
+app = FastAPI()
+
+class WhatsAppMessage(BaseModel):
+    From: str
+    Body: str
+
+@app.post("/webhook")
+async def webhook(message: WhatsAppMessage):
+    user_message = message.Body
+    from_number = message.From.split(":")[-1]
+
+    # Get response from ChatGPT
+    chatgpt_response = get_chatgpt_response(user_message)
+
+    # Send response back to WhatsApp
+    send_whatsapp_message(from_number, chatgpt_response)
+
+    return {"status": "success"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2>Step 7: Create Dockerfile</h2>
+                        <div className="step">
+                            <p>Create a <code>Dockerfile</code> with the following content:</p>
+                            <pre>
+{`FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app/ .
+COPY .env .
+
+CMD ["python", "main.py"]
+`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2>Step 8: Build and Run Docker Container</h2>
+                        <div className="step">
+                            <p>Build the Docker image:</p>
+                            <pre>docker build -t chatgpt-whatsapp .</pre>
+                            <p>Run the Docker container:</p>
+                            <pre>docker run -d -p 8000:8000 --name chatgpt-whatsapp-bot chatgpt-whatsapp</pre>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2>Step 9: Set Up Webhook</h2>
+                        <div className="step">
+                            <p>Configure your Twilio WhatsApp sandbox or WhatsApp Business API to forward incoming messages to your application's webhook URL (e.g., <code>http://your-server-ip:8000/webhook</code>).</p>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2>Conclusion</h2>
+                        <p>You now have a Dockerized application that connects ChatGPT to WhatsApp. This setup allows you to receive messages from WhatsApp, process them using ChatGPT, and send responses back to WhatsApp users.</p>
+                    </div>
+
+                    <div className="section">
+                        <h2>Additional Considerations</h2>
+                        <ul>
+                            <li>Implement error handling and logging for production use.</li>
+                            <li>Add rate limiting to prevent abuse and manage API costs.</li>
+                            <li>Implement user session management for context-aware conversations.</li>
+                            <li>Use Docker Compose for easier management of multi-container setups.</li>
+                            <li>Set up a reverse proxy (e.g., Nginx) for HTTPS support.</li>
+                        </ul>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<Tutorial />, document.getElementById('root'));
+    </script>
+</body>
+</html>
