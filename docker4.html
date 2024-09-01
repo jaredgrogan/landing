@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Learning Hub</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #f0f8ff;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --accent-color: #00a86b;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--secondary-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: var(--text-light);
+            text-align: center;
+            padding: 40px 0;
+            border-radius: 0 0 10px 10px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        nav {
+            background-color: var(--primary-color);
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        nav ul li {
+            margin: 5px 10px;
+        }
+        nav ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+        .content {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .card {
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: var(--accent-color);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        .list-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .list-item {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        .list-item:hover {
+            transform: scale(1.02);
+        }
+        .list-item h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .list-item p {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Docker Learning Hub</h1>
+            <p>Your one-stop resource for mastering Docker</p>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#essential-actions">Essential Actions</a></li>
+            <li><a href="#common-tasks">Common Tasks</a></li>
+            <li><a href="#impactful-commands">Impactful Commands</a></li>
+            <li><a href="#tutorials">Tutorials</a></li>
+            <li><a href="#advanced">Advanced Topics</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div id="root"></div>
+    </div>
+    <script type="text/babel">
+        const DockerLearningHub = () => {
+            const [activeSection, setActiveSection] = React.useState('overview');
+
+            const sections = {
+                overview: {
+                    title: 'Welcome to Docker Learning Hub',
+                    content: (
+                        <div>
+                            <p>This interactive site is designed to help developers learn Docker from the ground up. Whether you're a beginner or looking to expand your knowledge, we've got you covered.</p>
+                            <h3>What you'll learn:</h3>
+                            <ul>
+                                <li>Essential Docker actions and commands</li>
+                                <li>Common tasks and workflows</li>
+                                <li>Impactful Docker commands</li>
+                                <li>Advanced Docker concepts and best practices</li>
+                                <li>Real-world applications and integrations</li>
+                            </ul>
+                        </div>
+                    )
+                },
+                essential_actions: {
+                    title: '15 Most Essential Actions in Docker',
+                    content: (
+                        <div className="list-grid">
+                            {[
+                                {title: "Install Docker", description: "Set up Docker on your local machine to start using Docker."},
+                                {title: "Pull an Image", description: "Use docker pull to download images from a Docker registry, such as Docker Hub."},
+                                {title: "Run a Container", description: "Execute docker run to start a new container from a specific image."},
+                                {title: "Build an Image", description: "Use docker build -t <image_name> . to create a Docker image from a Dockerfile."},
+                                {title: "Tagging Images", description: "Assign tags to images using docker tag <image> <repository>:<tag> to specify versions or variants."},
+                                {title: "Push an Image", description: "Upload an image to a registry with docker push <repository>:<tag>."},
+                                {title: "Stop a Container", description: "Halt a running container using docker stop <container_id_or_name>."},
+                                {title: "Remove a Container", description: "Delete containers no longer needed using docker rm <container_id_or_name>."},
+                                {title: "Remove an Image", description: "Use docker rmi <image_id_or_name> to delete Docker images."},
+                                {title: "List Containers", description: "View all containers with docker ps (running) and docker ps -a (all)."},
+                                {title: "List Images", description: "Check existing images with docker images."},
+                                {title: "Inspect Containers", description: "Retrieve detailed information about a container using docker inspect <container_id_or_name>."},
+                                {title: "View Logs", description: "Access container logs with docker logs <container_id_or_name>."},
+                                {title: "Use Docker Compose", description: "Define and run multi-container applications using a docker-compose.yml file."},
+                                {title: "Network Management", description: "Create and manage Docker networks using docker network create <network_name> and docker network connect/disconnect."}
+                            ].map((action, index) => (
+                                <div key={index} className="list-item">
+                                    <h3>{action.title}</h3>
+                                    <p>{action.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )
+                },
+                common_tasks: {
+                    title: '15 Most Repetitive Tasks or Keystrokes',
+                    content: (
+                        <div className="list-grid">
+                            {[
+                                {title: "Starting Containers", description: "docker start <container_name>"},
+                                {title: "Stopping Containers", description: "docker stop <container_name>"},
+                                {title: "Restarting Containers", description: "docker restart <container_name>"},
+                                {title: "Running Containers", description: "docker run -d <image_name> to start containers in detached mode."},
+                                {title: "Listing Containers", description: "docker ps and docker ps -a to check running/all containers."},
+                                {title: "Viewing Logs", description: "docker logs -f <container_name> for real-time log viewing."},
+                                {title: "Building Images", description: "docker build -t <image_name> . frequently during development."},
+                                {title: "Removing Containers", description: "docker rm <container_name> to clean up unused containers."},
+                                {title: "Removing Images", description: "docker rmi <image_name> to delete unwanted images."},
+                                {title: "Pulling Images", description: "docker pull <image_name> to update or download images."},
+                                {title: "Executing Commands Inside Containers", description: "docker exec -it <container_name> <command> for accessing containers."},
+                                {title: "Checking Container Stats", description: "docker stats for real-time monitoring of container performance."},
+                                {title: "Using Docker Compose Up", description: "docker-compose up -d to start services defined in docker-compose.yml."},
+                                {title: "Viewing Resource Usage", description: "docker system df to see disk usage by Docker."},
+                                {title: "Clearing Unused Resources", description: "docker system prune to remove unused containers, networks, and images."}
+                            ].map((task, index) => (
+                                <div key={index} className="list-item">
+                                    <h3>{task.title}</h3>
+                                    <p>{task.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )
+                },
+                impactful_commands: {
+                    title: '15 Most Impactful Commands',
+                    content: (
+                        <div className="list-grid">
+                            {[
+                                {title: "docker run", description: "Start a new container from an image, making it essential for deploying applications."},
+                                {title: "docker build", description: "Create a Docker image from a Dockerfile, crucial for defining application environments."},
+                                {title: "docker pull", description: "Download an image from a Docker registry, a common step in deployment."},
+                                {title: "docker push", description: "Upload an image to a registry, enabling sharing and deployment."},
+                                {title: "docker ps", description: "List running containers, useful for monitoring and management."},
+                                {title: "docker exec", description: "Run commands inside a running container, important for debugging and administration."},
+                                {title: "docker stop", description: "Stop a running container, used to halt operations."},
+                                {title: "docker start", description: "Start a stopped container, useful for resuming services."},
+                                {title: "docker rm", description: "Remove stopped containers to free up resources."},
+                                {title: "docker rmi", description: "Remove images to save disk space."},
+                                {title: "docker logs", description: "View logs from a container to diagnose and debug."},
+                                {title: "docker-compose up", description: "Start and run multi-container Docker applications as defined in docker-compose.yml."},
+                                {title: "docker-compose down", description: "Stop and remove containers, networks, images, and volumes created by docker-compose up."},
+                                {title: "docker network", description: "Manage Docker networks for connecting containers, important for defining container communication."},
+                                {title: "docker volume", description: "Create and manage Docker volumes for persistent data storage, critical for data integrity across container restarts."}
+                            ].map((command, index) => (
+                                <div key={index} className="list-item">
+                                    <h3>{command.title}</h3>
+                                    <p>{command.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )
+                },
+                tutorials: {
+                    title: 'Docker Tutorials',
+                    content: (
+                        <div>
+                            <h3>API Integration Tutorial</h3>
+                            <p>Learn how to create a Dockerized application that makes API calls, including connecting to the OpenAI API and WhatsApp.</p>
+                            <a href="#" className="btn">Start Tutorial</a>
+                        </div>
+                    )
+                },
+                advanced: {
+                    title: 'Advanced Docker Topics',
+                    content: (
+                        <ul>
+                            <li>Docker Swarm and Orchestration</li>
+                            <li>Docker Security Best Practices</li>
+                            <li>Docker Networking in Depth</li>
+                            <li>Optimizing Docker Images</li>
+                            <li>Continuous Integration/Continuous Deployment with Docker</li>
+                        </ul>
+                    )
+                }
+            };
+
+            React.useEffect(() => {
+                const handleHashChange = () => {
+                    const hash = window.location.hash.slice(1);
+                    if (sections[hash]) {
+                        setActiveSection(hash);
+                    }
+                };
+
+                window.addEventListener('hashchange', handleHashChange);
+                handleHashChange(); // Initial check
+
+                return () => window.removeEventListener('hashchange', handleHashChange);
+            }, []);
+
+            return (
+                <div className="content fade-in">
+                    {Object.entries(sections).map(([key, section]) => (
+                        <div key={key} id={key} className="card" style={{display: activeSection === key ? 'block' : 'none'}}>
+                            <h2>{section.title}</h2>
+                            {section.content}
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        ReactDOM.render(<DockerLearningHub />, document.getElementById('root'));
+    </script>
+</body>
+</html>
