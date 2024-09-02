@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stella AI Assistant Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #90EE90;
+            --text-color: #333;
+            --bg-color: #fff;
+            --panel-bg: #f3f4f6;
+        }
+        .dark-mode {
+            --primary-color: #4CAF50;
+            --text-color: #f3f4f6;
+            --bg-color: #1f2937;
+            --panel-bg: #374151;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .panel {
+            background-color: var(--panel-bg);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: height 0.3s ease-out;
+        }
+        .panel-header {
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .panel-content {
+            padding: 1rem;
+            display: none;
+        }
+        .expanded .panel-content {
+            display: block;
+        }
+        .drag-handle {
+            cursor: move;
+            padding: 0.5rem;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="container mx-auto">
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-black dark:text-white">www.trystella.com</h1>
+            <div class="flex items-center space-x-4">
+                <span id="current-time"></span>
+                <button id="darkModeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+                <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Settings
+                </button>
+            </div>
+        </header>
+
+        <div id="dashboard-panels">
+            <div class="panel" data-panel-id="account-balance">
+                <div class="panel-header">
+                    <h2 class="text-xl font-semibold">Account Balance</h2>
+                    <div class="drag-handle">☰</div>
+                </div>
+                <div class="panel-content">
+                    <p class="text-3xl font-bold mb-4">$<span id="balance">100.00</span></p>
+                    <div class="flex space-x-2">
+                        <button onclick="addFunds(10)" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">+$10</button>
+                        <button onclick="addFunds(50)" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">+$50</button>
+                        <button onclick="addFunds(100)" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">+$100</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" data-panel-id="incoming-tickets">
+                <div class="panel-header">
+                    <h2 class="text-xl font-semibold">Incoming Tickets</h2>
+                    <div class="drag-handle">☰</div>
+                </div>
+                <div class="panel-content">
+                    <div id="tickets-list">
+                        <p>Loading tickets...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" data-panel-id="todays-queries">
+                <div class="panel-header">
+                    <h2 class="text-xl font-semibold">Today's Queries</h2>
+                    <div class="drag-handle">☰</div>
+                </div>
+                <div class="panel-content">
+                    <p class="text-3xl font-bold mb-2">Total Queries: <span id="query-count">0</span></p>
+                    <div id="query-summary"></div>
+                </div>
+            </div>
+
+            <div class="panel" data-panel-id="chat-with-stella">
+                <div class="panel-header">
+                    <h2 class="text-xl font-semibold">Chat with Stella</h2>
+                    <div class="drag-handle">☰</div>
+                </div>
+                <div class="panel-content">
+                    <div id="chat-messages" class="h-64 overflow-y-auto mb-4 bg-gray-100 dark:bg-gray-700 p-2 rounded">
+                        <div class="mb-2 text-left">
+                            <span class="inline-block p-2 rounded bg-gray-200 dark:bg-gray-600">
+                                Hello! I'm Stella, your AI assistant. How can I help you today?
+                            </span>
+                        </div>
+                    </div>
+                    <form id="chat-form" class="flex">
+                        <input type="text" id="chat-input" placeholder="Type your message..." class="flex-grow mr-2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-2">Send</button>
+                        <button id="micButton" type="button" class="p-2 bg-black text-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                            </svg>
+                        </button>
+                    </form>
+                    <div id="suggestions" class="mt-2"></div>
+                </div>
+            </div>
+
+            <div class="panel" data-panel-id="customer-engagement">
+                <div class="panel-header">
+                    <h2 class="text-xl font-semibold">Customer Engagement Analytics</h2>
+                    <div class="drag-handle">☰</div>
+                </div>
+                <div class="panel-content">
+                    <canvas id="engagementChart"></canvas>
+                    <button id="exportData" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Export Data</button>
+                </div>
+            </div>
+
+            <div class="panel" data-panel-id="conversation-drill-down">
+                <div class="panel-header">
+                    <h2 class="text-xl font-semibold">Conversation Drill-Down</h2>
+                    <div class="drag-handle">☰</div>
+                </div>
+                <div class="panel-content">
+                    <input type="text" id="conversation-search" placeholder="Search conversations..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 mb-4">
+                    <div id="conversation-list"></div>
+                </div>
+            </div>
+
+            <div class="panel" data-panel-id="train-stella">
+                <div class="panel-header">
+                    <h2 class="text-xl font-semibold">Train Stella</h2>
+                    <div class="drag-handle">☰</div>
+                </div>
+                <div class="panel-content">
+                    <textarea id="business-description" rows="4" placeholder="Describe your business and Stella's role..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 mb-4"></textarea>
+                    <div class="mb-4">
+                        <label class="block mb-2">
+                            <input type="checkbox" class="mr-2"> Transcribe messages
+                        </label>
+                        <label class="block mb-2">
+                            <input type="checkbox" class="mr-2"> Make calendar events
+                        </label>
+                        <label class="block">
+                            <input type="checkbox" class="mr-2"> Answer FAQs
+                        </label>
+                    </div>
+                    <button id="uploadDocs" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-4">Upload Documents</button>
+                    <button id="trainStella" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Train Stella</button>
+                </div>
+            </div>
+
+            <div class="panel" data-panel-id="calendar">
+                <div class="panel-header">
+                    <h2 class="text-xl font-semibold">Calendar</h2>
+                    <div class="drag-handle">☰</div>
+                </div>
+                <div class="panel-content">
+                    <div id="calendar" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center mb-4">
+                            <button id="prevMonth" class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </button>
+                            <h2 id="currentMonth" class="text-xl font-semibold"></h2>
+                            <button id="nextMonth" class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                        <table class="w-full">
+                            <thead>
+                                <tr>
+                                    <th class="py-2">Sun</th>
+                                    <th class="py-2">Mon</th>
+                                    <th class="py-2">Tue</th>
+                                    <th class="py-2">Wed</th>
+                                    <th class="py-2">Thu</th>
+                                    <th class="py-2">Fri</th>
+                                    <th class="py-2">Sat</th>
+                                </tr>
+                            </thead>
+                            <tbody id="calendarBody">
+                                <!-- Calendar days will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" data-panel-id="deliverables">
+                <div class="panel-header">
+                    <h2 class="text-xl font-semibold">Deliverables</h2>
+                    <div class="drag-handle">☰</div>
+                </div>
+                <div class="panel-content">
+                    <ul id="deliverables-list">
+                        <li>No pending deliverables</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Current time update
