@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stella AI Assistant Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #90EE90 0%, #ffffff 20%);
+            min-height: 100vh;
+        }
+        .hover-tooltip:hover .tooltip {
+            display: block;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="mb-4 flex justify-between items-center">
+        <h1 class="text-3xl font-bold text-green-800">www.trystella.com</h1>
+        <div class="flex items-center space-x-4">
+            <span id="current-time"></span>
+            <button class="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                </svg>
+                Settings
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <h2 class="text-xl font-semibold">Account Balance</h2>
+                </div>
+                <div class="flex space-x-2">
+                    <button class="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        $10
+                    </button>
+                    <button class="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        $50
+                    </button>
+                    <button class="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        $100
+                    </button>
+                </div>
+            </div>
+            <p class="text-3xl font-bold">$100.00</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                </svg>
+                <h2 class="text-xl font-semibold">Incoming Tickets</h2>
+            </div>
+            <div id="incoming-tickets">
+                <!-- Real-time updates will be inserted here -->
+                <p>Loading tickets...</p>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                    </svg>
+                    <h2 class="text-xl font-semibold">Today's Queries</h2>
+                </div>
+            </div>
+            <div id="todays-queries">
+                <!-- Real-time updates will be inserted here -->
+                <p>Loading queries...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                    </svg>
+                    <h2 class="text-xl font-semibold">Chat with Stella</h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <button class="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd" />
+                    </svg>
+                    EN
+                </button>
+            </div>
+            <div class="h-64 overflow-y-auto mb-4 bg-gray-100 p-2 rounded">
+                <div class="mb-2 text-left">
+                    <span class="inline-block p-2 rounded bg-gray-200">
+                        Hello! I'm Stella, your AI assistant. How can I help you today?
+                    </span>
+                </div>
+            </div>
+            <form class="flex">
+                <input type="text" placeholder="Type your message..." class="flex-grow mr-2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-2 transition duration-300">Send</button>
+                <button type="button" class="p-2 bg-black text-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                    </svg>
+                </button>
+            </form>
+            <div class="mt-2">
+                <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+                    </svg>
+                 Get Suggestions
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <h2 class="text-xl font-semibold">Customer Engagement Analytics</h2>
+            </div>
+            <div class="mb-4">
+                <ul class="flex border-b">
+                    <li class="-mb-px mr-1">
+                        <a class="bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700 font-semibold" href="#">Queries</a>
+                    </li>
+                    <li class="mr-1">
+                        <a class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold" href="#">Categories</a>
+                    </li>
+                    <li class="mr-1">
+                        <a class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold" href="#">Sentiment</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <canvas id="queriesChart" width="400" height="200"></canvas>
+            </div>
+            <div class="mt-4">
+                <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-300">
+                    Export Data
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">Conversation Drill-Down</h2>
+            <div class="mb-4">
+                <input type="text" placeholder="Search conversations..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">Date Range</label>
+                <div class="mt-1 flex space-x-2">
+                    <input type="date" class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <input type="date" class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+            </div>
+            <div class="border rounded-md">
+                <div class="p-4 border-b hover:bg-gray-50 cursor-pointer">
+                    <h3 class="font-semibold">Conversation #1</h3>
+                    <p class="text-sm text-gray-500">Brief snippet of the conversation...</p>
+                </div>
+                <div class="p-4 border-b hover:bg-gray-50 cursor-pointer">
+                    <h3 class="font-semibold">Conversation #2</h3>
+                    <p class="text-sm text-gray-500">Brief snippet of the conversation...</p>
+                </div>
+                <!-- More conversation summaries -->
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">Train Stella</h2>
+            <div class="mb-4">
+                <div class="hover-tooltip relative">
+                    <label for="business-description" class="block text-sm font-medium text-gray-700 mb-1">Describe Your Business and Stella's Role</label>
+                    <div class="tooltip hidden absolute z-10 w-64 p-2 mt-1 text-sm bg-black text-white rounded">
+                        This is where you describe your business and Stella's role. Include tasks like transcribing messages, making calendar events, answering questions, etc. This is your place to customize Stella for your business.
+                    </div>
+                </div>
+                <textarea id="business-description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+            </div>
+            <div class="mb-4">
+                <h3 class="text-lg font-medium mb-2">Common Tasks</h3>
+                <div class="space-y-2">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
+                        <span class="ml-2 text-gray-700">Transcribe messages</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
+                        <span class="ml-2 text-gray-700">Make calendar events</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
+                        <span class="ml-2 text-gray-700">Answer FAQs</span>
+                    </label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <div class="hover-tooltip relative">
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        Upload Documents
+                    </button>
+                    <div class="tooltip hidden absolute z-10 w-64 p-2 mt-1 text-sm bg-black text-white rounded">
+                        Upload your business documents such as employee guidelines, workflows, key tasks, terms, policies, products, etc. This information will be used to train Stella about your specific business.
+                    </div>
+                </div>
+            </div>
+            <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-300">
+                Train Stella
+            </button>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
+        <div class="px-6 py-4 bg-gray-100 border-b">
+            <ul class="flex">
+                <li class="mr-3">
+                    <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" href="#">Calendar</a>
+                </li>
+                <li class="mr-3">
+                    <a class="inline-block border border-white rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3" href="#">Deliverables</a>
+                </li>
+            </ul>
+        </div>
+        <div class="p-6">
+            <div id="calendar">
+                <!-- Google Calendar API integration will populate this div -->
+                <p>Loading calendar...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-8 text-center text-sm text-gray-500">
+        © 2024 www.trystella.com. All rights reserved.
+    </footer>
+
+    <script>
+        // Set current time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleString();
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Initialize charts
+        const ctx = document.getElementById('queriesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Queries',
+                    data: [65, 59, 80, 81, 56, 55, 40],
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Placeholder for real-time updates
+        function updateTickets() {
+            // This would be replaced with actual API calls
+            document.getElementById('incoming-tickets').innerHTML = '<p>New ticket: Customer inquiry about product features</p>';
+        }
+
+        function updateQueries() {
+            // This would be replaced with actual API calls
+            document.getElementById('todays-queries').innerHTML = '<p>Total queries today: 42</p><p>Most common topic: Account setup</p>';
+        }
+
+        // Simulate real-time updates
+        setInterval(updateTickets, 5000);
+        setInterval(updateQueries, 5000);
+
+        // Placeholder for Google Calendar API integration
+        function loadCalendar() {
+            // This would be replaced with actual Google Calendar API integration
+            document.getElementById('calendar').innerHTML = '<p>Calendar loaded. Showing events for @trystella.com</p>';
+        }
+
+        // Load calendar on page load
+        window.onload = loadCalendar;
+    </script>
+</body>
+</html>
