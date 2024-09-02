@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7-Day Python AI Boot Camp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/berkeley-mono.min.css">
+    <style>
+        body {
+            font-family: 'Berkeley Mono', monospace;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4ade80, #3b82f6);
+        }
+        .day-button {
+            transition: all 0.3s ease;
+        }
+        .day-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        .chat-container {
+            transition: all 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .chat-container.open {
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <header class="bg-[#1e1e1e] text-white py-6 px-6 shadow-lg sticky top-0 z-10 flex items-center">
+        <img src="/api/placeholder/50/50" alt="Logo" class="w-[50px] h-[50px] mr-4">
+        <h1 class="text-3xl font-bold">7-Day Python AI Boot Camp</h1>
+    </header>
+
+    <nav class="bg-white shadow-md sticky top-20 z-10">
+        <ul class="flex justify-around py-2" id="daySelector">
+            <!-- Day buttons will be inserted here by JavaScript -->
+        </ul>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8 flex-grow">
+        <main id="contentArea">
+            <!-- Day content will be inserted here by JavaScript -->
+        </main>
+    </div>
+
+    <div class="fixed bottom-4 right-4">
+        <button id="chatToggle" class="gradient-bg text-white rounded-full p-3 shadow-lg hover:opacity-90 transition-opacity">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+        </button>
+    </div>
+
+    <div id="chatContainer" class="chat-container fixed bottom-20 right-4 w-80 bg-white rounded-lg shadow-xl p-4">
+        <div id="chatMessages" class="h-60 overflow-y-auto mb-4">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="flex">
+            <input type="text" id="chatInput" class="flex-grow border rounded-l px-2 py-1" placeholder="Ask a question...">
+            <button id="chatSend" class="gradient-bg text-white px-4 py-1 rounded-r">Send</button>
+        </div>
+    </div>
+
+    <footer class="bg-gray-200 text-center py-4 mt-8">
+        <div class="container mx-auto">
+            <p class="text-gray-600">Copyright © 2024 UNIVERSITAS AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const bootcampData = [
+            {
+                day: 1,
+                title: "Python Fundamentals and Linear Algebra",
+                outcomes: [
+                    "Master basic Python syntax and data structures",
+                    "Understand linear algebra concepts essential for AI/ML"
+                ],
+                description: "Introduction to Python programming and essential linear algebra concepts for AI.",
+                concepts: [
+                    "Variables", "Data types", "Operators", "Control structures", "Functions", "Modules",
+                    "Lists", "Dictionaries", "Sets", "Vectors", "Matrices", "Eigenvalues", "Eigenvectors"
+                ],
+                commands: [
+                    "print()", "len()", "type()", "if-else", "for loop", "while loop", "def function_name():",
+                    "import numpy as np", "np.array()", "np.dot()", "np.linalg.eig()"
+                ]
+            },
+            {
+                day: 2,
+                title: "Data Manipulation and Visualization",
+                outcomes: [
+                    "Proficiently manipulate data using Pandas",
+                    "Create insightful visualizations with Matplotlib and Seaborn"
+                ],
+                description: "Learn to handle and visualize data effectively using popular Python libraries.",
+                concepts: [
+                    "DataFrame", "Series", "Data cleaning", "Data preprocessing", "Aggregations", "Grouping",
+                    "Line plots", "Scatter plots", "Histograms", "Statistical visualizations", "Interactive plots"
+                ],
+                commands: [
+                    "import pandas as pd", "pd.read_csv()", "df.head()", "df.describe()", "df.groupby()",
+                    "import matplotlib.pyplot as plt", "plt.plot()", "plt.scatter()", "import seaborn as sns",
+                    "sns.heatmap()", "import plotly.express as px", "px.line()"
+                ]
+            },
+            {
+                day: 3,
+                title: "Machine Learning Fundamentals",
+                outcomes: [
+                    "Understand core ML algorithms and their applications",
+                    "Implement and evaluate basic ML models"
+                ],
+                description: "Dive into machine learning concepts and implement your first ML models.",
+                concepts: [
+                    "Supervised learning", "Unsupervised learning", "Model training", "Model testing", "Validation",
+                    "Feature engineering", "Feature selection", "Linear regression", "Logistic regression",
+                    "Decision trees", "Random forests", "K-means clustering", "Cross-validation"
+                ],
+                commands: [
+                    "from sklearn.model_selection import train_test_split", "from sklearn.linear_model import LinearRegression",
+                    "model.fit(X, y)", "model.predict(X_test)", "from sklearn.metrics import mean_squared_error",
+                    "from sklearn.ensemble import RandomForestClassifier", "from sklearn.cluster import KMeans",
+                    "from sklearn.model_selection import cross_val_score"
+                ]
+            },
+            {
+                day: 4,
+                title: "Deep Learning and Neural Networks",
+                outcomes: [
+                    "Grasp fundamental concepts of neural networks",
+                    "Build and train basic neural networks using PyTorch"
+                ],
+                description: "Explore the world of deep learning and start building neural networks.",
+                concepts: [
+                    "Perceptrons", "Activation functions", "Backpropagation", "Gradient descent",
+                    "Feedforward networks", "Convolutional Neural Networks (CNNs)", "Recurrent Neural Networks (RNNs)",
+                    "Loss functions", "Optimizers", "Regularization", "Dropout"
+                ],
+                commands: [
+                    "import torch", "import torch.nn as nn", "import torch.optim as optim",
+                    "class Net(nn.Module):", "def forward(self, x):", "criterion = nn.CrossEntropyLoss()",
+                    "optimizer = optim.Adam(model.parameters())", "optimizer.step()",
+                    "torch.save(model.state_dict(), 'model.pth')"
+                ]
+            },
+            {
+                day: 5,
+                title: "Natural Language Processing and Transformers",
+                outcomes: [
+                    "Understand core NLP concepts and techniques",
+                    "Implement and fine-tune transformer models"
+                ],
+                description: "Delve into NLP and learn to work with state-of-the-art transformer models.",
+                concepts: [
+                    "Tokenization", "Word embeddings", "Transformers", "Attention mechanisms",
+                    "BERT", "GPT", "Fine-tuning pre-trained models", "Sentiment analysis",
+                    "Named Entity Recognition (NER)", "Text classification", "Language translation"
+                ],
+                commands: [
+                    "from transformers import BertTokenizer, BertForSequenceClassification",
+                    "tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')",
+                    "model = BertForSequenceClassification.from_pretrained('bert-base-uncased')",
+                    "inputs = tokenizer(text, return_tensors='pt')",
+                    "outputs = model(**inputs)",
+                    "from torch.nn.functional import softmax",
+                    "probs = softmax(outputs.logits, dim=-1)"
+                ]
+            },
+            {
+                day: 6,
+                title: "Computer Vision and Reinforcement Learning",
+                outcomes: [
+                    "Apply deep learning techniques to computer vision tasks",
+                    "Understand and implement basic reinforcement learning algorithms"
+                ],
+                description: "Explore computer vision applications and the basics of reinforcement learning.",
+                concepts: [
+                    "Image processing", "Object detection", "Image segmentation", "Transfer learning",
+                    "Markov Decision Processes", "Q-learning", "Deep Q-Networks (DQN)", "Policy gradient methods",
+                    "YOLO (You Only Look Once)", "Generative Adversarial Networks (GANs)"
+                ],
+                commands: [
+                    "import cv2", "cv2.imread()", "cv2.resize()", "from torchvision import models",
+                    "model = models.resnet50(pretrained=True)", "import gym", "env = gym.make('CartPole-v1')",
+                    "state, reward, done, _ = env.step(action)", "Q[state, action] = Q[state, action] + alpha * (reward + gamma * np.max(Q[next_state, :]) - Q[state, action])"
+                ]
+            },
+            {
+                day: 7,
+                title: "Model Deployment and Advanced Topics",
+                outcomes: [
+                    "Deploy ML models to production environments",
+                    "Explore advanced AI topics and frameworks"
+                ],
+                description: "Learn to deploy your models and dive into cutting-edge AI topics.",
+                concepts: [
+                    "Flask API", "Docker containerization", "Cloud deployment (AWS, GCP, Azure)",
+                    "Generative AI", "Federated Learning", "Explainable AI", "AI Ethics",
+                    "Model serving", "A/B testing", "Monitoring ML models in production"
+                ],
+                commands: [
+                    "from flask import Flask, request, jsonify", "app = Flask(__name__)",
+                    "@app.route('/predict', methods=['POST'])", "docker build -t myapp .", "docker run myapp",
+                    "from tensorflow.keras.models import load_model", "model = load_model('my_model.h5')",
+                    "import mlflow", "mlflow.start_run()", "mlflow.log_param('param_name', param_value)"
+                ]
+            }
+        ];
+
+        function createDayButtons() {
+            const daySelector = document.getElementById('daySelector');
+            bootcampData.forEach(day => {
+                const button = document.createElement('button');
+                button.className = 'day-button px-4 py-2 rounded transition-colors bg-white text-green-600 hover:bg-green-100';
+                button.textContent = `Day ${day.day}`;
+                button.onclick = () => {
+                    document.getElementById(`day${day.day}`).scrollIntoView({ behavior: 'smooth' });
+                };
+                daySelector.appendChild(button);
+            });
+        }
+
+        function createContent() {
+            const contentArea = document.getElementById('contentArea');
+            bootcampData.forEach(dayData => {
+                const dayElement = document.createElement('section');
+                dayElement.id = `day${dayData.day}`;
+                dayElement.className = 'mb-12 bg-white rounded-lg shadow-md p-6';
+                dayElement.innerHTML = `
+                    <h2 class="text-2xl font-bold text-green-600 mb-4">Day ${dayData.day}: ${dayData.title}</h2>
+                    <p class="text-gray-600 mb-4">${dayData.description}</p>
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-green-500 mb-2">Learning Outcomes:</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            ${dayData.outcomes.map(outcome => `<li class="text-gray-700">${outcome}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-green-500 mb-2">Key Concepts:</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${dayData.concepts.map(concept => `<span class="bg-green-100 text-green-800 px-2 py-1 rounded">${concept}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-green-500 mb-2">Essential Commands:</h3>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <code class="text-sm">
+                                ${dayData.commands.join('<br>')}
+                            </code>
+                        </div>
+                    </div>
+                `;
+                contentArea.appendChild(dayElement);
+            });
+        }
+
+         // Chat functionality
+    const chatToggle = document.getElementById('chatToggle');
+    const chatContainer = document.getElementById('chatContainer');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const chatSend = document.getElementById('chatSend');
+
+    chatToggle.onclick = () => {
+        chatContainer.classList.toggle('open');
+    };
+
+    chatSend.onclick = () => {
+        const message = chatInput.value.trim();
+        if (message) {
+            addMessage('user', message);
+            chatInput.value = '';
+            // Here you would typically send the message to your backend for processing by the LLM
+            // For this example, we'll just echo the message back
+            setTimeout(() => {
+                addMessage('bot', `You said: "${message}". This is a placeholder response. In a real implementation, this would be processed by an LLM.`);
+            }, 1000);
+        }
+    };
+
+    function addMessage(sender, text) {
+        const messageElement = document.createElement('div');
+        messageElement.className = `mb-2 ${sender === 'user' ? 'text-right' : 'text-left'}`;
+        messageElement.innerHTML = `
+            <span class="inline-block ${sender === 'user' ? 'gradient-bg text-white' : 'bg-gray-200 text-gray-800'} rounded px-2 py-1">
+                ${text}
+            </span>
+        `;
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Initialize
+    createDayButtons();
+    createContent();
+
+    // Add event listener for chat input
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            chatSend.click();
+        }
+    });
+</script>
+</body>
+</html>
