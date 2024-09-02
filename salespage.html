@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Try AI Messenger - Next-Gen AI Communication</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary-color: #2ecc71;
+            --secondary-color: #3498db;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --light-text-color: #ffffff;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text-color);
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--light-text-color);
+            color: var(--primary-color);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .product {
+            background: var(--light-text-color);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #e74c3c;
+            margin-right: 10px;
+        }
+
+        .features {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .features li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .features li::before {
+            content: "✓";
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .cart {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--light-text-color);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .cart-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--light-text-color);
+            padding: 10px;
+            border-radius: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .language-toggle select {
+            background: transparent;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            color: var(--text-color);
+            cursor: pointer;
+            padding-right: 20px;
+        }
+
+        .language-toggle::after {
+            content: "🌐";
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            .cart, .language-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background: var(--text-color);
+            color: var(--light-text-color);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const translations = {
+            en: {
+                title: "Try AI Messenger - Next-Gen AI Communication",
+                hero: {
+                    title: "Try AI Messenger",
+                    subtitle: "Next-Gen AI Communication Suite",
+                    cta: "Explore Solutions"
+                },
+                productsTitle: "Our AI-Powered Solutions",
+                cart: {
+                    item: "item",
+                    items: "items",
+                    checkout: "Checkout"
+                },
+                footer: {
+                    rights: "All rights reserved.",
+                    website: "www.tryaimessenger.com"
+                },
+                products: [
+                    {
+                        title: "WhatsApp AI Assistant",
+                        description: "24/7 automated customer support for WhatsApp.",
+                        features: [
+                            "24/7 automated responses",
+                            "Deploy the latest AI models",
+                            "Multi-language support"
+                        ]
+                    },
+                    {
+                        title: "Instagram AI Assistant",
+                        description: "Boost engagement and manage your Instagram presence.",
+                        features: [
+                            "Automated comment management",
+                            "AI-generated captions and hashtags",
+                            "Follower growth strategies"
+                        ]
+                    },
+                    {
+                        title: "Website AI Integration",
+                        description: "Transform your website with intelligent interactions.",
+                        features: [
+                            "24/7 intelligent customer support",
+                            "Seamless integration with existing websites",
+                            "Increased conversion rates"
+                        ]
+                    }
+                ],
+                addToCart: "Add to Cart"
+            },
+            es: {
+                title: "Prueba AI Messenger - Comunicación AI de Última Generación",
+                hero: {
+                    title: "Prueba AI Messenger",
+                    subtitle: "Suite de Comunicación AI de Última Generación",
+                    cta: "Explorar Soluciones"
+                },
+                productsTitle: "Nuestras Soluciones Potenciadas por IA",
+                cart: {
+                    item: "artículo",
+                    items: "artículos",
+                    checkout: "Pagar"
+                },
+                footer: {
+                    rights: "Todos los derechos reservados.",
+                    website: "www.tryaimessenger.com"
+                },
+                products: [
+                    {
+                        title: "Asistente AI para WhatsApp",
+                        description: "Soporte al cliente automatizado 24/7 para WhatsApp.",
+                        features: [
+                            "Respuestas automatizadas 24/7",
+                            "Implementa los últimos modelos de IA",
+                            "Soporte multilingüe"
+                        ]
+                    },
+                    {
+                        title: "Asistente AI para Instagram",
+                        description: "Aumenta el engagement y gestiona tu presencia en Instagram.",
+                        features: [
+                            "Gestión automatizada de comentarios",
+                            "Generación de subtítulos y hashtags con IA",
+                            "Estrategias de crecimiento de seguidores"
+                        ]
+                    },
+                    {
+                        title: "Integración AI para Sitios Web",
+                        description: "Transforma tu sitio web con interacciones inteligentes.",
+                        features: [
+                            "Soporte al cliente inteligente 24/7",
+                            "Integración perfecta con sitios web existentes",
+                            "Aumento de las tasas de conversión"
+                        ]
+                    }
+                ],
+                addToCart: "Añadir al Carrito"
+            }
+        };
+
+        const LanguageToggle = ({ language, setLanguage }) => (
+            <div className="language-toggle">
+                <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                </select>
+            </div>
+        );
+
+        const Product = ({ title, description, originalPrice, price, features, onAddToCart, addToCartText }) => (
+            <div className="product">
+                <h2>{title}</h2>
+                <p>{description}</p>
+                <p className="price">
+                    <span className="original-price">${originalPrice}</span>
+                    ${price}
+                </p>
+                <ul className="features">
+                    {features.map((feature, index) => (
+                        <li key={index}>{feature}</li>
+                    ))}
+                </ul>
+                <button className="cta-button" onClick={() => onAddToCart(title, price)}>{addToCartText}</button>
+            </div>
+        );
+
+        const Cart = ({ items, total, cartText, checkoutText }) => (
+            <div className="cart">
+                <span className="cart-icon">🛒</span>
+                <span>{items.length} {items.length === 1 ? cartText.item : cartText.items} - ${total}</span>
+                <button className="cta-button" style={{marginLeft: '10px'}}>{checkoutText}</button>
+            </div>
+        );
+
+        const SalesPage = () => {
+            const [cartItems, setCartItems] = React.useState([]);
+            const [language, setLanguage] = React.useState('en');
+            const t = translations[language];
+
+            const addToCart = (title, price) => {
+                setCartItems([...cartItems, { title, price }]);
+            };
+
+            const cartTotal = cartItems.reduce((total, item) => total + item.price, 0);
+
+            React.useEffect(() => {
+                document.title = t.title;
+            }, [language]);
+
+            return (
+                <div>
+                    <LanguageToggle language={language} setLanguage={setLanguage} />
+                    <div className="hero">
+                        <h1>{t.hero.title}</h1>
+                        <p>{t.hero.subtitle}</p>
+                        <a href="#products" className="cta-button">{t.hero.cta}</a>
+                    </div>
+                    <div className="container">
+                        <Cart items={cartItems} total={cartTotal} cartText={t.cart} checkoutText={t.cart.checkout} />
+                        <h2 id="products">{t.productsTitle}</h2>
+                        <div className="product-grid">
+                            {t.products.map((product, index) => (
+                                <Product 
+                                    key={index} 
+                                    {...product} 
+                                    originalPrice={599}
+                                    price={475}
+                                    onAddToCart={addToCart}
+                                    addToCartText={t.addToCart}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div className="footer">
+                        <p>&copy; 2024 Try AI Messenger. {t.footer.rights}</p>
+                        <p>{t.footer.website}</p>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<SalesPage />, document.getElementById('root'));
+    </script>
+</body>
+</html>
