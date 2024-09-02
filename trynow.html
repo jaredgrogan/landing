@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Try AI Messenger - Next-Gen AI Communication</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary-color: #2ecc71;
+            --secondary-color: #3498db;
+            --background-color: #ffffff;
+            --text-color: #2c3e50;
+            --light-text-color: #ffffff;
+            --accent-color: #e74c3c;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text-color);
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--light-text-color);
+            color: var(--primary-color);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product {
+            background: var(--light-text-color);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--accent-color);
+            margin-right: 10px;
+        }
+
+        .features {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .features li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .features li::before {
+            content: "✓";
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--light-text-color);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .cart-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .offer-banner {
+            background-color: var(--accent-color);
+            color: var(--light-text-color);
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offer-banner::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.1) 10px,
+                rgba(255, 255, 255, 0.1) 20px
+            );
+            animation: move-bg 20s linear infinite;
+        }
+
+        @keyframes move-bg {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(50%, 50%);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            .cart, .language-selector {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background: var(--text-color);
+            color: var(--light-text-color);
+        }
+
+        .typing-animation::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .testimonials {
+            background: #f8f9fa;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+
+        .testimonial {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq {
+            margin-top: 50px;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+        }
+
+        .faq-question {
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .faq-answer {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const Product = ({ title, description, originalPrice, price, features, onAddToCart, addToCartText }) => (
+            <div className="product">
+                <h2>{title}</h2>
+                <p>{description}</p>
+                <p className="price">
+                    <span className="original-price">${originalPrice}</span>
+                    ${price}
+                </p>
+                <ul className="features">
+                    {features.map((feature, index) => (
+                        <li key={index}>{feature}</li>
+                    ))}
+                </ul>
+                <button className="cta-button" onClick={() => onAddToCart(title, price)}>{addToCartText}</button>
+            </div>
+        );
+
+        const Cart = ({ items, total, checkoutText }) => (
+            <div className="cart">
+                <span className="cart-icon">🛒</span>
+                <span>{items.length} item(s) - ${total}</span>
+                <button className="cta-button" style={{marginLeft: '10px'}}>{checkoutText}</button>
+            </div>
+        );
+
+        const LanguageSelector = ({ language, setLanguage }) => (
+            <div className="language-selector">
+                <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+        );
+
+        const OfferBanner = ({ offerText }) => (
+            <div className="offer-banner">
+                <h3>{offerText}</h3>
+            </div>
+        );
+
+        const TypingHeader = ({ text }) => {
+            const [displayText, setDisplayText] = React.useState('');
+            const [index, setIndex] = React.useState(0);
+
+            React.useEffect(() => {
+                if (index < text.length) {
+                    const timer = setTimeout(() => {
+                        setDisplayText(prev => prev + text[index]);
+                        setIndex(prevIndex => prevIndex + 1);
+                    }, 100);
+                    return () => clearTimeout(timer);
+                }
+            }, [index, text]);
+
+            return <h1 className="typing-animation">{displayText}</h1>;
+        };
+
+        const Testimonial = ({ text, author }) => (
+            <div className="testimonial">
+                <p>"{text}"</p>
+                <p><strong>- {author}</strong></p>
+            </div>
+        );
+
+        const FAQ = ({ faqs }) => {
+            const [openIndex, setOpenIndex] = React.useState(null);
+
+            const toggleAnswer = (index) => {
+                setOpenIndex(openIndex === index ? null : index);
+            };
+
+            return (
+                <div className="faq">
+                    <h2>Frequently Asked Questions</h2>
+                    {faqs.map((faq, index) => (
+                        <div key={index} className="faq-item">
+                            <div className="faq-question" onClick={() => toggleAnswer(index)}>
+                                {faq.question}
+                            </div>
+                            <div className={`faq-answer ${openIndex === index ? 'show' : ''}`}>
+                                {faq.answer}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        const SalesPage = () => {
+        const [cartItems, setCartItems] = React.useState([]);
+        const [language, setLanguage] = React.useState('en');
+
+        const addToCart = (title, price) => {
+            setCartItems([...cartItems, { title, price }]);
+        };
+
+        const cartTotal = cartItems.reduce((total, item) => total + item.price, 0);
+
+        const products = [
+            {
+                title: "WhatsApp AI Assistant",
+                description: "24/7 automated customer support for WhatsApp.",
+                originalPrice: 599,
+                price: 475,
+                features: [
+                    "24/7 automated responses",
+                    "Natural language processing",
+                    "Custom AI training",
+                    "Multi-language support",
+                    "Analytics dashboard"
+                ]
+            },
+            {
+                title: "Instagram AI Assistant",
+                description: "Boost engagement and manage your Instagram presence.",
+                originalPrice: 599,
+                price: 475,
+                features: [
+                    "Automated comment management",
+                    "AI-generated captions and hashtags",
+                    "Follower growth strategies",
+                    "Content scheduling",
+                    "Performance analytics"
+                ]
+            },
+            {
+                title: "Dialpad AI Assistant",
+                description: "Enhance phone communications with AI-powered insights.",
+                originalPrice: 599,
+                price: 475,
+                features: [
+                    "Real-time call transcription",
+                    "Sentiment analysis",
+                    "Call summarization",
+                    "Automatic follow-up scheduling",
+                    "Integration with CRM systems"
+                ]
+            },
+            {
+                title: "Website AI Integration",
+                description: "Transform your website with intelligent interactions.",
+                originalPrice: 599,
+                price: 475,
+                features: [
+                    "Instant visitor query responses",
+                    "Personalized user experiences",
+                    "Increased conversion rates",
+                    "24/7 intelligent customer support",
+                    "Seamless integration with existing websites"
+                ]
+            }
+        ];
+
+        const translations = {
+            en: {
+                title: "Try AI Messenger",
+                subtitle: "Next-Gen AI Communication Suite",
+                exploreButton: "Explore Solutions",
+                checkoutButton: "Checkout",
+                addToCartButton: "Add to Cart",
+                offerText: "Limited Time Offer: Buy 2, Get 2 Free!",
+            },
+            es: {
+                title: "Prueba AI Messenger",
+                subtitle: "Suite de Comunicación AI de Próxima Generación",
+                exploreButton: "Explorar Soluciones",
+                checkoutButton: "Pagar",
+                addToCartButton: "Añadir al Carrito",
+                offerText: "Oferta por Tiempo Limitado: ¡Compra 2, Lleva 2 Gratis!",
+            },
+            ar: {
+                title: "جرب AI Messenger",
+                subtitle: "مجموعة اتصالات الذكاء الاصطناعي من الجيل التالي",
+                exploreButton: "استكشف الحلول",
+                checkoutButton: "الدفع",
+                addToCartButton: "أضف إلى السلة",
+                offerText: "عرض لفترة محدودة: اشترِ 2 واحصل على 2 مجانًا!",
+            }
+        };
+
+        const t = translations[language];
+
+        const faqs = [
+            {
+                question: "How does the AI assistant work?",
+                answer: "Our AI assistants use advanced natural language processing to understand and respond to customer inquiries automatically. They learn from interactions to improve over time."
+            },
+            {
+                question: "Can I customize the AI's responses?",
+                answer: "Yes, you can train the AI with your specific company information and preferred responses to ensure it aligns with your brand voice and policies."
+            },
+            {
+                question: "What platforms do you support?",
+                answer: "We currently offer AI assistants for WhatsApp, Instagram, phone systems (via Dialpad), and websites. We're continuously expanding to support more platforms."
+            },
+            {
+                question: "How secure is my data?",
+                answer: "We take data security very seriously. All data is encrypted in transit and at rest, and we comply with GDPR and other relevant data protection regulations."
+            }
+        ];
+
+        return (
+            <div>
+                <LanguageSelector language={language} setLanguage={setLanguage} />
+                <Cart items={cartItems} total={cartTotal} checkoutText={t.checkoutButton} />
+                <OfferBanner offerText={t.offerText} />
+                <div className="hero">
+                    <TypingHeader text={t.title} />
+                    <p>{t.subtitle}</p>
+                    <a href="#products" className="cta-button">{t.exploreButton}</a>
+                </div>
+                <div className="container">
+                    <h2 id="products">Our AI-Powered Solutions</h2>
+                    <div className="product-grid">
+                        {products.map((product, index) => (
+                            <Product 
+                                key={index} 
+                                {...product} 
+                                onAddToCart={addToCart} 
+                                addToCartText={t.addToCartButton}
+                            />
+                        ))}
+                    </div>
+                    <div className="testimonials">
+                        <h2>What Our Customers Say</h2>
+                        <Testimonial 
+                            text="Try AI Messenger has revolutionized our customer service. We're handling 10x more inquiries without increasing our team size!"
+                            author="Sarah J., E-commerce Manager"
+                        />
+                        <Testimonial 
+                            text="Our Instagram engagement skyrocketed after implementing the AI Assistant. It's like having a social media expert working 24/7!"
+                            author="Mike T., Influencer Marketing Agency"
+                        />
+                    </div>
+                    <FAQ faqs={faqs} />
+                </div>
+                <div className="footer">
+                    <p>&copy; 2024 Try AI Messenger. All rights reserved.</p>
+                    <p>www.tryaimessenger.com</p>
+                </div>
+            </div>
+        );
+    };
+
+    ReactDOM.render(<SalesPage />, document.getElementById('root'));
+</script>
+</body>
+</html>
