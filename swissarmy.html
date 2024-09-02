@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swiss Army Bots - Your AI Communication Suite</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .hero {
+            text-align: center;
+            padding: 50px 0;
+            background: linear-gradient(45deg, #3498db, #8e44ad);
+            color: white;
+            margin-bottom: 30px;
+        }
+        .hero h1 {
+            color: white;
+            font-size: 2.5em;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .cta-button:hover {
+            background: linear-gradient(45deg, #c0392b, #e74c3c);
+            transform: scale(1.05);
+        }
+        .product {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .product:hover {
+            transform: translateY(-5px);
+        }
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .original-price {
+            text-decoration: line-through;
+            color: #7f8c8d;
+            margin-right: 10px;
+        }
+        .features {
+            list-style-type: none;
+            padding: 0;
+        }
+        .features li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        .features li::before {
+            content: "✓";
+            color: #2ecc71;
+            position: absolute;
+            left: 0;
+        }
+        .testimonial {
+            font-style: italic;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .why-choose {
+            font-size: 1.3em;
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+            .container {
+                padding: 10px;
+            }
+            .product {
+                padding: 15px;
+            }
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background: #34495e;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const Product = ({ title, description, originalPrice, price, features }) => (
+            <div className="product fade-in">
+                <h2>{title}</h2>
+                <p>{description}</p>
+                <p className="price">
+                    <span className="original-price">${originalPrice}</span>
+                    <span className="pulse">${price}</span> - Limited Time Offer!
+                </p>
+                <ul className="features">
+                    {features.map((feature, index) => (
+                        <li key={index}>{feature}</li>
+                    ))}
+                </ul>
+                <a href="#order" className="cta-button pulse">Order Now</a>
+            </div>
+        );
+
+        const Testimonial = ({ text, author }) => (
+            <div className="testimonial fade-in">
+                <p>"{text}"</p>
+                <p><strong>- {author}</strong></p>
+            </div>
+        );
+
+        const SalesPage = () => {
+            const [showOffer, setShowOffer] = React.useState(false);
+
+            return (
+                <div>
+                    <div className="hero">
+                        <h1>Swiss Army Bots</h1>
+                        <p>Your All-in-One AI Communication Suite</p>
+                        <a href="#products" className="cta-button pulse">Explore Our Solutions</a>
+                    </div>
+                    <div className="container">
+                        <h2 id="products">Our AI-Powered Solutions</h2>
+                        <Product 
+                            title="WhatsApp AI Assistant"
+                            description="Revolutionize your WhatsApp communication with our AI-powered assistant. Handle customer inquiries, automate responses, and boost engagement 24/7."
+                            originalPrice="599"
+                            price="475"
+                            features={[
+                                "24/7 automated responses",
+                                "Natural language processing",
+                                "Custom AI training",
+                                "Multi-language support",
+                                "Analytics dashboard"
+                            ]}
+                        />
+                        <Product 
+                            title="Instagram AI Assistant"
+                            description="Take your Instagram presence to the next level with our AI assistant. Manage comments, generate captions, and interact with your audience automatically."
+                            originalPrice="599"
+                            price="475"
+                            features={[
+                                "Automated comment management",
+                                "AI-generated captions and hashtags",
+                                "Follower growth strategies",
+                                "Content scheduling",
+                                "Performance analytics"
+                            ]}
+                        />
+                        <Product 
+                            title="Dialpad AI Assistant"
+                            description="Enhance your phone communications with our Dialpad AI assistant. Transcribe calls, analyze sentiment, and provide real-time suggestions during conversations."
+                            originalPrice="599"
+                            price="475"
+                            features={[
+                                "Real-time call transcription",
+                                "Sentiment analysis",
+                                "Call summarization",
+                                "Automatic follow-up scheduling",
+                                "Integration with CRM systems"
+                            ]}
+                        />
+                        <Product 
+                            title="Website AI LLM Integration"
+                            description="Transform your website into an intelligent, interactive platform. Provide instant, context-aware responses to visitor queries, personalize user experiences, and boost conversions."
+                            originalPrice="599"
+                            price="475"
+                            features={[
+                                "Instant visitor query responses",
+                                "Personalized user experiences",
+                                "Increased conversion rates",
+                                "24/7 intelligent customer support",
+                                "Seamless integration with existing websites"
+                            ]}
+                        />
+                        <div className="why-choose fade-in">
+                            <h2>Why Choose Swiss Army Bots?</h2>
+                            <ul>
+                                <li>Cutting-edge AI technology</li>
+                                <li>Seamless integration with existing platforms</li>
+                                <li>Customizable to your specific needs</li>
+                                <li>Significant time and cost savings</li>
+                                <li>Improved customer satisfaction and engagement</li>
+                            </ul>
+                        </div>
+                        <Testimonial 
+                            text="Swiss Army Bots' WhatsApp AI Assistant has completely transformed our customer service. We're now able to handle 10x more inquiries without increasing our team size!"
+                            author="Sarah J., E-commerce Manager"
+                        />
+                        <Testimonial 
+                            text="Our Instagram engagement skyrocketed after implementing the Swiss Army Bots AI Assistant. It's like having a social media expert working 24/7!"
+                            author="Mike T., Influencer Marketing Agency"
+                        />
+                        <h2 className="pulse">Limited Time Offer</h2>
+                        <p>Order now and get a 20% discount on your first year subscription! Plus, receive free setup and onboarding support worth $500.</p>
+                        <a href="#order" className="cta-button pulse" onClick={() => setShowOffer(true)}>Claim Your Discount Now</a>
+                        {showOffer && (
+                            <div className="fade-in" style={{marginTop: '20px', padding: '20px', background: '#e74c3c', color: 'white', borderRadius: '10px'}}>
+                                <h3>Exclusive Bundle Deal!</h3>
+                                <p>Purchase any Swiss Army Bot, and get two additional bots of your choice for free! This incredible offer is only available for the next 24 hours.</p>
+                                <a href="#order" className="cta-button" style={{background: 'white', color: '#e74c3c'}}>Claim This Exclusive Offer</a>
+                            </div>
+                        )}
+                    </div>
+                    <div className="footer">
+                        <p>&copy; 2024 Swiss Army Bots. All rights reserved.</p>
+                        <p>www.swissarmybots.com</p>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<SalesPage />, document.getElementById('root'));
+    </script>
+</body>
+</html>
