@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Master the Art of Viral Marketing with our interactive learning platform.">
+    <title>Viral Marketing Mastery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #F8F8F8;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #FF4500;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: #FFF;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            font-weight: bold;
+            color: #1E90FF;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            background: url('hero-video-placeholder.jpg') center/cover no-repeat;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+        }
+
+        .hero .cta {
+            margin-top: 20px;
+            background-color: #FF4500;
+            padding: 15px 30px;
+            border-radius: 5px;
+            color: white;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .hero .cta:hover {
+            background-color: #32CD32;
+        }
+
+        /* Introduction Section */
+        .intro {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .intro p {
+            font-size: 1.2rem;
+        }
+
+        .infographic {
+            margin: 3rem auto;
+            background-color: #1E90FF;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        /* Featured Content Section */
+        .featured-content {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-card {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .content-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .content-card h3 {
+            padding: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .content-card p {
+            padding: 0 1rem 1rem 1rem;
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333333;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: #FF4500;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .cta {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">Viral Marketing</div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Courses</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Master the Art of Viral Marketing</h1>
+            <a href="#" class="cta">Start Learning Now</a>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="intro">
+        <p>Viral marketing is a key strategy to drive explosive growth. Learn the best techniques to make your content go viral and build a massive audience with our interactive learning platform.</p>
+        <div class="infographic">
+            <h3>Key Viral Marketing Stats</h3>
+            <!-- Infographic content goes here -->
+        </div>
+    </section>
+
+    <!-- Featured Content Section -->
+    <section class="featured-content">
+        <div class="content-card">
+            <img src="content-image1.jpg" alt="Viral Strategy 1">
+            <h3>Strategy 1: Social Media</h3>
+            <p>Learn how to harness the power of social media to amplify your marketing efforts.</p>
+        </div>
+        <div class="content-card">
+            <img src="content-image2.jpg" alt="Viral Strategy 2">
+            <h3>Strategy 2: Influencer Marketing</h3>
+            <p>Collaborate with influencers to boost the visibility of your viral content.</p>
+        </div>
+        <div class="content-card">
+            <img src="content-image3.jpg" alt="Viral Strategy 3">
+            <h3>Strategy 3: Content Sharing</h3>
+            <p>Encourage user-generated content to maximize organic reach.</p>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2024 Viral Marketing Mastery. All rights reserved. | <a href="#">Privacy Policy</a></p>
+        <p>Follow us on <a href="#">Twitter</a>, <a href="#">Facebook</a>, and <a href="#">Instagram</a>.</p>
+    </footer>
+
+</body>
+</html>
