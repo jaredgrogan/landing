@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Chat App - Universitas AI</title>
+    <meta name="description" content="A multilingual document chat application supporting various languages">
+    <link rel="icon" href="favicon5.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: {
+                            light: '#f5f5f5',
+                            dark: '#1e1e1e',
+                        },
+                        panel: {
+                            light: '#ffffff',
+                            dark: '#2a2a2a',
+                        }
+                    },
+                    fontFamily: {
+                        'roboto': ['Roboto', 'sans-serif'],
+                    },
+                    keyframes: {
+                        pulse: {
+                            '0%, 100%': { opacity: 1 },
+                            '50%': { opacity: 0.5 },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateY(10px)', opacity: 0 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 },
+                        }
+                    },
+                    animation: {
+                        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        fadeIn: 'fadeIn 0.3s ease-out',
+                        slideIn: 'slideIn 0.3s ease-out',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 6px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip-container:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .micro-animation {
+            transition: transform 0.1s;
+        }
+        .micro-animation:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Expanded translations object
+        const translations = {
+            en: {
+                appTitle: "Document Chat App",
+                send: "Send",
+                voiceInput: "Voice input",
+                dragDropFiles: "Drag and drop files here or",
+                selectFiles: "Select Files",
+                searchPlaceholder: "Enter your search query...",
+                search: "Search",
+                generateCitation: "Generate Citation",
+                editCitation: "Edit Citation",
+                autoReader: "Auto-Reader",
+                analyzeDocument: "Analyze Document",
+                analyzing: "Analyzing...",
+                analysisResult: "Analysis Result:",
+                summary: "Summary:",
+                keyEntities: "Key Entities:",
+                suggestedTasks: "Suggested Tasks:",
+                keyInsights: "Key Insights:",
+                exportOptions: "Export Options",
+                uploadedDocuments: "Uploaded Documents",
+                previewDocument: "Preview document",
+                processing: "Processing your request...",
+                error: "Error",
+                changeLanguage: "Change language",
+                lightMode: "Switch to light mode",
+                darkMode: "Switch to dark mode",
+                findRelatedResearch: "Find Related Research",
+                researchGapIdentifier: "Identify Research Gaps",
+                customizeAnalysis: "Customize Analysis",
+                supportedFileTypes: "Supported file types: PDF, DOCX, TXT",
+                // Add more translations as needed
+            },
+            es: {
+                // Spanish translations (omitted for brevity, but should be included in the full implementation)
+            },
+            // Add more languages as needed
+        };
+
+        const Tooltip = ({ text, children }) => (
+            <div className="tooltip-container relative">
+                {children}
+                <span className="tooltip">{text}</span>
+            </div>
+        );
+
+        // LanguageSelector component (replacing LanguageToggle)
+        const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
+            return (
+                <Tooltip text={translations[currentLanguage].changeLanguage}>
+                    <select
+                        value={currentLanguage}
+                        onChange={(e) => onLanguageChange(e.target.value)}
+                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                    >
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        {/* Add more language options here */}
+                    </select>
+                </Tooltip>
+            );
+        };
+
+        // Enhanced ChatInterface component
+        const ChatInterface = ({ messages, onSendMessage, language }) => {
+            const [inputMessage, setInputMessage] = useState('');
+            const chatContainerRef = useRef(null);
+
+            useEffect(() => {
+                if (chatContainerRef.current) {
+                    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+                }
+            }, [messages]);
+
+            const handleSend = () => {
+                if (inputMessage.trim()) {
+                    onSendMessage(inputMessage);
+                    setInputMessage('');
+                }
+            };
+
+            const autoSuggestions = [
+                "Summarize this document",
+                "Find key concepts",
+                "Compare with another paper",
+                "Generate citation"
+            ];
+
+            return (
+                <div className="bg-panel-light dark:bg-panel-dark p-4 rounded-lg shadow-md animate-fadeIn">
+                    <div ref={chatContainerRef} className="h-80 overflow-y-auto mb-4">
+                        {messages.map((msg, index) => (
+                            <div key={index} className={`p-2 rounded-lg mb-2 ${msg.type === 'user' ? 'bg-blue-100 dark:bg-blue-900 ml-auto' : 'bg-gray-100 dark:bg-gray-700'} animate-slideIn`}>
+                                {msg.type === 'bot' && <strong className="text-blue-600 dark:text-blue-400">Herakles: </strong>}
+                                {msg.content}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex items-center">
+                        <input
+                            type="text"
+                            value={inputMessage}
+                            onChange={(e) => setInputMessage(e.target.value)}
+                            placeholder={translations[language].searchPlaceholder}
+                            className="flex-grow mr-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <Tooltip text={translations[language].send}>
+                            <button onClick={handleSend} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors micro-animation">
+                                {translations[language].send}
+                            </button>
+                        </Tooltip>
+                        <Tooltip text={translations[language].voiceInput}>
+                            <VoiceInput onVoiceInput={(text) => setInputMessage(text)} />
+                        </Tooltip>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                        {autoSuggestions.map((suggestion, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setInputMessage(suggestion)}
+                                className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors micro-animation"
+                            >
+                                {suggestion}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        // Enhanced DocumentUpload component
+        const DocumentUpload = ({ onFileUpload, language }) => {
+            const [dragOver, setDragOver] = useState(false);
+            const [uploadProgress, setUploadProgress] = useState(0);
+            const fileInputRef = useRef(null);
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                setDragOver(false);
+                const files = Array.from(e.dataTransfer.files);
+                handleFiles(files);
+            };
+
+            const handleFiles = (files) => {
+                const validFiles = files.filter(file => 
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'].includes(file.type)
+                );
+                if (validFiles.length) {
+                    setUploadProgress(0);
+                    const interval = setInterval(() => {
+                        setUploadProgress(prev => {
+                            if (prev >= 100) {
+                                clearInterval(interval);
+                                onFileUpload(validFiles);
+                                return 0;
+                            }
+                            return prev + 10;
+                        });
+                    }, 200);
+                } else {
+                    alert('Please upload PDF, DOCX, or TXT files only.');
+                }
+            };
+
+            return (
+                <Tooltip text={translations[language].supportedFileTypes}>
+                    <div
+                        onDrop={handleDrop}
+                        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                        onDragLeave={() => setDragOver(false)}
+                        className={`border-2 border-dashed p-4 rounded-lg text-center ${dragOver ? 'border-blue-500 bg-blue-50 dark:bg-blue-900' : 'border-gray-300 dark:border-gray-700'} animate-fadeIn`}
+                    >
+                        <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <p>{translations[language].dragDropFiles}</p>
+                        <input
+                            type="file"
+                            multiple
+                            accept=".pdf,.docx,.txt"
+                            onChange={(e) => handleFiles(Array.from(e.target.files))}
+                            className="hidden"
+                            ref={fileInputRef}
+                        />
+                        <button
+                            onClick={() => fileInputRef.current?.click()}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors micro-animation"
+                        >
+                            {translations[language].selectFiles}
+                        </button>
+                        {uploadProgress > 0 && (
+                            <div className="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+                                <div 
+                                    className="bg-blue-600 h-2.5 rounded-full transition-all duration-200" 
+                                    style={{ width: `${uploadProgress}%` }}
+                                ></div>
+                            </div>
+                        )}
+                    </div>
+                </Tooltip>
+            );
+        };
+
+        // Enhanced SemanticSearch component
+        const SemanticSearch = ({ onSearch, language }) => {
+            const [query, setQuery] = useState('');
+            const [filters, setFilters] = useState({ year: '', author: '', topic: '' });
+
+            const handleSearch = () => {
+                if (query.trim()) {
+                    onSearch(query, filters);
+                }
+            };
+
+            return (
+                <div className="mb-4 animate-fadeIn">
+                    <input
+                        type="text"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder={translations[language].searchPlaceholder}
+                        className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    <div className="mt-2 flex gap-2">
+                        <input
+                            type="text"
+                            placeholder="Year"
+                            value={filters.year}
+                            onChange={(e) => setFilters({...filters, year: e.target.value})}
+                            className="p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Author"
+                            value={filters.author}
+                            onChange={(e) => setFilters({...filters, author: e.target.value})}
+                            className="p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Topic"
+                            value={filters.topic}
+                            onChange={(e) => setFilters({...filters, topic: e.target.value})}
+                            className="p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+                        />
+                    </div>
+                    <Tooltip text={translations[language].search}>
+                        <button onClick={handleSearch} className="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors micro-animation">
+                            {translations[language].search}
+                        </button>
+                    </Tooltip>
+                </div>
+            );
+        };
+
+        // Enhanced AutoCitation component
+        const AutoCitation = ({ onGenerateCitation, language }) => {
+            const [format, setFormat] = useState('APA');
+            const [generatedCitation, setGeneratedCitation] = useState('');
+
+            const handle
