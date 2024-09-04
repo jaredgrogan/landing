@@ -346,34 +346,72 @@
             );
         };
 
-        // Enhanced AutoCitation component
-        const AutoCitation = ({ onGenerateCitation, language }) => {
-            const [format, setFormat] = useState('APA');
-            const [generatedCitation, setGeneratedCitation] = useState('');
+      const AutoCitation = ({ onGenerateCitation, language }) => {
+    const [format, setFormat] = useState('APA');
+    const [generatedCitation, setGeneratedCitation] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
 
-            const handle   {isLoading && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center animate-fadeIn">
-                        <div className="bg-white dark:bg-[#2a2a2a] p-4 rounded-lg">
-                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                            <p className="mt-2 text-center">{translations[language].processing}</p>
-                        </div>
-                    </div>
-                )}
-
-                {error && (
-                    <div className="mt-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded animate-fadeIn">
-                        <p className="font-bold">{translations[language].error}</p>
-                        <p>{error}</p>
-                    </div>
-                )}
-
-                <footer className="mt-8 text-center text-gray-500 text-sm animate-fadeIn">
-                    © UNIVERSITAS AI
-                </footer>
-            </div>
-        );
+    const handleGenerateCitation = () => {
+        const citation = onGenerateCitation(format);
+        setGeneratedCitation(citation);
+        setIsEditing(false);
     };
 
+    const handleEditCitation = () => {
+        setIsEditing(true);
+    };
+
+    const handleSaveCitation = () => {
+        setIsEditing(false);
+        // Here you would typically save the edited citation
+    };
+
+    const citationFormats = [
+        'APA', 'MLA', 'Chicago', 'Harvard', 'IEEE', 'AMA', 'ASA', 'APSA', 'Turabian', 'Vancouver'
+    ];
+
+    return (
+        <div className="mb-4 animate-fadeIn">
+            <select
+                value={format}
+                onChange={(e) => setFormat(e.target.value)}
+                className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+            >
+                {citationFormats.map(fmt => (
+                    <option key={fmt} value={fmt}>{fmt}</option>
+                ))}
+            </select>
+            <Tooltip text={translations[language].generateCitation}>
+                <button onClick={handleGenerateCitation} className="mt-2 bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors micro-animation">
+                    {translations[language].generateCitation}
+                </button>
+            </Tooltip>
+            {generatedCitation && (
+                <div className="mt-4 p-2 bg-gray-100 dark:bg-gray-800 rounded">
+                    {isEditing ? (
+                        <>
+                            <textarea
+                                value={generatedCitation}
+                                onChange={(e) => setGeneratedCitation(e.target.value)}
+                                className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+                            />
+                            <button onClick={handleSaveCitation} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors micro-animation">
+                                Save
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <p>{generatedCitation}</p>
+                            <button onClick={handleEditCitation} className="mt-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors micro-animation">
+                                {translations[language].editCitation}
+                            </button>
+                        </>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
     // DarkModeToggle component
     const DarkModeToggle = ({ darkMode, onToggle, language }) => {
         return (
