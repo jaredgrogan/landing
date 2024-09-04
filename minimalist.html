@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AICO Advanced Chat Interface</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            height: 100%;
+            background: linear-gradient(135deg, #f6f8ff 0%, #f1f1fe 100%);
+        }
+        #root {
+            height: 100%;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+        .chat-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .message {
+            max-width: 80%;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            line-height: 1.4;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .ai-message {
+            background-color: #f3e5f5;
+            align-self: flex-start;
+        }
+        .chat-input {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 2rem;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .chat-input button {
+            background: #6200ea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .chat-input button:hover {
+            background: #3700b3;
+        }
+        .chat-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        .action-button {
+            background: white;
+            border: none;
+            border-radius: 1rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .action-button:hover {
+            background: #f3f3f3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .advanced-features {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .advanced-button {
+            background: #3700b3;
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .advanced-button:hover {
+            background: #6200ea;
+        }
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const ChatInterface = () => {
+            const [messages, setMessages] = useState([]);
+            const [input, setInput] = useState('');
+            const messagesEndRef = useRef(null);
+
+            useEffect(() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, [messages]);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (!input.trim()) return;
+
+                const newMessage = { role: 'user', content: input };
+                setMessages([...messages, newMessage]);
+                setInput('');
+
+                // Simulate AI response
+                setTimeout(() => {
+                    const aiResponse = { role: 'ai', content: 'This is a simulated AI response.' };
+                    setMessages(prevMessages => [...prevMessages, aiResponse]);
+                }, 1000);
+            };
+
+            const handleAdvancedAction = (action) => {
+                alert(`${action} feature would be implemented here.`);
+            };
+
+            return (
+                <div className="chat-container">
+                    <div className="chat-header">
+                        <h1>AICO Advanced Chat Interface</h1>
+                    </div>
+                    <div className="chat-messages">
+                        {messages.map((message, index) => (
+                            <div key={index} className={`message ${message.role === 'user' ? 'user-message' : 'ai-message'}`}>
+                                {message.content}
+                            </div>
+                        ))}
+                        <div ref={messagesEndRef} />
+                    </div>
+                    <form onSubmit={handleSubmit} className="chat-input">
+                        <input
+                            type="text"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Type your message here..."
+                        />
+                        <button type="submit">
+                            <i data-feather="send"></i>
+                        </button>
+                    </form>
+                    <div className="chat-actions">
+                        <button className="action-button" onClick={() => handleAdvancedAction('Voice Input')}>
+                            <i data-feather="mic"></i>
+                        </button>
+                        <button className="action-button" onClick={() => handleAdvancedAction('File Upload')}>
+                            <i data-feather="upload"></i>
+                        </button>
+                        <button className="action-button" onClick={() => setMessages([])}>
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </div>
+                    <div className="advanced-features">
+                        <button className="advanced-button" onClick={() => handleAdvancedAction('Summarize')}>Summarize</button>
+                        <button className="advanced-button" onClick={() => handleAdvancedAction('Analyze')}>Analyze</button>
+                        <button className="advanced-button" onClick={() => handleAdvancedAction('Visualize')}>Visualize</button>
+                    </div>
+                    <div className="copyright">
+                        © 2024 AICO. All rights reserved.
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<ChatInterface />, document.getElementById('root'));
+
+        // Initialize Feather icons after render
+        feather.replace();
+    </script>
+</body>
+</html>
