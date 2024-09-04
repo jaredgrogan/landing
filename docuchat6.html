@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSITAS AI - Document Chat App</title>
+    <link rel="icon" href="favicon5.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        .slide-in { animation: slideIn 0.3s ease-out; }
+        .micro-animation { transition: transform 0.1s; }
+        .micro-animation:active { transform: scale(0.95); }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Translations (expanded for new features)
+        const translations = {
+            en: {
+                appTitle: "UNIVERSITAS AI - Document Chat",
+                upload: "Upload",
+                search: "Search",
+                cite: "Cite",
+                analyze: "Analyze",
+                relatedResearch: "Find Related Research",
+                researchGap: "Identify Research Gaps",
+                refManager: "Reference Manager",
+                studyPlanner: "Study Planner",
+                proposalGen: "Proposal Generator",
+                plagiarismCheck: "Plagiarism Checker",
+                // ... (add more translations as needed)
+            },
+            es: {
+                appTitle: "UNIVERSITAS AI - Chat de Documentos",
+                upload: "Subir",
+                search: "Buscar",
+                cite: "Citar",
+                analyze: "Analizar",
+                relatedResearch: "Buscar Investigación Relacionada",
+                researchGap: "Identificar Brechas de Investigación",
+                refManager: "Gestor de Referencias",
+                studyPlanner: "Planificador de Estudio",
+                proposalGen: "Generador de Propuestas",
+                plagiarismCheck: "Verificador de Plagio",
+                // ... (add more translations as needed)
+            },
+            // ... (add more languages as needed)
+        };
+
+        // Main App Component
+        const DocumentChatApp = () => {
+            const [language, setLanguage] = useState('en');
+            const [darkMode, setDarkMode] = useState(false);
+
+            // ... (add more state variables as needed)
+
+            useEffect(() => {
+                // Apply dark mode
+                if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }, [darkMode]);
+
+            return (
+                <div className="container mx-auto p-4 max-w-6xl">
+                    <Header 
+                        language={language} 
+                        setLanguage={setLanguage} 
+                        darkMode={darkMode}
+                        setDarkMode={setDarkMode}
+                    />
+                    <main className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <Sidebar language={language} />
+                        <ChatInterface language={language} />
+                        <RightPanel language={language} />
+                    </main>
+                    <Footer language={language} />
+                </div>
+            );
+        };
+
+        // Header Component
+        const Header = ({ language, setLanguage, darkMode, setDarkMode }) => {
+            return (
+                <header className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md slide-in">
+                    <div className="flex items-center space-x-4">
+                        <img src="favicon5.svg" alt="UNIVERSITAS AI Logo" className="w-10 h-10" />
+                        <h1 className="text-2xl font-bold">{translations[language].appTitle}</h1>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                        <LanguageSelector language={language} setLanguage={setLanguage} />
+                        <DarkModeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+                    </div>
+                </header>
+            );
+        };
+
+        // Language Selector Component
+        const LanguageSelector = ({ language, setLanguage }) => {
+            return (
+                <select 
+                    value={language} 
+                    onChange={(e) => setLanguage(e.target.value)}
+                    className="p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
+                >
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    {/* Add more language options here */}
+                </select>
+            );
+        };
+
+        // Dark Mode Toggle Component
+        const DarkModeToggle = ({ darkMode, setDarkMode }) => {
+            return (
+                <button 
+                    onClick={() => setDarkMode(!darkMode)}
+                    className="p-2 rounded-full bg-gray-200 dark:bg-gray-600 micro-animation"
+                >
+                    {darkMode ? '☀️' : '🌙'}
+                </button>
+            );
+        };
+
+        // Sidebar Component
+        const Sidebar = ({ language }) => {
+            return (
+                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md fade-in">
+                    <h2 className="text-xl font-bold mb-4">{translations[language].upload}</h2>
+                    <DocumentUpload language={language} />
+                    <SearchFilters language={language} />
+                </div>
+            );
+        };
+
+        // Document Upload Component
+        const DocumentUpload = ({ language }) => {
+            const [uploading, setUploading] = useState(false);
+            const [progress, setProgress] = useState(0);
+
+            const handleUpload = () => {
+                setUploading(true);
+                const interval = setInterval(() => {
+                    setProgress((prevProgress) => {
+                        if (prevProgress >= 100) {
+                            clearInterval(interval);
+                            setUploading(false);
+                            return 0;
+                        }
+                        return prevProgress + 10;
+                    });
+                }, 500);
+            };
+
+            return (
+                <div className="mb-4">
+                    <button 
+                        onClick={handleUpload} 
+                        className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors micro-animation"
+                    >
+                        {uploading ? `${progress}%` : translations[language].upload}
+                    </button>
+                    {uploading && (
+                        <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                            <div 
+                                className="bg-blue-600 h-2.5 rounded-full transition-all duration-500" 
+                                style={{ width: `${progress}%` }}
+                            ></div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // Search Filters Component
+        const SearchFilters = ({ language }) => {
+            return (
+                <div className="mt-4">
+                    <h3 className="font-bold mb-2">{translations[language].search} Filters</h3>
+                    {/* Add filter options here */}
+                </div>
+            );
+        };
+
+        // Chat Interface Component
+        const ChatInterface = ({ language }) => {
+            const [messages, setMessages] = useState([]);
+            const [input, setInput] = useState('');
+
+            const handleSend = () => {
+                if (input.trim()) {
+                    setMessages([...messages, { type: 'user', content: input }]);
+                    setInput('');
+                    // Simulate AI response
+                    setTimeout(() => {
+                        setMessages(prev => [...prev, { type: 'ai', content: 'This is a simulated AI response.' }]);
+                    }, 1000);
+                }
+            };
+
+            return (
+                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md fade-in">
+                    <div className="h-96 overflow-y-auto mb-4">
+                        {messages.map((msg, index) => (
+                            <div key={index} className={`p-2 rounded-lg mb-2 ${msg.type === 'user' ? 'bg-blue-100 ml-auto' : 'bg-gray-100'} slide-in`}>
+                                {msg.content}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex">
+                        <input 
+                            type="text" 
+                            value={input} 
+                            onChange={(e) => setInput(e.target.value)}
+                            className="flex-grow p-2 border rounded-l"
+                            placeholder={translations[language].search + "..."}
+                        />
+                        <button 
+                            onClick={handleSend}
+                            className="p-2 bg-blue-500 text-white rounded-r hover:bg-blue-600 transition-colors micro-animation"
+                        >
+                            Send
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Right Panel Component
+        const RightPanel = ({ language }) => {
+            return (
+                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md fade-in">
+                    <h2 className="text-xl font-bold mb-4">Tools</h2>
+                    <div className="space-y-2">
+                        <ToolButton text={translations[language].cite} />
+                        <ToolButton text={translations[language].analyze} />
+                        <ToolButton text={translations[language].relatedResearch} />
+                        <ToolButton text={translations[language].researchGap} />
+                        <ToolButton text={translations[language].refManager} />
+                        <ToolButton text={translations[language].studyPlanner} />
+                        <ToolButton text={translations[language].proposalGen} />
+                        <ToolButton text={translations[language].plagiarismCheck} />
+                    </div>
+                </div>
+            );
+        };
+
+        // Tool Button Component
+        const ToolButton = ({ text }) => {
+            return (
+                <button className="w-full p-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors micro-animation">
+                    {text}
+                </button>
+            );
+        };
+
+        // Footer Component
+        const Footer = ({ language }) => {
+            return (
+                <footer className="mt-8 text-center text-sm text-gray-500 fade-in">
+                    © 2023 UNIVERSITAS AI. All rights reserved.
+                </footer>
+            );
+        };
+
+        ReactDOM.render(<DocumentChatApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
