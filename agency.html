@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aicosystem AI Automation Agency</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-blue-600">Aicosystem</div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#home" class="hover:text-blue-600 transition-colors">Home</a>
+                <a href="#services" class="hover:text-blue-600 transition-colors">Services</a>
+                <a href="#case-studies" class="hover:text-blue-600 transition-colors">Case Studies</a>
+                <a href="#pricing" class="hover:text-blue-600 transition-colors">Pricing</a>
+                <a href="#contact" class="hover:text-blue-600 transition-colors">Contact</a>
+            </div>
+            <button class="md:hidden" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+        <div class="md:hidden bg-white py-2 hidden" id="mobile-menu">
+            <a href="#home" class="block py-2 px-4 hover:bg-gray-100">Home</a>
+            <a href="#services" class="block py-2 px-4 hover:bg-gray-100">Services</a>
+            <a href="#case-studies" class="block py-2 px-4 hover:bg-gray-100">Case Studies</a>
+            <a href="#pricing" class="block py-2 px-4 hover:bg-gray-100">Pricing</a>
+            <a href="#contact" class="block py-2 px-4 hover:bg-gray-100">Contact</a>
+        </div>
+    </header>
+
+    <main class="pt-16">
+        <section id="home" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+            <div class="text-center">
+                <h1 class="text-5xl font-bold mb-4">AI Automation for Your Business</h1>
+                <p class="text-xl mb-8">Streamline operations and boost productivity with Aicosystem</p>
+                <a href="#contact" class="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-blue-100 transition-colors">Get Started</a>
+            </div>
+        </section>
+
+        <section id="services" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-8 text-center">Our Services</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-gray-100 p-6 rounded-lg hover:shadow-md transition-shadow">
+                        <h3 class="text-xl font-semibold mb-4">WhatsApp AI Assistant</h3>
+                        <p class="mb-4">Enhance customer service with our AI-powered WhatsApp assistant. Handle inquiries 24/7, automate responses, and seamlessly escalate to human agents when needed.</p>
+                        <a href="#contact" class="text-blue-600 hover:underline">Learn more</a>
+                    </div>
+                    <div class="bg-gray-100 p-6 rounded-lg hover:shadow-md transition-shadow">
+                        <h3 class="text-xl font-semibold mb-4">Content Generation AI</h3>
+                        <p class="mb-4">Create high-quality, SEO-optimized content at scale. Our AI generates blog posts, product descriptions, and marketing copy tailored to your brand voice.</p>
+                        <a href="#contact" class="text-blue-600 hover:underline">Learn more</a>
+                    </div>
+                    <div class="bg-gray-100 p-6 rounded-lg hover:shadow-md transition-shadow">
+                        <h3 class="text-xl font-semibold mb-4">AI-Driven Data Analysis</h3>
+                        <p class="mb-4">Harness the power of AI to analyze vast amounts of data. Gain actionable insights, predict trends, and make data-driven decisions with ease.</p>
+                        <a href="#contact" class="text-blue-600 hover:underline">Learn more</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="case-studies" class="py-16 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-8 text-center">Case Studies</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-4">TechNova: AI-Powered Customer Support</h3>
+                        <p class="mb-4">TechNova, a growing SaaS startup, implemented our WhatsApp AI Assistant to handle customer inquiries. The result? 70% reduction in response time, 24/7 support coverage, and 35% increase in customer satisfaction scores.</p>
+                        <a href="#contact" class="text-blue-600 hover:underline">Read full case study</a>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-4">GreenGrocer: Revolutionizing Inventory Management</h3>
+                        <p class="mb-4">GreenGrocer, a local supermarket chain, utilized our AI-Driven Data Analysis to optimize inventory. The system reduced waste by 25%, improved stock accuracy by 40%, and increased overall profit margins by 15%.</p>
+                        <a href="#contact" class="text-blue-600 hover:underline">Read full case study</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-8 text-center">Pricing Plans</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="border border-gray-200 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold mb-4">Starter</h3>
+                        <p class="text-3xl font-bold mb-4">$499<span class="text-sm font-normal">/mo</span></p>
+                        <ul class="mb-6 text-left">
+                            <li class="mb-2">✓ WhatsApp AI Assistant (up to 1000 msgs/day)</li>
+                            <li class="mb-2">✓ Content Generation (10,000 words/mo)</li>
+                            <li class="mb-2">✓ Basic Data Analysis</li>
+                            <li class="mb-2">✓ Email Support</li>
+                        </ul>
+                        <a href="#contact" class="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors">Choose Plan</a>
+                    </div>
+                    <div class="border border-gray-200 p-6 rounded-lg text-center shadow-md">
+                        <h3 class="text-xl font-semibold mb-4">Pro</h3>
+                        <p class="text-3xl font-bold mb-4">$999<span class="text-sm font-normal">/mo</span></p>
+                        <ul class="mb-6 text-left">
+                            <li class="mb-2">✓ WhatsApp AI Assistant (up to 5000 msgs/day)</li>
+                            <li class="mb-2">✓ Content Generation (50,000 words/mo)</li>
+                            <li class="mb-2">✓ Advanced Data Analysis</li>
+                            <li class="mb-2">✓ Priority Support</li>
+                            <li class="mb-2">✓ Monthly Strategy Call</li>
+                        </ul>
+                        <a href="#contact" class="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors">Choose Plan</a>
+                    </div>
+                    <div class="border border-gray-200 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold mb-4">Enterprise</h3>
+                        <p class="text-3xl font-bold mb-4">Custom</p>
+                        <ul class="mb-6 text-left">
+                            <li class="mb-2">✓ Unlimited WhatsApp AI Assistant</li>
+                            <li class="mb-2">✓ Unlimited Content Generation</li>
+                            <li class="mb-2">✓ Custom AI Models</li>
+                            <li class="mb-2">✓ 24/7 Dedicated Support</li>
+                            <li class="mb-2">✓ Quarterly Business Review</li>
+                        </ul>
+                        <a href="#contact" class="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-16 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-8 text-center">Contact Us</h2>
+                <form class="max-w-lg mx-auto">
+                    <div class="mb-4">
+                        <label for="name" class="block mb-2">Name</label>
+                        <input type="text" id="name" class="w-full p-2 border border-gray-300 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block mb-2">Email</label>
+                        <input type="email" id="email" class="w-full p-2 border border-gray-300 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="message" class="block mb-2">Message</label>
+                        <textarea id="message" rows="4" class="w-full p-2 border border-gray-300 rounded" required></textarea>
+                    </div>
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-xl font-semibold mb-4">Aicosystem</h3>
+                    <p>Empowering businesses with AI automation solutions.</p>
+                </div>
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+                    <ul>
+                        <li><a href="#home" class="hover:text-blue-400">Home</a></li>
+                        <li><a href="#services" class="hover:text-blue-400">Services</a></li>
+                        <li><a href="#case-studies" class="hover:text-blue-400">Case Studies</a></li>
+                        <li><a href="#pricing" class="hover:text-blue-400">Pricing</a></li>
+                        <li><a href="#contact" class="hover:text-blue-400">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-blue-400"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-blue-400"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="hover:text-blue-400"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <p>&copy; 2024 Aicosystem. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="chatbot" class="fixed bottom-4 right-4 w-80 bg-white rounded-lg shadow-lg overflow-hidden hidden">
+        <div class="bg-blue-600 text-white p-4 flex justify-between items-center">
+            <h3 class="font-semibold">AI Assistant</h3>
+            <button id="close-chat"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chat-messages" class="h-64 p-4 overflow-y-auto">
+            <p class="mb-2">Hello! How can I assist you today?</p>
+        </div>
+     <div class="p-4 border-t">
+            <input type="text" id="chat-input" placeholder="Type your message..." class="w-full p-2 border border-gray-300 rounded">
+        </div>
+    </div>
+
+    <button id="open-chat" class="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors">
+        <i class="fas fa-comment"></i>
+    </button>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Chatbot functionality
+        const openChatBtn = document.getElementById('open-chat');
+        const closeChatBtn = document.getElementById('close-chat');
+        const chatbot = document.getElementById('chatbot');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        openChatBtn.addEventListener('click', () => {
+            chatbot.classList.remove('hidden');
+            openChatBtn.classList.add('hidden');
+        });
+
+        closeChatBtn.addEventListener('click', () => {
+            chatbot.classList.add('hidden');
+            openChatBtn.classList.remove('hidden');
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const message = chatInput.value.trim();
+                if (message) {
+                    addMessage('user', message);
+                    chatInput.value = '';
+                    // Simulate AI response (replace with actual AI integration)
+                    setTimeout(() => {
+                        addMessage('ai', 'Thank you for your message. An agent will be with you shortly.');
+                    }, 1000);
+                }
+            }
+        });
+
+        function addMessage(sender, message) {
+            const messageElement = document.createElement('p');
+            messageElement.classList.add('mb-2', sender === 'user' ? 'text-right' : 'text-left');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Highlight active section in navigation
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('main > section');
+            const navLinks = document.querySelectorAll('nav a');
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 60) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('text-blue-600');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('text-blue-600');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
