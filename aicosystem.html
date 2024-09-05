@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AICOSYSTEM - Full-Stack AI Solutions Provider</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #1a365d;
+            color: white;
+            padding: 1rem 0;
+        }
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        nav ul li {
+            margin-left: 1rem;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .hero {
+            background: #f0f4f8;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .btn {
+            display: inline-block;
+            background: #3182ce;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #3182ce;
+            color: #3182ce;
+        }
+        .products {
+            padding: 3rem 0;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .product-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .product-card i {
+            font-size: 2rem;
+            color: #3182ce;
+        }
+        .demo {
+            background: #ebf8ff;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        .testimonials {
+            padding: 3rem 0;
+            background: #f7fafc;
+        }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .testimonial-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .cta {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>AICOSYSTEM</h1>
+            <nav>
+                <ul>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#demo">Demo</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Revolutionize Your Business with AI</h1>
+            <p>Unlock the power of artificial intelligence with our cutting-edge solutions</p>
+            <a href="#contact" class="btn">Get Started</a>
+            <a href="#demo" class="btn btn-outline">Schedule a Demo</a>
+        </div>
+    </section>
+
+    <section id="products" class="products">
+        <div class="container">
+            <h2>Our Products</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <i data-feather="code"></i>
+                    <h3>Custom LLM API</h3>
+                    <p>Leverage our powerful language models for your specific needs.</p>
+                    <a href="#" class="btn">Learn More</a>
+                </div>
+                <div class="product-card">
+                    <i data-feather="message-circle"></i>
+                    <h3>AI WhatsApp Assistant</h3>
+                    <p>Enhance customer engagement with our AI-powered chat solution.</p>
+                    <a href="#" class="btn">Learn More</a>
+                </div>
+                <div class="product-card">
+                    <i data-feather="globe"></i>
+                    <h3>Enterprise LLM Integration</h3>
+                    <p>Seamlessly integrate AI into your existing infrastructure.</p>
+                    <a href="#" class="btn">Learn More</a>
+                </div>
+                <div class="product-card">
+                    <i data-feather="cpu"></i>
+                    <h3>AIOS Productivity Platform</h3>
+                    <p>Experience the future of work with our cognitive computer.</p>
+                    <a href="#" class="btn">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="demo">
+        <div class="container">
+            <h2>AIOS Live Demo</h2>
+            <div style="background: white; padding: 2rem; border-radius: 5px;">
+                <p>Interactive AIOS demo would be embedded here</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2>What Our Customers Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p>"AICOSYSTEM has transformed the way we approach problem-solving. The Custom LLM API is a game-changer!"</p>
+                    <p><strong>John Doe</strong>, Tech Innovators Inc.</p>
+                </div>
+                <div class="testimonial-card">
+                    <p>"The AI WhatsApp Assistant has significantly improved our customer service efficiency. Highly recommended!"</p>
+                    <p><strong>Jane Smith</strong>, Global Communications Ltd.</p>
+                </div>
+                <div class="testimonial-card">
+                    <p>"AIOS has boosted our team's productivity beyond our expectations. It's like having a cognitive supercomputer at our fingertips."</p>
+                    <p><strong>Alex Johnson</strong>, Future Enterprises</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="cta">
+        <div class="container">
+            <h2>Ready to Elevate Your Business?</h2>
+            <p>Join the AI revolution with AICOSYSTEM</p>
+            <a href="#" class="btn">Contact Us Today</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 AICOSYSTEM. All rights reserved.</p>
+            <p><i data-feather="lock" style="width: 1em; height: 1em; vertical-align: middle;"></i> Secure and Cutting-Edge AI Technology</p>
+        </div>
+    </footer>
+
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>
