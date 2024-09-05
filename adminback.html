@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Call Configurator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/github-dark.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('https://example.com/fonts/BerkeleyMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .berkeley-mono {
+            font-family: 'Berkeley Mono', monospace;
+        }
+        .dark {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+        }
+        .light {
+            background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
+            color: #2d3748;
+        }
+        .drag-item {
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+        .drag-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .drop-zone {
+            min-height: 200px;
+            transition: all 0.3s ease;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #2d3748;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback } = React;
+
+        const DraggableItem = ({ id, content, description, onDragStart, focusRef, tabIndex, customization, onCustomizationChange }) => (
+            <div
+                ref={focusRef}
+                tabIndex={tabIndex}
+                draggable
+                onDragStart={(e) => onDragStart(e, id)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onDragStart(e, id);
+                    }
+                }}
+                className="drag-item bg-gradient-to-r from-green-400 to-blue-500 p-4 mb-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out tooltip text-white"
+                aria-label={`${content} - ${description}`}
+            >
+                <div className="flex justify-between items-center mb-2">
+                    <span className="font-semibold">{content}</span>
+                    <span className="tooltiptext">{description}</span>
+                </div>
+                <input
+                    type="text"
+                    value={customization}
+                    onChange={(e) => onCustomizationChange(id, e.target.value)}
+                    className="w-full p-2 rounded bg-white bg-opacity-20 text-white placeholder-white placeholder-opacity-70"
+                    placeholder="Customize this layer..."
+                />
+            </div>
+        );
+
+        const DropZone = ({ onDrop, children, isOver }) => {
+            return (
+                <div
+                    className={`drop-zone p-6 rounded-lg transition-all duration-300 ease-in-out ${
+                        isOver ? 'bg-blue-100 dark:bg-blue-800 border-blue-300 dark:border-blue-600' : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+                    } border-2 border-dashed`}
+                >
+                    {children}
+                </div>
+            );
+        };
+
+        const APICallBuilder = ({ darkMode }) => {
+            const [layers, setLayers] = useState([]);
+            const [availableLayers, setAvailableLayers] = useState([
+                { id: 'system', content: 'System Behavior', description: 'Define the AI\'s role and behavior', customization: '' },
+                { id: 'user', content: 'User Input', description: 'Specify user query or input fields', customization: '' },
+                { id: 'context', content: 'Contextual Information', description: 'Add custom context for personalized responses', customization: '' },
+                { id: 'formatting', content: 'Formatting', description: 'Define response structure', customization: '' },
+                { id: 'constraints', content: 'Constraints and Tone', description: 'Set response limits and adjust tone', customization: '' },
+                { id: 'memory', content: 'Memory', description: 'Enable iterative memory features', customization: '' },
+            ]);
+            const [draggedItem, setDraggedItem] = useState(null);
+            const [isOver, setIsOver] = useState(false);
+            const [history, setHistory] = useState([]);
+            const [historyIndex, setHistoryIndex] = useState(-1);
+
+            const handleDragStart = (e, id) => {
+                setDraggedItem(id);
+                if (e.dataTransfer) {
+                    e.dataTransfer.setData('text/plain', id);
+                }
+            };
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                setIsOver(true);
+            };
+
+            const handleDragLeave = () => {
+                setIsOver(false);
+            };
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                setIsOver(false);
+                const id = e.dataTransfer ? e.dataTransfer.getData('text') : draggedItem;
+                const draggedLayer = availableLayers.find((layer) => layer.id === id);
+                if (draggedLayer) {
+                    const newLayers = [...layers, draggedLayer];
+                    setLayers(newLayers);
+                    setAvailableLayers(availableLayers.filter((layer) => layer.id !== id));
+                    addToHistory(newLayers);
+                }
+                setDraggedItem(null);
+            };
+
+            const moveLayer = (from, to) => {
+                const newLayers = [...layers];
+                const [removed] = newLayers.splice(from, 1);
+                newLayers.splice(to, 0, removed);
+                setLayers(newLayers);
+                addToHistory(newLayers);
+            };
+
+            const handleCustomizationChange = (id, value) => {
+                const newLayers = layers.map(layer =>
+                    layer.id === id ? { ...layer, customization: value } : layer
+                );
+                setLayers(newLayers);
+                addToHistory(newLayers);
+            };
+
+            const addToHistory = (newLayers) => {
+                const newHistory = [...history.slice(0, historyIndex + 1), newLayers];
+                setHistory(newHistory);
+                setHistoryIndex(newHistory.length - 1);
+            };
+
+            const undo = () => {
+                if (historyIndex > 0) {
+                    setHistoryIndex(historyIndex - 1);
+                    setLayers(history[historyIndex - 1]);
+                }
+            };
+
+            const redo = () => {
+                if (historyIndex < history.length - 1) {
+                    setHistoryIndex(historyIndex + 1);
+                    setLayers(history[historyIndex + 1]);
+                }
+            };
+
+            const saveConfiguration = () => {
+                const configuration = JSON.stringify(layers);
+                const blob = new Blob([configuration], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'api_configuration.json';
+                a.click();
+                URL.revokeObjectURL(url);
+            };
+
+            const loadConfiguration = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const loadedLayers = JSON.parse(e.target.result);
+                            setLayers(loadedLayers);
+                            setAvailableLayers(availableLayers.filter(layer => !loadedLayers.some(l => l.id === layer.id)));
+                            addToHistory(loadedLayers);
+                        } catch (error) {
+                            console.error('Error parsing configuration file:', error);
+                            alert('Invalid configuration file');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+
+            const validateConfiguration = () => {
+                // Implement your validation logic here
+                // For this example, we'll just check if there's at least one layer
+                if (layers.length === 0) {
+                    return { valid: false, message: 'Configuration must have at least one layer.' };
+                }
+                return { valid: true, message: 'Configuration is valid.' };
+            };
+
+            return (
+                <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
+                    <div className={`w-full lg:w-1/4 p-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md`}>
+                        <h2 className={`text-xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Available Layers</h2>
+                        {availableLayers.map((layer, index) => (
+                            <DraggableItem
+                                key={layer.id}
+                                id={layer.id}
+                                content={layer.content}
+                                description={layer.description}
+                                onDragStart={handleDragStart}
+                                focusRef={index === 0 ? (el) => el && el.focus() : null}
+                                tabIndex={0}
+                                customization={layer.customization}
+                                onCustomizationChange={handleCustomizationChange}
+                            />
+                        ))}
+                    </div>
+                    <div className={`w-full lg:w-1/2 p-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md`}>
+                        <h2 className={`text-xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>API Call Configuration</h2>
+                        <DropZone onDrop={handleDrop} isOver={isOver} onDragOver={handleDragOver} onDragLeave={handleDragLeave}>
+                            {layers.map((layer, index) => (
+                                <div key={layer.id} className={`${darkMode ? 'bg-gray-700' : 'bg-blue-50'} p-4 mb-4 rounded-lg shadow-sm flex justify-between items-center`}>
+                                    <span>{layer.content}: {layer.customization}</span>
+                                    <div>
+                                        <button onClick={() => moveLayer(index, Math.max(0, index - 1))} className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100 mr-2">↑</button>
+                                        <button onClick={() => moveLayer(index, Math.min(layers.length - 1, index + 1))} className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">↓</button>
+                                    </div>
+                                </div>
+                            ))}
+                            {layers.length === 0 && (
+                                <p className={`text-gray-500 dark:text-gray-400`}>Drag and drop layers here</p>
+                            )}
+                      </DropZone>
+                        <div className="mt-6 flex justify-between">
+                            <button onClick={undo} disabled={historyIndex <= 0} className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded hover:from-green-500 hover:to-blue-600 transition-colors disabled:opacity-50">Undo</button>
+                            <button onClick={redo} disabled={historyIndex >= history.length - 1} className="bg-gradient-to-r from-blue-400 to-green-500 text-white px-4 py-2 rounded hover:from-blue-500 hover:to-green-600 transition-colors disabled:opacity-50">Redo</button>
+                        </div>
+                        <div className="mt-4 flex justify-between">
+                            <button onClick={saveConfiguration} className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded hover:from-green-500 hover:to-blue-600 transition-colors">Export Configuration</button>
+                            <label className="bg-gradient-to-r from-blue-400 to-green-500 text-white px-4 py-2 rounded hover:from-blue-500 hover:to-green-600 transition-colors cursor-pointer">
+                                Import Configuration
+                                <input type="file" onChange={loadConfiguration} className="hidden" accept=".json" />
+                            </label>
+                        </div>
+                        <div className="mt-4">
+                            <button onClick={() => {
+                                const result = validateConfiguration();
+                                alert(result.message);
+                            }} className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded hover:from-yellow-500 hover:to-orange-600 transition-colors">
+                                Validate Configuration
+                            </button>
+                        </div>
+                    </div>
+                    <div className={`w-full lg:w-1/4 p-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md`}>
+                        <h2 className={`text-xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Preview</h2>
+                        <pre className={`berkeley-mono ${darkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-100 text-gray-800'} p-4 rounded-lg overflow-x-auto`}>
+                            <code className="hljs language-json">
+                                {JSON.stringify({
+                                    model: "gpt-3.5-turbo",
+                                    messages: [
+                                        ...layers.map(layer => ({
+                                            role: layer.id === 'user' ? 'user' : 'system',
+                                            content: `${layer.content}: ${layer.customization || '[Your content here]'}`
+                                        }))
+                                    ]
+                                }, null, 2)}
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [darkMode, setDarkMode] = useState(false);
+
+            const toggleDarkMode = () => {
+                setDarkMode(!darkMode);
+            };
+
+            useEffect(() => {
+                document.body.className = darkMode ? 'dark' : 'light';
+                hljs.highlightAll();
+            }, [darkMode]);
+
+            return (
+                <div className={`container mx-auto p-6 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                    <header className="flex justify-between items-center mb-8 fade-in">
+                        <h1 className="text-4xl font-bold">
+                            <span className="bg-gradient-to-r from-green-400 to-blue-500 text-transparent bg-clip-text">
+                                API Call Configurator
+                            </span>
+                        </h1>
+                        <button 
+                            onClick={toggleDarkMode} 
+                            className={`p-2 rounded-full ${darkMode ? 'bg-yellow-400 text-gray-900' : 'bg-gray-800 text-white'}`}
+                            aria-label={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                                {darkMode ? (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                ) : (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                )}
+                            </svg>
+                        </button>
+                    </header>
+                    <APICallBuilder darkMode={darkMode} />
+                    <footer className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                        &copy; 2024 Aico. All rights reserved.
+                    </footer>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
