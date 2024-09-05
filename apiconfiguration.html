@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced API Call Configurator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-flow-renderer/9.7.4/react-flow-renderer.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        }
+        .react-flow__node {
+            padding: 10px;
+            border-radius: 5px;
+            width: 150px;
+            font-size: 12px;
+            color: #222;
+            text-align: center;
+            border-width: 1px;
+            border-style: solid;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .react-flow__edge {
+            stroke: #222;
+            stroke-width: 2;
+        }
+        .react-flow__node-input {
+            border-color: #0041d0;
+        }
+        .react-flow__node-output {
+            border-color: #ff0072;
+        }
+        .react-flow__node-default {
+            border-color: #1a192b;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @media (max-width: 640px) {
+            .mobile-stack {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useCallback } = React;
+        const { Background, Controls, ReactFlow } = ReactFlowRenderer;
+
+        const DraggableItem = ({ id, content, onDragStart }) => (
+            <div
+                draggable
+                onDragStart={(e) => onDragStart(e, id)}
+                className="bg-white p-3 mb-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out cursor-move"
+            >
+                {content}
+            </div>
+        );
+
+        const VisualFlow = ({ nodes, edges, onNodesChange, onEdgesChange, onConnect }) => {
+            return (
+                <div style={{ height: 400 }}>
+                    <ReactFlow
+                        nodes={nodes}
+                        edges={edges}
+                        onNodesChange={onNodesChange}
+                        onEdgesChange={onEdgesChange}
+                        onConnect={onConnect}
+                        fitView
+                    >
+                        <Background />
+                        <Controls />
+                    </ReactFlow>
+                </div>
+            );
+        };
+
+        const LowCodeInterface = () => (
+            <div className="bg-white p-4 rounded-lg shadow-md">
+                <h3 className="text-lg font-semibold mb-3">Low-Code Interface</h3>
+                <div className="grid grid-cols-2 gap-2">
+                    <button className="bg-blue-500 text-white p-2 rounded">API Call</button>
+                    <button className="bg-green-500 text-white p-2 rounded">Data Processing</button>
+                    <button className="bg-yellow-500 text-white p-2 rounded">User Input</button>
+                    <button className="bg-purple-500 text-white p-2 rounded">Output</button>
+                </div>
+            </div>
+        );
+
+        const AnalyticsPanel = () => (
+            <div className="bg-white p-4 rounded-lg shadow-md">
+                <h3 className="text-lg font-semibold mb-3">Analytics</h3>
+                <div className="h-40 bg-gray-100 rounded flex items-center justify-center">
+                    [Analytics Chart Placeholder]
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const [nodes, setNodes] = useState([
+                { id: '1', data: { label: 'Input' }, position: { x: 250, y: 5 }, type: 'input' },
+                { id: '2', data: { label: 'API Call' }, position: { x: 100, y: 100 }, type: 'default' },
+                { id: '3', data: { label: 'Output' }, position: { x: 400, y: 200 }, type: 'output' },
+            ]);
+            const [edges, setEdges] = useState([
+                { id: 'e1-2', source: '1', target: '2' },
+                { id: 'e2-3', source: '2', target: '3' },
+            ]);
+
+            const onNodesChange = useCallback(
+                (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+                [setNodes]
+            );
+            const onEdgesChange = useCallback(
+                (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+                [setEdges]
+            );
+            const onConnect = useCallback(
+                (connection) => setEdges((eds) => addEdge(connection, eds)),
+                [setEdges]
+            );
+
+            return (
+                <div className="container mx-auto p-4">
+                    <header className="text-center mb-8 fade-in">
+                        <h1 className="text-4xl font-bold mb-2 gradient-bg text-white p-4 rounded-lg inline-block">Advanced API Call Configurator</h1>
+                        <p className="text-gray-600">Build, visualize, and optimize your API integrations</p>
+                    </header>
+                    <div className="flex flex-wrap -mx-2 mobile-stack">
+                        <div className="w-full md:w-1/4 px-2 mb-4">
+                            <div className="bg-white p-4 rounded-lg shadow-md">
+                                <h2 className="text-xl font-bold mb-4">Components</h2>
+                                <DraggableItem id="api" content="API Call" />
+                                <DraggableItem id="process" content="Data Processing" />
+                                <DraggableItem id="input" content="User Input" />
+                                <DraggableItem id="output" content="Output" />
+                            </div>
+                        </div>
+                        <div className="w-full md:w-3/4 px-2">
+                            <div className="bg-white p-4 rounded-lg shadow-md mb-4">
+                                <h2 className="text-xl font-bold mb-4">Visual Flow</h2>
+                                <VisualFlow
+                                    nodes={nodes}
+                                    edges={edges}
+                                    onNodesChange={onNodesChange}
+                                    onEdgesChange={onEdgesChange}
+                                    onConnect={onConnect}
+                                />
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <LowCodeInterface />
+                                <AnalyticsPanel />
+                            </div>
+                        </div>
+                    </div>
+                    <footer className="text-center mt-8 text-sm text-gray-500">
+                        &copy; 2024 AICO. All rights reserved.
+                    </footer>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
