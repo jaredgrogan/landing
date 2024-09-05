@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Interface</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js"></script>
+    <style>
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef, useEffect } = React;
+        const { Send, Mic, ChevronRight, ChevronLeft, Settings, Trash2, Upload } = lucide;
+
+        const Switch = ({ checked, onCheckedChange }) => (
+            <button
+                className={`relative inline-flex h-6 w-11 items-center rounded-full ${checked ? 'bg-blue-600' : 'bg-gray-200'}`}
+                onClick={() => onCheckedChange(!checked)}
+            >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${checked ? 'translate-x-6' : 'translate-x-1'}`} />
+            </button>
+        );
+
+        const ChatInterface = () => {
+            const [messages, setMessages] = useState([]);
+            const [input, setInput] = useState('');
+            const [isTyping, setIsTyping] = useState(false);
+            const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+            const [isDarkMode, setIsDarkMode] = useState(false);
+            const [isVoiceMode, setIsVoiceMode] = useState(false);
+            const [suggestions, setSuggestions] = useState([]);
+            const chatContainerRef = useRef(null);
+            const inputRef = useRef(null);
+            const fileInputRef = useRef(null);
+
+            useEffect(() => {
+                if (chatContainerRef.current) {
+                    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+                }
+            }, [messages]);
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                if (!input.trim()) return;
+
+                const userMessage = { role: 'user', content: input };
+                setMessages(prevMessages => [...prevMessages, userMessage]);
+                setInput('');
+                setIsTyping(true);
+
+                // Simulating API call to GPT-3.5 Turbo
+                setTimeout(() => {
+                    const aiMessage = { role: 'assistant', content: 'This is a simulated AI response.' };
+                    setMessages(prevMessages => [...prevMessages, aiMessage]);
+                    setIsTyping(false);
+                    generateSuggestions(input);
+                }, 1000);
+            };
+
+            const handleKeyDown = (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    handleSubmit(e);
+                }
+            };
+
+            const generateSuggestions = (input) => {
+                const lowercaseInput = input.toLowerCase();
+                if (lowercaseInput.includes('hello') || lowercaseInput.includes('hi')) {
+                    setSuggestions(['Tell me a joke', 'What\'s the weather like?', 'How can you help me today?']);
+                } else if (lowercaseInput.includes('weather')) {
+                    setSuggestions(['What\'s the forecast for tomorrow?', 'Is it going to rain this week?', 'What\'s the temperature now?']);
+                } else {
+                    setSuggestions(['Can you explain that further?', 'Give me an example', 'What are the pros and cons?']);
+                }
+            };
+
+            const startVoiceInput = () => {
+                setIsVoiceMode(true);
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (SpeechRecognition) {
+                    const recognition = new SpeechRecognition();
+                    recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        setInput(transcript);
+                        setIsVoiceMode(false);
+                    };
+                    recognition.start();
+                } else {
+                    alert('Speech recognition is not supported in this browser.');
+                    setIsVoiceMode(false);
+                }
+            };
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            };
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            };
+
+            const handleFiles = (files) => {
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const content = e.target.result;
+                        setMessages(prevMessages => [...prevMessages, { role: 'user', content: `Uploaded file: ${file.name}` }]);
+                    };
+                    reader.readAsText(file);
+                });
+            };
+
+            return (
+                <div className={`flex h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100'}`}>
+                    <main className="flex-1 flex flex-col" onDragOver={handleDragOver} onDrop={handleDrop}>
+                        <div className="flex-1 overflow-y-auto p-4" ref={chatContainerRef}>
+                            {messages.map((message, index) => (
+                                <div
+                                    key={index}
+                                    className={`mb-4 p-3 rounded-lg ${
+                                        message.role === 'user' ? 'bg-blue-100 ml-auto' : 'bg-white'
+                                    } max-w-3/4 animate-fadeIn`}
+                                >
+                                    {message.content}
+                                </div>
+                            ))}
+                            {isTyping && (
+                                <div className="text-gray-500 italic animate-pulse">AI is typing...</div>
+                            )}
+                        </div>
+                        <div className="p-2">
+                            {suggestions.map((suggestion, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setInput(suggestion)}
+                                    className="mr-2 mb-2 px-3 py-1 bg-gray-200 rounded-full text-sm hover:bg-gray-300"
+                                >
+                                    {suggestion}
+                                </button>
+                            ))}
+                        </div>
+                        <form onSubmit={handleSubmit} className="p-4 bg-white border-t">
+                            <div className="flex items-center space-x-2">
+                                <textarea
+                                    ref={inputRef}
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Type your message here..."
+                                    className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    rows={1}
+                                />
+                                <button
+                                    type="submit"
+                                    className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <Send size={20} />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={startVoiceInput}
+                                    className={`p-2 ${isVoiceMode ? 'bg-red-500' : 'bg-gray-200'} text-gray-700 rounded-full hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500`}
+                                >
+                                    <Mic size={20} />
+                                </button>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={(e) => handleFiles(e.target.files)}
+                                    className="hidden"
+                                    multiple
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => fileInputRef.current.click()}
+                                    className="p-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                >
+                                    <Upload size={20} />
+                                </button>
+                            </div>
+                        </form>
+                    </main>
+                    <aside
+                        className={`w-64 bg-white p-4 border-l transform transition-transform duration-300 ease-in-out ${
+                            isSidePanelOpen ? 'translate-x-0' : 'translate-x-full'
+                        }`}
+                    >
+                        <h2 className="text-xl font-bold mb-4">Settings</h2>
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <span>Dark Mode</span>
+                                <Switch checked={isDarkMode} onCheckedChange={setIsDarkMode} />
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span>Voice Commands</span>
+                                <Switch checked={isVoiceMode} onCheckedChange={setIsVoiceMode} />
+                            </div>
+                        </div>
+                    </aside>
+                    <button
+                        onClick={() => setIsSidePanelOpen(!isSidePanelOpen)}
+                        className="fixed right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-l-md shadow-md"
+                    >
+                        {isSidePanelOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+                    </button>
+                    <div className="fixed bottom-4 right-4 flex space-x-2">
+                        <button className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                            <Settings size={20} />
+                        </button>
+                        <button className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                            <Trash2 size={20} />
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<ChatInterface />, document.getElementById('root'));
+    </script>
+</body>
+</html>
