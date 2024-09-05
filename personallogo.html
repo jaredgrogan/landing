@@ -1,0 +1,34 @@
+<svg width="150" height="150" xmlns="http://www.w3.org/2000/svg">
+  <g id="logo" transform="translate(0,0)">
+    <!-- Rectangle for 'J' -->
+    <rect x="10" y="10" width="40" height="80" fill="black"/>
+    <!-- Rectangle for 'G' -->
+    <rect x="60" y="10" width="40" height="80" fill="black"/>
+  </g>
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgb(0,0,255);stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <style>
+    svg {
+      transition: transform 0.5s ease;
+    }
+    #logo {
+      transition: transform 0.4s ease;
+    }
+    rect {
+      transition: fill 0.5s ease;
+    }
+    svg:hover #logo {
+      transform: translate(5px, 5px);
+    }
+    svg:hover {
+      transform: scale(1.05);
+    }
+    svg:hover rect {
+      fill: url(#grad1);
+    }
+  </style>
+</svg>
