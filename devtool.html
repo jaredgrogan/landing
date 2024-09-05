@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant Configurations</title>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const configurations = [
+            {
+                name: "Customer Service Bot",
+                description: "Assists customers with product inquiries and troubleshooting",
+                layers: {
+                    systemBehavior: "You are an expert customer service AI assistant for a high-end tech company...",
+                    contextualInformation: "You have access to the customer's purchase history, previous support tickets...",
+                    formatting: "Structure your responses in the following format:...",
+                    constraintsAndTone: "Keep responses under 150 words unless more detail is necessary...",
+                    memory: "Remember key details from the current conversation, such as specific product names..."
+                }
+            },
+            // Add other configurations here...
+        ];
+
+        const ConfigurationCard = ({ config, onSelect }) => (
+            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => onSelect(config)}>
+                <h3 className="text-xl font-semibold mb-2">{config.name}</h3>
+                <p className="text-gray-600">{config.description}</p>
+            </div>
+        );
+
+        const ConfigurationDetail = ({ config, onClose }) => (
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onClick={onClose}>
+                <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white" onClick={e => e.stopPropagation()}>
+                    <div className="mt-3 text-center">
+                        <h3 className="text-2xl font-semibold text-gray-900 mb-4">{config.name}</h3>
+                        <div className="mt-2 px-7 py-3 text-left">
+                            {Object.entries(config.layers).map(([key, value]) => (
+                                <div key={key} className="mb-4">
+                                    <h4 className="font-semibold text-lg capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</h4>
+                                    <p className="text-gray-600">{value}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="items-center px-4 py-3">
+                            <button
+                                onClick={onClose}
+                                className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const [selectedConfig, setSelectedConfig] = React.useState(null);
+
+            return (
+                <div className="container mx-auto px-4 py-8">
+                    <h1 className="text-4xl font-bold text-center mb-8">AI Assistant Configurations</h1>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {configurations.map((config, index) => (
+                            <ConfigurationCard key={index} config={config} onSelect={setSelectedConfig} />
+                        ))}
+                    </div>
+                    {selectedConfig && (
+                        <ConfigurationDetail config={selectedConfig} onClose={() => setSelectedConfig(null)} />
+                    )}
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
