@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Call Configurator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        .drag-item {
+            cursor: move;
+        }
+        .drop-zone {
+            min-height: 100px;
+            border: 2px dashed #ccc;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const DraggableItem = ({ id, content, onDragStart }) => (
+            <div
+                draggable
+                onDragStart={(e) => onDragStart(e, id)}
+                className="bg-white p-2 mb-2 rounded shadow cursor-move"
+            >
+                {content}
+            </div>
+        );
+
+        const DropZone = ({ onDrop, children }) => {
+            const [isOver, setIsOver] = useState(false);
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                setIsOver(true);
+            };
+
+            const handleDragLeave = () => {
+                setIsOver(false);
+            };
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                setIsOver(false);
+                onDrop(e);
+            };
+
+            return (
+                <div
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    className={`drop-zone p-4 ${
+                        isOver ? 'bg-blue-100' : 'bg-gray-100'
+                    }`}
+                >
+                    {children}
+                </div>
+            );
+        };
+
+        const APICallBuilder = () => {
+            const [layers, setLayers] = useState([]);
+            const [availableLayers, setAvailableLayers] = useState([
+                { id: 'system', content: 'System Behavior' },
+                { id: 'user', content: 'User Input' },
+                { id: 'context', content: 'Contextual Information' },
+                { id: 'formatting', content: 'Formatting' },
+                { id: 'constraints', content: 'Constraints and Tone' },
+                { id: 'memory', content: 'Memory' },
+            ]);
+
+            const handleDragStart = (e, id) => {
+                e.dataTransfer.setData('text/plain', id);
+            };
+
+            const handleDrop = (e) => {
+                const id = e.dataTransfer.getData('text');
+                const draggedLayer = availableLayers.find((layer) => layer.id === id);
+                if (draggedLayer) {
+                    setLayers([...layers, draggedLayer]);
+                    setAvailableLayers(availableLayers.filter((layer) => layer.id !== id));
+                }
+            };
+
+            return (
+                <div className="flex">
+                    <div className="w-1/4 p-4 bg-gray-200">
+                        <h2 className="text-xl font-bold mb-4">Available Layers</h2>
+                        {availableLayers.map((layer) => (
+                            <DraggableItem
+                                key={layer.id}
+                                id={layer.id}
+                                content={layer.content}
+                                onDragStart={handleDragStart}
+                            />
+                        ))}
+                    </div>
+                    <div className="w-3/4 p-4">
+                        <h2 className="text-xl font-bold mb-4">API Call Configuration</h2>
+                        <DropZone onDrop={handleDrop}>
+                            {layers.map((layer) => (
+                                <div key={layer.id} className="bg-white p-2 mb-2 rounded shadow">
+                                    {layer.content}
+                                </div>
+                            ))}
+                            {layers.length === 0 && (
+                                <p className="text-gray-500">Drag and drop layers here</p>
+                            )}
+                        </DropZone>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            return (
+                <div className="container mx-auto p-4">
+                    <h1 className="text-3xl font-bold mb-6">API Call Configurator</h1>
+                    <APICallBuilder />
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
