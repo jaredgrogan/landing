@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Productivity Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.global.prod.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuedraggable/2.24.3/vuedraggable.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        [v-cloak] { display: none; }
+        .dark { background-color: #1e1e1e; color: #ffffff; }
+        .dark .panel { background-color: #2a2a2a; }
+        .task { transition: all 0.3s ease; }
+        .task:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.5s; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dark .glassmorphism {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .mic-button.pulse {
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <div id="app" v-cloak :class="{ 'dark': darkMode }">
+        <div class="min-h-screen bg-gradient-to-br from-gray-900 to-#1e1e1e dark:from-#1e1e1e dark:to-#2a2a2a transition-colors duration-300">
+            <nav class="bg-white bg-opacity-80 dark:bg-gray-800 dark:bg-opacity-80 shadow-sm backdrop-filter backdrop-blur-lg">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16">
+                        <div class="flex items-center">
+                            <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">AI Productivity Hub</h1>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button @click="toggleAIAssistant" class="p-2 rounded-full text-indigo-600 hover:bg-indigo-100 dark:text-indigo-400 dark:hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                            </button>
+                            <button @click="toggleDarkMode" class="p-2 rounded-full text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                <svg v-if="darkMode" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main content here -->
+
+            <div v-if="showAIAssistant" class="fixed bottom-4 right-4 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform translate-y-0 opacity-100">
+                <div class="p-4 bg-indigo-600 text-white flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">AI Assistant</h3>
+                    <button @click="toggleAIAssistant" class="text-white hover:text-gray-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-4 max-h-80 overflow-y-auto">
+                    <div v-for="message in aiMessages" :key="message.id" class="mb-2">
+                        <div :class="{'text-right': message.sender === 'user'}">
+                            <span class="inline-block px-3 py-1 rounded-lg" :class="message.sender === 'user' ? 'bg-indigo-100 text-indigo-800' : 'bg-gray-100 text-gray-800'">
+                                {{ message.text }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 border-t dark:border-gray-700">
+                    <form @submit.prevent="sendMessage" class="flex items-center space-x-2">
+                        <button class="text-white bg-gray-600 hover:bg-gray-700 p-2 rounded-full">
+                            <!-- SVG for the paperclip icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l7.07-7.07a4 4 0 00-5.657-5.657l-7.07 7.07a6 6 0 008.485 8.485l6.586-6.586" />
+                            </svg>
+                        </button>
+                        <input v-model="userMessage" type="text" placeholder="Ask AI for help..." class="flex-grow px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button @click="startRecording" class="text-white bg-gray-600 hover:bg-gray-700 p-2 rounded-full mic-button" :class="{ 'pulse': isRecording }">
+                            <!-- SVG for the mic icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14a3.5 3.5 0 003.5-3.5v-5a3.5 3.5 0 00-7 0v5A3.5 3.5 0 0012 14zM19 10v1.5A7.5 7.5 0 0112 19v3m0-3v-1m-7-8v1.5A7.5 7.5 0 0012 19v0" />
+                            </svg>
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    darkMode: false,
+                    projects: [
+                        { id: 1, name: 'Website Redesign', description: 'Overhaul the company website', labels: ['Design', 'Development'], dueDate: '2024-09-15' },
+                        { id: 2, name: 'Mobile App Development', description: 'Create a new mobile app for clients', labels: ['Mobile', 'Development'], dueDate: '2024-10-01' },
+                    ],
+                    events: [
+                        { id: 1, title: 'Team Meeting', date: '2024-09-06 10:00 AM' },
+                        { id: 2, title: 'Client Presentation', date: '2024-09-07 2:00 PM' },
+                    ],
+                    showAIAssistant: false,
+                    aiMessages: [],
+                    userMessage: '',
+                    isRecording: false
+                }
+            },
+            methods: {
+                toggleDarkMode() {
+                    this.darkMode = !this.darkMode;
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                },
+                toggleAIAssistant() {
+                    this.showAIAssistant = !this.showAIAssistant;
+                    if (this.showAIAssistant && this.aiMessages.length === 0) {
+                        this.aiMessages.push({
+                            id: Date.now(),
+                            sender: 'ai',
+                            text: 'Hello! How can I assist you today?'
+                        });
+                    }
+                },
+                sendMessage() {
+                    if (this.userMessage.trim() === '') return;
+
+                    this.aiMessages.push({
+                        id: Date.now(),
+                        sender: 'user',
+                        text: this.userMessage
+                    });
+
+                    // Simulate AI response (replace with actual API call in production)
+                    setTimeout(() => {
+                        this.aiMessages.push({
+                            id: Date.now(),
+                            sender: 'ai',
+                            text: this.getAIResponse(this.userMessage)
+                        });
+                    }, 1000);
+
+                    this.userMessage = '';
+                },
+                startRecording() {
+                    this.isRecording = !this.isRecording;
+                    // Add actual recording logic here
+                },
+                getAIResponse(userMessage) {
+                    const responses = [
+                        "I can help you with that. What specific aspect of your project would you like assistance with?",
+                        "That's an interesting question. Let me analyze your current tasks and provide some suggestions.",
+                        "Based on your current projects, I'd recommend focusing on the website redesign first. Would you like me to break it down into smaller tasks?",
+                    ];
+                    return responses[Math.floor(Math.random() * responses.length)];
+                }
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>
