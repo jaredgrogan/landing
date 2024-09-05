@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Productivity Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.global.prod.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuedraggable/2.24.3/vuedraggable.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        [v-cloak] { display: none; }
+        .dark { background-color: #1e1e1e; color: #ffffff; }
+        .dark .panel { background-color: #2a2a2a; }
+        .task { transition: all 0.3s ease; }
+        .task:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.5s; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dark .glassmorphism {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <div id="app" v-cloak :class="{ 'dark': darkMode }">
+        <div class="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 dark:from-gray-900 dark:to-indigo-900 transition-colors duration-300">
+            <nav class="bg-white bg-opacity-80 dark:bg-gray-800 dark:bg-opacity-80 shadow-sm backdrop-filter backdrop-blur-lg">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16">
+                        <div class="flex items-center">
+                            <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">AI Productivity Hub</h1>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button @click="toggleAIAssistant" class="p-2 rounded-full text-indigo-600 hover:bg-indigo-100 dark:text-indigo-400 dark:hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                            </button>
+                            <button @click="toggleDarkMode" class="p-2 rounded-full text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                <svg v-if="darkMode" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div class="px-4 py-6 sm:px-0">
+                    <div class="flex flex-wrap -mx-4">
+                        <div class="w-full lg:w-2/3 px-4 mb-8">
+                            <div class="glassmorphism p-6">
+                                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Projects & Tasks</h2>
+                                <div class="space-y-4">
+                                    <draggable v-model="projects" group="projects" @start="drag=true" @end="drag=false" item-key="id">
+                                        <template #item="{element}">
+                                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm task cursor-move">
+                                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ element.name }}</h3>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ element.description }}</p>
+                                                <div class="mt-2 flex flex-wrap gap-2">
+                                                    <span v-for="label in element.labels" :key="label" class="px-2 py-1 text-xs font-medium rounded-full" :class="getLabelClass(label)">
+                                                        {{ label }}
+                                                    </span>
+                                                </div>
+                                                <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                                    Due: {{ element.dueDate }}
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </draggable>
+                                </div>
+                                <button @click="addProject" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                    Add Project
+                                </button>
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-1/3 px-4 mb-8">
+                            <div class="glassmorphism p-6">
+                                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Calendar</h2>
+                                <div class="space-y-4">
+                                    <div v-for="event in events" :key="event.id" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm task">
+                                        <h3 class="text-md font-medium text-gray-900 dark:text-gray-100">{{ event.title }}</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ event.date }}</p>
+                                    </div>
+                                </div>
+                                <button @click="addEvent" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                    Add Event
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <div v-if="showAIAssistant" class="fixed bottom-4 right-4 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform translate-y-0 opacity-100">
+                <div class="p-4 bg-indigo-600 text-white flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">AI Assistant</h3>
+                    <button @click="toggleAIAssistant" class="text-white hover:text-gray-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-4 max-h-80 overflow-y-auto">
+                    <div v-for="message in aiMessages" :key="message.id" class="mb-2">
+                        <div :class="{'text-right': message.sender === 'user'}">
+                            <span class="inline-block px-3 py-1 rounded-lg" :class="message.sender === 'user' ? 'bg-indigo-100 text-indigo-800' : 'bg-gray-100 text-gray-800'">
+                                {{ message.text }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 border-t dark:border-gray-700">
+                    <form @submit.prevent="sendMessage" class="flex">
+                        <input v-model="userMessage" type="text" placeholder="Ask AI for help..." class="flex-grow px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    darkMode: false,
+                    projects: [
+                        { id: 1, name: 'Website Redesign', description: 'Overhaul the company website', labels: ['Design', 'Development'], dueDate: '2024-09-15' },
+                        { id: 2, name: 'Mobile App Development', description: 'Create a new mobile app for clients', labels: ['Mobile', 'Development'], dueDate: '2024-10-01' },
+                    ],
+                    events: [
+                        { id: 1, title: 'Team Meeting', date: '2024-09-06 10:00 AM' },
+                        { id: 2, title: 'Client Presentation', date: '2024-09-07 2:00 PM' },
+                    ],
+                    showAIAssistant: false,
+                    aiMessages: [],
+                    userMessage: '',
+                }
+            },
+            methods: {
+                toggleDarkMode() {
+                    this.darkMode = !this.darkMode;
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                },
+                addProject() {
+                    const newProject = {
+                        id: this.projects.length + 1,
+                        name: 'New Project',
+                        description: 'Project description',
+                        labels: ['New'],
+                        dueDate: '2024-09-30',
+                    };
+                    this.projects.push(newProject);
+                    this.animateAddition('.task:last-child');
+                },
+                addEvent() {
+                    const newEvent = {
+                        id: this.events.length + 1,
+                        title: 'New Event',
+                        date: '2024-09-08 9:00 AM',
+                    };
+                    this.events.push(newEvent);
+                    this.animateAddition('.task:last-child');
+                },
+               getLabelClass(label) {
+                    const classes = {
+                        'Design': 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200',
+                        'Development': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+                        'Mobile': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+                        'New': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+                    };
+                    return classes[label] || 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+                },
+                animateAddition(selector) {
+                    this.$nextTick(() => {
+                        gsap.from(selector, {
+                            duration: 0.5,
+                            opacity: 0,
+                            y: 20,
+                            ease: 'power2.out'
+                        });
+                    });
+                },
+                toggleAIAssistant() {
+                    this.showAIAssistant = !this.showAIAssistant;
+                    if (this.showAIAssistant && this.aiMessages.length === 0) {
+                        this.aiMessages.push({
+                            id: Date.now(),
+                            sender: 'ai',
+                            text: 'Hello! How can I assist you today?'
+                        });
+                    }
+                },
+                sendMessage() {
+                    if (this.userMessage.trim() === '') return;
+
+                    this.aiMessages.push({
+                        id: Date.now(),
+                        sender: 'user',
+                        text: this.userMessage
+                    });
+
+                    // Simulate AI response (replace with actual API call in production)
+                    setTimeout(() => {
+                        this.aiMessages.push({
+                            id: Date.now(),
+                            sender: 'ai',
+                            text: this.getAIResponse(this.userMessage)
+                        });
+                        this.$nextTick(() => {
+                            const chatContainer = this.$el.querySelector('.max-h-80');
+                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                        });
+                    }, 1000);
+
+                    this.userMessage = '';
+                },
+                getAIResponse(userMessage) {
+                    // This is a placeholder. In a real application, you would make an API call to your AI service.
+                    const responses = [
+                        "I can help you with that. What specific aspect of your project would you like assistance with?",
+                        "That's an interesting question. Let me analyze your current tasks and provide some suggestions.",
+                        "Based on your current projects, I'd recommend focusing on the website redesign first. Would you like me to break it down into smaller tasks?",
+                        "I've noticed you have a client presentation coming up. Would you like me to help you prepare some talking points based on your current projects?",
+                        "Your mobile app development project seems to be a priority. Can I suggest some best practices or help you set up a development timeline?",
+                    ];
+                    return responses[Math.floor(Math.random() * responses.length)];
+                },
+            },
+            mounted() {
+                // Simulate loading projects from an API
+                setTimeout(() => {
+                    gsap.from('.task', {
+                        duration: 0.5,
+                        opacity: 0,
+                        y: 20,
+                        stagger: 0.1,
+                        ease: 'power2.out'
+                    });
+                }, 500);
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>
