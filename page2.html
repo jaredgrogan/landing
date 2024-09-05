@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universitas Pro - AI-Powered Scheduling and Automation</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon10.svg" type="image/svg+xml">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .header-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+
+    .header-container h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 27px;
+      font-weight: bold;
+      color: black;
+      transition: color 0.3s;
+    }
+
+    .nav-header {
+      position: fixed;
+      top: 24px;
+      right: 230px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-header ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .nav-header ul li {
+      position: relative;
+    }
+
+    .nav-header ul li a {
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .language-select {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      z-index: 100;
+    }
+
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .cta-button {
+      background-color: #007bff;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .cta-button:hover {
+      background-color: #0056b3;
+    }
+
+    .interactive-timeline {
+      display: flex;
+      justify-content: space-around;
+      margin: 2rem 0;
+    }
+
+    .timeline-section {
+      cursor: pointer;
+      padding: 1rem;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .timeline-section:hover {
+      background-color: rgba(0, 123, 255, 0.1);
+    }
+
+    .benefits-section {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+
+    .benefit-card {
+      width: 30%;
+      padding: 1rem;
+      margin: 1rem;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .video-demo {
+      margin: 2rem 0;
+    }
+
+    .testimonial-carousel {
+      overflow: hidden;
+      white-space: nowrap;
+      margin: 2rem 0;
+    }
+
+    .testimonial {
+      display: inline-block;
+      width: 100%;
+      padding: 1rem;
+      animation: scroll 30s linear infinite;
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    .features-overview {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+
+    .feature {
+      width: 30%;
+      padding: 1rem;
+      margin: 1rem;
+      text-align: center;
+    }
+
+    .dashboard-preview {
+      margin: 2rem 0;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .dashboard-image {
+      display: inline-block;
+      width: 300px;
+      height: 200px;
+      margin-right: 1rem;
+      background-color: #ddd;
+    }
+
+    .workflow-example {
+      margin: 2rem 0;
+    }
+
+    .workflow-step {
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 5px;
+      background-color: rgba(0, 123, 255, 0.1);
+    }
+
+    .chat-window {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      height: 400px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #f3f4f6;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <!-- Navigation Header -->
+  <div class="nav-header">
+    <ul id="navMenu">
+      <li>
+        <a href="javascript:void(0)" id="navMenuItem">Menu</a>
+        <ul>
+          <li><a href="product.html" id="navAppsItem">Apps</a></li>
+          <li><a href="tutorials.html" id="navLearnItem">Learn</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Language Selection Dropdown -->
+  <div class="language-select">
+    <select id="languageSelect" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+
+  <!-- Day/Night Mode Toggle Button -->
+  <div class="toggle-container">
+    <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+      <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div>
+      <h1 class="text-4xl font-bold mb-4">Supercharge Your Workflow with AI-Powered Scheduling and Automation</h1>
+      <p class="text-xl mb-8">Effortlessly manage your tasks, optimize your time, and integrate all your productivity tools in one platform.</p>
+      <a href="#" class="cta-button">Get Started Now</a>
+      <p class="mt-4 text-sm">No credit card required – Get started in minutes</p>
+    </div>
+  </section>
+
+  <!-- Interactive Timeline -->
+  <section class="interactive-timeline">
+    <div class="timeline-section" id="morning">
+      <h3>Morning</h3>
+      <p>AI schedules your most important tasks</p>
+    </div>
+    <div class="timeline-section" id="afternoon">
+      <h3>Afternoon</h3>
+      <p>Automatic meeting reminders and task adjustments</p>
+    </div>
+    <div class="timeline-section" id="evening">
+      <h3>Evening</h3>
+      <p>AI prepares your schedule for tomorrow</p>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="benefits-section">
+    <div class="benefit-card">
+      <h3>AI-Powered Scheduling</h3>
+      <p>Never miss a meeting—our AI schedules and adjusts based on priority and availability.</p>
+    </div>
+    <div class="benefit-card">
+      <h3>Task Automation</h3>
+      <p>Automate repetitive tasks with one click, so you can focus on what matters.</p>
+    </div>
+    <div class="benefit-card">
+      <h3>Seamless Integrations</h3>
+      <p>Sync with your favorite tools like Gmail, Outlook, and iCloud to manage everything in one place.</p>
+    </div>
+  </section>
+
+  <!-- Video Demo -->
+  <section class="video-demo">
+    <h2>See Universitas Pro in Action</h2>
+    <div id="video-placeholder" style="width: 560px; height: 315px; background-color: #ddd; margin: 0 auto;">
+      Video Placeholder
+    </div>
+  </section>
+
+  <!-- Testimonial Carousel -->
+  <section class="testimonial-carousel">
+    <div class="testimonial">
+      <p>"Cut my prep time in half!" - John D., Marketing Manager</p>
+    </div>
+    <div class="testimonial">
+      <p>"I've never been this organized." - Sarah L., Entrepreneur</p>
+    </div>
+    <div class="testimonial">
+      <p>"Universitas Pro revolutionized my workflow." - Mike R., Software Developer</p>
+    </div>
+  </section>
+
+  <!-- Features Overview -->
+  <section class="features-overview">
+    <div class="feature">
+      <h3>Smart Scheduling</h3>
+      <p>AI prioritizes your tasks based on deadlines and availability.</p>
+    </div>
+    <div class="feature">
+      <h3>Multi-Tool Integration</h3>
+      <p>Sync with Gmail, Outlook, and more for seamless productivity.</p>
+    </div>
+    <div class="feature">
+      <h3>Automation Engine</h3>
+      <p>Delegate tasks to AI and focus on what truly matters.</p>
+    </div>
+  </section>
+
+  <!-- Dashboard Preview -->
+  <section class="dashboard-preview">
+    <h2>Universitas Pro Dashboard</h2>
+    <div class="dashboard-image"></div>
+    <div class="dashboard-image"></div>
+    <div class="dashboard-image"></div>
+  </section>
+
+  <!-- Workflow Example -->
+  <section class="workflow-example">
+    <h2>Start your day with Universitas Pro</h2>
+    <div class="workflow-step">
+      <h3>Step 1: Add tasks or meetings</h3>
+      <p>Simply input your tasks and meetings for the day.</p>
+    </div>
+    <div class="workflow-step">
+      <h3>Step 2: Let AI schedule and prioritize</h3>
+      <p>Our AI organizes your day for maximum efficiency.</p>
+    </div>
+    <div class="workflow-step">
+      <h3>Step 3: Automate repetitive tasks</h3>
+      <p>Set up automations for tasks like email sorting.</p>
+    </div>
+    <div class="workflow-step">
+      <h3>Step 4: Review your optimized schedule</h3>
+      <p>Get a clear overview of your perfectly organized day.</p>
+    </div>
+  </section>
+
+  <!-- Chat Window -->
+  <div class="chat-window" id="chat-window">
+    <!-- Chat content will be dynamically added here -->
+  </div>
+
+  <!-- Final CTA -->
+  <section class="text-center py-16">
+    <h2 class="text-3xl font-bold mb-4">Experience the Power of Universitas Pro</h2>
+    <a href="#" class="cta-button">Start Your Free Trial</a>
+    <p class="mt-4">Trusted by AI Professionals</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <script>
+    const app = document.getElementById('app');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const languageSelect = document.getElementById('languageSelect');
+    const navMenuItem = document.getElementById('navMenuItem');
+    const navAppsItem = document.getElementById('navAppsItem');
+    const navLearnItem = document.getElementById('navLearnItem');
+
+    let isDarkMode = false;
+    let language = 'en';
+
+    const translations = {
+      en: {
+        navMenu: "Menu",
+        navApps: "Apps",
+        navLearn: "Learn",
+      },
+      es: {
+        navMenu: "Menú",
+        navApps: "Aplicaciones",
+        navLearn: "Aprender",
+      },
+    };
+
+    function changeLanguage() {
+      language = languageSelect.value;
+      updateLanguage();
+    }
+
+    function updateLanguage() {
+      navMenuItem.textContent = translations[language].navMenu;
+      navAppsItem.textContent = translations[language].navApps;
+      navLearnItem.textContent = translations[language].navLearn;
+    }
+
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+    }
+
+    // Initialize language
+    updateLanguage();
+
+    // Interactive Timeline
+    const timelineSections = document.querySelectorAll('.timeline-section');
+    timelineSections.forEach(section => {
+      section.addEventListener('mouseover', () => {
+        section.style.backgroundColor = 'rgba(0, 123, 255, 0.1)';
+      });
+      section.addEventListener('mouseout', () => {
+        section.style.backgroundColor = 'transparent';
+      });
+    });
+
+    // Chat Window
+    const chatWindow = document.getElementById('chat-window');
+    const chatMessages = [
+      "Hello! How can I help you with Universitas Pro?",
+      "Would you like to know more about our AI-powered scheduling?",
+      "Feel free to ask any questions about our features!"
+    ];
+    let messageIndex = 0;
+
+    function displayNextMessage() {
+      if (messageIndex < chatMessages.length) {
+        const messageElement = document.createElement('p');
+        messageElement.textContent = chatMessages[messageIndex];
+        chatWindow.appendChild(messageElement);
+        messageIndex++;
+      }
+      if (messageIndex < chatMessages.length) {
+        setTimeout(displayNextMessage, 5000);
+      }
+    }
+
+    displayNextMessage();
+  </script>
+</body>
+</html>
