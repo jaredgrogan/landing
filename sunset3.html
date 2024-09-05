@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Gradient Background</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(45deg, #FF4500, #FF69B4);
+      background-size: 400% 400%;
+      animation: gradientAnimation 15s ease infinite;
+      transition: background 1s ease;
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      color: white;
+      font-size: 3em;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    /* Media Query for Responsive Font Sizes */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Click or Press to Change Gradient</h1>
+
+  <script>
+    // JavaScript to change the gradient on click or pressure
+    document.body.addEventListener('click', () => {
+      // Randomize colors on click
+      const colors = [
+        ['#FF4500', '#FF69B4'],
+        ['#FF00FF', '#FF6347'],
+        ['#00008B', '#00FFFF'],
+        ['#008080', '#ADD8E6']
+      ];
+
+      // Get a random color set
+      const randomColors = colors[Math.floor(Math.random() * colors.length)];
+      
+      // Set the new gradient
+      document.body.style.background = `linear-gradient(45deg, ${randomColors[0]}, ${randomColors[1]})`;
+    });
+  </script>
+</body>
+</html>
