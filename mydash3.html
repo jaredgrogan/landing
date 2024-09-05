@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Productivity Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.global.prod.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuedraggable/2.24.3/vuedraggable.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        [v-cloak] { display: none; }
+        .dark { background-color: #1e1e1e; color: #ffffff; }
+        .dark .panel { background-color: #2a2a2a; }
+        .task { transition: all 0.3s ease; }
+        .task:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.5s; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .dark .glassmorphism {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .kanban-column {
+            min-height: 300px;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <div id="app" v-cloak :class="{ 'dark': darkMode }">
+        <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-900 transition-colors duration-300">
+            <nav class="bg-white shadow-sm">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16">
+                        <div class="flex items-center">
+                            <h1 class="text-2xl font-bold text-indigo-600">AI Productivity Hub</h1>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button @click="toggleView" class="p-2 rounded-full text-indigo-600 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                <svg v-if="currentView === 'list'" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                </svg>
+                                <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                                </svg>
+                            </button>
+                            <button @click="toggleAIAssistant" class="p-2 rounded-full text-indigo-600 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                            </button>
+                            <button @click="toggleDarkMode" class="p-2 rounded-full text-indigo-600 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                <svg v-if="darkMode" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <!-- Intelligent Notifications -->
+                <div v-if="notifications.length > 0" class="mb-6">
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-2">Notifications</h2>
+                        <ul class="space-y-2">
+                            <li v-for="notification in notifications" :key="notification.id" class="flex items-center justify-between p-2 bg-indigo-50 rounded">
+                                <span class="text-indigo-800">{{ notification.message }}</span>
+                                <button @click="dismissNotification(notification.id)" class="text-indigo-600 hover:text-indigo-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Existing content: Project & Task Management -->
+                <div class="px-4 py-6 sm:px-0">
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Projects & Tasks</h2>
+                            <div class="flex space-x-2">
+                                <button @click="showNewProjectModal = true" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-200">
+                                    New Project
+                                </button>
+                                <button @click="showTemplatesModal = true" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-200">
+                                    Templates
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex space-x-4 mb-4">
+                            <input v-model="searchQuery" type="text" placeholder="Search projects and tasks..." class="flex-grow px-3 py-2 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <select v-model="filterLabel" class="px-3 py-2 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="">All Labels</option>
+                                <option v-for="label in uniqueLabels" :key="label" :value="label">{{ label }}</option>
+                            </select>
+                            <select v-model="filterPriority" class="px-3 py-2 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="">All Priorities</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div v-if="currentView === 'list'" class="space-y-4">
+                        <draggable v-model="filteredProjects" group="projects" @start="drag=true" @end="drag=false" item-key="id">
+                            <template #item="{element}">
+                                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm task cursor-move">
+                                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ element.name }}</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ element.description }}</p>
+                                    <div class="mt-2 flex flex-wrap gap-2">
+                                        <span v-for="label in element.labels" :key="label" class="px-2 py-1 text-xs font-medium rounded-full" :class="getLabelClass(label)">
+                                            {{ label }}
+                                        </span>
+                                    </div>
+                                    <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                        Due: {{ element.dueDate }} | Priority: {{ element.priority }}
+                                    </div>
+                                </div>
+                            </template>
+                        </draggable>
+                    </div>
+
+                    <div v-else class="flex space-x-4">
+                        <div v-for="status in ['To Do', 'In Progress', 'Done']" :key="status" class="flex-1">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">{{ status }}</h3>
+                            <draggable :list="getProjectsByStatus(status)" group="projects" class="space-y-2 kanban-column bg-gray-100 dark:bg-gray-700 p-2 rounded-lg">
+                                <template #item="{element}">
+                                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm task cursor-move">
+                                        <h4 class="text-md font-medium text-gray-900 dark:text-gray-100">{{ element.name }}</h4>
+                                        <div class="mt-2 flex flex-wrap gap-2">
+                                            <span v-for="label in element.labels" :key="label" class="px-2 py-1 text-xs font-medium rounded-full" :class="getLabelClass(label)">
+                                                {{ label }}
+                                            </span>
+                                        </div>
+                                        <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                            Due: {{ element.dueDate }} | Priority: {{ element.priority }}
+                                        </div>
+                                    </div>
+                                </template>
+                            </draggable>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Analytics Charts -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Project Analytics</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Task Completion Rate</h3>
+                            <canvas id="taskCompletionChart"></canvas>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Project Progress</h3>
+                            <canvas id="projectProgressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- AI Assistant Modal -->
+            <div v-if="showAIAssistant" class="fixed bottom-4 right-4 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform translate-y-0 opacity-100">
+                <!-- AI Assistant content (same as before) -->
+            </div>
+
+            <!-- New Project Modal -->
+            <div v-if="showNewProjectModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="new-project-modal">
+                <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+                    <div class="mt-3 text-center">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">Create New Project</h3>
+                        <div class="mt-2 px-7 py-3">
+                            <input v-model="newProject.name" type="text" placeholder="Project Name" class="mb-3 px-3 py-2 bg-white dark:bg-gray-700 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <textarea v-model="newProject.description" placeholder="Project Description" class="mb-3 px-3 py-2 bg-white dark:bg-gray-700 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                            <input v-model="newProject.dueDate" type="date" class="mb-3 px-3 py-2 bg-white dark:bg-gray-700 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <select v-model="newProject.priority" class="mb-3 px-3 py-2 bg-white dark:bg-gray-700 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="low">Low Priority</option>
+                                <option value="medium">Medium Priority</option>
+                                <option value="high">High Priority</option>
+                            </select>
+                            <input v-model="newProject.labels" type="text" placeholder="Labels (comma-separated)" class="mb-3 px-3 py-2 bg-white dark:bg-gray-700 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="items-center px-4 py-3">
+                            <button @click="createProject" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mr-2">Create</button>
+                            <button @click="showNewProjectModal = false" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Templates Modal -->
+            <div v-if="showTemplatesModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="templates-modal">
+                <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+                    <div class="mt-3 text-center">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">Project Templates</h3>
+                        <div class="mt-2 px-7 py-3">
+                            <div v-for="template in projectTemplates" :key="template.id" class="mb-3 p-3 bg-gray-100 dark:bg-gray-700 rounded-md text-left cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600" @click="useTemplate(template)">
+                                <h4 class="font-medium text-gray-900 dark:text-gray-100">{{ template.name }}</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">{{ template.description }}</p>
+                            </div>
+                        </div>
+                        <div class="items-center px-4 py-3">
+                            <button @click="showTemplatesModal = false" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    darkMode: false,
+                    projects: [
+                        { id: 1, name: 'Website Redesign', description: 'Overhaul the company website', labels: ['Design', 'Development'], dueDate: '2024-09-15', priority: 'high', status: 'In Progress' },
+                        { id: 2, name: 'Mobile App Development', description: 'Create a new mobile app for clients', labels: ['Mobile', 'Development'], dueDate: '2024-10-01', priority: 'medium', status: 'To Do' },
+                    ],
+                    events: [
+                        { id: 1, title: 'Team Meeting', date: '2024-09-06 10:00 AM' },
+                        { id: 2, title: 'Client Presentation', date: '2024-09-07 2:00 PM' },
+                    ],
+                    showAIAssistant: false,
+                    aiMessages: [],
+                    userMessage: '',
+                    currentView: 'list',
+                    searchQuery: '',
+                    filterLabel: '',
+                    filterPriority: '',
+                    showNewProjectModal: false,
+                    showTemplatesModal: false,
+                    newProject: {
+                        name: '',
+                        description: '',
+                        dueDate: '',
+                        priority: 'medium',
+                        labels: '',
+                        status: 'To Do'
+                    },
+                    projectTemplates: [
+                        { id: 1, name: 'Basic Web Project', description: 'Template for a standard web development project' },
+                        { id: 2, name: 'Mobile App Project', description: 'Template for mobile app development' },
+                        { id: 3, name: 'Marketing Campaign', description: 'Template for planning and executing marketing campaigns' },
+                    ],
+                    notifications: []
+                }
+            },
+            computed: {
+                filteredProjects() {
+                    return this.projects.filter(project => {
+                        const matchesSearch = project.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                                              project.description.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        const matchesLabel = this.filterLabel === '' || project.labels.includes(this.filterLabel);
+                        const matchesPriority = this.filterPriority === '' || project.priority === this.filterPriority;
+                        return matchesSearch && matchesLabel && matchesPriority;
+                    });
+                },
+                uniqueLabels() {
+                    const labels = new Set();
+                    this.projects.forEach(project => project.labels.forEach(label => labels.add(label)));
+                    return Array.from(labels);
+                }
+            },
+            methods: {
+                toggleDarkMode() {
+                    this.darkMode = !this.darkMode;
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                    this.updateCharts();
+                },
+                toggleView() {
+                    this.currentView = this.currentView === 'list' ? 'kanban' : 'list';
+                },
+                getProjectsByStatus(status) {
+                    return this.filteredProjects.filter(project => project.status === status);
+                },
+                getLabelClass(label) {
+                    const classes = {
+                        'Design': 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200',
+                        'Development': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+                        'Mobile': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+                    };
+                    return classes[label] || 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+                },
+                createProject() {
+                    const newProject = {
+                        id: this.projects.length + 1,
+                        ...this.newProject,
+                        labels: this.newProject.labels.split(',').map(label => label.trim()),
+                    };
+                    this.projects.push(newProject);
+                    this.showNewProjectModal = false;
+                    this.newProject = { name: '', description: '', dueDate: '', priority: 'medium', labels: '', status: 'To Do' };
+                    this.updateCharts();
+                },
+                useTemplate(template) {
+                    this.newProject = {
+                        name: template.name,
+                        description: template.description,
+                        dueDate: '',
+                        priority: 'medium',
+                        labels: template.name.split(' ').join(','),
+                        status: 'To Do'
+                    };
+                    this.showTemplatesModal = false;
+                    this.showNewProjectModal = true;
+                },
+                dismissNotification(id) {
+                    this.notifications = this.notifications.filter(n => n.id !== id);
+                },
+                async generateIntelligentNotifications() {
+                    // In a real application, this would be an API call to an AI service
+                    // For this prototype, we'll simulate the AI's response
+                    const aiGeneratedNotifications = [
+                        { id: Date.now(), message: "You have a high-priority task due tomorrow. Consider allocating more time to it today." },
+                        { id: Date.now() + 1, message: "Your 'Website Redesign' project is 50% complete. Great progress!" },
+                        { id: Date.now() + 2, message: "You have a team meeting in 30 minutes. Don't forget to prepare your updates." }
+                    ];
+                    this.notifications = aiGeneratedNotifications;
+                },
+                updateCharts() {
+                    this.updateTaskCompletionChart();
+                    this.updateProjectProgressChart();
+                },
+                updateTaskCompletionChart() {
+                    const ctx = document.getElementById('taskCompletionChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Completed', 'In Progress', 'To Do'],
+                            datasets: [{
+                                data: [
+                                    this.projects.filter(p => p.status === 'Done').length,
+                                    this.projects.filter(p => p.status === 'In Progress').length,
+                                    this.projects.filter(p => p.status === 'To Do').length
+                                ],
+                                backgroundColor: ['#10B981', '#3B82F6', '#EF4444']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        color: this.darkMode ? '#fff' : '#000'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+                updateProjectProgressChart() {
+                    const ctx = document.getElementById('projectProgressChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: this.projects.map(p => p.name),
+                            datasets: [{
+                                label: 'Progress',
+                                data: this.projects.map(p => p.status === 'Done' ? 100 : p.status === 'In Progress' ? 50 : 0),
+                                backgroundColor: '#3B82F6'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + '%';
+                                        },
+                                        color: this.darkMode ? '#fff' : '#000'
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        color: this.darkMode ? '#fff' : '#000'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                }
+            },
+            mounted() {
+                this.updateCharts();
+                this.generateIntelligentNotifications();
+                // Set an interval to refresh notifications periodically
+                setInterval(this.generateIntelligentNotifications, 300000); // Every 5 minutes
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>
