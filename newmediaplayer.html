@@ -386,9 +386,167 @@
                 </svg>
                 <span class="tooltiptext">Save Note</span>
             </button>
-            <button class="icon-button tooltip">
+         <button class="icon-button tooltip">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>
                 </svg>
                 <span class="tooltiptext">View Notes</span>
             </button>
+        </div>
+    </div>
+
+    <footer>
+        <button class="icon-button tooltip">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+            <span class="tooltiptext">View More</span>
+        </button>
+        <button class="icon-button tooltip">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+            </svg>
+            <span class="tooltiptext">Speak</span>
+        </button>
+        <button class="icon-button tooltip">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+            </svg>
+            <span class="tooltiptext">Settings</span>
+        </button>
+        <button class="icon-button tooltip">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+            </svg>
+            <span class="tooltiptext">Analytics</span>
+        </button>
+        <button class="icon-button tooltip refresh-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+            </svg>
+            <span class="tooltiptext">Refresh</span>
+        </button>
+    </footer>
+
+    <script>
+        // State variable to track the current display mode
+        let currentMode = 'oneScreen';
+
+        // Function to fetch video IDs (simulated API call)
+        async function fetchVideoIds() {
+            // In a real implementation, this would be an API call
+            return ['dQw4w9WgXcQ', '9bZkp7q19f0'];
+        }
+
+        // Function to create a YouTube iframe
+        function createYouTubeEmbed(videoId) {
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+            iframe.title = "YouTube Video";
+            iframe.frameborder = "0";
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            iframe.allowFullscreen = true;
+            return iframe;
+        }
+
+        // Function to show one screen
+        async function showOneScreen() {
+            const youtubeSection = document.getElementById('youtube-section');
+            youtubeSection.innerHTML = ''; // Clear existing content
+            youtubeSection.classList.remove('two-youtube-screens');
+            youtubeSection.classList.add('one-youtube-screen');
+
+            try {
+                const videoIds = await fetchVideoIds();
+                const embed = createYouTubeEmbed(videoIds[0]);
+                youtubeSection.appendChild(embed);
+                currentMode = 'oneScreen';
+                updateViewControls();
+            } catch (error) {
+                handleEmbedError(youtubeSection, "Failed to load video.");
+            }
+        }
+
+        // Function to show two screens
+        async function showTwoScreens() {
+            const youtubeSection = document.getElementById('youtube-section');
+            youtubeSection.innerHTML = ''; // Clear existing content
+            youtubeSection.classList.remove('one-youtube-screen');
+            youtubeSection.classList.add('two-youtube-screens');
+
+            try {
+                const videoIds = await fetchVideoIds();
+                const embed1 = createYouTubeEmbed(videoIds[0]);
+                const embed2 = createYouTubeEmbed(videoIds[1]);
+                youtubeSection.appendChild(embed1);
+                youtubeSection.appendChild(embed2);
+                currentMode = 'twoScreens';
+                updateViewControls();
+            } catch (error) {
+                handleEmbedError(youtubeSection, "Failed to load videos.");
+            }
+        }
+
+        // Function to handle embedding errors
+        function handleEmbedError(container, message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'embed-error';
+            errorDiv.textContent = message;
+            container.appendChild(errorDiv);
+        }
+
+        // Function to update view control buttons
+        function updateViewControls() {
+            const oneScreenBtn = document.getElementById('oneScreenBtn');
+            const twoScreensBtn = document.getElementById('twoScreensBtn');
+            
+            oneScreenBtn.classList.toggle('active', currentMode === 'oneScreen');
+            twoScreensBtn.classList.toggle('active', currentMode === 'twoScreens');
+        }
+
+        // Event listeners for view control buttons
+        document.getElementById('oneScreenBtn').addEventListener('click', showOneScreen);
+        document.getElementById('twoScreensBtn').addEventListener('click', showTwoScreens);
+
+        // Function to update time and date
+        function updateTimeDate() {
+            const now = new Date();
+            const options = { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                hour12: true,
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric'
+            };
+            document.getElementById('timeDate').textContent = now.toLocaleString('en-US', options);
+        }
+
+        // Update time and date every second
+        setInterval(updateTimeDate, 1000);
+
+        // Day/Night mode toggle
+        document.getElementById('day-night-toggle').addEventListener('change', function() {
+            document.body.classList.toggle('night-mode', this.checked);
+        });
+
+        // Search/Chat mode toggle
+        const searchBtn = document.getElementById('searchBtn');
+        const chatBtn = document.getElementById('chatBtn');
+
+        searchBtn.addEventListener('click', () => {
+            searchBtn.classList.add('active');
+            chatBtn.classList.remove('active');
+        });
+
+        chatBtn.addEventListener('click', () => {
+            chatBtn.classList.add('active');
+            searchBtn.classList.remove('active');
+        });
+
+        // Initial load
+        showOneScreen();
+        updateTimeDate();
+    </script>
+</body>
+</html>
