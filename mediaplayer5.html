@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebert – AI-Powered Intelligent Programming Guide</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f4f8, #fff); /* Improved light mode colors */
+            color: #000;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Improved logo typography */
+        .logo {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .time-date {
+            font-size: 1.2em;
+            color: inherit;
+        }
+
+        .toggle-mode {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Sun/Moon Toggle */
+        .toggle-switch {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .toggle-switch svg {
+            width: 24px;
+            height: 24px;
+            fill: #000; /* Default day mode black */
+        }
+
+        /* Main Container */
+        .main-container {
+            padding: 30px;
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        /* Improved color for better readability */
+        body.night-mode {
+            background: linear-gradient(135deg, #2c3e50, #000);
+            color: #fff;
+        }
+
+        body.night-mode .toggle-switch svg {
+            fill: #fff; /* White for night mode */
+        }
+
+        .search-bar input {
+            width: 80%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.3);
+            color: #000;
+            font-size: 1.1em;
+        }
+
+        /* Dark Mode Styling */
+        body.night-mode footer button {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">Ebert</div>
+        <div class="time-date" id="time-date">Friday, Sep 06, 01:11 AM</div>
+        <div class="toggle-mode">
+            <div class="toggle-switch" id="toggle-switch" data-mode="day" title="Switch to Night Mode">
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zm5.657 2.929a1 1 0 10-1.414 1.414l.707.707a1 1 0 101.414-1.414l-.707-.707zM12 6a6 6 0 100 12 6 6 0 000-12zm10 5h-1a1 1 0 000 2h1a1 1 0 000-2zm-1.929 4.657a1 1 0 00-1.414-1.414l-.707.707a1 1 0 101.414 1.414l.707-.707zm-16.485-2.929a1 1 0 100 2 1 1 0 000-2zm16.485-5.657a1 1 0 10-1.414 1.414l.707.707a1 1 0 101.414-1.414l-.707-.707zM4.636 4.636a1 1 0 10-1.414 1.414l.707.707a1 1 0 001.414-1.414l-.707-.707zM12 17a1 1 0 00-1 1v1a1 1 0 002 0v-1a1 1 0 00-1-1z"/></svg>
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;"><path d="M21.752 15.002A9.01 9.01 0 0112 22a9.01 9.01 0 01-7.503-3.752c6.177-.1 11.076-5.025 11.255-11.251A9.011 9.011 0 0121.752 15z"/></svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Content goes here -->
+    </div>
+
+    <script>
+        // Handle day/night mode toggle
+        const toggleSwitch = document.getElementById('toggle-switch');
+        const body = document.body;
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+
+        toggleSwitch.addEventListener('click', () => {
+            const isDayMode = toggleSwitch.getAttribute('data-mode') === 'day';
+            
+            if (isDayMode) {
+                body.classList.add('night-mode');
+                toggleSwitch.setAttribute('data-mode', 'night');
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'inline';
+                toggleSwitch.title = 'Switch to Day Mode';
+            } else {
+                body.classList.remove('night-mode');
+                toggleSwitch.setAttribute('data-mode', 'day');
+                sunIcon.style.display = 'inline';
+                moonIcon.style.display = 'none';
+                toggleSwitch.title = 'Switch to Night Mode';
+            }
+        });
+
+        // Set the current time and date
+        const timeDateElement = document.getElementById('time-date');
+        const currentTime = new Date();
+        const options = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+        timeDateElement.textContent = currentTime.toLocaleDateString('en-US', options);
+    </script>
+</body>
+</html>
