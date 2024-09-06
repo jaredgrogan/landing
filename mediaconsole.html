@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebert – AI-Powered Intelligent Programming Guide</title>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --text-color: #000;
+            --bg-color: #e0f7fa;
+            --glass-bg: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffffff, #d9d9d9);
+            color: var(--text-color);
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--glass-border);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .time-date {
+            font-size: 1.2em;
+        }
+
+        .toggle-mode {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Toggle Switch Styles */
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            margin-left: 10px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 30px;
+            transition: 0.4s;
+        }
+
+        .toggle-switch input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        .toggle-switch .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .main-container {
+            padding: 30px;
+        }
+
+        /* YouTube Embed Styles */
+        .youtube-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .youtube-embed {
+            width: 100%;
+            height: 350px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .youtube-embed iframe {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .two-youtube-screens .youtube-embed {
+            width: 48%;
+        }
+
+        .view-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .view-controls button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .view-controls button:hover {
+            transform: scale(1.05);
+            background-color: #1976D2;
+        }
+
+        .platform-dropdown {
+            margin: 20px 0;
+        }
+
+        .platform-dropdown button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .platform-dropdown button:hover {
+            transform: scale(1.05);
+        }
+
+        .platform-dropdown ul {
+            display: none;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .platform-dropdown button:focus + ul {
+            display: block;
+        }
+
+        .platform-dropdown ul li {
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .platform-dropdown ul li:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Notes Panel Styles */
+        .notes-panel {
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .notes-panel h3 {
+            margin-bottom: 15px;
+        }
+
+        .notes-panel button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .notes-panel button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .notepad {
+            margin-top: 20px;
+        }
+
+        .notepad textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+        }
+
+        footer {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        footer button {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        footer button:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Night Mode */
+        body.night-mode {
+            --text-color: #e0e0e0;
+            --bg-color: #121212;
+            --glass-bg: rgba(18, 18, 18, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Tooltip Styles */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+
+        [data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-tooltip]:hover::after {
+            opacity: 1;
+        }
+
+        .mic-active {
+            background-color: red;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="glass">
+        <div class="logo">Ebert</div>
+        <div class="time-date">00:43 AM | 06 September 2024</div>
+        <div class="toggle-mode">
+            <span>Day Mode / Night Mode</span>
+            <div class="toggle-switch">
+                <input type="checkbox" id="day-night-toggle">
+                <label for="day-night-toggle" class="slider"></label>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- YouTube Embed Section -->
+        <div id="youtube-section" class="youtube-container">
+            <div class="youtube-embed glass">
+                <iframe src="https://www.youtube.com/embed/DpQQi2scsHo" title="YouTube Video 1"></iframe>
+            </div>
+        </div>
+
+        <!-- Screen Controls -->
+        <div class="view-controls">
+            <button onclick="showOneScreen()">One Screen</button>
+            <button onclick="showTwoScreens()">Two Screens</button>
+            <button onclick="fullScreenPrompt()">Full Screen</button>
+        </div>
+
+        <!-- Platform Dropdown -->
+        <div class="platform-dropdown glass">
+            <button>🎞️ Platforms ▼</button>
+            <ul class="dropdown-content">
+                <li><a href="#">YouTube</a></li>
+                <li><a href="#">Netflix</a></li>
+                <li><a href="#">Amazon</a></li>
+                <li><a href="#">HBO</a></li>
+                <li><a href="#">Tubi</a></li>
+                <li><a href="#">Roku</a></li>
+            </ul>
+        </div>
+
+        <!-- Notes Section -->
+        <div class="notes-panel glass">
+            <h3>Notes</h3>
+            <div class="notepad">
+                <textarea id="notepad-text" placeholder="Take notes..."></textarea>
+                <button onclick="saveNote()">Save Note</button>
+                <button onclick="exportNote()">Export Note</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="glass">
+        <button data-tooltip="Track your usage statistics">
+            <svg><!-- Analytics Icon --></svg> Analytics
+        </button>
+        <button class="refresh-btn" data-tooltip="Update content and reset the interface">
+            <svg><!-- Refresh Icon --></svg> Refresh
+        </button>
+        <button onclick="micRecord()" class="voice-btn" data-tooltip="Speak your query or command">
+            <svg><!-- Mic Icon --></svg> Speak
+        </button>
+    </footer>
+
+    <script>
+        document.getElementById('day-night-toggle').addEventListener('change', function () {
+            document.body.classList.toggle('night-mode');
+        });
+
+        function showOneScreen() {
+            const youtubeSection = document.getElementById('youtube-section');
+            youtubeSection.innerHTML = `
+                <div class="youtube-embed glass">
+                    <iframe src="https://www.youtube.com/embed/DpQQi2scsHo" title="YouTube Video 1"></iframe>
+                </div>
+            `;
+        }
+
+        function showTwoScreens() {
+            const youtubeSection = document.getElementById('youtube-section');
+            youtubeSection.innerHTML = `
+                <div class="youtube-embed glass">
+                    <iframe src="https://www.youtube.com/embed/DpQQi2scsHo" title="YouTube Video 1"></iframe>
+                </div>
+                <div class="youtube-embed glass">
+                    <iframe src="https://www.youtube.com/embed/aircAruvnKk&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" title="YouTube Video 2"></iframe>
+                </div>
+            `;
+        }
+
+        function fullScreenPrompt() {
+            const screenChoice = prompt("Enter '1' for One Screen or '2' for Two Screens:");
+            if (screenChoice === "1") showOneScreen();
+            if (screenChoice === "2") showTwoScreens();
+            document.documentElement.requestFullscreen();
+        }
+
+        function saveNote() {
+            localStorage.setItem('note', document.getElementById('notepad-text').value);
+            alert('Note saved!');
+        }
+
+        function exportNote() {
+            const note = localStorage.getItem('note') || '';
+            const blob = new Blob([note], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'note.txt';
+            link.click();
+        }
+
+        function micRecord() {
+            const micBtn = document.querySelector('.voice-btn');
+            micBtn.classList.toggle('mic-active');
+        }
+    </script>
+</body>
+
+</html>
