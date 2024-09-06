@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebert – AI-Powered Intelligent Programming Guide</title>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --text-color: #000;
+            --bg-color: #f3f4f6;
+            --night-mode-bg-color: #1d2938;
+            --glass-bg: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Arial', sans-serif;
+            transition: background-color 0.5s ease;
+        }
+
+        body.night-mode {
+            background: var(--night-mode-bg-color);
+            color: #e0e0e0;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--glass-border);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--glass-bg);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 30px;
+            transition: 0.4s;
+        }
+
+        .toggle-switch input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        .toggle-switch .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .main-container {
+            padding: 30px;
+        }
+
+        .youtube-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .youtube-embed {
+            width: 100%;
+            height: 350px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .youtube-search {
+            margin-top: 10px;
+            padding: 8px;
+            width: 100%;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            font-size: 1em;
+        }
+
+        .view-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .view-controls button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .view-controls button:hover {
+            transform: scale(1.05);
+            background-color: #1976D2;
+        }
+
+        .platform-dropdown ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .platform-dropdown ul li {
+            padding: 10px;
+            cursor: pointer;
+            background-color: white;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .platform-dropdown ul li:hover {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        footer {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        footer button {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        footer button:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .full-screen-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading"></div>
+
+    <header class="glass">
+        <div class="logo">Ebert</div>
+        <div class="toggle-switch">
+            <input type="checkbox" id="day-night-toggle">
+            <label for="day-night-toggle" class="slider"></label>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- YouTube Embeds with Search -->
+        <div id="youtube-section" class="youtube-container">
+            <div class="youtube-embed">
+                <iframe src="https://youtu.be/DpQQi2scsHo" title="YouTube Video 1" frameborder="0" allowfullscreen></iframe>
+                <input type="text" class="youtube-search" placeholder="Search YouTube Video 1...">
+            </div>
+            <div class="youtube-embed">
+                <iframe src="https://www.youtube.com/watch?v=uJs693eNfuQ&t=4818s" title="YouTube Video 2" frameborder="0" allowfullscreen></iframe>
+                <input type="text" class="youtube-search" placeholder="Search YouTube Video 2...">
+            </div>
+        </div>
+
+        <!-- Full-Screen Button -->
+        <div class="view-controls">
+            <button onclick="toggleFullScreen()">Full Screen</button>
+        </div>
+
+        <!-- Platform Dropdown -->
+        <footer class="glass">
+            <div class="platform-dropdown">
+                <ul>
+                    <li>YouTube</li>
+                    <li>Netflix</li>
+                    <li>Amazon</li>
+                    <li>HBO</li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Day/Night mode toggle
+        document.getElementById('day-night-toggle').addEventListener('change', function() {
+            document.body.classList.toggle('night-mode');
+        });
+
+        // Full-Screen Functionality
+        function toggleFullScreen() {
+            const youtubeSection = document.getElementById('youtube-section');
+            if (!document.fullscreenElement) {
+                youtubeSection.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+    </script>
+</body>
+</html>
