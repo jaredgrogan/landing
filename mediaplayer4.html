@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebert – AI-Powered Intelligent Programming Guide</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f4f8, #fff); /* Improved light mode colors */
+            color: #000;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Improved logo typography */
+        .logo {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .time-date {
+            font-size: 1.4em;
+            color: inherit;
+        }
+
+        .toggle-mode {
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            margin-left: 10px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 30px;
+            transition: 0.4s;
+        }
+
+        .toggle-switch input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        .toggle-switch .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Main Container */
+        .main-container {
+            padding: 30px;
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .console-container {
+            margin-bottom: 30px;
+        }
+
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar input {
+            width: 80%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.3);
+            color: #000;
+            font-size: 1.1em;
+        }
+
+        .search-bar .voice-btn svg {
+            fill: #000; /* Black for day mode */
+        }
+
+        /* YouTube Display */
+        .youtube-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .youtube-embed {
+            width: 100%;
+            height: 350px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .youtube-embed iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Two YouTube Screens */
+        .two-youtube-screens .youtube-embed {
+            width: 48%;
+        }
+
+        .view-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .view-controls button {
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: transform 0.2s;
+        }
+
+        .view-controls button:hover {
+            transform: scale(1.05);
+        }
+
+        .notes-panel {
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .notes-panel h3 {
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .notes-panel button {
+            display: block;
+            margin: 10px 0;
+            padding: 12px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: inherit;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+
+        footer {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        footer button {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            padding: 12px 20px;
+            color: inherit;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s, color 0.4s;
+        }
+
+        footer button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Tooltip styling */
+        [data-tooltip] {
+            position: relative;
+            cursor: pointer;
+        }
+
+        [data-tooltip]:hover::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+        }
+
+        [data-tooltip]:hover::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent #333 transparent;
+        }
+
+        /* Dark Mode Styling */
+        body.night-mode {
+            background: linear-gradient(135deg, #2c3e50, #000);
+            color: #fff;
+        }
+
+        body.night-mode footer button {
+            color: #fff;
+        }
+
+        body.night-mode .search-bar input {
+            color: #fff;
+        }
+
+        body.night-mode .notes-panel button {
+            color: #fff;
+        }
+
+        body.night-mode .view-controls button {
+            background-color: #fff;
+            color: #2196F3;
+        }
+
+        body.night-mode .time-date {
+            color: #fff;
+        }
+
+        body.night-mode .search-bar .voice-btn svg {
+            fill: #fff; /* White for night mode */
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">Ebert</div>
+        <div class="time-date">00:43 AM | 06 September 2024</div>
+        <div class="toggle-mode">
+            <span>Day Mode / Night Mode</span>
+            <div class="toggle-switch">
+                <input type="checkbox" id="day-night-toggle">
+                <label for="day-night-toggle" class="slider"></label>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+
+        <!-- Search / Chat Console -->
+        <div class="console-container glass">
+            <div class="console-header">
+                <div class="mode-toggle">
+                    <button class="active" data-tooltip="Search Mode">
+                        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23.707 22.293l-6.4-6.4A9.95 9.95 0 0010 0 10 10 0 100 10a9.95 9.95 0 0015.893 7.307l6.4 6.4a1 1 0 001.414-1.414zM2 10a8 8 0 1116 0 8 8 0 01-16 0z"/>
+                        </svg>
+                    </button>
+                    <button data-tooltip="Chat Mode">
+                        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 1.5a1.5 1.5 0 011.5 1.5v10.5a1.5 1.5 0 01-1.5 1.5H5.829l-4.267 3.2A1 1 0 010 16.866V3A1.5 1.5 0 011.5 1.5H20zm0-1.5H1.5A3 3 0 00-1 3v13.866a3 3 0 004.854 2.366l4.267-3.2H20a3 3 0 003-3V3a3 3 0 00-3-3z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="platform-dropdown" data-tooltip="Select Platform">
+                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 21l9-18H3l9 18zm0 0l3-7-3 7zm-3-7l3-7-3 7z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search or chat here...">
+                <button class="voice-btn" data-tooltip="Voice Search">
+                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 1a3.999 3.999 0 00-4 4v7a4 4 0 008 0V5a3.999 3.999 0 00-4-4z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- YouTube Display Section -->
+        <div id="youtube-section" class="youtube-container">
+            <div class="youtube-embed">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube Video 1"></iframe>
+            </div>
+            <!-- If Two-Screen mode is enabled, the second video will appear here -->
+        </div>
+
+        <!-- View Control Buttons -->
+        <div class="view-controls">
+            <button onclick="showOneScreen()">One Screen</button>
+            <button onclick="showTwoScreens()">Two Screens</button>
+        </div>
+
+        <!-- Notes Section -->
+        <div class="notes-panel glass">
+            <h3>Notes</h3>
+            <button>✏️ Add Note</button>
+            <button>💾 Save Note</button>
+            <button>🗂️ View Notes</button>
+        </div>
+
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <button data-tooltip="View More">
+            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5l4 4H8l4-4zm0 10l-4-4h8l-4 4z"/>
+            </svg>
+        </button>
+        <button data-tooltip="Speak">
+            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1a3.999 3.999 0 00-4 4v7a4 4 0 008 0V5a3.999 3.999 0 00-4-4z"/>
+            </svg>
+        </button>
+        <button data-tooltip="Settings">
+            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 13.5h2v-3h-2a7.988 7.988 0 00-1.172-2.828l1.414-1.414-2.121-2.121-1.414 1.414A7.988 7.988 0 0013.5 4V2h-3v2A7.988 7.988 0 007.672 5.672l-1.414-1.414-2.121 2.121 1.414 1.414A7.988 7.988 0 004 10.5H2v3h2a7.988 7.988 0 001.172 2.828l-1.414 1.414 2.121 2.121 1.414-1.414A7.988 7.988 0 0010.5 20v2h3v-2a7.988 7.988 0 002.828-1.172l1.414 1.414 2.121-2.121-1.414-1.414A7.988 7.988 0 0020 13.5zM12 16a4 4 0 110-8 4 4 0 010 8z"/>
+            </svg>
+        </button>
+        <button data-tooltip="Analytics">
+            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm3 10l5 5-2 2-5-5v-2l4-4z"/>
+            </svg>
+        </button>
+        <button class="refresh-btn" data-tooltip="Refresh">
+            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.65 6.35A7.95 7.95 0 0012 4V1L8 5l4 4V6a6 6 0 016 6 6 6 0 01-6 6 6 6 0 01-5.65-4H3.05A8 8 0 0012 21a8 8 0 000-16z"/>
+            </svg>
+        </button>
+    </footer>
+
+    <script>
+        document.getElementById('day-night-toggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('night-mode');
+            } else {
+                document.body.classList.remove('night-mode');
+            }
+        });
+
+        function showOneScreen() {
+            const youtubeSection = document.getElementById('youtube-section');
+            youtubeSection.classList.remove('two-youtube-screens');
+            youtubeSection.innerHTML = `
+                <div class="youtube-embed">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube Video 1"></iframe>
+                </div>
+            `;
+        }
+
+        function showTwoScreens() {
+            const youtubeSection = document.getElementById('youtube-section');
+            youtubeSection.classList.add('two-youtube-screens');
+            youtubeSection.innerHTML = `
+                <div class="youtube-embed">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube Video 1"></iframe>
+                </div>
+                <div class="youtube-embed">
+                    <iframe src="https://www.youtube.com/embed/9bZkp7q19f0" title="YouTube Video 2"></iframe>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
