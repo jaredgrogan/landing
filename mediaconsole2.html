@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebert – AI-Powered Intelligent Programming Guide</title>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --text-color: #000;
+            --bg-color: #f3f4f6;
+            --glass-bg: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--glass-border);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .time-date {
+            font-size: 1.2em;
+        }
+
+        .toggle-mode {
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            margin-left: 10px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 30px;
+            transition: 0.4s;
+        }
+
+        .toggle-switch input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        .toggle-switch .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .main-container {
+            padding: 30px;
+        }
+
+        .youtube-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .youtube-embed {
+            width: 100%;
+            height: 350px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .youtube-embed iframe {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .view-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .view-controls button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .view-controls button:hover {
+            transform: scale(1.05);
+            background-color: #1976D2;
+        }
+
+        .platform-dropdown {
+            margin: 20px 0;
+        }
+
+        .platform-dropdown ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .platform-dropdown ul li {
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 5px;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        .platform-dropdown ul li:hover {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .notes-panel {
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .notepad textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+        }
+
+        footer {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        footer button {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        footer button:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        body.night-mode {
+            --text-color: #e0e0e0;
+            --bg-color: #1d2938;
+            --glass-bg: rgba(18, 18, 18, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="glass">
+        <div class="logo">Ebert</div>
+        <div class="time-date">00:43 AM | 06 September 2024</div>
+        <div class="toggle-mode">
+            <span>Day Mode / Night Mode</span>
+            <div class="toggle-switch">
+                <input type="checkbox" id="day-night-toggle">
+                <label for="day-night-toggle" class="slider"></label>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div id="youtube-section" class="youtube-container">
+            <div class="youtube-embed glass">
+                <iframe src="https://www.youtube.com/embed/DpQQi2scsHo" title="YouTube Video 1"></iframe>
+                <input type="text" placeholder="Search within YouTube..." id="youtube-search-1">
+            </div>
+            <div class="youtube-embed glass">
+                <iframe src="https://www.youtube.com/embed/aircAruvnKk&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" title="YouTube Video 2"></iframe>
+                <input type="text" placeholder="Search within YouTube..." id="youtube-search-2">
+            </div>
+        </div>
+
+        <div class="view-controls">
+            <button onclick="showOneScreen()">One Screen</button>
+            <button onclick="showTwoScreens()">Two Screens</button>
+            <button onclick="toggleFullScreen(1)">Full Screen</button>
+        </div>
+
+        <div class="platform-dropdown glass">
+            <button>🎞️ Platforms ▼</button>
+            <ul class="dropdown-content">
+                <li>YouTube</li>
+                <li>Netflix</li>
+                <li>Amazon</li>
+                <li>HBO</li>
+                <li>Tubi</li>
+                <li>Roku</li>
+            </ul>
+        </div>
+
+        <div class="notes-panel glass">
+            <textarea id="notepad-text" placeholder="Take notes..."></textarea>
+            <button onclick="saveNote()">Save Note</button>
+            <button onclick="exportNote()">Export Note</button>
+        </div>
+    </div>
+
+    <footer class="glass">
+        <button data-tooltip="Track your usage statistics">
+            <svg><!-- Analytics Icon --></svg> Analytics
+        </button>
+        <button class="refresh-btn" data-tooltip="Update content and reset the interface">
+            <svg><!-- Refresh Icon --></svg> Refresh
+        </button>
+        <button onclick="micRecord()" class="voice-btn" data-tooltip="Speak your query or command">
+            <svg><!-- Mic Icon --></svg> Speak
+        </button>
+    </footer>
+
+    <script>
+        document.getElementById('day-night-toggle').addEventListener('change', function () {
+            document.body.classList.toggle('night-mode');
+        });
+
+        function showOneScreen() {
+            const youtubeSection = document.getElementById('youtube-section');
+            youtubeSection.innerHTML = `
+                <div class="youtube-embed glass">
+                    <iframe src="https://www.youtube.com/embed/DpQQi2scsHo" title="YouTube Video 1"></iframe>
+                    <input type="text" placeholder="Search within YouTube..." id="youtube-search-1">
+                </div>
+            `;
+        }
+
+        function showTwoScreens() {
+            const youtubeSection = document.getElementById('youtube-section');
+            youtubeSection.innerHTML = `
+                <div class="youtube-embed glass">
+                    <iframe src="https://www.youtube.com/embed/DpQQi2scsHo" title="YouTube Video 1"></iframe>
+                    <input type="text" placeholder="Search within YouTube..." id="youtube-search-1">
+                </div>
+                <div class="youtube-embed glass">
+                    <iframe src="https://www.youtube.com/embed/aircAruvnKk&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" title="YouTube Video 2"></iframe>
+                    <input type="text" placeholder="Search within YouTube..." id="youtube-search-2">
+                </div>
+            `;
+        }
+
+        function toggleFullScreen(screen) {
+            if (screen === 1) showOneScreen();
+            else showTwoScreens();
+            document.getElementById('youtube-section').requestFullscreen();
+        }
+
+        function saveNote() {
+            localStorage.setItem('note', document.getElementById('notepad-text').value);
+            alert('Note saved!');
+        }
+
+        function exportNote() {
+            const note = localStorage.getItem('note') || '';
+            const blob = new Blob([note], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'note.txt';
+            link.click();
+        }
+
+        function micRecord() {
+            const micBtn = document.querySelector('.voice-btn');
+            micBtn.classList.toggle('mic-active');
+        }
+    </script>
+</body>
+
+</html>
