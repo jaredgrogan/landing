@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Universitas Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon10.svg" type="image/svg+xml">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f3f4f6, #e2e8f0);
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dark-mode {
+      background: linear-gradient(135deg, #1e1e1e, #2d3748);
+      color: #e0e0e0;
+    }
+
+    .nav-header {
+      position: fixed;
+      top: 24px;
+      right: 230px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-header ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .nav-header ul li {
+      position: relative;
+    }
+
+    .nav-header ul li a {
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .nav-header ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: rgba(213, 213, 213, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .nav-header ul li ul li a {
+      font-weight: normal;
+      font-size: 14px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      display: block;
+      color: #111827;
+    }
+
+    .nav-header ul li ul li a:hover,
+    .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .dark-mode .nav-header ul li ul {
+      background-color: rgba(51, 51, 51, 0.8);
+    }
+
+    .dark-mode .nav-header ul li ul li a {
+      color: #e0e0e0;
+    }
+
+    .dark-mode .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: #e0e0e0;
+    }
+
+    .nav-header ul li:hover ul {
+      display: block;
+    }
+
+    .light-mode .nav-header ul li a {
+      color: black;
+    }
+
+    .dark-mode .nav-header ul li a {
+      color: white;
+    }
+
+    .toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .toggle-container button {
+      border: 1px solid #111827;
+    }
+
+    .language-select {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      z-index: 100;
+    }
+
+    .language-select select {
+      background: none;
+      color: inherit;
+      border: 1px solid #111827;
+      border-radius: 5px;
+      padding: 5px;
+      outline-color: #007bff;
+    }
+
+    .language-select select:focus {
+      outline: 2px solid #007bff;
+    }
+
+    .hero-section {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+    }
+
+    .minilogo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      transition: transform 0.3s ease;
+    }
+
+    .minilogo:hover {
+      transform: scale(1.5);
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.5);
+      transition: transform 0.3s ease;
+    }
+
+    .circle {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      line-height: 100px;
+      text-align: center;
+      font-size: 5rem;
+    }
+
+    .u {
+      color: #000;
+      font-size: 5rem;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .dark-mode .u {
+      color: #fff;
+    }
+
+    .content {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    footer {
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .glass:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .glass {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .dark-mode .glass:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    #typingEffect {
+      font-family: 'Courier New', monospace;
+      font-size: 27px;
+      height: 40px;
+    }
+
+    .nav-header ul,
+    .language-select select,
+    .toggle-container button,
+    footer {
+      backdrop-filter: blur(5px);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      padding: 5px 10px;
+      transition: all 0.3s ease;
+    }
+
+    .dark-mode .nav-header ul,
+    .dark-mode .language-select select,
+    .dark-mode .toggle-container button,
+    .dark-mode footer {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-header ul:hover,
+    .language-select select:hover,
+    .toggle-container button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .dark-mode .nav-header ul:hover,
+    .dark-mode .language-select select:hover,
+    .dark-mode .toggle-container button:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .typing-text::after {
+      content: '|';
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <div class="nav-header">
+    <ul id="navMenu">
+      <li>
+        <a href="javascript:void(0)" id="navMenuItem">Menu</a>
+        <ul>
+          <li><a href="newconsole.html" id="navHeraklesItem">Herakles AI</a></li>
+          <li><a href="docuchat5.html" id="navResearchItem">Research</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="language-select">
+    <select id="languageSelect" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+
+  <div class="toggle-container">
+    <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+      <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="hero-section">
+    <a href="index.html" class="minilogo">
+      <img src="/favicon5.svg" alt="miniLogo" class="fade-in">
+    </a>
+    <div class="container glass fade-in">
+      <div class="tooltip">
+        <div class="logo">
+          <div class="circle">
+            <span class="u">U</span>
+          </div>
+        </div>
+        <span class="tooltiptext">Get started!</span>
+      </div>
+      <div class="content">
+        <div id="typingEffect" class="typing-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="glass">
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <script>
+    const app = document.getElementById('app');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const languageSelect = document.getElementById('languageSelect');
+    const navMenuItem = document.getElementById('navMenuItem');
+    const navHeraklesItem = document.getElementById('navHeraklesItem');
+    const navResearchItem = document.getElementById('navResearchItem');
+    const typingEffect = document.getElementById('typingEffect');
+
+    let isDarkMode = false;
+    let language = 'en';
+
+    const translations = {
+      en: {
+        navMenu: "Menu",
+        navHerakles: "Herakles AI",
+        navResearch: "Research",
+        slogan: "Your Cognitive Computer."
+      },
+      es: {
+        navMenu: "Menú",
+        navHerakles: "Herakles AI",
+        navResearch: "Investigación",
+        slogan: "Tu Computadora Cognitiva."
+      },
+    };
+
+    function changeLanguage() {
+      language = languageSelect.value;
+      updateLanguage();
+    }
+
+    function updateLanguage() {
+      navMenuItem.textContent = translations[language].navMenu;
+      navHeraklesItem.textContent = translations[language].navHerakles;
+      navResearchItem.textContent = translations[language].navResearch;
+      typeText(translations[language].slogan);
+    }
+
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+    }
+
+    function typeText(text) {
+      typingEffect.textContent = '';
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          typingEffect.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, 100);
+        }
+      }
+      type();
+    }
+
+    function addFadeInEffect() {
+      const elements = document.querySelectorAll('.fade-in');
+      elements.forEach((element, index) => {
+        setTimeout(() => {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }, index * 200);
+      });
+    }
+
+    function init() {
+      updateLanguage();
+      typeText(translations[language].slogan);
+      addFadeInEffect();
+    }
+
+    darkModeBtn.addEventListener('click', toggleDarkMode);
+    languageSelect.addEventListener('change', changeLanguage);
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+
+</html>
