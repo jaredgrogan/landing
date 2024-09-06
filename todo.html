@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradient To-Do List</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-beautiful-dnd/13.1.0/beautiful-dnd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #9c27b0, #e91e63, #f44336);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #app {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .input-container {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+        }
+        button {
+            background-color: #9c27b0;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 0 4px 4px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: linear-gradient(to right, #f3e5f5, #fce4ec);
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .sub-tasks {
+            margin-left: 1rem;
+        }
+        .sub-task {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+        .sub-task::before {
+            content: "✓";
+            margin-right: 0.5rem;
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { DragDropContext, Droppable, Draggable } = window.ReactBeautifulDnd;
+
+        function ToDoList() {
+            const [tasks, setTasks] = useState([]);
+            const [newTask, setNewTask] = useState('');
+
+            const onDragEnd = (result) => {
+                if (!result.destination) return;
+                const items = Array.from(tasks);
+                const [reorderedItem] = items.splice(result.source.index, 1);
+                items.splice(result.destination.index, 0, reorderedItem);
+                setTasks(items);
+            };
+
+            const addTask = () => {
+                if (newTask.trim() !== '') {
+                    setTasks([...tasks, { id: Date.now().toString(), content: newTask, subTasks: [], date: '' }]);
+                    setNewTask('');
+                }
+            };
+
+            const addSubTask = (taskId, subTask) => {
+                setTasks(tasks.map(task => 
+                    task.id === taskId 
+                        ? { ...task, subTasks: [...task.subTasks, { id: Date.now().toString(), content: subTask }] }
+                        : task
+                ));
+            };
+
+            const updateDate = (taskId, date) => {
+                setTasks(tasks.map(task => 
+                    task.id === taskId ? { ...task, date } : task
+                ));
+            };
+
+            return (
+                <div>
+                    <h1>Gradient To-Do List</h1>
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            value={newTask}
+                            onChange={(e) => setNewTask(e.target.value)}
+                            placeholder="Add a new task"
+                        />
+                        <button onClick={addTask}>Add</button>
+                    </div>
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable droppableId="tasks">
+                            {(provided) => (
+                                <ul {...provided.droppableProps} ref={provided.innerRef}>
+                                    {tasks.map((task, index) => (
+                                        <Draggable key={task.id} draggableId={task.id} index={index}>
+                                            {(provided) => (
+                                                <li
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                >
+                                                    <div className="task-header">
+                                                        <span>{task.content}</span>
+                                                        <input
+                                                            type="date"
+                                                            value={task.date}
+                                                            onChange={(e) => updateDate(task.id, e.target.value)}
+                                                        />
+                                                    </div>
+                                                    <ul className="sub-tasks">
+                                                        {task.subTasks.map((subTask) => (
+                                                            <li key={subTask.id} className="sub-task">
+                                                                <span>{subTask.content}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Add a sub-task"
+                                                        onKeyPress={(e) => {
+                                                            if (e.key === 'Enter' && e.target.value.trim() !== '') {
+                                                                addSubTask(task.id, e.target.value);
+                                                                e.target.value = '';
+                                                            }
+                                                        }}
+                                                    />
+                                                </li>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </ul>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<ToDoList />, document.getElementById('app'));
+    </script>
+</body>
+</html>
