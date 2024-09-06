@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Instagram Marketing Bootcamp</title>
+    <style>
+        /* Global styles */
+        :root {
+            --primary-color: #ff4d8d;
+            --secondary-color: #ff8f40;
+            --bg-dark: #1e1e1e;
+            --bg-light: #2a2a2a;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        h1, h2, h3 {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: #fff;
+            padding: 12px 24px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 77, 141, 0.4);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 77, 141, 0.6);
+        }
+        .cta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(42, 42, 42, 0.8) 100%), url('/api/placeholder/1200/600') center/cover no-repeat;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+        .hero p {
+            font-size: 1.4em;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+        .hero-graphic {
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            animation: fadeIn 1s ease-out 0.4s backwards;
+        }
+        .instagram-post {
+            width: 300px;
+            height: 400px;
+            background: #fff;
+            border-radius: 10px;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .instagram-post img {
+            width: 100%;
+            height: 60%;
+            object-fit: cover;
+        }
+        .instagram-post .content {
+            padding: 15px;
+            color: #333;
+            text-align: left;
+        }
+        .instagram-post .likes {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .instagram-post .caption {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        /* AI Tools Section */
+        .ai-tools {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, rgba(255, 77, 141, 0.1) 0%, rgba(255, 143, 64, 0.1) 100%);
+        }
+        .ai-tools h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .tool-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 77, 141, 0.2);
+        }
+        .tool-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        .tool-card p {
+            font-size: 1em;
+            color: #ddd;
+        }
+        /* FAQ Section */
+        .faq {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(42, 42, 42, 0.8) 100%);
+            padding: 80px 20px;
+        }
+        .faq h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+        }
+        .faq-item {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+        .faq-item button {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.2em;
+            text-align: left;
+            background: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .faq-item button:hover {
+            background: rgba(255, 77, 141, 0.1);
+        }
+        .faq-item p {
+            padding: 20px;
+            display: none;
+            color: #ddd;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+            .hero p {
+                font-size: 1.2em;
+            }
+            .cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            .instagram-post {
+                width: 90%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Master AI-Powered Instagram Marketing</h1>
+        <p>"Revolutionize Your Social Media Strategy with Cutting-Edge AI"</p>
+        <div class="cta">
+            <a href="#apply" class="btn">Apply Now</a>
+            <a href="#learn-more" class="btn">Explore Bootcamp</a>
+        </div>
+        <div class="hero-graphic">
+            <div class="instagram-post">
+                <img src="/api/placeholder/300/240" alt="AI-generated Instagram post">
+                <div class="content">
+                    <div class="likes">1,234 likes</div>
+                    <div class="caption">Harness the power of AI to skyrocket your Instagram engagement! 🚀 #AIMarketing #InstagramGrowth</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Tools Section -->
+    <section class="ai-tools" id="learn-more">
+        <div class="container">
+            <h2>Cutting-Edge AI Tools You'll Master</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3>Content Generator</h3>
+                    <p>Create engaging posts and captions using advanced natural language processing.</p>
+                </div>
+                <div class="tool-card">
+                    <h3>Hashtag Optimizer</h3>
+                    <p>Discover high-performing hashtags tailored to your content and audience.</p>
+                </div>
+                <div class="tool-card">
+                    <h3>Engagement Predictor</h3>
+                    <p>Forecast post performance and optimize timing for maximum reach.</p>
+                </div>
+                <div class="tool-card">
+                    <h3>Audience Analyzer</h3>
+                    <p>Gain deep insights into your followers' preferences and behaviors.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <button onclick="toggleFAQ(this)">What is AI-powered Instagram marketing?</button>
+                <p>AI-powered Instagram marketing leverages artificial intelligence and machine learning algorithms to optimize your social media strategy. It includes tools for content creation, audience analysis, engagement prediction, and performance optimization, all designed to boost your Instagram presence and ROI.</p>
+            </div>
+            <div class="faq-item">
+                <button onclick="toggleFAQ(this)">What are the prerequisites for this bootcamp?</button>
+                <p>No technical or coding experience is required! This bootcamp is designed for marketers, entrepreneurs, and social media enthusiasts of all levels. A basic understanding of Instagram and a passion for learning cutting-edge marketing techniques are all you need to get started.</p>
+            </div>
+            <div class="faq-item">
+                <button onclick="toggleFAQ(this)">How long does the program last?</button>
+                <p>The bootcamp runs for 6 intensive weeks, with 3 live online sessions per week. Each session is 2 hours long, complemented by hands-on assignments and projects. You'll also have access to our AI tools and learning resources for 3 months after the bootcamp ends.</p>
+            </div>
+            <div class="faq-item">
+                <button onclick="toggleFAQ(this)">Will I be able to apply these AI tools to my own Instagram account?</button>
+                <p>Absolutely! Throughout the bootcamp, you'll have the opportunity to apply all the AI tools and techniques directly to your own Instagram account. We encourage you to use your actual account to see real-time improvements and gain practical experience.</p>
+            </div>
+            <div class="faq-item">
+                <button onclick="toggleFAQ(this)">What kind of results can I expect after completing the bootcamp?</button>
+                <p>While results can vary, our past students have reported significant improvements in their Instagram performance. On average, graduates see a 150% increase in engagement rates, a 200% growth in followers, and a 300% boost in reach within 3 months of implementing our AI-powered strategies.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function toggleFAQ(button) {
+            const faqContent = button.nextElementSibling;
+            const allFAQs = document.querySelectorAll('.faq-item p');
+            allFAQs.forEach(item => {
+                if (item !== faqContent) {
+                    item.style.display = 'none';
+                }
+            });
+            faqContent.style.display = faqContent.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+
+</body>
+</html>
