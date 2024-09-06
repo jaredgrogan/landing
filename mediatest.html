@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebert – AI-Powered Intelligent Programming Guide</title>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --text-color: #000;
+            --bg-color: #f3f4f6;
+            --glass-bg: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-color), #fff);
+            color: var(--text-color);
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--glass-border);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ff7f50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .time-date {
+            font-size: 1.2em;
+        }
+
+        .toggle-mode {
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            margin-left: 10px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 30px;
+            transition: 0.4s;
+        }
+
+        .toggle-switch input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        .toggle-switch .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .main-container {
+            padding: 30px;
+        }
+
+        .youtube-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .youtube-embed {
+            width: 100%;
+            height: 350px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .youtube-embed iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        .two-youtube-screens .youtube-embed {
+            width: 48%;
+        }
+
+        footer {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        footer button {
+            background: none;
+            border: none;
+            padding: 10px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .youtube-container {
+                flex-direction: column;
+            }
+
+            .two-youtube-screens .youtube-embed {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            footer {
+                flex-wrap: wrap;
+            }
+
+            footer button {
+                margin: 5px;
+                flex: 1 1 40%;
+            }
+        }
+
+        /* Night Mode */
+        body.night-mode {
+            --text-color: #fff;
+            --bg-color: hsl(210, 8%, 35%);
+            --glass-bg: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <header class="glass">
+        <div class="logo">Ebert</div>
+        <div class="time-date">00:43 AM | 06 September 2024</div>
+        <div class="toggle-mode">
+            <span>Day Mode / Night Mode</span>
+            <div class="toggle-switch">
+                <input type="checkbox" id="day-night-toggle">
+                <label for="day-night-toggle" class="slider"></label>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div id="youtube-section" class="youtube-container">
+            <div class="youtube-embed glass">
+                <iframe src="https://www.youtube.com/embed/DpQQi2scsHo" title="YouTube Video 1" loading="lazy"></iframe>
+            </div>
+            <div class="youtube-embed glass">
+                <iframe src="https://www.youtube.com/embed/uJs693eNfuQ" title="YouTube Video 2" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer class="glass">
+        <button>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </footer>
+
+    <script>
+        // Day/Night mode toggle
+        document.getElementById('day-night-toggle').addEventListener('change', function() {
+            document.body.classList.toggle('night-mode');
+        });
+    </script>
+</body>
+</html>
