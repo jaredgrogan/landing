@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Universitas Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon10.svg" type="image/svg+xml">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    /* ... (keep existing styles) ... */
+
+    /* New styles for glassmorphism */
+    .glass {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .dark-mode .glass {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Animated gradient header */
+    .gradient-text {
+      font-family: 'Roboto', sans-serif;
+      font-size: 2.5rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientAnimation 5s ease infinite;
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Tooltip styles */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <!-- Animated Header -->
+  <h1 id="animatedHeader" class="gradient-text text-center mt-8">// Discover the Universe</h1>
+
+  <!-- ... (keep existing navigation, language select, and dark mode toggle) ... -->
+
+  <!-- Updated Hero Section -->
+  <div class="hero-section">
+    <a href="index.html" class="minilogo">
+      <img src="/favicon5.svg" alt="miniLogo">
+    </a>
+    <div class="container glass p-8">
+      <div class="tooltip">
+        <div class="logo">
+          <div class="circle">
+            <span class="u">U</span>
+          </div>
+        </div>
+        <span class="tooltiptext">Get started!</span>
+      </div>
+      <div class="content">
+        <div id="typingEffect" class="text-2xl font-bold mt-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ... (keep existing footer) ... -->
+
+  <script>
+    // ... (keep existing JavaScript) ...
+
+    // Typing effect
+    const typingElement = document.getElementById('typingEffect');
+    const text = "Your Cognitive Computer.";
+    let index = 0;
+
+    function typeText() {
+      if (index < text.length) {
+        typingElement.innerHTML += text.charAt(index);
+        index++;
+        setTimeout(typeText, 100);
+      } else {
+        typingElement.innerHTML += '<span class="blink">|</span>';
+      }
+    }
+
+    typeText();
+
+    // Update menu items
+    const navAppsItem = document.getElementById('navAppsItem');
+    const navLearnItem = document.getElementById('navLearnItem');
+    navAppsItem.textContent = 'Herakles AI';
+    navAppsItem.href = 'newconsole.html';
+    navLearnItem.textContent = 'Research';
+    navLearnItem.href = 'docuchat5.html';
+
+    // Translations update
+    const translations = {
+      en: {
+        navMenu: "Menu",
+        navHerakles: "Herakles AI",
+        navResearch: "Research",
+        slogan: "Your Cognitive Computer.",
+        header: "// Discover the Universe"
+      },
+      es: {
+        navMenu: "Menú",
+        navHerakles: "Herakles AI",
+        navResearch: "Investigación",
+        slogan: "Tu Computadora Cognitiva.",
+        header: "// Descubre el Universo"
+      },
+    };
+
+    function updateLanguage() {
+      navMenuItem.textContent = translations[language].navMenu;
+      navAppsItem.textContent = translations[language].navHerakles;
+      navLearnItem.textContent = translations[language].navResearch;
+      document.getElementById('animatedHeader').textContent = translations[language].header;
+      
+      // Reset typing effect with new language
+      typingElement.innerHTML = '';
+      index = 0;
+      text = translations[language].slogan;
+      typeText();
+    }
+
+    // ... (keep existing event listeners and function calls) ...
+  </script>
+</body>
+
+</html>
