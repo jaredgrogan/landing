@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebert - AI Programming Guide</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.3.0/luxon.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --background-light: linear-gradient(to bottom right, #E3F2FD, #FFFFFF);
+            --background-dark: linear-gradient(to bottom right, #0D47A1, #000000);
+            --text-light: #333333;
+            --text-dark: #FFFFFF;
+            --glass-light: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background: var(--background-light);
+            color: var(--text-light);
+        }
+
+        body.dark-mode {
+            background: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .datetime {
+            font-size: 1.2rem;
+        }
+
+        .mode-toggle {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .glass-container {
+            background: var(--glass-light);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .dark-mode .glass-container {
+            background: var(--glass-dark);
+        }
+
+        .search-chat-console {
+            grid-column: 1 / -1;
+        }
+
+        .search-chat-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .youtube-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .youtube-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .notes-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .notes-content {
+            flex-grow: 1;
+            min-height: 200px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--primary-color);
+        }
+
+        .footer-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .search-chat-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .footer-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Ebert</div>
+            <div class="datetime" id="datetime"></div>
+            <button class="mode-toggle" id="modeToggle">Toggle Day/Night</button>
+        </header>
+
+        <div class="main-container">
+            <div class="glass-container search-chat-console">
+                <div class="search-chat-controls">
+                    <div>
+                        <button class="btn" id="searchModeBtn">Search</button>
+                        <button class="btn" id="chatModeBtn">Chat</button>
+                    </div>
+                    <select class="btn">
+                        <option>Select Platform</option>
+                        <option>GitHub</option>
+                        <option>Stack Overflow</option>
+                        <option>MDN</option>
+                    </select>
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search or type a message...">
+                    <button class="btn">🎤</button>
+                    <button class="btn">Go</button>
+                </div>
+            </div>
+
+            <div class="glass-container youtube-container" id="youtubeContainer">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+
+            <div class="glass-container youtube-controls">
+                <button class="btn" id="oneScreenBtn">One Screen</button>
+                <button class="btn" id="twoScreenBtn">Two Screens</button>
+            </div>
+
+            <div class="glass-container notes-section">
+                <textarea class="notes-content" placeholder="Take notes here..."></textarea>
+                <div>
+                    <button class="btn">Add Note</button>
+                    <button class="btn">Save Notes</button>
+                    <button class="btn">View Notes</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-buttons">
+                <button class="btn">View More</button>
+                <button class="btn">Speak</button>
+                <button class="btn">Settings</button>
+                <button class="btn">Analytics</button>
+            </div>
+            <button class="refresh-btn">Refresh</button>
+        </footer>
+    </div>
+
+    <script>
+        const body = document.body;
+        const modeToggle = document.getElementById('modeToggle');
+        const dateTimeElement = document.getElementById('datetime');
+        const searchModeBtn = document.getElementById('searchModeBtn');
+        const chatModeBtn = document.getElementById('chatModeBtn');
+        const oneScreenBtn = document.getElementById('oneScreenBtn');
+        const twoScreenBtn = document.getElementById('twoScreenBtn');
+        const youtubeContainer = document.getElementById('youtubeContainer');
+
+        // Mode toggle
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+
+        // Date and time update
+        function updateDateTime() {
+            const now = luxon.DateTime.local();
+            dateTimeElement.textContent = now.toLocaleString(luxon.DateTime.DATETIME_FULL);
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Search/Chat mode toggle
+        searchModeBtn.addEventListener('click', () => {
+            searchModeBtn.style.backgroundColor = 'var(--primary-color)';
+            chatModeBtn.style.backgroundColor = '';
+        });
+
+        chatModeBtn.addEventListener('click', () => {
+            chatModeBtn.style.backgroundColor = 'var(--primary-color)';
+            searchModeBtn.style.backgroundColor = '';
+        });
+
+        // YouTube view controls
+        oneScreenBtn.addEventListener('click', () => {
+            youtubeContainer.style.gridColumn = 'span 1';
+        });
+
+        twoScreenBtn.addEventListener('click', () => {
+            youtubeContainer.style.gridColumn = 'span 2';
+        });
+
+        // Add hover effects to buttons
+        const buttons = document.querySelectorAll('.btn, .refresh-btn');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.transform = 'scale(1.05)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
