@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Instagram Marketing Bootcamp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.1.9/recharts.min.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Recharts;
+
+        const AIInstagramBootcamp = () => {
+            const [activeAccordion, setActiveAccordion] = useState(null);
+            const [chatbotOpen, setChatbotOpen] = useState(false);
+            const [email, setEmail] = useState('');
+
+            const toggleAccordion = (index) => {
+                setActiveAccordion(activeAccordion === index ? null : index);
+            };
+
+            const handleEmailSubmit = (e) => {
+                e.preventDefault();
+                console.log('Email submitted:', email);
+                setEmail('');
+            };
+
+            const courseModules = [
+                { name: 'AI Fundamentals', icon: '🤖' },
+                { name: 'Instagram Algorithm', icon: '📊' },
+                { name: 'Content Creation', icon: '🎨' },
+                { name: 'Audience Analysis', icon: '👥' },
+                { name: 'Engagement Strategies', icon: '🔥' },
+                { name: 'Performance Metrics', icon: '📈' },
+            ];
+
+            const instructors = [
+                { name: 'Dr. AI Smith', role: 'AI Expert', image: 'https://via.placeholder.com/150', linkedin: '#' },
+                { name: 'Sarah Insta', role: 'Instagram Guru', image: 'https://via.placeholder.com/150', linkedin: '#' },
+                { name: 'Mark Eting', role: 'Marketing Specialist', image: 'https://via.placeholder.com/150', linkedin: '#' },
+            ];
+
+            const testimonials = [
+                { name: 'Jane Doe', quote: 'This bootcamp revolutionized my Instagram strategy!', image: 'https://via.placeholder.com/60' },
+                { name: 'John Smith', quote: 'I saw a 500% increase in engagement after applying these techniques.', image: 'https://via.placeholder.com/60' },
+                { name: 'Alice Johnson', quote: 'The AI tools we learned about are game-changers.', image: 'https://via.placeholder.com/60' },
+            ];
+
+            const faqItems = [
+                { question: 'What is AI-Powered Instagram Marketing?', answer: 'AI-Powered Instagram Marketing involves using artificial intelligence tools and techniques to optimize your Instagram content, engagement, and growth strategies.' },
+                { question: 'Do I need prior experience with AI or Instagram?', answer: 'No prior experience is required. Our bootcamp is designed to take you from beginner to expert in AI-Powered Instagram Marketing.' },
+                { question: 'How long is the bootcamp?', answer: 'The bootcamp is an intensive 8-week program with both live sessions and self-paced learning materials.' },
+                { question: 'What tools will I learn to use?', answer: 'You'll learn to use cutting-edge AI tools for content creation, audience analysis, engagement optimization, and performance tracking.' },
+            ];
+
+            const applicationSteps = [
+                'Submit Application',
+                'Complete Assessment',
+                'Interview',
+                'Acceptance',
+                'Enroll',
+            ];
+
+            const demoData = [
+                { name: 'Mon', engagement: 1000 },
+                { name: 'Tue', engagement: 2000 },
+                { name: 'Wed', engagement: 1500 },
+                { name: 'Thu', engagement: 3000 },
+                { name: 'Fri', engagement: 2500 },
+                { name: 'Sat', engagement: 4000 },
+                { name: 'Sun', engagement: 3500 },
+            ];
+
+            return (
+                <div className="min-h-screen bg-gray-900 text-white font-sans">
+                    {/* Hero Section */}
+                    <header className="bg-gradient-to-r from-purple-900 to-indigo-900 py-20 px-4 sm:px-6 lg:px-8">
+                        <div className="max-w-7xl mx-auto">
+                            <h1 className="text-5xl font-bold mb-4 animate-fade-in">Master AI-Powered Instagram Marketing</h1>
+                            <p className="text-xl mb-8">Unlock the potential of AI to skyrocket your Instagram presence</p>
+                            <button className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+                                Apply Now
+                            </button>
+                        </div>
+                    </header>
+
+                    {/* Course Overview */}
+                    <section className="py-16 px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-3xl font-bold mb-8 text-center">Course Roadmap</h2>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                            {courseModules.map((module, index) => (
+                                <div key={index} className="bg-gray-800 p-6 rounded-lg text-center hover:bg-gray-700 transition duration-300 ease-in-out cursor-pointer">
+                                    <div className="text-4xl mb-4">{module.icon}</div>
+                                    <h3 className="text-xl font-semibold">{module.name}</h3>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* Key Features */}
+                    <section className="bg-gray-800 py-16 px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-3xl font-bold mb-8 text-center">Key Features</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                            {['AI-Powered Content Creation', 'Real-time Analytics', 'Automated Engagement Strategies', 'Personalized Learning Path', 'Industry Expert Mentorship', 'Hands-on Projects'].map((feature, index) => (
+                                <div key={index} className="bg-gray-700 p-6 rounded-lg text-center hover:bg-gray-600 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                                    <h3 className="text-xl font-semibold mb-2">{feature}</h3>
+                                    <p className="text-gray-300">Click to learn more</p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* Instructor Profiles */}
+                    <section className="py-16 px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-3xl font-bold mb-8 text-center">Meet Your Instructors</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                            {instructors.map((instructor, index) => (
+                                <div key={index} className="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src={instructor.image} alt={instructor.name} className="w-full h-48 object-cover" />
+                                    <div className="p-4">
+                                        <h3 className="text-xl font-semibold mb-1">{instructor.name}</h3>
+                                        <p className="text-gray-400 mb-4">{instructor.role}</p>
+                                        <a href={instructor.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
+                                            LinkedIn Profile
+                                        </a>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* Interactive Demo */}
+                    <section className="bg-gray-800 py-16 px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-3xl font-bold mb-8 text-center">AI-Powered Engagement Prediction</h2>
+                        <div className="max-w-4xl mx-auto bg-gray-700 rounded-lg p-6">
+                            <ResponsiveContainer width="100%" height={300}>
+                                <LineChart data={demoData}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                                    <XAxis dataKey="name" stroke="#fff" />
+                                    <YAxis stroke="#fff" />
+                                    <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} />
+                                    <Line type="monotone" dataKey="engagement" stroke="#8884d8" strokeWidth={2} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                            <p className="mt-4 text-center text-gray-300">This demo shows predicted engagement levels based on AI analysis of your content and posting times.</p>
+                        </div>
+                    </section>
+
+                    {/* Testimonials */}
+                    <section className="py-16 px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-3xl font-bold mb-8 text-center">What Our Students Say</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                            {testimonials.map((testimonial, index) => (
+                                <div key={index} className="bg-gray-800 p-6 rounded-lg">
+                                    <img src={testimonial.image} alt={testimonial.name} className="w-16 h-16 rounded-full mx-auto mb-4" />
+                                    <p className="text-gray-300 mb-4">"{testimonial.quote}"</p>
+                                    <p className="font-semibold">{testimonial.name}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* FAQ Section */}
+                    <section className="bg-gray-800 py-16 px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-3xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
+                        <div className="max-w-3xl mx-auto">
+                            {faqItems.map((item, index) => (
+                                <div key={index} className="mb-4">
+                                    <button
+                                        className="flex justify-between items-center w-full text-left p-4 bg-gray-700 hover:bg-gray-600 rounded-lg focus:outline-none"
+                                        onClick={() => toggleAccordion(index)}
+                                    >
+                                        <span className="font-semibold">{item.question}</span>
+                                        <span>{activeAccordion === index ? '▲' : '▼'}</span>
+                                    </button>
+                                    {activeAccordion === index && (
+                                        <div className="p-4 bg-gray-600 rounded-b-lg">
+                                            <p>{item.answer}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* Application Process */}
+                    <section className="py-16 px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-3xl font-bold mb-8 text-center">Application Process</h2>
+                        <div className="max-w-4xl mx-auto">
+                            <div className="flex flex-col md:flex-row justify-between items-center">
+                                {applicationSteps.map((step, index) => (
+                                    <div key={index} className="flex flex-col items-center mb-4 md:mb-0">
+                                        <div className="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center text-xl font-bold mb-2">
+                                            {index + 1}
+                                        </div>
+                                        <p className="text-center">{step}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                   {/* Call-to-Action */}
+                    <section className="bg-gradient-to-r from-purple-900 to-indigo-900 py-16 px-4 sm:px-6 lg:px-8">
+                        <div className="max-w-3xl mx-auto text-center">
+                            <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Instagram Marketing?</h2>
+                            <p className="mb-8">Join our next cohort and master the art of AI-Powered Instagram Marketing</p>
+                            <form onSubmit={handleEmailSubmit} className="flex flex-col md:flex-row justify-center items-center">
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    className="w-full md:w-auto px-4 py-2 rounded-l-lg mb-4 md:mb-0 text-gray-900"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                                <button type="submit" className="w-full md:w-auto bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-r-lg transition duration-300 ease-in-out">
+                                    Get More Info
+                                </button>
+                            </form>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+                        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+                            <div className="mb-4 md:mb-0">
+                                <p>&copy; 2024 AI-Powered Instagram Marketing Bootcamp</p>
+                            </div>
+                            <div className="flex space-x-4">
+                                <a href="#" className="text-gray-400 hover:text-white">LinkedIn</a>
+                                <a href="#" className="text-gray-400 hover:text-white">Email</a>
+                            </div>
+                        </div>
+                    </footer>
+
+                    {/* Floating Action Button */}
+                    <button
+                        className="fixed bottom-4 right-4 bg-pink-600 hover:bg-pink-700 text-white rounded-full p-4 shadow-lg transition duration-300 ease-in-out"
+                        onClick={() => setChatbotOpen(!chatbotOpen)}
+                    >
+                        Chat
+                    </button>
+
+                    {/* Chatbot */}
+                    {chatbotOpen && (
+                        <div className="fixed bottom-20 right-4 w-80 bg-gray-800 rounded-lg shadow-xl p-4">
+                            <h3 className="text-xl font-bold mb-4">Chatbot</h3>
+                            <p className="mb-4">How can I assist you today?</p>
+                            <input type="text" placeholder="Type your question here" className="w-full px-3 py-2 rounded bg-gray-700 text-white mb-2" />
+                            <button className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded">
+                                Send
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Accessibility Alert */}
+                    <div className="fixed top-4 left-4 w-auto max-w-md bg-gray-800 border-gray-700 p-4 rounded-lg shadow-lg">
+                        <h4 className="font-bold mb-2">Accessibility</h4>
+                        <p>
+                            Press 'Tab' to navigate and 'Enter' to select. Use arrow keys for accordion menus.
+                        </p>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<AIInstagramBootcamp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
