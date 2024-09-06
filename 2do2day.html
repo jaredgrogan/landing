@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects - Cognitive Cloud</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+        }
+        #gradient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+        .menu-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .menu-bar button {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 5px;
+        }
+        .menu-bar button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .input-container {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        input[type="text"], input[type="date"] {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .task-content {
+            flex-grow: 1;
+            margin-right: 1rem;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        #chat-console {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            width: 300px;
+            height: 300px;
+            padding: 10px;
+            display: none;
+            border-radius: 10px;
+        }
+        #chat-console input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        #chat-output {
+            height: 200px;
+            overflow-y: scroll;
+            color: white;
+        }
+        #chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gradient-canvas"></canvas>
+    <div id="app">
+        <div class="container">
+            <h1>My Projects</h1>
+            <div class="menu-bar">
+                <button onclick="exportAsTXT()">Export as TXT</button>
+                <button onclick="exportAsPDF()">Export as PDF</button>
+                <button onclick="exportAsCSV()">Export as CSV</button>
+                <button onclick="shareViaEmail()">Share via Email</button>
+                <button onclick="saveData()">Save</button>
+            </div>
+            <ul id="task-list"></ul>
+            <div class="stats">
+                <span>Ongoing items: 0</span>
+                <span>Completed items: 0</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-console">
+        <input type="text" id="chat-input" placeholder="Ask GPT-3.5 turbo" />
+        <button onclick="sendMessageToGPT()">Send</button>
+        <div id="chat-output"></div>
+    </div>
+    <div id="chat-toggle" onclick="toggleChat()">💬</div>
+
+    <footer>© 2024 Cognitive Cloud</footer>
+
+    <script>
+        // Export functions
+        function getTasksAsString() {
+            // Example task data
+            return "Task 1\nTask 2\nTask 3\n";
+        }
+
+        function exportAsTXT() {
+            let tasks = getTasksAsString();
+            let blob = new Blob([tasks], { type: 'text/plain' });
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'tasks.txt';
+            link.click();
+        }
+
+        function exportAsPDF() {
+            html2canvas(document.querySelector(".container")).then(canvas => {
+                let imgData = canvas.toDataURL("image/png");
+                let pdf = new jsPDF();
+                pdf.addImage(imgData, 'PNG', 0, 0);
+                pdf.save("tasks.pdf");
+            });
+        }
+
+        function exportAsCSV() {
+            let csv = "Task,Due Date,Priority\nTask 1,2024-12-31,High\n";
+            let blob = new Blob([csv], { type: 'text/csv' });
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'tasks.csv';
+            link.click();
+        }
+
+        // Share via email (pseudo-code, needs backend implementation)
+        function shareViaEmail() {
+            alert('Email sharing is under construction.');
+        }
+
+        // Save functionality (pseudo-code, needs backend implementation)
+        function saveData() {
+            alert('Save functionality is under construction.');
+        }
+
+        // Chat console for GPT-3.5 turbo
+        function toggleChat() {
+            const chatConsole = document.getElementById('chat-console');
+            chatConsole.style.display = chatConsole.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function sendMessageToGPT() {
+            const query = document.getElementById('chat-input').value;
+            if (query) {
+                fetch('/api/chat', {
+                    method: 'POST',
+                    body: JSON.stringify({ query }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => response.json())
+                .then(data => {
+                    const output = document.getElementById('chat-output');
+                    output.innerHTML += `<div>User: ${query}</div>`;
+                    output.innerHTML += `<div>GPT-3.5: ${data.result}</div>`;
+                });
+            }
+        }
+
+        // Animated gradient background
+        const canvas = document.getElementById('gradient-canvas');
+        const ctx = canvas.getContext('2d');
+        let time = 0;
+        function animate() {
+            const width = canvas.width = window.innerWidth;
+            const height = canvas.height = window.innerHeight;
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, `hsl(${time % 360}, 70%, 60%)`);
+            gradient.addColorStop(1, `hsl(${(time + 80) % 360}, 70%, 40%)`);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            time += 0.25;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
