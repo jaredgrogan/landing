@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebert - AI-Powered Guide</title>
+    <style>
+        /* Base Styling */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom right, #f0f4f7, #d3e0ea);
+            margin: 0;
+            padding: 0;
+            transition: background 0.3s ease-in-out;
+        }
+
+        header, footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+        }
+
+        .time-date {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-label {
+            background: linear-gradient(90deg, #60a3bc, #0a3d62);
+            border-radius: 50px;
+            cursor: pointer;
+            width: 50px;
+            height: 26px;
+            position: relative;
+        }
+
+        /* Search/Chat Console */
+        .console {
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+        }
+
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .voice-btn {
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+        }
+
+        .voice-btn:hover {
+            box-shadow: 0 0 10px #0a3d62;
+        }
+
+        .console-menu {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .media-select {
+            padding: 8px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-chat-toggle button {
+            margin: 0 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #60a3bc;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-chat-toggle button:hover {
+            background-color: #0a3d62;
+        }
+
+        /* Results Section */
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .video-card:hover {
+            transform: scale(1.05);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+        }
+
+        .video-controls button {
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            background-color: #60a3bc;
+            color: white;
+            cursor: pointer;
+        }
+
+        .video-controls button:hover {
+            background-color: #0a3d62;
+        }
+
+        /* Notes Section */
+        .notes-panel {
+            position: fixed;
+            right: 0;
+            top: 100px;
+            width: 300px;
+            height: 100%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 16px 0 0 16px;
+        }
+
+        .notes-input {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .save-notes {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #60a3bc;
+            color: white;
+            cursor: pointer;
+        }
+
+        .save-notes:hover {
+            background-color: #0a3d62;
+        }
+
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer button {
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #60a3bc;
+            color: white;
+            cursor: pointer;
+        }
+
+        .footer button:hover {
+            background-color: #0a3d62;
+        }
+
+        .refresh-btn {
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="time-date">
+            <span id="currentTime">12:00 PM</span>
+            <span id="currentDate">September 5, 2024</span>
+        </div>
+        <div class="toggle-container">
+            <input type="checkbox" id="dayNightToggle" />
+            <label for="dayNightToggle" class="toggle-label"></label>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Search/Chat Console -->
+        <section class="console">
+            <div class="console-header">
+                <input type="text" placeholder="Search or ask a question..." class="search-bar" id="inputField">
+                <button class="voice-btn" id="voiceInput"></button>
+            </div>
+            <div class="console-menu">
+                <select class="media-select">
+                    <option>Netflix</option>
+                    <option>YouTube</option>
+                    <option>Amazon Prime</option>
+                </select>
+                <div class="search-chat-toggle">
+                    <button id="searchMode">Search</button>
+                    <button id="chatMode">Chat</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results">
+            <div class="video-card">
+                <img src="thumbnail1.jpg" alt="Video Thumbnail" class="video-thumbnail">
+                <div class="video-controls">
+                    <button class="summary-btn">Summary</button>
+                    <button class="related-btn">Related</button>
+                    <button class="preview-btn">Preview</button>
+                </div>
+            </div>
+            <!-- More video cards -->
+        </section>
+
+        <!-- Notes Section -->
+        <section class="notes-panel">
+            <textarea placeholder="Add your notes here..." class="notes-input"></textarea>
+            <button class="save-notes">Save</button>
+            <div class="saved-notes">
+                <!-- List of saved notes -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <button class="view-more-btn">View More</button>
+        <button class="speak-btn">Speak</button>
+        <button class="settings-btn">Settings</button>
+        <button class="analytics-btn">Analytics</button>
+        <button class="refresh-btn">Refresh</button>
+    </footer>
+
+    <script>
+        // Handle day/night mode toggle
+        document.getElementById('dayNightToggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.body.style.background = "linear-gradient(to bottom right, #1a1a1d, #2e2e38)";
+            } else {
+                document.body.style.background = "linear-gradient(to bottom right, #f0f4f7, #d3e0ea)";
+            }
+        });
+
+        // Placeholder for voice dictation (Whisper API integration)
+        document.getElementById('voiceInput').addEventListener('click', function() {
+            alert('Voice input will be handled via Whisper API');
+        });
+
+        // Handle switching between Search and Chat modes
+        document.getElementById('searchMode').addEventListener('click', function() {
+            alert('Search mode selected. Connect to search API here.');
+        });
+
+        document.getElementById('chatMode').addEventListener('click', function() {
+            alert('Chat mode selected. Connect to LLM API here.');
+        });
+
+        // Placeholder for saving notes
+        document.querySelector('.save-notes').addEventListener('click', function() {
+            alert('Note saved! Implement save functionality.');
+        });
+    </script>
+</body>
+
+</html>
