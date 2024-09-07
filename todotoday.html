@@ -103,7 +103,7 @@
         input::placeholder {
             color: rgba(255, 255, 255, 0.6);
         }
-        button {
+        button, select {
             background-color: rgba(255, 255, 255, 0.3);
             color: white;
             border: none;
@@ -111,7 +111,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        button:hover {
+        button:hover, select:hover {
             background-color: rgba(255, 255, 255, 0.4);
         }
         .add-button {
@@ -134,14 +134,19 @@
         .task-content {
             flex-grow: 1;
             margin-right: 1rem;
+            display: flex;
+            align-items: center;
         }
         .task-name {
             font-weight: bold;
             cursor: pointer;
-            padding-left: 0.5rem;
-            padding-top: 10px;
+            margin-left: 0.5rem;
         }
-        .task-actions button {
+        .task-actions {
+            display: flex;
+            align-items: center;
+        }
+        .task-actions button, .task-actions select {
             margin-left: 0.5rem;
             background-color: transparent;
             color: white;
@@ -156,16 +161,6 @@
             margin-top: 1rem;
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.8);
-        }
-        .priority {
-            display: flex;
-            gap: 0.25rem;
-        }
-        .priority svg {
-            width: 16px;
-            height: 16px;
-            fill: gold;
-            cursor: pointer;
         }
         .delete-button {
             background: none;
@@ -203,14 +198,14 @@
         const canvas = document.getElementById('gradient-canvas');
         const ctx = canvas.getContext('2d');
 
-        let time = 0;
+        let time = 240; // Start at 240 degrees for blue hues
         function animate() {
             const width = canvas.width = window.innerWidth;
             const height = canvas.height = window.innerHeight;
 
             const gradient = ctx.createLinearGradient(0, 0, width, height);
-            gradient.addColorStop(0, `hsl(${time % 360}, 70%, 60%)`);
-            gradient.addColorStop(1, `hsl(${(time + 80) % 360}, 70%, 40%)`);
+            gradient.addColorStop(0, `hsl(${time % 360}, 70%, 50%)`); // Lightened by 5%
+            gradient.addColorStop(1, `hsl(${(time + 80) % 360}, 70%, 30%)`); // Lightened by 5%
 
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
@@ -239,14 +234,6 @@
 
     <script type="text/babel">
         const { useState, useEffect } = React;
-
-        function StarIcon({ filled, onClick }) {
-            return (
-                <svg viewBox="0 0 24 24" fill={filled ? "gold" : "none"} stroke="gold" strokeWidth="2" onClick={onClick}>
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                </svg>
-            );
-        }
 
         function TrashIcon() {
             return (
@@ -284,7 +271,7 @@
                         id: Date.now(), 
                         content: newTask, 
                         completed: false, 
-                        priority: 1,
+                        priority: '★',
                         dueDate: dueDate
                     }]);
                     setNewTask('');
@@ -387,16 +374,15 @@
                         {tasks.map((task) => (
                             <li key={task.id} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
                                 <div className="task-content">
-                                    <div className="priority">
-                                        {[1, 2, 3].map(star => (
-                                            <StarIcon 
-                                                key={star} 
-                                                filled={star <= task.priority} 
-                                                onClick={() => changePriority(task.id, star)}
-                                            />
-                                        ))}
-                                    </div>
-                                    <span className="task-name" onClick={() => renameTask(task.id)}>{task.content}</span>
+                                    <select 
+                                        value={task.priority} 
+                                        onChange={(e) => changePriority(task.id, e.target.value)}
+                                    >
+                                        <option value="★">★</option>
+                                        <option value="★★">★★</option>
+                                        <option value="★★★">★★★</option>
+                                    </select>
+                                  <span className="task-name" onClick={() => renameTask(task.id)}>{task.content}</span>
                                     {task.annotation && <div><small>({task.annotation})</small></div>}
                                     {task.dueDate && <div><small>Due: {task.dueDate}</small></div>}
                                 </div>
