@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Universitas Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon10.svg" type="image/svg+xml">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .hero-section {
+      height: 70vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.1);
+    }
+
+    .circle {
+      display: inline-block;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+      border: 3px solid rgba(255, 255, 255, 0.7); /* Stroke outline */
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+      backdrop-filter: blur(10px); /* Glassmorphic blur */
+      -webkit-backdrop-filter: blur(10px); /* Webkit support */
+      text-align: center;
+      line-height: 150px; /* Centers the "U" */
+      transition: transform 0.3s ease;
+    }
+
+    .circle:hover {
+      transform: scale(1.1);
+    }
+
+    .u {
+      color: #000;
+      font-size: 5rem;
+      font-family: 'Courier New', Courier, monospace;
+      position: relative;
+      z-index: 1; /* Ensure "U" is on top of the blurred background */
+    }
+
+    .dark-mode .u {
+      color: #fff;
+    }
+
+    .content {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .enter-btn {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 27px;
+      font-family: 'Courier New', monospace;
+      transition: transform 0.3s ease;
+    }
+
+    .enter-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .enter-btn a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    footer {
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="logo">
+      <div class="circle">
+        <span class="u">U</span>
+      </div>
+    </div>
+    <div class="content">
+      <button class="enter-btn">
+        <a href="app.html" id="slogan">Your Cognitive Computer.</a>
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <script>
+    const app = document.getElementById('app');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const languageSelect = document.getElementById('languageSelect');
+    const navMenuItem = document.getElementById('navMenuItem');
+    const navAppsItem = document.getElementById('navAppsItem');
+    const navLearnItem = document.getElementById('navLearnItem');
+    const slogan = document.getElementById('slogan');
+
+    let isDarkMode = false;
+    let language = 'en';
+
+    const translations = {
+      en: {
+        navMenu: "Menu",
+        navApps: "Apps",
+        navLearn: "Learn",
+        slogan: "Your Cognitive Computer."
+      },
+      es: {
+        navMenu: "Menú",
+        navApps: "Aplicaciones",
+        navLearn: "Aprender",
+        slogan: "Tu Computadora Cognitiva."
+      },
+    };
+
+    function changeLanguage() {
+      language = languageSelect.value;
+      updateLanguage();
+    }
+
+    function updateLanguage() {
+      navMenuItem.textContent = translations[language].navMenu;
+      navAppsItem.textContent = translations[language].navApps;
+      navLearnItem.textContent = translations[language].navLearn;
+      slogan.textContent = translations[language].slogan;
+    }
+
+    // Day/Night mode toggle
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+    }
+
+    // Initialize the page with the default language
+    updateLanguage();
+  </script>
+</body>
+
+</html>
