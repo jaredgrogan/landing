@@ -1,0 +1,175 @@
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1E1E1E;
+    color: #E0E0E0;
+}
+
+/* Header Styling */
+.header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: #1E1E1E;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logo {
+    color: indigo;
+    font-size: 1.5rem;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+
+.nav-links li a {
+    color: #E0E0E0;
+    padding: 10px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+    color: indigo;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: #E0E0E0;
+    margin: 4px 0;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(135deg, #2F1D69, #3B3B3B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Grainy Texture Overlay */
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('grain-texture.png');
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+/* Hero Content */
+.hero-content {
+    text-align: center;
+    z-index: 1;
+}
+
+/* Hero Title */
+.hero-title {
+    font-size: 4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin-bottom: 1rem;
+    color: #E0E0E0;
+}
+
+/* Hero Subtitle */
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Call-to-Action Button */
+.cta-button {
+    padding: 0.75rem 2rem;
+    background-color: #2F1D69;
+    color: #E0E0E0;
+    border-radius: 30px;
+    text-transform: uppercase;
+    font-size: 1rem;
+    position: relative;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #5B4D9C;
+    transform: scale(1.1);
+}
+
+/* Tooltip Styling */
+.cta-button[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+/* Chat Section */
+.chat-container {
+    margin-top: 100px;
+    padding: 20px;
+}
+
+.chat-box {
+    background-color: #1E1E1E;
+    padding: 20px;
+    border-radius: 10px;
+    min-height: 200px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .cta-button {
+        font-size: 0.9rem;
+        padding: 0.6rem 1.8rem;
+    }
+}
