@@ -1,0 +1,170 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&family=Berkeley+Mono:wght@400&display=swap');
+
+/* Body Styling */
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    background-color: #1E1E1E;
+    color: #E0E0E0;
+}
+
+/* Header Styling */
+.header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: #1E1E1E;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logo {
+    color: white;
+    font-family: 'Berkeley Mono', serif;
+    font-size: 1.5rem;
+}
+
+/* Navigation Links Styling */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+.nav-links li a {
+    color: white;
+    text-decoration: none; /* Removed underline */
+    font-family: 'Source Sans Pro', sans-serif;
+    padding: 10px;
+    transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+    color: indigo;
+}
+
+/* Hamburger Menu (Mobile) */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 4px 0;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(135deg, #1E1E1E, #2F1D69);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hero-content {
+    text-align: center;
+    z-index: 1;
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-family: 'Berkeley Mono', serif;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin-bottom: 1rem;
+    color: #E0E0E0;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+/* Call-to-Action Button */
+.cta-button {
+    padding: 0.75rem 2rem;
+    background-color: #2F1D69;
+    color: #E0E0E0;
+    border-radius: 30px;
+    font-size: 1rem;
+    text-decoration: none; /* Removed underline */
+    font-family: 'Source Sans Pro', sans-serif;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #5B4D9C;
+    transform: scale(1.05);
+}
+
+/* Chat Container */
+.chat-container {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 300px;
+    padding: 15px;
+    background-color: #1E1E1E;
+    border: 2px solid #5B4D9C;
+    border-radius: 15px;
+    display: none;
+    z-index: 10;
+}
+
+.chat-container.open {
+    display: block;
+}
+
+.chat-box {
+    background-color: #292929;
+    padding: 10px;
+    border-radius: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+#chat-input {
+    width: calc(100% - 50px);
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 5px;
+    border: none;
+}
+
+/* Footer with Glassmorphic Effect */
+.footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+    }
+}
