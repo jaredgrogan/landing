@@ -1,0 +1,92 @@
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1E1E1E;
+    color: white;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(135deg, indigo, purple, gray, black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Grainy Texture Overlay */
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('grain-texture.png'); /* Optional: use a texture image */
+    opacity: 0.2; /* Adjust texture visibility */
+    pointer-events: none;
+}
+
+/* Hero Content */
+.hero-content {
+    text-align: center;
+    z-index: 1;
+}
+
+/* Hero Title */
+.hero-title {
+    font-size: 4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+/* Hero Subtitle */
+.hero-subtitle {
+    font-size: 1.5rem;
+    color: #E0E0E0;
+    margin-bottom: 2rem;
+}
+
+/* Call-to-Action Button */
+.cta-button {
+    padding: 0.75rem 2rem;
+    background-color: indigo;
+    color: white;
+    text-transform: uppercase;
+    font-size: 1rem;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+}
+
+.cta-button:hover {
+    background-color: purple;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .cta-button {
+        font-size: 0.9rem;
+        padding: 0.6rem 1.8rem;
+    }
+}
