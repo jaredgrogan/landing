@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        #gradient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            color: white;
+            margin: 0;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        .editable-title {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            width: 100%;
+        }
+        .date-time {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .input-container {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        input[type="text"], input[type="date"] {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        input[type="date"] {
+            border-radius: 0;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        button {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .add-button {
+            border-radius: 0 5px 5px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .task-content {
+            flex-grow: 1;
+            margin-right: 1rem;
+        }
+        .task-name {
+            font-weight: bold;
+        }
+        .task-actions button {
+            margin-left: 0.5rem;
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .priority {
+            display: flex;
+            gap: 0.25rem;
+        }
+        .priority svg {
+            width: 16px;
+            height: 16px;
+            fill: gold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gradient-canvas"></canvas>
+    <div id="app"></div>
+
+    <script>
+        // Gradient animation (unchanged)
+        const canvas = document.getElementById('gradient-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let time = 0;
+        function animate() {
+            const width = canvas.width = window.innerWidth;
+            const height = canvas.height = window.innerHeight;
+
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, `hsl(${time % 360}, 70%, 60%)`);
+            gradient.addColorStop(1, `hsl(${(time + 80) % 360}, 70%, 40%)`);
+
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+
+            time += 0.25;
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        setInterval(() => {
+            time += 30;
+        }, 30000);
+    </script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function StarIcon({ filled, onClick }) {
+            return (
+                <svg viewBox="0 0 24 24" fill={filled ? "gold" : "none"} stroke="gold" strokeWidth="2" onClick={onClick}>
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+            );
+        }
+
+        function ToDoList() {
+            const [tasks, setTasks] = useState([]);
+            const [newTask, setNewTask] = useState('');
+            const [dateTime, setDateTime] = useState('');
+            const [dueDate, setDueDate] = useState('');
+            const [title, setTitle] = useState('My Projects');
+            const [isEditingTitle, setIsEditingTitle] = useState(false);
+
+            useEffect(() => {
+                updateDateTime();
+                const timer = setInterval(updateDateTime, 1000);
+                return () => clearInterval(timer);
+            }, []);
+
+            function updateDateTime() {
+                const now = new Date();
+                setDateTime(now.toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+            }
+
+            const addTask = () => {
+                if (newTask.trim() !== '') {
+                    setTasks([...tasks, { 
+                        id: Date.now(), 
+                        content: newTask, 
+                        completed: false, 
+                        priority: 1,
+                        dueDate: dueDate
+                    }]);
+                    setNewTask('');
+                    setDueDate('');
+                }
+            };
+
+            const toggleComplete = (id) => {
+                setTasks(tasks.map(task => 
+                    task.id === id ? { ...task, completed: !task.completed } : task
+                ));
+            };
+
+            const annotateTask = (id, annotation) => {
+                const annotationText = prompt("Add annotation:", annotation || "");
+                if (annotationText !== null) {
+                    setTasks(tasks.map(task => 
+                        task.id === id ? { ...task, annotation: annotationText } : task
+                    ));
+                }
+            };
+
+            const changePriority = (id, newPriority) => {
+                setTasks(tasks.map(task => 
+                    task.id === id ? { ...task, priority: newPriority } : task
+                ));
+            };
+
+            const moveTask = (id, direction) => {
+                const index = tasks.findIndex(task => task.id === id);
+                if ((direction === 'up' && index > 0) || (direction === 'down' && index < tasks.length - 1)) {
+                    const newTasks = [...tasks];
+                    const [removed] = newTasks.splice(index, 1);
+                    newTasks.splice(direction === 'up' ? index - 1 : index + 1, 0, removed);
+                    setTasks(newTasks);
+                }
+            };
+
+            const ongoingTasks = tasks.filter(task => !task.completed).length;
+            const completedTasks = tasks.filter(task => task.completed).length;
+
+            return (
+                <>
+                    <div className="date-time">{dateTime}</div>
+                    <div className="container">
+                        <div className="header">
+                            {isEditingTitle ? (
+                                <input 
+                                    className="editable-title"
+                                    type="text" 
+                                    value={title} 
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    onBlur={() => setIsEditingTitle(false)}
+                                    onKeyPress={(e) => e.key === 'Enter' && setIsEditingTitle(false)}
+                                    autoFocus
+                                />
+                            ) : (
+                                <h1 onClick={() => setIsEditingTitle(true)}>{title}</h1>
+                            )}
+                        </div>
+                        <div className="input-container">
+                            <input
+                                type="text"
+                                value={newTask}
+                                onChange={(e) => setNewTask(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && addTask()}
+                                placeholder="Add a new task"
+                            />
+                            <input
+                                type="date"
+                                value={dueDate}
+                                onChange={(e) => setDueDate(e.target.value)}
+                            />
+                            <button className="add-button" onClick={addTask}>Add</button>
+                        </div>
+                        <ul>
+                            {tasks.map((task) => (
+                                <li key={task.id} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
+                                    <div className="task-content">
+                                        <div className="priority">
+                                            {[1, 2, 3].map(star => (
+                                                <StarIcon 
+                                                    key={star} 
+                                                    filled={star <= task.priority} 
+                                                    onClick={() => changePriority(task.id, star)}
+                                                />
+                                            ))}
+                                        </div>
+                                        <span className="task-name">{task.content}</span>
+                                        {task.annotation && <div><small>({task.annotation})</small></div>}
+                                        {task.dueDate && <div><small>Due: {task.dueDate}</small></div>}
+                                    </div>
+                                    <div className="task-actions">
+                                        <button onClick={() => toggleComplete(task.id)}>
+                                            {task.completed ? 'Undo' : 'Complete'}
+                                        </button>
+                                        <button onClick={() => annotateTask(task.id, task.annotation)}>
+                                            Annotate
+                                        </button>
+                                        <button onClick={() => moveTask(task.id, 'up')}>↑</button>
+                                        <button onClick={() => moveTask(task.id, 'down')}>↓</button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="stats">
+                            <span>Ongoing items: {ongoingTasks}</span>
+                            <span>Completed items: {completedTasks}</span>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        ReactDOM.render(<ToDoList />, document.getElementById('app'));
+    </script>
+</body>
+</html>
