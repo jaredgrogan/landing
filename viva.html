@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-beautiful-dnd/13.1.0/beautiful-dnd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        #gradient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            position: relative;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            color: white;
+            margin: 0;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        .date-time {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .input-container {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        input[type="text"], input[type="date"] {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        input[type="date"] {
+            border-radius: 0;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        button {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .add-button {
+            border-radius: 0 5px 5px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .task-content {
+            flex-grow: 1;
+            margin-right: 1rem;
+        }
+        .task-actions button {
+            margin-left: 0.5rem;
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .priority {
+            display: flex;
+            gap: 0.25rem;
+        }
+        .priority svg {
+            width: 16px;
+            height: 16px;
+            fill: gold;
+            cursor: pointer;
+        }
+        .minimize-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .minimize-button:hover {
+            transform: scale(1.5);
+        }
+        .freeze-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .export-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        .export-buttons button {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .award-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 215, 0, 0.9);
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            z-index: 1000;
+        }
+        .llm-integration {
+            margin-top: 1rem;
+        }
+        .llm-integration textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gradient-canvas"></canvas>
+    <div id="app"></div>
+
+    <script>
+        // Gradient animation (unchanged)
+        const canvas = document.getElementById('gradient-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let time = 0;
+        let animationPaused = false;
+
+        function animate() {
+            if (!animationPaused) {
+                const width = canvas.width = window.innerWidth;
+                const height = canvas.height = window.innerHeight;
+
+                const gradient = ctx.createLinearGradient(0, 0, width, height);
+                gradient.addColorStop(0, `hsl(${time % 360}, 70%, 60%)`);
+                gradient.addColorStop(1, `hsl(${(time + 80) % 360}, 70%, 40%)`);
+
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+
+                time += 0.25;
+            }
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        setInterval(() => {
+            if (!animationPaused) {
+                time += 30;
+            }
+        }, 30000);
+
+        function toggleAnimation() {
+            animationPaused = !animationPaused;
+        }
+    </script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        const { DragDropContext, Droppable, Draggable } = window.ReactBeautifulDnd;
+
+        function StarIcon({ filled, onClick }) {
+            return (
+                <svg viewBox="0 0 24 24" fill={filled ? "gold" : "none"} stroke="gold" strokeWidth="2" onClick={onClick}>
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+            );
+        }
+
+        function Confetti() {
+            const canvasRef = useRef(null);
+            
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                
+                const confetti = [];
+                const confettiCount = 100;
+                const gravity = 0.5;
+                const terminalVelocity = 5;
+                const drag = 0.075;
+                const colors = ['#FFC700', '#FF0000', '#2E3191', '#41A6F6'];
+                
+                for (let i = 0; i < confettiCount; i++) {
+                    confetti.push({
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        dimensions: {
+                            x: Math.random() * 10,
+                            y: Math.random() * 10,
+                        },
+                        position: {
+                            x: Math.random() * canvas.width,
+                            y: canvas.height - 1,
+                        },
+                        rotation: Math.random() * 360,
+                        scale: {
+                            x: 1,
+                            y: 1,
+                        },
+                        velocity: {
+                            x: Math.random() * 3 - 1.5,
+                            y: Math.random() * -3 - 3,
+                        },
+                    });
+                }
+                
+                function update() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    confetti.forEach((confetto, index) => {
+                        confetto.velocity.x -= confetto.velocity.x * drag;
+                        confetto.velocity.y = Math.min(confetto.velocity.y + gravity, terminalVelocity);
+                        confetto.velocity.x += Math.random() > 0.5 ? Math.random() : -Math.random();
+                        
+                        confetto.position.x += confetto.velocity.x;
+                        confetto.position.y += confetto.velocity.y;
+                        
+                        if (confetto.position.y >= canvas.height) confetti.splice(index, 1);
+                        
+                        confetto.rotation += 0.1;
+                        ctx.save();
+                        ctx.translate(confetto.position.x, confetto.position.y);
+                        ctx.rotate(confetto.rotation);
+                        ctx.fillStyle = confetto.color;
+                        ctx.fillRect(-confetto.dimensions.x / 2, -confetto.dimensions.y / 2, confetto.dimensions.x, confetto.dimensions.y);
+                        ctx.restore();
+                    });
+                    
+                    if (confetti.length > 0) {
+                        requestAnimationFrame(update);
+                    } else {
+                        canvas.remove();
+                    }
+                }
+                
+                update();
+            }, []);
+            
+            return <canvas ref={canvasRef} style={{position: 'fixed', top: 0, left: 0, pointerEvents: 'none', zIndex: 1000}} />;
+        }
+
+        function ToDoList() {
+            const [tasks, setTasks] = useState([]);
+            const [newTask, setNewTask] = useState('');
+            const [dateTime, setDateTime] = useState('');
+            const [dueDate, setDueDate] = useState('');
+            const [isMinimized, setIsMinimized] = useState(false);
+            const [showConfetti, setShowConfetti] = useState(false);
+            const [completedTaskCount, setCompletedTaskCount] = useState(0);
+            const [showAward, setShowAward] = useState(false);
+            const [title, setTitle] = useState('My Projects');
+            const [isEditingTitle, setIsEditingTitle] = useState(false);
+            const [llmInput, setLlmInput] = useState('');
+            const [llmResponse, setLlmResponse] = useState('');
+
+            useEffect(() => {
+                updateDateTime();
+                const timer = setInterval(updateDateTime, 1000);
+                return () => clearInterval(timer);
+            }, []);
+
+            function updateDateTime() {
+                const now = new Date();
+                setDateTime(now.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }));
+            }
+
+            const addTask = () => {
+                if (newTask.trim() !== '') {
+                    setTasks([...tasks, { 
+                        id: Date.now(), 
+                        content: newTask, 
+                        completed: false, 
+                        priority: 1,
+                        dueDate: dueDate
+                    }]);
+                    setNewTask('');
+                    setDueDate('');
+                }
+            };
+
+            const toggleComplete = (id) => {
+                setTasks(tasks.map(task => {
+                    if (task.id === id) {
+                        const newCompleted = !task.completed;
+                        if (newCompleted) {
+                            setCompletedTaskCount(prev => {
+                                const newCount = prev + 1;
+                                if (newCount % 10 === 0) {
+                                    setShowAward(true);
+                                    setTimeout(() => setShowAward(false), 3000);
+                                }
+                                return newCount;
+                            });
+                            setShowConfetti(true);
+                            setTimeout(() => setShowConfetti(false), 3000);
+                        }
+                        return { ...task, completed: newCompleted };
+                    }
+                    return task;
+                }));
+            };
+
+           const annotateTask = (id, annotation) => {
+                const annotationText = prompt("Add annotation:", annotation || "");
+                if (annotationText !== null) {
+                    setTasks(tasks.map(task => 
+                        task.id === id ? { ...task, annotation: annotationText } : task
+                    ));
+                }
+            };
+
+            const changePriority = (id, newPriority) => {
+                setTasks(tasks.map(task => 
+                    task.id === id ? { ...task, priority: newPriority } : task
+                ));
+            };
+
+            const onDragEnd = (result) => {
+                if (!result.destination) return;
+                const newTasks = Array.from(tasks);
+                const [reorderedItem] = newTasks.splice(result.source.index, 1);
+                newTasks.splice(result.destination.index, 0, reorderedItem);
+                setTasks(newTasks);
+            };
+
+            const handleVoiceCommand = () => {
+                if ('webkitSpeechRecognition' in window) {
+                    const recognition = new window.webkitSpeechRecognition();
+                    recognition.onresult = (event) => {
+                        const command = event.results[0][0].transcript.toLowerCase();
+                        if (command.includes('add task')) {
+                            const taskContent = command.replace('add task', '').trim();
+                            setTasks([...tasks, { 
+                                id: Date.now(), 
+                                content: taskContent, 
+                                completed: false, 
+                                priority: 1,
+                                dueDate: ''
+                            }]);
+                        } else if (command.includes('complete task')) {
+                            const taskIndex = parseInt(command.replace('complete task', '').trim()) - 1;
+                            if (taskIndex >= 0 && taskIndex < tasks.length) {
+                                toggleComplete(tasks[taskIndex].id);
+                            }
+                        }
+                    };
+                    recognition.start();
+                } else {
+                    alert('Voice recognition is not supported in this browser.');
+                }
+            };
+
+            const exportAsPDF = () => {
+                const input = document.getElementById('app');
+                html2canvas(input).then((canvas) => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jspdf.jsPDF();
+                    pdf.addImage(imgData, 'PNG', 0, 0);
+                    pdf.save("tasks.pdf");
+                });
+            };
+
+            const exportAsImage = () => {
+                const input = document.getElementById('app');
+                html2canvas(input).then((canvas) => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.download = 'tasks.png';
+                    link.href = imgData;
+                    link.click();
+                });
+            };
+
+            const exportAsTxt = () => {
+                const taskText = tasks.map(task => `${task.content} (Priority: ${task.priority}, Completed: ${task.completed})`).join('\n');
+                const blob = new Blob([taskText], { type: 'text/plain' });
+                const link = document.createElement('a');
+                link.download = 'tasks.txt';
+                link.href = URL.createObjectURL(blob);
+                link.click();
+            };
+
+            const handleLlmInteraction = async () => {
+                try {
+                    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer YOUR_API_KEY_HERE'
+                        },
+                        body: JSON.stringify({
+                            model: "gpt-3.5-turbo",
+                            messages: [{ role: "user", content: llmInput }],
+                            temperature: 0.7
+                        })
+                    });
+                    const data = await response.json();
+                    setLlmResponse(data.choices[0].message.content);
+                } catch (error) {
+                    console.error('Error:', error);
+                    setLlmResponse('An error occurred while processing your request.');
+                }
+            };
+
+            const ongoingTasks = tasks.filter(task => !task.completed).length;
+            const completedTasks = tasks.filter(task => task.completed).length;
+
+            return (
+                <>
+                    {showConfetti && <Confetti />}
+                    {showAward && (
+                        <div className="award-notification">
+                            Congratulations! You've completed 10 tasks!
+                        </div>
+                    )}
+                    <div className="container" style={{ display: isMinimized ? 'none' : 'block' }}>
+                        <div className="header">
+                            {isEditingTitle ? (
+                                <input 
+                                    type="text" 
+                                    value={title} 
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    onBlur={() => setIsEditingTitle(false)}
+                                    onKeyPress={(e) => e.key === 'Enter' && setIsEditingTitle(false)}
+                                />
+                            ) : (
+                                <h1 onClick={() => setIsEditingTitle(true)}>{title}</h1>
+                            )}
+                            <div className="date-time">{dateTime}</div>
+                        </div>
+                        <div className="input-container">
+                            <input
+                                type="text"
+                                value={newTask}
+                                onChange={(e) => setNewTask(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && addTask()}
+                                placeholder="Add a new task"
+                            />
+                            <input
+                                type="date"
+                                value={dueDate}
+                                onChange={(e) => setDueDate(e.target.value)}
+                            />
+                            <button className="add-button" onClick={addTask}>Add</button>
+                        </div>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            <Droppable droppableId="tasks">
+                                {(provided) => (
+                                    <ul {...provided.droppableProps} ref={provided.innerRef}>
+                                        {tasks.map((task, index) => (
+                                            <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                                                {(provided) => (
+                                                    <li 
+                                                        ref={provided.innerRef} 
+                                                        {...provided.draggableProps} 
+                                                        {...provided.dragHandleProps}
+                                                        style={{
+                                                            ...provided.draggableProps.style,
+                                                            textDecoration: task.completed ? 'line-through' : 'none'
+                                                        }}
+                                                    >
+                                                        <div className="task-content">
+                                                            <div className="priority">
+                                                                {[1, 2, 3].map(star => (
+                                                                    <StarIcon 
+                                                                        key={star} 
+                                                                        filled={star <= task.priority} 
+                                                                        onClick={() => changePriority(task.id, star)}
+                                                                    />
+                                                                ))}
+                                                            </div>
+                                                            {task.content}
+                                                            {task.annotation && <div><small>({task.annotation})</small></div>}
+                                                            {task.dueDate && <div><small>Due: {task.dueDate}</small></div>}
+                                                        </div>
+                                                        <div className="task-actions">
+                                                            <button onClick={() => toggleComplete(task.id)}>
+                                                                {task.completed ? 'Undo' : 'Complete'}
+                                                            </button>
+                                                            <button onClick={() => annotateTask(task.id, task.annotation)}>
+                                                                Annotate
+                                                            </button>
+                                                        </div>
+                                                    </li>
+                                                )}
+                                            </Draggable>
+                                        ))}
+                                        {provided.placeholder}
+                                    </ul>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                        <div className="stats">
+                            <span>Ongoing items: {ongoingTasks}</span>
+                            <span>Completed items: {completedTasks}</span>
+                        </div>
+                        <div className="export-buttons">
+                            <button onClick={exportAsPDF}>Export as PDF</button>
+                            <button onClick={exportAsImage}>Export as Image</button>
+                            <button onClick={exportAsTxt}>Export as TXT</button>
+                            <button onClick={handleVoiceCommand}>Voice Command</button>
+                        </div>
+                        <div className="llm-integration">
+                            <textarea 
+                                value={llmInput} 
+                                onChange={(e) => setLlmInput(e.target.value)}
+                                placeholder="Ask the AI for task suggestions or advice..."
+                            />
+                            <button onClick={handleLlmInteraction}>Get AI Assistance</button>
+                            {llmResponse && <div className="llm-response">{llmResponse}</div>}
+                        </div>
+                    </div>
+                    <div className="minimize-button" onClick={() => setIsMinimized(!isMinimized)}>
+                        {isMinimized ? '↗' : '↙'}
+                    </div>
+                    <div className="freeze-button" onClick={toggleAnimation}>
+                        ❄️
+                    </div>
+                </>
+            );
+        }
+
+        ReactDOM.render(<ToDoList />, document.getElementById('app'));
+    </script>
+</body>
+</html>
