@@ -1,0 +1,130 @@
+/* Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1E1E1E;
+    color: #E0E0E0;
+}
+
+/* Header Styling */
+.header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: #1E1E1E;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logo {
+    color: white;
+    font-size: 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(135deg, #1E1E1E, #2F1D69);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hero-content {
+    text-align: center;
+    z-index: 1;
+}
+
+.cta-button {
+    padding: 0.75rem 2rem;
+    background-color: #2F1D69;
+    color: #E0E0E0;
+    border-radius: 30px;
+    font-size: 1rem;
+    text-decoration: none; /* Removed underline */
+}
+
+.cta-button:hover {
+    background-color: #5B4D9C;
+}
+
+/* Chat Container */
+.chat-container {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 300px;
+    padding: 15px;
+    background-color: #1E1E1E;
+    border: 2px solid #5B4D9C;
+    border-radius: 15px;
+    display: none;
+    z-index: 10;
+}
+
+.chat-container.open {
+    display: block;
+}
+
+.chat-box {
+    background-color: #292929;
+    padding: 10px;
+    border-radius: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+#chat-input {
+    width: calc(100% - 50px);
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 5px;
+    border: none;
+}
+
+.mic-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.mic-button img {
+    width: 30px;
+    transition: all 0.3s ease;
+}
+
+.mic-button.recording img {
+    background-color: red;
+    animation: pulse 1s infinite;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Glassmorphic Footer */
+.footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
