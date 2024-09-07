@@ -12,273 +12,196 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: Arial, sans-serif;
-        }
-        #gradient-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        #app {
+            font-family: 'Source Sans', Arial, sans-serif;
+            background: linear-gradient(135deg, #66D1B9, #4466DD);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-            position: relative;
         }
+
         .container {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 2rem;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
             border: 1px solid rgba(255, 255, 255, 0.18);
-            margin-bottom: 2rem;
+            color: white;
         }
-        .chat-console {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 1.5rem;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            display: flex;
-            flex-direction: column;
-        }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
         }
+
+        h1 {
+            font-size: 2rem;
+            margin: 0;
+        }
+
         .date-time {
-            position: absolute;
-            top: 10px;
-            right: 20px;
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.8);
         }
-        .input-container, .chat-input-container {
+
+        .input-container {
             display: flex;
             margin-bottom: 1rem;
         }
+
         input[type="text"], input[type="date"] {
             flex-grow: 1;
-            padding: 0.5rem;
+            padding: 0.7rem;
             border: none;
-            border-radius: 5px 0 0 5px;
+            margin-right: 0.5rem;
+            border-radius: 5px;
             background: rgba(255, 255, 255, 0.2);
             color: white;
+            font-size: 1rem;
         }
+
         input::placeholder {
             color: rgba(255, 255, 255, 0.6);
         }
-        button, .send-button {
+
+        button {
             background-color: rgba(255, 255, 255, 0.3);
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 0.7rem 1.2rem;
             cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
             transition: background-color 0.3s;
         }
-        .send-button:hover {
-            background-color: rgba(255, 255, 255, 0.4);
+
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.5);
         }
+
         ul {
             list-style-type: none;
             padding: 0;
         }
+
         li {
             background: rgba(255, 255, 255, 0.1);
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             padding: 1rem;
-            border-radius: 5px;
+            border-radius: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: white;
         }
-        .task-actions svg {
-            width: 16px;
-            height: 16px;
-            fill: white;
-            cursor: pointer;
-            margin-left: 10px;
+
+        .task-content {
+            display: flex;
+            flex-direction: column;
         }
-        /* Mic button styling */
-        .mic-button {
-            background-color: transparent;
-            border: none;
-            margin-left: 10px;
-            cursor: pointer;
+
+        .task-name {
+            font-weight: bold;
+            font-size: 1.2rem;
         }
-        .mic-button svg {
+
+        .priority {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .priority svg {
             width: 20px;
             height: 20px;
-            fill: white;
+            fill: gold;
         }
-        .recording .mic-button svg {
-            fill: red;
-            animation: pulse 1s infinite;
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+
+        .task-actions button {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
         }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
     </style>
 </head>
 <body>
-    <canvas id="gradient-canvas"></canvas>
-    <div class="date-time"></div>
-    <div id="app"></div>
+    <div class="container">
+        <div class="header">
+            <h1>My Projects</h1>
+            <div class="date-time">Saturday, September 7, 2024 at 03:01 PM</div>
+        </div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+        <div class="input-container">
+            <input type="text" placeholder="Add a new task" />
+            <input type="date" />
+            <button>Add</button>
+        </div>
 
-        // SVG Icons for task actions
-        function TrashIcon() {
-            return (
-                <svg viewBox="0 0 24 24">
-                    <path d="M3 6h18v2H3V6zm2 3h14v13H5V9zm5 3v8H7v-8h3zm4 0v8h-3v-8h3zm2 8v-8h-2v8h2z"/>
-                </svg>
-            );
-        }
-
-        function EditIcon() {
-            return (
-                <svg viewBox="0 0 24 24">
-                    <path d="M4 21v-3.7l10-10L17.7 7l-10 10H4zm15.3-12.1l2.1-2.1c.4-.4.4-1 0-1.4l-2.1-2.1c-.4-.4-1-.4-1.4 0l-2.1 2.1 2.1 2.1c.4.4 1 .4 1.4 0z"/>
-                </svg>
-            );
-        }
-
-        // Chat component with voice recording mic button
-        function ChatConsole() {
-            const [message, setMessage] = useState('');
-            const [recording, setRecording] = useState(false);
-
-            const sendMessage = () => {
-                // LLM API call here
-                console.log("Message sent:", message);
-                setMessage('');
-            };
-
-            const toggleRecording = () => {
-                setRecording(!recording);
-                // Logic for starting/stopping voice recording
-            };
-
-            return (
-                <div className="chat-console">
-                    <h2>Chat with AI</h2>
-                    <div className="chat-input-container">
-                        <input
-                            type="text"
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            placeholder="Type your message here..."
-                        />
-                        <button className="send-button" onClick={sendMessage}>Send</button>
-                        <button className={`mic-button ${recording ? 'recording' : ''}`} onClick={toggleRecording}>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 14a4 4 0 0 0 4-4V6a4 4 0 1 0-8 0v4a4 4 0 0 0 4 4zm6-4v-2h2v2a8 8 0 0 1-8 8v3h-4v-3a8 8 0 0 1-8-8v-2h2v2a6 6 0 0 0 6 6v-3h4v3a6 6 0 0 0 6-6z"/>
-                            </svg>
-                        </button>
+        <ul>
+            <li>
+                <div class="task-content">
+                    <div class="priority">
+                        <svg><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     </div>
+                    <span class="task-name">AICO.energy</span>
+                    <small>(review pages, fix header menu / click, clean links, update logo / branding)</small>
                 </div>
-            );
-        }
+                <div class="task-actions">
+                    <button>Complete</button>
+                    <button>Annotate</button>
+                    <button>↑</button>
+                    <button>↓</button>
+                </div>
+            </li>
 
-        // Task list component
-        function ToDoList() {
-            const [tasks, setTasks] = useState([]);
-            const [newTask, setNewTask] = useState('');
-            const [dateTime, setDateTime] = useState('');
-            const [dueDate, setDueDate] = useState('');
-            const [title, setTitle] = useState('My Projects');
-
-            useEffect(() => {
-                updateDateTime();
-                const timer = setInterval(updateDateTime, 1000);
-                return () => clearInterval(timer);
-            }, []);
-
-            function updateDateTime() {
-                const now = new Date();
-                document.querySelector('.date-time').textContent = now.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
-            }
-
-            const addTask = () => {
-                if (newTask.trim() !== '') {
-                    setTasks([...tasks, { 
-                        id: Date.now(), 
-                        content: newTask, 
-                        completed: false, 
-                        priority: 1,
-                        dueDate: dueDate
-                    }]);
-                    setNewTask('');
-                    setDueDate('');
-                }
-            };
-
-            return (
-                <div className="container">
-                    <div className="header">
-                        <h1>{title}</h1>
+            <li>
+                <div class="task-content">
+                    <div class="priority">
+                        <svg><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     </div>
-                    <div className="input-container">
-                        <input
-                            type="text"
-                            value={newTask}
-                            onChange={(e) => setNewTask(e.target.value)}
-                            placeholder="Add a new task"
-                        />
-                        <input
-                            type="date"
-                            value={dueDate}
-                            onChange={(e) => setDueDate(e.target.value)}
-                        />
-                        <button className="add-button" onClick={addTask}>Add</button>
-                    </div>
-                    <ul>
-                        {tasks.map((task) => (
-                            <li key={task.id}>
-                                <div className="task-content">
-                                    <span className="task-name">{task.content}</span>
-                                    {task.dueDate && <div><small>Due: {task.dueDate}</small></div>}
-                                </div>
-                                <div className="task-actions">
-                                    <TrashIcon title="Delete Task" />
-                                    <EditIcon title="Edit Task" />
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+                    <span class="task-name">FLUX LORA</span>
+                    <small>(create accounts, create model of myself)</small>
                 </div>
-            );
-        }
-
-        function App() {
-            return (
-                <div>
-                    <ToDoList />
-                    <ChatConsole />
+                <div class="task-actions">
+                    <button>Complete</button>
+                    <button>Annotate</button>
+                    <button>↑</button>
+                    <button>↓</button>
                 </div>
-            );
-        }
+            </li>
+        </ul>
 
-        ReactDOM.render(<App />, document.getElementById('app'));
+        <div class="stats">
+            <span>Ongoing items: 2</span>
+            <span>Completed items: 0</span>
+        </div>
+    </div>
+
+    <script>
+        // Update date-time dynamically if needed
     </script>
 </body>
 </html>
