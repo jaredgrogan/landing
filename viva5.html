@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Projects</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body, html {
@@ -46,11 +46,16 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            padding: 20px;
+            padding: 0;
             position: fixed;
             bottom: 20px;
             left: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
+            font-size: 24px;
+            color: white;
         }
         .header {
             display: flex;
@@ -129,6 +134,10 @@
         .task-name {
             font-weight: bold;
         }
+        .task-actions {
+            display: flex;
+            align-items: center;
+        }
         .task-actions button {
             margin-left: 0.5rem;
             background-color: transparent;
@@ -174,7 +183,7 @@
     <div id="app"></div>
 
     <script>
-        // Gradient animation code (unchanged)
+        // Gradient animation
         const canvas = document.getElementById('gradient-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -325,7 +334,7 @@
 
             return (
                 <div className={`container ${isMinimized ? 'minimized' : ''}`} onClick={() => isMinimized && setIsMinimized(false)}>
-                    {!isMinimized && (
+                    {!isMinimized ? (
                         <>
                             <div className="header">
                                 {isEditingTitle ? (
@@ -371,7 +380,7 @@
                                                     />
                                                 ))}
                                             </div>
-                                        <span className="task-name">{task.content}</span>
+                                    <span className="task-name">{task.content}</span>
                                             {task.annotation && <div><small>({task.annotation})</small></div>}
                                             {task.dueDate && <div><small>Due: {task.dueDate}</small></div>}
                                         </div>
@@ -400,6 +409,8 @@
                             </div>
                             <button onClick={() => setIsMinimized(true)}>Minimize</button>
                         </>
+                    ) : (
+                        <div>+</div>
                     )}
                 </div>
             );
