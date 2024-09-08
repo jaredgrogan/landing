@@ -251,7 +251,7 @@
             const [newTask, setNewTask] = useState('');
             const [dateTime, setDateTime] = useState('');
             const [dueDate, setDueDate] = useState('');
-            const [title, setTitle] = useState('My Projects');
+            const [title, setTitle] = useState("Today's Tasks");
             const [isEditingTitle, setIsEditingTitle] = useState(false);
 
             useEffect(() => {
@@ -386,12 +386,12 @@
                                     {task.annotation && <div><small>({task.annotation})</small></div>}
                                     {task.dueDate && <div><small>Due: {task.dueDate}</small></div>}
                                 </div>
-                                <div className="task-actions">
+                              <div className="task-actions">
                                     <button onClick={() => toggleComplete(task.id)}>
-                                        {task.completed ? 'Undo' : 'Complete'}
+                                        {task.completed ? 'Undo' : 'Done'}
                                     </button>
                                     <button onClick={() => annotateTask(task.id, task.annotation)}>
-                                        Annotate
+                                        Notes
                                     </button>
                                     <button onClick={() => moveTask(task.id, 'up')}>↑</button>
                                     <button onClick={() => moveTask(task.id, 'down')}>↓</button>
