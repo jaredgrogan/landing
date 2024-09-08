@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI - My Project</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+
+    <!-- Styles -->
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .favicon {
+            width: 20px;
+            height: 20px;
+            margin: 5px 0 5px 10px;
+        }
+        .gear-icon {
+            margin-right: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 5px;
+        }
+        .gear-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        .paperclip-icon {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .paperclip-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        .chat-container {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .chat-prompt {
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            resize: none;
+            max-height: 100px;
+        }
+        .chat-actions {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+        .send-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            margin-right: 10px;
+        }
+        .send-button svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top header with favicon and settings icon -->
+    <div class="top-header">
+        <div>
+            <img src="favicon_white.svg" alt="Favicon" class="favicon">
+        </div>
+        <div class="gear-icon" onclick="toggleSettings()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22l-1.92 3.32c-.12.21-.07.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Chat input area -->
+    <div class="chat-container">
+        <!-- Paperclip Icon for File Upload -->
+        <div class="paperclip-icon" onclick="uploadDocument()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M21.58 12.58l-9-9a6.53 6.53 0 00-9.19 9.19l1.2 1.2a.75.75 0 001.06-1.06l-1.2-1.2a5 5 0 017.08-7.08l9 9a5 5 0 01-7.08 7.08l-4.94-4.94a2.5 2.5 0 013.53-3.53l.88.88a.75.75 0 001.06-1.06l-.88-.88a4 4 0 00-5.65 5.65l4.94 4.94a6.5 6.5 0 009.19-9.19z"/>
+            </svg>
+        </div>
+        <textarea class="chat-prompt" placeholder="Type a message..."></textarea>
+        <div class="chat-actions">
+            <button class="send-button" onclick="sendMessage()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M2.01 21l20.93-9L2.01 3v7l15 2-15 2z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function uploadDocument() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.jpg, .jpeg, .png, .pdf';
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                console.log('File uploaded:', file);
+            };
+            input.click();
+        }
+
+        async function sendMessage() {
+            const message = document.querySelector('.chat-prompt').value;
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message }),
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+    </script>
+
+</body>
+</html>
