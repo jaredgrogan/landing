@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Vision AI Camera App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <style>
+        .card {
+            @apply bg-white shadow-md rounded-lg overflow-hidden;
+        }
+        .card-header {
+            @apply font-bold text-lg p-4 bg-gray-100;
+        }
+        .card-content {
+            @apply p-4;
+        }
+        .btn {
+            @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200;
+        }
+        .btn-outline {
+            @apply px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition duration-200;
+        }
+        .input, .textarea {
+            @apply w-full border border-gray-300 rounded p-2;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="max-w-2xl mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Super Vision AI Camera App</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header">Camera Access</div>
+            <div class="card-content">
+                <button id="startCamera" class="btn"><i data-lucide="camera" class="inline-block mr-2"></i>Start Camera</button>
+                <video id="video" autoplay playsinline class="mt-2 w-full"></video>
+                <canvas id="canvas" style="display: none;" width="640" height="480"></canvas>
+                <button id="capturePhoto" class="btn mt-2"><i data-lucide="camera" class="inline-block mr-2"></i>Capture Photo</button>
+            </div>
+        </div>
+        
+        <div id="capturedImageCard" class="card mb-4" style="display: none;">
+            <div class="card-header">Captured Image</div>
+            <div class="card-content">
+                <img id="capturedImage" alt="Captured" class="w-full">
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">Text Extraction</div>
+            <div class="card-content">
+                <textarea id="ocrText" readonly class="textarea"></textarea>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">Super Vision AI Analysis</div>
+            <div class="card-content">
+                <textarea id="aiResponse" readonly class="textarea mb-2"></textarea>
+                <div id="suggestions" class="flex flex-wrap gap-2">
+                    <button class="btn-outline" data-action="Describe">Describe</button>
+                    <button class="btn-outline" data-action="Key Words">Key Words</button>
+                    <button class="btn-outline" data-action="Social Media">Social Media</button>
+                    <button class="btn-outline" data-action="Web Search">Web Search</button>
+                    <button class="btn-outline" data-action="Expand">Expand</button>
+                    <button class="btn-outline" data-action="Prompt">Prompt</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">Share</div>
+            <div class="card-content flex items-center">
+                <input type="email" placeholder="Enter email" class="input flex-grow mr-2">
+                <button id="shareImage" class="btn"><i data-lucide="share-2" class="inline-block mr-2"></i>Share</button>
+            </div>
+        </div>
+        
+        <div class="mt-4 text-center text-sm text-gray-600">
+            © 2024 Cognitive Cloud
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        const videoElement = document.getElementById('video');
+        const canvasElement = document.getElementById('canvas');
+        const capturedImageElement = document.getElementById('capturedImage');
+        const capturedImageCard = document.getElementById('capturedImageCard');
+        const ocrTextElement = document.getElementById('ocrText');
+        const aiResponseElement = document.getElementById('aiResponse');
+        const suggestionsElement = document.getElementById('suggestions');
+
+        document.getElementById('startCamera').addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+            }
+        });
+
+        document.getElementById('capturePhoto').addEventListener('click', () => {
+            const context = canvasElement.getContext('2d');
+            context.drawImage(videoElement, 0, 0, 640, 480);
+            const imageDataUrl = canvasElement.toDataURL('image/jpeg');
+            capturedImageElement.src = imageDataUrl;
+            capturedImageCard.style.display = 'block';
+            processImage(imageDataUrl);
+        });
+
+        function processImage(imageData) {
+            // Simulating API call for OCR and AI analysis
+            ocrTextElement.value = "Simulated text extraction...";
+            aiResponseElement.value = "Herakles' description of the image...";
+        }
+
+        suggestionsElement.addEventListener('click', (event) => {
+            if (event.target.classList.contains('btn-outline')) {
+                const action = event.target.dataset.action;
+                performAction(action);
+            }
+        });
+
+        function performAction(action) {
+            // Simulating API call for different actions
+            let response;
+            switch (action) {
+                case 'Describe':
+                    response = "Detailed description of the image, including named entities...";
+                    break;
+                case 'Key Words':
+                    response = "Key words for tagging: word1, word2, word3...";
+                    break;
+                case 'Social Media':
+                    response = "Generated social media post for X, IG: Check out this amazing...";
+                    break;
+                case 'Web Search':
+                    response = "Suggested web search queries based on the image content...";
+                    break;
+                case 'Expand':
+                    response = "Detailed explanation of the topic seen in the image...";
+                    break;
+                case 'Prompt':
+                    response = "Suggested prompt for image generation: A stunning view of...";
+                    break;
+                default:
+                    response = "Action not recognized";
+            }
+            aiResponseElement.value = response;
+        }
+
+        document.getElementById('shareImage').addEventListener('click', () => {
+            // Implement sharing functionality here
+            console.log("Sharing image...");
+        });
+    </script>
+</body>
+</html>
