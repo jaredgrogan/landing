@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universitas AI - My Projects</title>
+    <title>Universitas AI - My Project</title>
 
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
@@ -37,7 +36,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 30px;
+            height: 40px;
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             z-index: 1000;
@@ -52,7 +51,7 @@
         .favicon {
             width: 20px;
             height: 20px;
-            margin: 5px 5px 5px 10px; /* Ensure 5px padding above, below, and to the right of favicon */
+            margin: 10px;
         }
         .top-left-text {
             font-size: 14px;
@@ -62,11 +61,14 @@
         .right-header {
             display: flex;
             align-items: center;
-            padding-right: 10px; /* 10px padding from the right edge of the page */
+            padding-right: 10px;
         }
         .gear-icon {
-            margin-right: 10px; /* 10px spacing to the left of the time */
+            margin-right: 10px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            height: 100%;
         }
         .gear-icon svg {
             width: 20px;
@@ -76,7 +78,7 @@
         .top-time {
             color: white;
             font-size: 14px;
-            padding-right: 10px; /* 10px padding from the right page edge */
+            padding-right: 10px;
         }
         #app {
             display: flex;
@@ -230,7 +232,7 @@
             border-radius: 10px;
             backdrop-filter: blur(10px);
             color: white;
-            font-weight: normal; /* No bold */
+            font-weight: normal;
         }
         .list-header span {
             margin-right: 4ch;
@@ -255,13 +257,11 @@
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 10px;
+            padding: 10px 20px;
             display: flex;
             align-items: center;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
             border: 1px solid rgba(255, 255, 255, 0.18);
-            padding-right: 20px;
-            padding-left: 20px;
         }
         .chat-prompt {
             flex-grow: 1;
@@ -282,31 +282,14 @@
             align-items: center;
             margin-left: 10px;
         }
-        .send-button {
+        .send-button, .mic-button {
             background: none;
             border: none;
             cursor: pointer;
             color: white;
             margin-right: 10px;
         }
-        .send-button svg {
-            width: 20px;
-            height: 20px;
-            fill: white;
-        }
-        .mic-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: white;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .mic-button svg {
+        .send-button svg, .mic-button svg {
             width: 20px;
             height: 20px;
             fill: white;
@@ -357,24 +340,45 @@
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.6);
         }
+        .file-upload-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            z-index: 1001;
+        }
+        .file-upload-popup input[type="file"] {
+            margin-bottom: 10px;
+        }
+        .file-upload-popup button {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
     <!-- Canvas for background gradient -->
     <canvas id="gradient-canvas"></canvas>
 
-    <!-- Top header for current time display, settings gear, favicon, and left text -->
+    <!-- Top header -->
     <div class="top-header">
-        <!-- Left Side (Favicon and Text) -->
         <div class="top-left">
             <img src="favicon_white.svg" alt="Favicon" class="favicon">
             <div class="top-left-text">// UNIVERSITAS AI</div>
         </div>
-
-        <!-- Right Side (Settings and Time) -->
         <div class="right-header">
             <div class="gear-icon" onclick="toggleSettings()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22l-1.92 3.32c-.12.21-.07.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
                 </svg>
             </div>
@@ -397,7 +401,7 @@
     <!-- Glassomorphic Chat Prompt for LLM Interaction -->
     <div class="chat-container">
         <!-- Paperclip Icon for File Upload -->
-        <div class="paperclip-icon" onclick="uploadDocument()">
+        <div class="paperclip-icon" onclick="openFileUploadPopup()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M21.58 12.58l-9-9a6.53 6.53 0 00-9.19 9.19l1.2 1.2a.75.75 0 001.06-1.06l-1.2-1.2a5 5 0 017.08-7.08l9 9a5 5 0 01-7.08 7.08l-4.94-4.94a2.5 2.5 0 013.53-3.53l.88.88a.75.75 0 001.06-1.06l-.88-.88a4 4 0 00-5.65 5.65l4.94 4.94a6.5 6.5 0 009.19-9.19z"/>
             </svg>
@@ -417,6 +421,13 @@
                 </svg>
             </button>
         </div>
+    </div>
+
+    <!-- File Upload Popup -->
+    <div id="file-upload-popup" class="file-upload-popup">
+        <input type="file" id="file-input" multiple>
+        <button onclick="handleFileUpload()">Upload</button>
+        <button onclick="closeFileUploadPopup()">Cancel</button>
     </div>
 
     <!-- Copyright footer -->
@@ -519,18 +530,46 @@
         }
 
         function stopDictation() {
-            // The recognition will automatically stop when the user stops speaking
             console.log("Stopping dictation...");
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.querySelector('.chat-prompt');
-            console.log("Sending message:", input.value);
+            const message = input.value;
+            console.log("Sending message:", message);
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message }),
+                });
+                const data = await response.json();
+                console.log("Response from API:", data);
+                // Handle the response data here (e.g., display it in the UI)
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
+            
             input.value = "";
         }
 
-        function uploadDocument() {
-            console.log("Upload document triggered.");
+        function openFileUploadPopup() {
+            document.getElementById('file-upload-popup').style.display = 'block';
+        }
+
+        function closeFileUploadPopup() {
+            document.getElementById('file-upload-popup').style.display = 'none';
+        }
+
+        function handleFileUpload() {
+            const fileInput = document.getElementById('file-input');
+            const files = fileInput.files;
+            // Handle file upload logic here
+            console.log("Files to upload:", files);
+            closeFileUploadPopup();
         }
 
         const { useState } = React;
@@ -637,13 +676,13 @@
                             onChange={(e) => setDueDate(e.target.value)}
                         />
                         <button className="add-button" onClick={addTask}>Add</button>
-                   </div>
+                    </div>
 
-                   <div className="list-header">
-                       <span>// ITEM          DUE          PRIORITY</span>
-                       <span> </span>
-                       <span>STATUS</span>
-                   </div>
+                    <div className="list-header">
+                        <span>// Item          Due          Priority</span>
+                        <span> </span>
+                        <span>Status</span>
+                    </div>
 
                     <ul>
                         {tasks.map((task) => (
@@ -652,9 +691,9 @@
                                     <button onClick={() => moveTask(task.id, 'up')}>▲</button>
                                     <button onClick={() => moveTask(task.id, 'down')}>▼</button>
                                 </div>
-                                <div className="task-content">
+                          <div className="task-content">
                                     <span className="task-name" onClick={() => renameTask(task.id)}>{task.content}</span>
-                                    <span className="task-due-date">{task.dueDate || 'NA'}</span>
+                                    <span className="task-due-date">{task.dueDate}</span>
                                     <select 
                                         value={task.priority} 
                                         onChange={(e) => changePriority(task.id, e.target.value)}
@@ -664,7 +703,7 @@
                                         <option value="★★">★★</option>
                                         <option value="★★★">★★★</option>
                                     </select>
-                                    {task.notes && <span>{task.notes}</span>}
+                                    {task.notes && <span title={task.notes}>📝</span>}
                                 </div>
                                 <div className="task-actions">
                                     <button onClick={() => addNote(task.id)}>Notes</button>
