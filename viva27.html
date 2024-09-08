@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <!-- Styles -->
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #gradient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 20px;
+        }
+        .top-time {
+            color: white;
+            font-size: 14px;
+        }
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 50px 20px 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: white;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas for background gradient -->
+    <canvas id="gradient-canvas"></canvas>
+    
+    <!-- Top header for current time display -->
+    <div class="top-header">
+        <div id="top-time-display" class="top-time"></div>
+    </div>
+    
+    <!-- App container for React content -->
+    <div id="app"></div>
+
+    <!-- Scripts to render React components and background animation -->
+    <script type="text/babel">
+        // Canvas Background Animation
+        const canvas = document.getElementById('gradient-canvas');
+        const ctx = canvas.getContext('2d');
+        let time = 240;  // Start with blue hues
+
+        function animate() {
+            const width = canvas.width = window.innerWidth;
+            const height = canvas.height = window.innerHeight;
+
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, `hsl(${time % 360}, 70%, 50%)`);
+            gradient.addColorStop(1, `hsl(${(time + 80) % 360}, 70%, 30%)`);
+
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+
+            time += 0.25;
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Resize the canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Update top time display
+        function updateTopTime() {
+            const now = new Date();
+            const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+            document.getElementById('top-time-display').textContent = now.toLocaleDateString('en-US', options);
+        }
+        updateTopTime();
+        setInterval(updateTopTime, 1000);
+
+        // React ToDo List Component
+        const { useState, useEffect } = React;
+
+        function ToDoList() {
+            const [tasks, setTasks] = useState([]);
+            const [newTask, setNewTask] = useState('');
+            const [dueDate, setDueDate] = useState('');
+
+            const addTask = () => {
+                if (newTask.trim() !== '') {
+                    setTasks([...tasks, { id: Date.now(), content: newTask, dueDate: dueDate }]);
+                    setNewTask('');
+                    setDueDate('');
+                }
+            };
+
+            const deleteTask = (id) => setTasks(tasks.filter(task => task.id !== id));
+
+            return (
+                <div className="container">
+                    <h1>Today's Tasks</h1>
+                    <div>
+                        <input 
+                            type="text" 
+                            value={newTask} 
+                            onChange={(e) => setNewTask(e.target.value)} 
+                            placeholder="Add a new task" 
+                        />
+                        <input 
+                            type="date" 
+                            value={dueDate} 
+                            onChange={(e) => setDueDate(e.target.value)} 
+                        />
+                        <button onClick={addTask}>Add</button>
+                    </div>
+                    <ul>
+                        {tasks.map(task => (
+                            <li key={task.id}>
+                                <span>{task.content} (Due: {task.dueDate || 'No date'})</span>
+                                <button onClick={() => deleteTask(task.id)}>Delete</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<ToDoList />, document.getElementById('app'));
+    </script>
+</body>
+</html>
