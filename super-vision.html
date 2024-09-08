@@ -6,28 +6,53 @@
     <title>Super Vision</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f0f0f0;
+            padding: 20px;
         }
         h1 {
-            color: #333;
+            color: #2c3e50;
+            font-size: 2.5em;
         }
         #videoContainer {
             margin-bottom: 20px;
+            border: 3px solid #3498db;
+            border-radius: 10px;
+            overflow: hidden;
         }
-        #capturedImages {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 800px;
+        #capturedImage {
+            max-width: 100%;
+            height: auto;
+            display: none;
+            margin-top: 20px;
+            border: 2px solid #2c3e50;
+            border-radius: 5px;
         }
-        .capturedImage {
+        .button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
             margin: 10px;
-            border: 2px solid #333;
-            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            max-width: 600px;
+            text-align: center;
         }
     </style>
 </head>
@@ -36,46 +61,69 @@
     <div id="videoContainer">
         <video id="video" width="640" height="480" autoplay></video>
     </div>
-    <div id="capturedImages"></div>
+    <button id="captureBtn" class="button">Capture Image</button>
+    <button id="analyzeBtn" class="button">Analyze Image</button>
+    <img id="capturedImage" alt="Captured Image">
+    <div id="result"></div>
 
     <script>
         const video = document.getElementById('video');
-        const capturedImages = document.getElementById('capturedImages');
+        const captureBtn = document.getElementById('captureBtn');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const capturedImage = document.getElementById('capturedImage');
+        const result = document.getElementById('result');
         let stream;
+        let imageData;
 
-        // Request access to the camera
         async function initCamera() {
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 video.srcObject = stream;
             } catch (err) {
                 console.error("Error accessing the camera:", err);
+                result.textContent = "Error: Unable to access the camera. Please make sure you've granted the necessary permissions.";
             }
         }
 
-        // Capture image from video
         function captureImage() {
             const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
-            const img = document.createElement('img');
-            img.src = canvas.toDataURL('image/jpeg');
-            img.className = 'capturedImage';
-            img.width = 200;  // Thumbnail size
-            capturedImages.prepend(img);
+            imageData = canvas.toDataURL('image/jpeg');
+            capturedImage.src = imageData;
+            capturedImage.style.display = 'block';
+            result.textContent = "Image captured. Click 'Analyze Image' to process.";
+        }
 
-            // Keep only the last 10 images
-            if (capturedImages.children.length > 10) {
-                capturedImages.removeChild(capturedImages.lastChild);
+        async function analyzeImage() {
+            if (!imageData) {
+                result.textContent = "Please capture an image first.";
+                return;
+            }
+            result.textContent = "Analyzing image...";
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: "What's in this image?",
+                        image: imageData
+                    }),
+                });
+                const data = await response.json();
+                result.textContent = data.message;
+            } catch (error) {
+                console.error('Error:', error);
+                result.textContent = "An error occurred during analysis. Please try again.";
             }
         }
 
-        // Initialize camera when page loads
         window.addEventListener('load', initCamera);
-
-        // Capture image every 5 seconds
-        setInterval(captureImage, 5000);
+        captureBtn.addEventListener('click', captureImage);
+        analyzeBtn.addEventListener('click', analyzeImage);
     </script>
 </body>
 </html>
