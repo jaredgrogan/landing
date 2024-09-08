@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Vision</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        #videoContainer {
+            margin-bottom: 20px;
+        }
+        #capturedImages {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 800px;
+        }
+        .capturedImage {
+            margin: 10px;
+            border: 2px solid #333;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>Super Vision</h1>
+    <div id="videoContainer">
+        <video id="video" width="640" height="480" autoplay></video>
+    </div>
+    <div id="capturedImages"></div>
+
+    <script>
+        const video = document.getElementById('video');
+        const capturedImages = document.getElementById('capturedImages');
+        let stream;
+
+        // Request access to the camera
+        async function initCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error("Error accessing the camera:", err);
+            }
+        }
+
+        // Capture image from video
+        function captureImage() {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            const img = document.createElement('img');
+            img.src = canvas.toDataURL('image/jpeg');
+            img.className = 'capturedImage';
+            img.width = 200;  // Thumbnail size
+            capturedImages.prepend(img);
+
+            // Keep only the last 10 images
+            if (capturedImages.children.length > 10) {
+                capturedImages.removeChild(capturedImages.lastChild);
+            }
+        }
+
+        // Initialize camera when page loads
+        window.addEventListener('load', initCamera);
+
+        // Capture image every 5 seconds
+        setInterval(captureImage, 5000);
+    </script>
+</body>
+</html>
