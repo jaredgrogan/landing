@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Vision AI Camera App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        .loading {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="max-w-2xl mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Super Vision AI Camera App</h1>
+        
+        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
+            <div class="font-bold text-lg p-4 bg-gray-100">Camera Access</div>
+            <div class="p-4">
+                <video id="video" autoplay playsinline class="w-full"></video>
+                <button id="capturePhoto" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
+                    Capture Photo
+                </button>
+            </div>
+        </div>
+        
+        <div id="capturedImageCard" class="bg-white shadow-md rounded-lg overflow-hidden mb-4" style="display: none;">
+            <div class="font-bold text-lg p-4 bg-gray-100">Captured Image</div>
+            <div class="p-4">
+                <img id="capturedImage" alt="Captured" class="w-full">
+            </div>
+        </div>
+        
+        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
+            <div class="font-bold text-lg p-4 bg-gray-100">Text Extraction</div>
+            <div class="p-4">
+                <textarea id="textExtraction" readonly class="w-full border border-gray-300 rounded p-2"></textarea>
+            </div>
+        </div>
+        
+        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
+            <div class="font-bold text-lg p-4 bg-gray-100">
+                Super Vision AI Analysis
+                <div id="loadingIndicator" class="loading" style="display: none;"></div>
+            </div>
+            <div class="p-4">
+                <textarea id="aiResponse" readonly class="w-full border border-gray-300 rounded p-2 mb-2"></textarea>
+                <div id="actionButtons" class="flex flex-wrap gap-2">
+                    <button class="action-btn px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition duration-200" data-action="Describe">Describe</button>
+                    <button class="action-btn px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition duration-200" data-action="Key Words">Key Words</button>
+                    <button class="action-btn px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition duration-200" data-action="Social Media">Social Media</button>
+                    <button class="action-btn px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition duration-200" data-action="Web Search">Web Search</button>
+                    <button class="action-btn px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition duration-200" data-action="Expand">Expand</button>
+                    <button class="action-btn px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition duration-200" data-action="Prompt">Prompt</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="font-bold text-lg p-4 bg-gray-100">Share</div>
+            <div class="p-4 flex items-center">
+                <input type="email" placeholder="Enter email" class="flex-grow mr-2 border border-gray-300 rounded p-2">
+                <button id="shareImage" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
+                    Share
+                </button>
+            </div>
+        </div>
+        
+        <div class="mt-4 text-center text-sm text-gray-600">
+            © 2024 Cognitive Cloud
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const capturePhotoButton = document.getElementById('capturePhoto');
+        const capturedImageCard = document.getElementById('capturedImageCard');
+        const capturedImage = document.getElementById('capturedImage');
+        const textExtractionElement = document.getElementById('textExtraction');
+        const aiResponseElement = document.getElementById('aiResponse');
+        const actionButtons = document.querySelectorAll('.action-btn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        // Activate camera
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+            }
+        }
+
+        startCamera();
+
+        // Capture photo
+        capturePhotoButton.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            const imageDataUrl = canvas.toDataURL('image/jpeg');
+            capturedImage.src = imageDataUrl;
+            capturedImageCard.style.display = 'block';
+            processImage(imageDataUrl);
+        });
+
+        // Process image
+        async function processImage(imageData) {
+            showLoading();
+            try {
+                const response = await sendMessage(imageData);
+                textExtractionElement.value = response.textExtraction || "No text extracted";
+                aiResponseElement.value = response.aiAnalysis || "No AI analysis available";
+            } catch (error) {
+                console.error("Error processing image:", error);
+                aiResponseElement.value = "Error processing image. Please try again.";
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Send message to server
+        async function sendMessage(message) {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message }),
+            });
+            return await response.json();
+        }
+
+        // Action buttons
+        actionButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                const action = button.dataset.action;
+                showLoading();
+                try {
+                    const response = await sendMessage(`Perform ${action} action on the image`);
+                    aiResponseElement.value = response.aiAnalysis || `${action} analysis not available`;
+                } catch (error) {
+                    console.error(`Error performing ${action} action:`, error);
+                    aiResponseElement.value = `Error performing ${action} action. Please try again.`;
+                } finally {
+                    hideLoading();
+                }
+            });
+        });
+
+        // Share image (placeholder functionality)
+        document.getElementById('shareImage').addEventListener('click', () => {
+            console.log("Sharing image...");
+            // Implement actual sharing functionality here
+        });
+
+        // Loading indicator functions
+        function showLoading() {
+            loadingIndicator.style.display = 'inline-block';
+        }
+
+        function hideLoading() {
+            loadingIndicator.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
