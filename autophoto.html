@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Vision Camera</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        video, canvas {
+            border: 2px solid #333;
+            margin-top: 20px;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Super Vision Camera</h1>
+    
+    <video id="video" autoplay></video>
+    <canvas id="canvas" width="640" height="480"></canvas>
+
+    <script>
+        // Get access to the video element and canvas
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Request access to the user's camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error("Error accessing camera: ", err);
+            });
+
+        // Function to capture an image from the video feed and draw it on the canvas
+        function captureImage() {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        }
+
+        // Capture an image every 3 seconds (3000 milliseconds)
+        setInterval(captureImage, 3000);
+    </script>
+    
+</body>
+</html>
