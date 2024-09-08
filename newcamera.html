@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Vision AI Camera App</title>
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('path/to/BerkeleyMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            background-color: #1e1e1e;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .glassomorphic {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .loading {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .card-header {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        textarea, input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 5px;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="glassomorphic header">
+        <div class="header-left">
+            <img src="favicon_white.svg" alt="Logo">
+            <span>// Universitas Pro</span>
+        </div>
+        <div id="datetime"></div>
+    </header>
+
+    <div class="container">
+        <h1>Super Vision AI Camera App</h1>
+        
+        <div class="glassomorphic card">
+            <div class="card-header">Camera Access</div>
+            <video id="video" autoplay playsinline style="width: 100%;"></video>
+            <button id="capturePhoto" class="glassomorphic btn">Capture Photo</button>
+        </div>
+        
+        <div id="capturedImageCard" class="glassomorphic card" style="display: none;">
+            <div class="card-header">Captured Image</div>
+            <img id="capturedImage" alt="Captured" style="width: 100%;">
+        </div>
+        
+        <div class="glassomorphic card">
+            <div class="card-header">Text Extraction</div>
+            <textarea id="textExtraction" readonly></textarea>
+        </div>
+        
+        <div class="glassomorphic card">
+            <div class="card-header">
+                Super Vision AI Analysis
+                <div id="loadingIndicator" class="loading" style="display: none;"></div>
+            </div>
+            <textarea id="aiResponse" readonly></textarea>
+            <div class="action-buttons">
+                <button class="action-btn glassomorphic btn" data-action="Describe">Describe</button>
+                <button class="action-btn glassomorphic btn" data-action="Key Words">Key Words</button>
+                <button class="action-btn glassomorphic btn" data-action="Social Media">Social Media</button>
+                <button class="action-btn glassomorphic btn" data-action="Web Search">Web Search</button>
+                <button class="action-btn glassomorphic btn" data-action="Expand">Expand</button>
+                <button class="action-btn glassomorphic btn" data-action="Prompt">Prompt</button>
+            </div>
+        </div>
+        
+        <div class="glassomorphic card">
+            <div class="card-header">Share</div>
+            <div style="display: flex;">
+                <input type="email" placeholder="Enter email" style="flex-grow: 1; margin-right: 10px;">
+                <button id="shareImage" class="glassomorphic btn">Share</button>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            © 2024 Cognitive Cloud
+        </div>
+    </div>
+
+    <script>
+        // ... (previous JavaScript code remains the same) ...
+
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+            document.getElementById('datetime').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 60000); // Update every minute
+    </script>
+</body>
+</html>
