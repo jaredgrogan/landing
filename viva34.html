@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+
+    <!-- Berkeley Mono Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400&display=swap">
+
+    <!-- Styles -->
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Berkeley Mono', monospace;
+            overflow: hidden;
+        }
+        #gradient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 30px;
+        }
+        .top-time {
+            color: white;
+            font-size: 14px;
+            padding-right: 10px;
+        }
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 50px 20px 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: white;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .input-container {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        input[type="text"], input[type="date"] {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        input[type="date"] {
+            border-radius: 0;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        button, select {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover, select:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .add-button {
+            border-radius: 0 5px 5px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .task-content {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+        .task-name {
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            padding-right: 10px; /* Added padding for the task name */
+        }
+        .task-actions {
+            display: flex;
+            align-items: center;
+        }
+        .task-actions select {
+            margin-right: 10px; /* Added margin to move select closer to "Done" button */
+        }
+        .task-actions select, .task-actions button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .delete-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.5rem;
+        }
+        .delete-button svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+        .copyright {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        /* Tooltip styles */
+        [data-tooltip] {
+            position: relative;
+            cursor: pointer;
+        }
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background-color: #333;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            top: -30px;
+            white-space: nowrap;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- App container for React content -->
+    <div id="app"></div>
+
+    <!-- Copyright footer -->
+    <div class="copyright">© Cognitive Cloud 2024</div>
+
+    <!-- Scripts to render React components -->
+    <script type="text/babel">
+        const { useState } = React;
+
+        function ToDoList() {
+            const [tasks, setTasks] = useState([]);
+            const [newTask, setNewTask] = useState('');
+            const [dueDate, setDueDate] = useState('');
+            const [title, setTitle] = useState("Today's Tasks");
+            const [isEditingTitle, setIsEditingTitle] = useState(false);
+
+            const addTask = () => {
+                if (newTask.trim() !== '') {
+                    setTasks([...tasks, { id: Date.now(), content: newTask, dueDate: dueDate, completed: false, priority: '★' }]);
+                    setNewTask('');
+                    setDueDate('');
+                }
+            };
+
+            const toggleComplete = (id) => {
+                setTasks(tasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task));
+            };
+
+            return (
+                <div className="container">
+                    <div className="header" data-tooltip="Edit list title">
+                        {isEditingTitle ? (
+                            <input 
+                                type="text" 
+                                value={title} 
+                                onChange={(e) => setTitle(e.target.value)}
+                                onBlur={() => setIsEditingTitle(false)}
+                                onKeyPress={(e) => e.key === 'Enter' && setIsEditingTitle(false)}
+                                autoFocus
+                                data-tooltip="Click to edit title"
+                            />
+                        ) : (
+                            <h1 onClick={() => setIsEditingTitle(true)} data-tooltip="Click to edit title">{title}</h1>
+                        )}
+                        <div className="date-time" data-tooltip="Current date">{new Date().toLocaleDateString()}</div>
+                    </div>
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            value={newTask}
+                            onChange={(e) => setNewTask(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && addTask()}
+                            placeholder="Add a new task"
+                            data-tooltip="Enter task description"
+                        />
+                        <input
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.target.value)}
+                            data-tooltip="Set due date"
+                        />
+                        <button onClick={addTask} data-tooltip="Add new task">Add</button>
+                    </div>
+                    <ul>
+                        {tasks.map((task) => (
+                            <li key={task.id} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
+                                <div className="task-content">
+                                    <span className="task-name" onClick={() => alert('Rename Task')} data-tooltip="Click to rename task">{task.content}</span>
+                                    <select 
+                                        value={task.priority} 
+                                        onChange={(e) => alert('Change priority')}
+                                        data-tooltip="Task Priority"
+                                    >
+                                        <option value="★">★</option>
+                                        <option value="★★">★★</option>
+                                        <option value="★★★">★★★</option>
+                                    </select>
+                                </div>
+                                <div className="task-actions">
+                                    <button onClick={() => toggleComplete(task.id)} data-tooltip="Mark as done/undone">
+                                        {task.completed ? 'Undo' : 'Done'}
+                                    </button>
+                                    <button onClick={() => alert('Add Notes')} data-tooltip="Add notes">Notes</button>
+                                    <button onClick={() => alert('Move Task Up')} data-tooltip="Move task up">↑</button>
+                                    <button onClick={() => alert('Move Task Down')} data-tooltip="Move task down">↓</button>
+                                    <button onClick={() => alert('Delete Task')} data-tooltip="Delete task">Delete</button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="stats">
+                        <span data-tooltip="Number of tasks not completed">Ongoing items: {tasks.filter(task => !task.completed).length}</span>
+                        <span data-tooltip="Number of tasks completed">Completed items: {tasks.filter(task => task.completed).length}</span>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<ToDoList />, document.getElementById('app'));
+    </script>
+</body>
+</html>
