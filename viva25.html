@@ -340,9 +340,12 @@
     </script>
 
     <script type="text/babel">
+        console.log('React Beautiful DnD:', window.ReactBeautifulDnd);
+        console.log('React Transition Group:', window.ReactTransitionGroup);
+
         const { useState, useEffect, useCallback } = React;
-        const { DragDropContext, Droppable, Draggable } = ReactBeautifulDnd;
-        const { CSSTransition, TransitionGroup } = ReactTransitionGroup;
+        const { DragDropContext, Droppable, Draggable } = window.ReactBeautifulDnd;
+        const { CSSTransition, TransitionGroup } = window.ReactTransitionGroup;
 
         function TrashIcon() {
             return (
@@ -430,7 +433,7 @@
                 }
             }, []);
 
-       const changePriority = useCallback((id, newPriority) => {
+                 const changePriority = useCallback((id, newPriority) => {
             setTasks(prevTasks => prevTasks.map(task => 
                 task.id === id ? { ...task, priority: newPriority } : task
             ));
@@ -506,7 +509,7 @@
                             <TransitionGroup
                                 component="ul"
                                 {...provided.droppableProps}
-                                innerRef={provided.innerRef}
+                                ref={provided.innerRef}
                             >
                                 {tasks.map((task, index) => (
                                     <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
