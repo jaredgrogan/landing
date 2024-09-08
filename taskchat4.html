@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <!-- Berkeley Mono Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400&display=swap">
+
+    <!-- Styles -->
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Berkeley Mono', monospace;
+            overflow: hidden;
+        }
+        #gradient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 30px;
+        }
+        .gear-icon {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .gear-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        .top-time {
+            color: white;
+            font-size: 14px;
+            padding-right: 10px;
+        }
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 50px 20px 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: white;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .input-container {
+            display: flex;
+            margin-bottom: 1rem;
+            gap: 5px;
+        }
+        input[type="text"], input[type="date"] {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            box-shadow: 0 4px 16px rgba(31, 38, 135, 0.37);
+        }
+        input[type="text"]::placeholder,
+        .chat-prompt::placeholder {
+            color: white;
+        }
+        button.add-button {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: background-color 0.3s;
+        }
+        button.add-button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 16px rgba(31, 38, 135, 0.37);
+        }
+        .task-content {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+        .task-name {
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .task-due-date {
+            margin-left: 10px;
+            font-style: italic;
+            color: lightgray;
+        }
+        .task-actions {
+            display: flex;
+            align-items: center;
+        }
+        .task-actions select, .task-actions button {
+            margin-left: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+        }
+        .task-actions select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='white' d='M0 2l4 4 4-4z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 8px 8px;
+            padding-right: 1.5rem;
+        }
+        .task-actions select option {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+        .chevron-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+        }
+        .chevron-buttons button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: 16px;
+            color: white;
+        }
+        .chevron-buttons button:hover {
+            color: lightgray;
+        }
+        .delete-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.5rem;
+        }
+        .delete-button svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+        .list-header {
+            display: flex;
+            justify-content: flex-start;
+            gap: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+        .list-header span {
+            flex: 1;
+            text-align: left;
+        }
+        .list-header span:first-child {
+            flex: 2;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .chat-container {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+        .chat-prompt {
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            resize: none;
+            overflow: auto;
+            max-height: 100px;
+        }
+        .chat-prompt:focus {
+            outline: none;
+        }
+        .chat-actions {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+        .send-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            margin-right: 10px;
+        }
+        .send-button svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        .mic-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .mic-button svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        .mic-button.recording {
+            background-color: red;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .paperclip-icon {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        .paperclip-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas for background gradient -->
+    <canvas id="gradient-canvas"></canvas>
+
+    <!-- Top header for current time display and settings gear -->
+    <div class="top-header">
+        <!-- Gear Icon for Settings -->
+        <div class="gear-icon" onclick="toggleSettings()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22l-1.92 3.32c-.12.21-.07.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+            </svg>
+        </div>
+        <div id="top-time-display" class="top-time"></div>
+    </div>
+
+    <!-- Settings Panel (hidden by default) -->
+    <div id="settings-panel" style="display:none; position: fixed; top: 40px; right: 20px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 10px; padding: 10px; color: white;">
+        <label for="time-format">Time Format:</label>
+        <select id="time-format" style="background: rgba(255, 255, 255, 0.2); color: white;" onchange="toggleTimeFormat()">
+            <option value="12">12-hour</option>
+            <option value="24">24-hour</option>
+        </select>
+    </div>
+
+    <!-- App container for React content -->
+    <div id="app"></div>
+
+    <!-- Glassomorphic Chat Prompt for LLM Interaction -->
+    <div class="chat-container">
+        <!-- Paperclip Icon for File Upload -->
+        <div class="paperclip-icon" onclick="uploadDocument()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M21.58 12.58l-9-9a6.53 6.53 0 00-9.19 9.19l1.2 1.2a.75.75 0 001.06-1.06l-1.2-1.2a5 5 0 017.08-7.08l9 9a5 5 0 01-7.08 7.08l-4.94-4.94a2.5 2.5 0 013.53-3.53l.88.88a.75.75 0 001.06-1.06l-.88-.88a4 4 0 00-5.65 5.65l4.94 4.94a6.5 6.5 0 009.19
