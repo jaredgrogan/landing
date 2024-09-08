@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Image Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef, useEffect } = React;
+
+        const Button = ({ children, onClick, className = "", variant = "primary" }) => {
+            const baseClass = "px-4 py-2 rounded font-semibold text-sm";
+            const variantClass = variant === "primary" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-800";
+            return (
+                <button onClick={onClick} className={`${baseClass} ${variantClass} ${className}`}>
+                    {children}
+                </button>
+            );
+        };
+
+        const Card = ({ children, className = "" }) => (
+            <div className={`bg-white rounded-lg shadow-md p-6 ${className}`}>
+                {children}
+            </div>
+        );
+
+        const CameraApp = () => {
+            const [capturedImage, setCapturedImage] = useState(null);
+            const [ocrText, setOcrText] = useState('');
+            const [aiResponse, setAiResponse] = useState('');
+            const [isProcessing, setIsProcessing] = useState(false);
+            const [activeTab, setActiveTab] = useState('camera');
+            const videoRef = useRef(null);
+            const canvasRef = useRef(null);
+
+            useEffect(() => {
+                if (activeTab === 'camera') {
+                    startCamera();
+                } else {
+                    stopCamera();
+                }
+            }, [activeTab]);
+
+            const startCamera = async () => {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    if (videoRef.current) {
+                        videoRef.current.srcObject = stream;
+                    }
+                } catch (err) {
+                    console.error("Error accessing camera:", err);
+                }
+            };
+
+            const stopCamera = () => {
+                if (videoRef.current && videoRef.current.srcObject) {
+                    videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+                }
+            };
+
+            const capturePhoto = () => {
+                if (videoRef.current && canvasRef.current) {
+                    const context = canvasRef.current.getContext('2d');
+                    context.drawImage(videoRef.current, 0, 0, 640, 480);
+                    const imageDataUrl = canvasRef.current.toDataURL('image/jpeg');
+                    setCapturedImage(imageDataUrl);
+                    processImage(imageDataUrl);
+                }
+            };
+
+            const processImage = async (imageData) => {
+                setIsProcessing(true);
+                // Simulating API call for OCR and AI analysis
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                setOcrText("Simulated OCR text extraction...");
+                setAiResponse("Herakles' description of the image: This image appears to depict...");
+                setIsProcessing(false);
+            };
+
+            const performAction = (action) => {
+                setAiResponse(prev => `${prev}\n\nPerforming: ${action}...\n`);
+                // Here you would make an API call with the action and update the response
+            };
+
+            const shareImage = () => {
+                // Implement sharing functionality here
+                console.log("Sharing image...");
+            };
+
+            return (
+                <div className="max-w-3xl mx-auto p-4">
+                    <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">AI-Powered Image Analyzer</h1>
+                    
+                    <div className="mb-6">
+                        <div className="flex mb-4">
+                            <Button onClick={() => setActiveTab('camera')} className={`mr-2 ${activeTab === 'camera' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Camera</Button>
+                            <Button onClick={() => setActiveTab('upload')} className={activeTab === 'upload' ? 'bg-blue-600 text-white' : 'bg-gray-200'}>Upload Image</Button>
+                        </div>
+                        <Card>
+                            {activeTab === 'camera' ? (
+                                <div className="relative">
+                                    <video ref={videoRef} autoPlay playsInline className="w-full rounded-lg" />
+                                    <Button onClick={capturePhoto} className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                                        Capture
+                                    </Button>
+                                </div>
+                            ) : (
+                                <input type="file" accept="image/*" onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        const reader = new FileReader();
+                                        reader.onload = (e) => {
+                                            setCapturedImage(e.target.result);
+                                            processImage(e.target.result);
+                                        };
+                                        reader.readAsDataURL(file);
+                                    }
+                                }} />
+                            )}
+                        </Card>
+                    </div>
+                    
+                    <canvas ref={canvasRef} style={{display: 'none'}} width="640" height="480" />
+                    
+                    {capturedImage && (
+                        <Card className="mb-6">
+                            <h2 className="text-xl font-semibold mb-4">Captured Image</h2>
+                            <img src={capturedImage} alt="Captured" className="w-full rounded-lg" />
+                            <div className="mt-4">
+                                <Button onClick={() => window.open(capturedImage, '_blank')} className="mr-2">Download</Button>
+                                <Button onClick={() => setCapturedImage(null)} variant="secondary">Clear</Button>
+                            </div>
+                        </Card>
+                    )}
+                    
+                    {isProcessing ? (
+                        <Card className="mb-6">
+                            <p className="text-center">Processing image...</p>
+                        </Card>
+                    ) : (
+                        <>
+                            <Card className="mb-6">
+                                <h2 className="text-xl font-semibold mb-4">Text Extraction</h2>
+                                <textarea value={ocrText} readOnly className="w-full h-32 p-2 border rounded" />
+                            </Card>
+                            
+                            <Card className="mb-6">
+                                <h2 className="text-xl font-semibold mb-4">Super Vision</h2>
+                                <textarea value={aiResponse} readOnly className="w-full h-48 p-2 border rounded mb-4" />
+                                <h3 className="text-lg font-medium mb-2">Suggested Actions:</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    <Button onClick={() => performAction("Describe")}>Describe</Button>
+                                    <Button onClick={() => performAction("Key Words")}>Key Words</Button>
+                                    <Button onClick={() => performAction("Social Media")}>Social Media</Button>
+                                    <Button onClick={() => performAction("Web Search")}>Web Search</Button>
+                                    <Button onClick={() => performAction("Expand")}>Expand</Button>
+                                    <Button onClick={() => performAction("Prompt")}>Prompt</Button>
+                                </div>
+                            </Card>
+                        </>
+                    )}
+                    
+                    <Card>
+                        <h2 className="text-xl font-semibold mb-4">Share Results</h2>
+                        <div className="flex items-center">
+                            <input type="email" placeholder="Enter email" className="flex-grow mr-2 p-2 border rounded" />
+                            <Button onClick={shareImage}>Share</Button>
+                        </div>
+                    </Card>
+
+                    <p className="text-center mt-8 text-sm text-gray-600">© 2024 Cognitive Cloud</p>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<CameraApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
