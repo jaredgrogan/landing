@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+
+    <!-- Berkeley Mono Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400&display=swap">
+
+    <!-- Styles -->
+    <style>
+        /* Additional styles for positioning and tooltips */
+        .task-name {
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            padding-right: 10px; /* Added padding for the task name */
+        }
+        .task-actions select {
+            margin-right: 10px; /* Added margin to move select closer to "Done" button */
+        }
+        /* Tooltip styles */
+        [data-tooltip] {
+            position: relative;
+            cursor: pointer;
+        }
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background-color: #333;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            top: -30px;
+            white-space: nowrap;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- App container for React content -->
+    <div id="app"></div>
+
+    <!-- Scripts to render React components -->
+    <script type="text/babel">
+        const { useState } = React;
+
+        function ToDoList() {
+            const [tasks, setTasks] = useState([]);
+            const [newTask, setNewTask] = useState('');
+            const [dueDate, setDueDate] = useState('');
+            const [title, setTitle] = useState("Today's Tasks");
+            const [isEditingTitle, setIsEditingTitle] = useState(false);
+
+            const addTask = () => {
+                if (newTask.trim() !== '') {
+                    setTasks([...tasks, { id: Date.now(), content: newTask, dueDate: dueDate, completed: false, priority: '★' }]);
+                    setNewTask('');
+                    setDueDate('');
+                }
+            };
+
+            const toggleComplete = (id) => {
+                setTasks(tasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task));
+            };
+
+            return (
+                <div className="container">
+                    <div className="header" data-tooltip="Edit list title">
+                        {isEditingTitle ? (
+                            <input 
+                                type="text" 
+                                value={title} 
+                                onChange={(e) => setTitle(e.target.value)}
+                                onBlur={() => setIsEditingTitle(false)}
+                                onKeyPress={(e) => e.key === 'Enter' && setIsEditingTitle(false)}
+                                autoFocus
+                            />
+                        ) : (
+                            <h1 onClick={() => setIsEditingTitle(true)} data-tooltip="Click to edit title">{title}</h1>
+                        )}
+                        <div className="date-time" data-tooltip="Current date">{new Date().toLocaleDateString()}</div>
+                    </div>
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            value={newTask}
+                            onChange={(e) => setNewTask(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && addTask()}
+                            placeholder="Add a new task"
+                            data-tooltip="Enter task description"
+                        />
+                        <input
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.target.value)}
+                            data-tooltip="Set due date"
+                        />
+                        <button onClick={addTask} data-tooltip="Add new task">Add</button>
+                    </div>
+                    <ul>
+                        {tasks.map((task) => (
+                            <li key={task.id} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
+                                <div className="task-content">
+                                    <span className="task-name" onClick={() => alert('Rename Task')} data-tooltip="Click to rename task">{task.content}</span>
+                                    <select 
+                                        value={task.priority} 
+                                        onChange={(e) => alert('Change priority')}
+                                        data-tooltip="Task Priority"
+                                    >
+                                        <option value="★">★</option>
+                                        <option value="★★">★★</option>
+                                        <option value="★★★">★★★</option>
+                                    </select>
+                                </div>
+                                <div className="task-actions">
+                                    <button onClick={() => toggleComplete(task.id)} data-tooltip="Mark as done/undone">
+                                        {task.completed ? 'Undo' : 'Done'}
+                                    </button>
+                                    <button onClick={() => alert('Add Notes')} data-tooltip="Add notes">Notes</button>
+                                    <button onClick={() => alert('Move Task Up')} data-tooltip="Move task up">↑</button>
+                                    <button onClick={() => alert('Move Task Down')} data-tooltip="Move task down">↓</button>
+                                    <button onClick={() => alert('Delete Task')} data-tooltip="Delete task">Delete</button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="stats">
+                        <span data-tooltip="Number of tasks not completed">Ongoing items: {tasks.filter(task => !task.completed).length}</span>
+                        <span data-tooltip="Number of tasks completed">Completed items: {tasks.filter(task => task.completed).length}</span>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<ToDoList />, document.getElementById('app'));
+    </script>
+</body>
+</html>
