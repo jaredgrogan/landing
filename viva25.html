@@ -341,8 +341,8 @@
 
     <script type="text/babel">
         const { useState, useEffect, useCallback } = React;
-        const { DragDropContext, Droppable, Draggable } = window.ReactBeautifulDnd;
-        const { CSSTransition, TransitionGroup } = window.ReactTransitionGroup;
+        const { DragDropContext, Droppable, Draggable } = ReactBeautifulDnd;
+        const { CSSTransition, TransitionGroup } = ReactTransitionGroup;
 
         function TrashIcon() {
             return (
@@ -430,7 +430,7 @@
                 }
             }, []);
 
-               const changePriority = useCallback((id, newPriority) => {
+       const changePriority = useCallback((id, newPriority) => {
             setTasks(prevTasks => prevTasks.map(task => 
                 task.id === id ? { ...task, priority: newPriority } : task
             ));
@@ -506,7 +506,7 @@
                             <TransitionGroup
                                 component="ul"
                                 {...provided.droppableProps}
-                                ref={provided.innerRef}
+                                innerRef={provided.innerRef}
                             >
                                 {tasks.map((task, index) => (
                                     <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
@@ -584,9 +584,18 @@
             console.error("Uncaught error:", error, errorInfo);
         }
 
+        resetErrorBoundary = () => {
+            this.setState({ hasError: false });
+        }
+
         render() {
             if (this.state.hasError) {
-                return <h1>Something went wrong. Please refresh the page.</h1>;
+                return (
+                    <div>
+                        <h1>Something went wrong.</h1>
+                        <button onClick={this.resetErrorBoundary}>Try again</button>
+                    </div>
+                );
             }
 
             return this.props.children;
