@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Pro - Task List</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Berkeley Mono', monospace;
+            overflow: hidden;
+            background-color: #f5f5f5;
+        }
+        .container {
+            padding: 20px;
+            width: 500px;
+            margin: 0 auto;
+            margin-top: 50px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f0f0f0;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            cursor: move;
+            transition: background-color 0.2s, opacity 0.2s;
+        }
+        li.dragging {
+            opacity: 0.5;
+        }
+        li:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Universitas Pro Task Manager</h1>
+        <ul id="taskList">
+            <li draggable="true">Task 1</li>
+            <li draggable="true">Task 2</li>
+            <li draggable="true">Task 3</li>
+            <li draggable="true">Task 4</li>
+            <li draggable="true">Task 5</li>
+        </ul>
+    </div>
+
+    <script>
+        // Get the list and list items
+        const taskList = document.getElementById('taskList');
+        let draggedItem = null;
+
+        // Function to handle drag start
+        function handleDragStart(e) {
+            draggedItem = this;
+            setTimeout(() => this.classList.add('dragging'), 0);
+        }
+
+        // Function to handle drag end
+        function handleDragEnd() {
+            setTimeout(() => {
+                this.classList.remove('dragging');
+                draggedItem = null;
+            }, 0);
+        }
+
+        // Function to handle dragging over other list items
+        function handleDragOver(e) {
+            e.preventDefault();  // Prevent default to allow drop
+            const currentItem = e.target;
+            const bounding = currentItem.getBoundingClientRect();
+            const offset = e.clientY - bounding.top;
+
+            if (offset > bounding.height / 2) {
+                currentItem.style['border-top'] = '';
+                currentItem.style['border-bottom'] = '2px solid #999';
+            } else {
+                currentItem.style['border-top'] = '2px solid #999';
+                currentItem.style['border-bottom'] = '';
+            }
+        }
+
+        // Function to handle dropping the dragged item
+        function handleDrop(e) {
+            e.preventDefault();
+            this.style['border-top'] = '';
+            this.style['border-bottom'] = '';
+
+            if (draggedItem !== this) {
+                const bounding = this.getBoundingClientRect();
+                const offset = e.clientY - bounding.top;
+                if (offset > bounding.height / 2) {
+                    taskList.insertBefore(draggedItem, this.nextSibling);
+                } else {
+                    taskList.insertBefore(draggedItem, this);
+                }
+            }
+        }
+
+        // Attach event listeners to each list item
+        const listItems = document.querySelectorAll('#taskList li');
+        listItems.forEach(item => {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+            item.addEventListener('dragover', handleDragOver);
+            item.addEventListener('drop', handleDrop);
+        });
+    </script>
+</body>
+</html>
