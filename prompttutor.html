@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering Library Tutorial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('/fonts/BerkeleyMono-Regular.woff2') format('woff2');
+        }
+        body {
+            font-family: 'Berkeley Mono', monospace;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const TutorialContent = () => (
+            // ... (same as before)
+        );
+
+        const DayNightToggle = ({ isDarkMode, toggleDarkMode }) => (
+            <button onClick={toggleDarkMode} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                {isDarkMode ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                )}
+            </button>
+        );
+
+        const Clock = () => {
+            const [time, setTime] = React.useState(new Date());
+
+            React.useEffect(() => {
+                const timer = setInterval(() => setTime(new Date()), 1000);
+                return () => clearInterval(timer);
+            }, []);
+
+            const formatDate = (date) => {
+                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                return `${days[date.getDay()]} ${months[date.getMonth()]} ${date.getDate()} ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`;
+            };
+
+            return <div className="text-sm">{formatDate(time)}</div>;
+        };
+
+        const App = () => {
+            const [message, setMessage] = React.useState('');
+            const [chatHistory, setChatHistory] = React.useState([]);
+            const [isRecording, setIsRecording] = React.useState(false);
+            const [isDarkMode, setIsDarkMode] = React.useState(false);
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                if (!message.trim()) return;
+
+                const newMessage = { role: 'user', content: message };
+                setChatHistory([...chatHistory, newMessage]);
+
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message }),
+                    });
+                    const data = await response.json();
+                    setChatHistory(prev => [...prev, { role: 'assistant', content: data.message }]);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+
+                setMessage('');
+            };
+
+            const toggleRecording = () => {
+                setIsRecording(!isRecording);
+                // Implement actual voice recording logic here
+            };
+
+            const toggleDarkMode = () => {
+                setIsDarkMode(!isDarkMode);
+            };
+
+            return (
+                <div className={`min-h-screen ${isDarkMode ? 'bg-[#1e1e1e] text-white' : 'bg-gray-100 text-black'}`}>
+                    <div className="container mx-auto p-4">
+                        <div className="flex justify-between items-center mb-4">
+                            <img src="/favicon5.svg" alt="Logo" className="w-[50px] h-[50px] mt-5 ml-5" />
+                            <h1 className="text-3xl font-bold">Prompt Engineering Library Tutorial</h1>
+                            <div className="flex items-center space-x-4">
+                                <Clock />
+                                <DayNightToggle isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            <div className={`p-4 rounded shadow overflow-y-auto ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} style={{maxHeight: "calc(100vh - 2rem)"}}>
+                                <TutorialContent />
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-bold mb-2">Interactive Chat Console</h2>
+                                <div className={`glass p-4 rounded shadow ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                                    <div className="h-64 overflow-y-auto mb-4">
+                                        {chatHistory.map((msg, index) => (
+                                            <div key={index} className={`mb-2 ${msg.role === 'user' ? 'text-blue-600' : 'text-green-600'}`}>
+                                                <strong>{msg.role === 'user' ? 'You: ' : 'AI: '}</strong>{msg.content}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <form onSubmit={handleSubmit} className="flex items-center">
+                                        <input
+                                            type="text"
+                                            value={message}
+                                            onChange={(e) => setMessage(e.target.value)}
+                                            className={`flex-grow mr-2 p-2 border rounded ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
+                                            placeholder="Type your message..."
+                                        />
+                                        <button type="submit" className="bg-blue-500 text-white p-2 rounded">Send</button>
+                                        <button
+                                            type="button"
+                                            onClick={toggleRecording}
+                                            className={`ml-2 p-2 rounded ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-gray-300'}`}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <footer className="mt-8 text-center text-sm">
+                        UNIVERSITAS AI
+                    </footer>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
