@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Vision</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            background-size: cover;
+            background-position: center;
+            transition: background 0.5s;
+        }
+
+        .top-stripe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .date-time-settings {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .date-time {
+            font-size: 14px;
+            position: fixed;
+            right: 10px;
+            margin-left: 5px;
+        }
+
+        .settings {
+            cursor: pointer;
+            padding: 5px;
+            position: fixed;
+            right: 60px;
+        }
+
+        .settings svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+
+        .settings-dropdown {
+            position: absolute;
+            right: 20px;
+            top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 5px;
+            padding: 10px;
+            display: none;
+        }
+
+        .settings-dropdown select,
+        .settings-dropdown button,
+        #analysisType {
+            background: transparent;
+            color: white;
+            border: none;
+            font-family: 'Berkeley Mono', monospace;
+            margin-bottom: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .settings-dropdown select option,
+        #analysisType option {
+            background: rgba(30, 30, 30, 0.9);
+            color: white;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+            margin-top: 50px;
+        }
+
+        #mediaContainer {
+            margin-bottom: 20px;
+            border: 3px solid #3498db;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 640px;
+            height: 480px;
+        }
+
+        #video,
+        #photoViewer {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #photoViewer {
+            display: none;
+        }
+
+        .button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+        }
+
+        .button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .button svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        #result,
+        #textExtraction {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            max-width: 600px;
+            text-align: left;
+        }
+
+        #autoSuggestions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 14px;
+            margin-top: auto;
+        }
+
+        #viewToggle,
+        #shareButton {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-stripe">
+        <div class="logo">
+            <img src="favicon_white.svg" alt="Logo">
+            <span>// Universitas Pro</span>
+        </div>
+        <div class="date-time-settings">
+            <div class="settings">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
+                </svg>
+                <div class="settings-dropdown">
+                    <select id="timeFormat">
+                        <option value="12">12-hour</option>
+                        <option value="24">24-hour</option>
+                    </select>
+                    <button id="cameraAccess">Camera Access</button>
+                </div>
+            </div>
+            <div class="date-time" id="dateTime"></div>
+        </div>
+    </div>
+
+    <h1>Super Vision</h1>
+    <div id="mediaContainer">
+        <video id="video" autoplay playsinline></video>
+        <img id="photoViewer" alt="Captured Photo">
+    </div>
+    <button id="viewToggle">Toggle View</button>
+    <button id="captureBtn" class="button">
+        <svg viewBox="0 0 24 24" fill="white">
+            <path d="M9 3H15L17 5H21C22.1 5 23 5.9 23 7V19C23 20.1 22.1 21 21 21H3C1.9 21 1 20.1 1 19V7C1 5.9 1.9 5 3 5H7L9 3ZM12 18C14.76 18 17 15.76 17 13C17 10.24 14.76 8 12 8C9.24 8 7 10.24 7 13C7 15.76 9.24 18 12 18Z" />
+        </svg>
+        Capture
+    </button>
+    <button id="analyzeBtn" class="button">Super Vision</button>
+    <select id="analysisType">
+        <option value="description">Description</option>
+        <option value="extractText">Extract Text</option>
+        <option value="socialPost">Social Post</option>
+        <option value="webSearch">Web Search</option>
+        <option value="explain">Explain</option>
+        <option value="prompt">Prompt</option>
+    </select>
+    <button id="shareButton">Share</button>
+    <div id="result"></div>
+    <div id="textExtraction"></div>
+    <div id="autoSuggestions"></div>
+
+    <div class="footer">
+        &copy; 2024 Cognitive Cloud
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const photoViewer = document.getElementById('photoViewer');
+        const captureBtn = document.getElementById('captureBtn');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const result = document.getElementById('result');
+        const textExtraction = document.getElementById('textExtraction');
+        const autoSuggestions = document.getElementById('autoSuggestions');
+        const viewToggle = document.getElementById('viewToggle');
+        const shareButton = document.getElementById('shareButton');
+        let stream;
+        let imageData;
+
+        function updateDateTime() {
+            const now = new Date();
+            const format = document.getElementById('timeFormat').value;
+            const options = { 
+                weekday: 'short', 
+                month: 'short', 
+                day: 'numeric', 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: format === '12'
+            };
+            let dateString = now.toLocaleString('en-US', options).replace(/,/g, '');
+            dateString = dateString.replace(/ at /, ' ');
+            document.getElementById('dateTime').textContent = dateString;
+        }
+
+        async function initCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error("Error accessing the camera:", err);
+                result.textContent = "Error: Unable to access the camera. Please make sure you've granted the necessary permissions.";
+            }
+        }
+
+        function captureImage() {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            imageData = canvas.toDataURL('image/jpeg');
+            photoViewer.src = imageData;
+            photoViewer.style.display = 'block';
+            video.style.display = 'none';
+            result.textContent = "Image captured. Click 'Super Vision' to analyze.";
+        }
+
+        async function analyzeImage() {
+            if (!imageData) {
+                result.textContent = "Please capture an image first.";
+                return;
+            }
+            result.textContent = "Analyzing image...";
+            const analysisType = document.getElementById('analysisType').value;
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: `Analyze this image: ${analysisType}`,
+                        image: imageData
+                    }),
+                });
+                const data = await response.json();
+                result.textContent = "Herakles says: " + data.message;
+            } catch (error) {
+                console.error('Error:', error);
+                result.textContent = "An error occurred during analysis. Please try again.";
+            }
+        }
+
+        function toggleView() {
+            if (video.style.display === 'none') {
+                video.style.display = 'block';
+                photoViewer.style.display = 'none';
+            } else {
+                video.style.display = 'none';
+                photoViewer.style.display = 'block';
+            }
+        }
+
+        async function shareImage() {
+            if (!imageData) {
+                alert("Please capture an image first.");
+                return;
+            }
+            try {
+                const blob = await (await fetch(imageData)).blob();
+                const file = new File([blob], "super_vision_image.jpg", { type: "image/jpeg" });
+                if (navigator.share) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Super Vision Image',
+                        text: 'Check out this image analyzed by Super Vision!'
+                    });
+                } else {
+                    const link = document.createElement('a');
+                    link.download = 'super_vision_image.jpg';
+                    link.href = imageData;
+                    link.click();
+                }
+            } catch (error) {
+                console.error('Error sharing:', error);
+                alert("Unable to share the image. You can try saving it manually.");
+            }
+        }
+
+        function handleAutoSuggestion(suggestion) {
+            document.getElementById('analysisType').value = suggestion.toLowerCase().replace(' ', '');
+            analyzeBtn.textContent = `Super Vision: ${suggestion}`;
+            analyzeImage();
+        }
+
+        window.addEventListener('load', () => {
+            const img = new Image();
+            img.src = 'sunset.jpeg';
+            img.onload = () => {
+                document.body.style.backgroundImage = "url('forest.jpeg')";
+            };
+            img.onerror = () => {
+                document.body.style.backgroundColor = "#1e1e1e";
+            };
+
+            initCamera();
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+        });
+
+        captureBtn.addEventListener('click', captureImage);
+        analyzeBtn.addEventListener('click', analyzeImage);
+        document.getElementById('timeFormat').addEventListener('change', updateDateTime);
+        viewToggle.addEventListener('click', toggleView);
+        shareButton.addEventListener('click', shareImage);
+
+        document.querySelector('.settings').addEventListener('click', (event) => {
+            event.stopPropagation();
+            const dropdown = document.querySelector('.settings-dropdown');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        });
+
+        document.getElementById('cameraAccess').addEventListener('click', () => {
+            if (navigator.permissions && navigator.permissions.query) {
+                navigator.permissions.query({ name: 'camera' })
+                    .then(permissionStatus => {
+                        if (permissionStatus.state === 'granted') {
+                            alert('Camera access is already granted.');
+                        } else {
+                            alert('Please grant camera access in your browser settings.');
+                            window.open('chrome://settings/content/camera');
+                        }
+                    });
+            } else {
+                alert('Please check your browser settings to manage camera permissions.');
+            }
+        });
+
+        document.getElementById('analysisType').addEventListener('change', (e) => {
+            analyzeBtn.textContent = `Super Vision: ${e.target.options[e.target.selectedIndex].text}`;
+        });
+
+        const suggestions = ["Description", "Extract Text", "Social Post", "Web Search", "Explain", "Prompt"];
+        autoSuggestions.innerHTML = suggestions.map(suggestion => 
+            `<button class="button suggestion-btn" onclick="handleAutoSuggestion('${suggestion}')">${suggestion}</button>`
+        ).join('');
+
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+
+        document.addEventListener('click', () => {
+            document.querySelector('.settings-dropdown').style.display = 'none';
+        });
+
+        analyzeBtn.textContent = `Super Vision: ${document.getElementById('analysisType').options[0].text}`;
+    </script>
+</body>
+</html>
+
