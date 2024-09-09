@@ -295,32 +295,32 @@
             result.textContent = "Image captured. Click 'Super Vision' to analyze.";
         }
 
-        async function analyzeImage() {
-            if (!imageData) {
-                result.textContent = "Please capture an image first.";
-                return;
-            }
-            result.textContent = "Analyzing image...";
-            const analysisType = document.getElementById('analysisType').value;
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: `Analyze this image: ${analysisType}`,
-                        image: imageData
-                    }),
-                });
-                const data = await response.json();
-                result.textContent = "Herakles says: " + data.message;
-            } catch (error) {
-                console.error('Error:', error);
-                result.textContent = "An error occurred during analysis. Please try again.";
-            }
-        }
-
+      async function analyzeImage() {
+    if (!imageData) {
+        result.textContent = "Please capture an image first.";
+        return;
+    }
+    result.textContent = "Analyzing image...";
+    const analysisType = document.getElementById('analysisType').value;
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: `Analyze this image: ${analysisType}`,
+                image: imageData,
+                service: 'openai-vision'  // Specify the service
+            }),
+        });
+        const data = await response.json();
+        result.textContent = "Herakles says: " + data.response;
+    } catch (error) {
+        console.error('Error:', error);
+        result.textContent = "An error occurred during analysis. Please try again.";
+    }
+}
         function toggleView() {
             if (video.style.display === 'none') {
                 video.style.display = 'block';
