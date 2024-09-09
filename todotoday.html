@@ -125,18 +125,19 @@
             color: white;
         }
         button.add-button {
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: background-color 0.3s;
-        }
-        button.add-button:hover {
-            background-color: rgba(255, 255, 255, 0.4);
-        }
+    background-color: rgba(255, 255, 255, 0.15); /* Glassmorphic background */
+    border-radius: 10px;
+    color: white; /* White text */
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: background-color 0.3s;
+}
+
+button.add-button:hover {
+    background-color: rgba(255, 255, 255, 0.25); /* Slightly lighter on hover */
+}
         ul {
             list-style-type: none;
             padding: 0;
