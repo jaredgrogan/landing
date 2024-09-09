@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Vision OCR Demo</title>
+</head>
+<body>
+    <h1>Google Vision OCR</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="snap">Capture Image</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <div id="result"></div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const resultDiv = document.getElementById('result');
+
+        // Access the device camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(error => {
+                console.error("Error accessing camera: ", error);
+            });
+
+        // Capture image and send to Google Cloud Vision API
+        document.getElementById('snap').addEventListener('click', function() {
+            context.drawImage(video, 0, 0, 640, 480);
+            const imageBase64 = canvas.toDataURL('image/png').replace('data:image/png;base64,', '');
+
+            // Call the Google Cloud Vision API
+            fetch('https://vision.googleapis.com/v1/images:annotate?key=YOUR_GOOGLE_CLOUD_API_KEY', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    requests: [{
+                        image: { content: imageBase64 },
+                        features: [{ type: 'TEXT_DETECTION' }]
+                    }]
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const result = data.responses[0].fullTextAnnotation ? data.responses[0].fullTextAnnotation.text : "No text detected";
+                resultDiv.innerText = result;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
