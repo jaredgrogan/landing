@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI - Language Tutor</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+
+    <!-- Berkeley Mono Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400&display=swap">
+
+    <!-- Styles -->
+    <style>
+        /* Existing styles... */
+
+        /* New styles for language learning interface */
+        .language-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 1rem 2rem 2rem 2rem;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .language-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .language-select, .proficiency-select, .goal-select {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .learning-console {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .text-area {
+            width: 100%;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .audio-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+
+        .audio-slider {
+            flex-grow: 1;
+        }
+
+        .scenario-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .scenario-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+
+        .generate-materials {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .progress-tracker {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 0.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas for background gradient -->
+    <canvas id="gradient-canvas"></canvas>
+
+    <!-- Top header -->
+    <div class="top-header">
+        <div class="top-left">
+            <img src="favicon_white.svg" alt="Favicon" class="favicon">
+            <div class="top-left-text">// UNIVERSITAS AI</div>
+        </div>
+        <div class="right-header">
+            <div class="gear-icon" onclick="toggleSettings()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22l-1.92 3.32c-.12.21-.07.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                </svg>
+            </div>
+            <div id="top-time-display" class="top-time"></div>
+        </div>
+    </div>
+
+    <!-- Settings Panel (hidden by default) -->
+    <div id="settings-panel" style="display:none; position: fixed; top: 40px; right: 20px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 10px; padding: 10px; color: white;">
+        <label for="time-format">Time Format:</label>
+        <select id="time-format" onchange="toggleTimeFormat()">
+            <option value="12">12-hour</option>
+            <option value="24">24-hour</option>
+        </select>
+    </div>
+
+    <!-- App container for React content -->
+    <div id="app"></div>
+
+    <!-- Glassomorphic Chat Prompt for LLM Interaction -->
+    <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+            <!-- AI messages will be inserted here -->
+        </div>
+        <div class="chat-input">
+            <textarea class="chat-prompt" placeholder="Type a message..."></textarea>
+            <div class="chat-actions">
+                <button class="send-button" onclick="sendMessage()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M2.01 21l20.93-9L2.01 3v7l15 2-15 2z"/>
+                    </svg>
+                </button>
+                <button class="mic-button" onclick="toggleMic(this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zM8 18h8v2H8v-2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright footer -->
+    <div class="copyright">© 2024 Cognitive Cloud</div>
+
+    <!-- Scripts to render React components and UI functionality -->
+    <script type="text/babel">
+        // Existing canvas and time display logic...
+
+        const { useState, useEffect } = React;
+
+        function LanguageTutor() {
+            const [nativeLanguage, setNativeLanguage] = useState('English');
+            const [targetLanguage, setTargetLanguage] = useState('Spanish');
+            const [proficiency, setProficiency] = useState('Beginner');
+            const [learningGoal, setLearningGoal] = useState('Travel');
+            const [textInput, setTextInput] = useState('');
+            const [audioSpeed, setAudioSpeed] = useState(1);
+            const [progress, setProgress] = useState(0);
+
+            const handleGenerateMaterials = () => {
+                // Logic to generate study materials
+                console.log('Generating study materials...');
+            };
+
+            const handleScenarioClick = (scenario) => {
+                // Logic to handle scenario selection
+                console.log(`Selected scenario: ${scenario}`);
+            };
+
+            return (
+                <div className="language-container">
+                    <h1>Language Tutor</h1>
+                    <div className="language-controls">
+                        <select
+                            className="language-select"
+                            value={nativeLanguage}
+                            onChange={(e) => setNativeLanguage(e.target.value)}
+                        >
+                            <option value="English">English</option>
+                            <option value="Spanish">Spanish</option>
+                        </select>
+                        <select
+                            className="language-select"
+                            value={targetLanguage}
+                            onChange={(e) => setTargetLanguage(e.target.value)}
+                        >
+                            <option value="Spanish">Spanish</option>
+                            <option value="English">English</option>
+                        </select>
+                        <select
+                            className="proficiency-select"
+                            value={proficiency}
+                            onChange={(e) => setProficiency(e.target.value)}
+                        >
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                        <select
+                            className="goal-select"
+                            value={learningGoal}
+                            onChange={(e) => setLearningGoal(e.target.value)}
+                        >
+                            <option value="Travel">Travel</option>
+                            <option value="Business">Business</option>
+                            <option value="Casual Conversation">Casual Conversation</option>
+                        </select>
+                    </div>
+                    <div className="learning-console">
+                        <textarea
+                            className="text-area"
+                            value={textInput}
+                            onChange={(e) => setTextInput(e.target.value)}
+                            placeholder="Type or speak your text here..."
+                        />
+                        <div className="audio-controls">
+                            <button className="audio-button">▶️</button>
+                            <button className="audio-button">⏸️</button>
+                            <button className="audio-button">🎙️</button>
+                            <input
+                                type="range"
+                                min="0.5"
+                                max="2"
+                                step="0.1"
+                                value={audioSpeed}
+                                onChange={(e) => setAudioSpeed(parseFloat(e.target.value))}
+                                className="audio-slider"
+                            />
+                        </div>
+                    </div>
+                    <div className="scenario-buttons">
+                        <button className="scenario-button" onClick={() => handleScenarioClick('Greetings')}>Practice Greetings</button>
+                        <button className="scenario-button" onClick={() => handleScenarioClick('Restaurant')}>Order at a Restaurant</button>
+                        <button className="scenario-button" onClick={() => handleScenarioClick('Directions')}>Ask for Directions</button>
+                    </div>
+                    <button className="generate-materials" onClick={handleGenerateMaterials}>Generate Study Materials</button>
+                    <div className="progress-tracker">
+                        <p>Learning Progress: {progress}%</p>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(
+            <React.StrictMode>
+                <LanguageTutor />
+            </React.StrictMode>,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+</html>
