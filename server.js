@@ -1,155 +1,179 @@
-const express = require('express');
-const cors = require('cors');
 const axios = require('axios');
-const bodyParser = require('body-parser');
-require('dotenv').config();
+const FormData = require('form-data');
+const fs = require('fs');
 
-const app = express();
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
+    try {
+      const { message, analysisType, image, audio, service } = req.body;
 
-// Middleware
-app.use(cors({
-  origin: process.env.CORS_ALLOWED_ORIGINS || '*',
-}));
-app.use(express.json());
-app.use(bodyParser.json());
-
-// Logging middleware
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-  next();
-});
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK' });
-});
-
-// Function to call OpenAI API
-async function callOpenAIAPI(message, apiKey, model = 'gpt-3.5-turbo') {
-  const openaiResponse = await axios.post(
-    'https://api.openai.com/v1/chat/completions',
-    {
-      model: model,
-      messages: [{ role: 'user', content: message }]
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      }
-    }
-  );
-  return openaiResponse.data.choices[0].message.content;
-}
-
-// Function to call Perplexity API
-async function callPerplexityAPI(message) {
-  try {
-    const response = await axios.post(
-      'https://api.perplexity.ai/chat/completions',
-      {
-        model: 'mixtral-8x7b-instruct',
-        messages: [{ role: 'user', content: message }]
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-    return response.data.choices[0].message.content;
-  } catch (error) {
-    console.error('Perplexity API Error:', error);
-    throw error;
-  }
-}
-
-// Chat endpoint
-app.post('/api/chat', async (req, res) => {
-  try {
-    const { message, usePerplexity, analysisType, image } = req.body;
-    if (!message) {
-      return res.status(400).json({ error: 'Message is required' });
-    }
-
-    let response;
-
-    if (image) {
-      // GPT-4V Image Analysis
-      let developerMessage = message;
-      if (analysisType === 'description') {
-        developerMessage = `Herakles: Describe the image in 150 characters and add a haiku - labeled as such (begins with "**Haiku:**" and the haiku is in italics).`;
+      if (!message && !image && !audio) {
+        console.error('No input provided');
+        return res.status(400).json({ error: 'Message, image, or audio is required' });
       }
 
-      const gptResponse = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
-        {
-          model: 'gpt-4-vision-preview',
-          messages: [
-            {
-              role: 'system',
-              content: `The AI must always refer to itself as Herakles. Analyze the image as requested by the user.`
-            },
-            {
-              role: 'user',
-              content: [
-                { type: 'text', text: `Analysis type: ${analysisType}. ${developerMessage}` },
-                { type: 'image_url', image_url: { url: image } }
-              ]
-            }
-          ]
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-            'Content-Type': 'application/json',
-          }
-        }
-      );
+      console.log('Received request:', { message, analysisType, image: !!image, audio: !!audio, service });
 
-      response = `Herakles says: ${gptResponse.data.choices[0].message.content}`;
-    } else if (usePerplexity) {
-      console.log('Calling Perplexity API...');
-      response = await callPerplexityAPI(message);
-    } else {
-      console.log('Decrypting OpenAI API Key using API Gateway...');
+      // Log environment variables (ensure sensitive data is handled appropriately)
+      console.log('API Gateway URL:', process.env.API_GATEWAY_URL);
+      console.log('OpenAI Model ID:', process.env.OPENAI_MODEL_ID);
+
+      // API Gateway call to decrypt the API keys
       const decryptResponse = await axios.post(
         process.env.API_GATEWAY_URL,
         {},
         {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         }
       );
-      const decryptedApiKey = decryptResponse.data;
-      if (!decryptedApiKey) {
-        throw new Error('Decryption failed or key not found in the response.');
+
+      console.log('Decrypt response status:', decryptResponse.status);
+
+      const {
+        OPENAI_API_KEY: decryptedOpenAIApiKey,
+        PERPLEXITY_API_KEY: decryptedPerplexityApiKey,
+        ANTHROPIC_API_KEY: decryptedAnthropicApiKey
+      } = decryptResponse.data;
+
+      if (!decryptedOpenAIApiKey || !decryptedPerplexityApiKey || !decryptedAnthropicApiKey) {
+        throw new Error('Decryption failed or keys not found in the response.');
       }
-      console.log('Calling OpenAI API...');
-      response = await callOpenAIAPI(message, decryptedApiKey);
+
+      let aiResponse;
+
+      switch (service) {
+        case 'openai-text':
+          aiResponse = await handleOpenAIText(message, decryptedOpenAIApiKey);
+          break;
+        case 'openai-vision':
+          aiResponse = await handleOpenAIVision(message, image, analysisType, decryptedOpenAIApiKey);
+          break;
+        case 'openai-audio':
+          aiResponse = await handleOpenAIAudio(audio, decryptedOpenAIApiKey);
+          break;
+        case 'perplexity':
+          aiResponse = await handlePerplexity(message, decryptedPerplexityApiKey);
+          break;
+        case 'anthropic':
+          aiResponse = await handleAnthropic(message, decryptedAnthropicApiKey);
+          break;
+        default:
+          throw new Error('Invalid service specified');
+      }
+
+      console.log('AI response status:', aiResponse.status);
+      console.log('AI response data:', aiResponse.data);
+
+      res.json({ response: aiResponse.data.choices ? aiResponse.data.choices[0].message.content : aiResponse.data.output });
+    } catch (error) {
+      console.error('Error in /api/chat:', error.message);
+      console.error('Stack trace:', error.stack);
+      res.status(500).json({
+        error: 'An error occurred while processing your request',
+        details: error.message,
+        stack: error.stack,
+      });
     }
-
-    res.json({ response });
-  } catch (error) {
-    console.error('Error in /api/chat:', error.message);
-    res.status(500).json({ 
-      error: 'An error occurred while processing your request',
-      details: error.message,
-      stack: error.stack
-    });
+  } else {
+    console.error('Invalid request method:', req.method);
+    res.status(405).json({ error: 'Method not allowed' });
   }
-});
+}
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
+async function handleOpenAIText(message, apiKey) {
+  return axios.post(
+    'https://api.openai.com/v1/chat/completions',
+    {
+      model: process.env.OPENAI_MODEL_ID || 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: message }],
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
 
-// Server setup
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+async function handleOpenAIVision(message, image, analysisType, apiKey) {
+  let developerMessage = message;
+  if (analysisType === 'description') {
+    developerMessage = `Herakles: Describe the image in 150 characters and add a haiku - labeled as such (begins with "**Haiku:**" and the haiku is in italics).`;
+  }
+  return axios.post(
+    'https://api.openai.com/v1/chat/completions',
+    {
+      model: 'gpt-4',
+      messages: [
+        {
+          role: 'system',
+          content: `The AI must always refer to itself as Herakles. Analyze the image as requested by the user.`
+        },
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: `Analysis type: ${analysisType}. ${developerMessage}` },
+            { type: 'image_url', image_url: { url: image } }
+          ]
+        }
+      ],
+      max_tokens: 300
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
 
-module.exports = app; // For testing purposes
+async function handleOpenAIAudio(audio, apiKey) {
+  const formData = new FormData();
+  formData.append('file', fs.createReadStream(audio));
+  formData.append('model', 'whisper-1');
+
+  return axios.post('https://api.openai.com/v1/audio/transcriptions', formData, {
+    headers: {
+      ...formData.getHeaders(),
+      'Authorization': `Bearer ${apiKey}`,
+    },
+  });
+}
+
+async function handlePerplexity(message, apiKey) {
+  return axios.post(
+    'https://api.perplexity.ai/chat/completions',
+    {
+      model: 'mixtral-8x7b-instruct',
+      messages: [{ role: 'user', content: message }],
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
+
+async function handleAnthropic(message, apiKey) {
+  return axios.post(
+    'https://api.anthropic.com/v1/messages',
+    {
+      model: 'claude-3-opus-20240229',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: message }],
+    },
+    {
+      headers: {
+        'X-API-Key': apiKey,
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+      },
+    }
+  );
+}
