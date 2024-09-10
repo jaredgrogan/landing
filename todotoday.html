@@ -124,18 +124,16 @@
         .chat-prompt::placeholder {
             color: white;
         }
-        button.add-button {
-    background-color: rgba(255, 255, 255, 0.1); /* Glassmorphic background */
-    color: white; /* White text */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Glassy border */
-    border-radius: 12px;
-    padding: 0.5rem 1.2rem;
+
+button.add-button {
+    background-color: rgba(255, 255, 255, 0.15) !important; 
+    color: white !important; 
+    border: none;
+    padding: 0.5rem 1rem;
     cursor: pointer;
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, box-shadow 0.3s;
+    transition: background-color 0.3s;
 }
-
 button.add-button:hover {
     background-color: rgba(255, 255, 255, 0.2); /* Slightly lighter on hover */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
