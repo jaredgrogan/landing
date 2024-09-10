@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Processing App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 136, 255, 0.5));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      background-size: cover;
+    }
+
+    .container {
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 20px;
+      width: 400px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #ffffff;
+    }
+
+    .image-preview {
+      width: 100%;
+      height: 200px;
+      background: url('https://via.placeholder.com/400') no-repeat center center/cover;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      background-color: rgba(255, 255, 255, 0.3);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 30px;
+      backdrop-filter: blur(15px);
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .button:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .layers {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .layers span {
+      color: white;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+    }
+
+    .tab {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+      color: white;
+    }
+
+    .tab:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .active-tab {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Image Editing</h1>
+    </div>
+
+    <!-- Image Preview -->
+    <div class="image-preview"></div>
+
+    <!-- Buttons -->
+    <div class="buttons">
+      <button class="button">Brightness</button>
+      <button class="button">Contrast</button>
+      <button class="button">Saturation</button>
+    </div>
+
+    <!-- Layers -->
+    <div class="layers">
+      <span>Layer 1</span>
+      <button class="button">Remove</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active-tab">Edit</div>
+      <div class="tab">Generate</div>
+      <div class="tab">Social</div>
+      <div class="tab">AR</div>
+    </div>
+  </div>
+</body>
+</html>
