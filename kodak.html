@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Kodak Film Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Source Sans Pro', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1f1f1f, #3a3a3a);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-top: 2rem;
+      font-size: 2.5rem;
+      color: #fff;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .film-panel {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .film-panel:hover {
+      transform: scale(1.02);
+    }
+
+    .film-panel h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .film-panel p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel-content {
+      display: none;
+      margin-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 1rem;
+    }
+
+    .film-panel.active .panel-content {
+      display: block;
+    }
+
+    .gradient-bar {
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, #ff5f6d, #ffc371);
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .film-panel h2 {
+        font-size: 1.2rem;
+      }
+
+      .film-panel p {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Kodak Film Explorer</h1>
+  <div class="container">
+    <div class="film-panel" onclick="togglePanel(this)">
+      <h2>Kodak Double X 5222/7222 (Black & White Negative Stock)</h2>
+      <div class="gradient-bar"></div>
+      <p>A gritty, high-contrast black-and-white film stock used in iconic films like Raging Bull and Schindler's List.</p>
+      <div class="panel-content">
+        <p><strong>Year of Release:</strong> 1959</p>
+        <p><strong>Notable Films:</strong> Raging Bull, Schindler's List</p>
+        <p><strong>Best Feature:</strong> Deep blacks, rich grain, classic noir look.</p>
+        <p><strong>Why Choose It?</strong> Timeless and gritty, perfect for emotionally charged historical films.</p>
+      </div>
+    </div>
+
+    <div class="film-panel" onclick="togglePanel(this)">
+      <h2>Kodak Tri-X 7266 (Black & White Reversal Stock)</h2>
+      <div class="gradient-bar"></div>
+      <p>Sharp, punchy black-and-white film stock, known for experimental and documentary filmmaking.</p>
+      <div class="panel-content">
+        <p><strong>Year of Release:</strong> 1954</p>
+        <p><strong>Notable Films:</strong> Man with a Movie Camera, The Cabinet of Dr. Caligari</p>
+        <p><strong>Best Feature:</strong> Sharp, high contrast, documentary feel.</p>
+        <p><strong>Why Choose It?</strong> Perfect for experimental or impactful visual storytelling.</p>
+      </div>
+    </div>
+
+    <div class="film-panel" onclick="togglePanel(this)">
+      <h2>Kodak Vision 3 50D 5203/7203 (Color Negative Stock)</h2>
+      <div class="gradient-bar"></div>
+      <p>Fine grain, true-to-life colors, ideal for daylight shoots in films like Dunkirk.</p>
+      <div class="panel-content">
+        <p><strong>Year of Release:</strong> 2007</p>
+        <p><strong>Notable Films:</strong> Dunkirk, Once Upon a Time in Hollywood</p>
+        <p><strong>Best Feature:</strong> Stunning detail and accurate color reproduction.</p>
+        <p><strong>Why Choose It?</strong> Perfect for bright outdoor scenes with natural colors.</p>
+      </div>
+    </div>
+
+    <!-- Add more film panels as needed -->
+  </div>
+
+  <script>
+    function togglePanel(panel) {
+      panel.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>
