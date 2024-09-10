@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSITAS AI - iOS App Development & Publishing Course</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('BerkeleyMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --primary-color: #0070c9;
+            --secondary-color: #47a9ff;
+            --background-light: #f0f0f0;
+            --background-dark: #1a1a1a;
+            --text-light: #333;
+            --text-dark: #f0f0f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            padding-top: 30px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Top strip styles */
+        .top-strip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            z-index: 1001;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            height: 20px;
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-family: 'Berkeley Mono', monospace;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .controls-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .datetime {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .settings-icon {
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+
+        .settings-dropdown {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1002;
+        }
+
+        .settings-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            margin-bottom: 10px;
+        }
+
+        .theme-select {
+            width: 100%;
+            padding: 5px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Theme background images */
+        body.theme-home { background-image: url('home.jpg'); }
+        body.theme-office { background-image: url('office.jpg'); }
+        body.theme-cafe { background-image: url('cafe.jpg'); }
+        body.theme-beach { background-image: url('beach.jpg'); }
+        body.theme-mountains { background-image: url('mountains.jpg'); }
+        body.theme-forest { background-image: url('forest.jpg'); }
+        body.theme-desert { background-image: url('desert.jpg'); }
+        body.theme-urban { background-image: url('urban.jpg'); }
+        body.theme-library { background-image: url('library.jpg'); }
+        body.theme-abstract { background-image: url('abstract.jpg'); }
+
+        body[class*="theme-"] {
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a1a1a 100%);
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .top-strip,
+        body.dark-mode .settings-dropdown {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode .logo-text,
+        body.dark-mode .datetime,
+        body.dark-mode .settings-icon {
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .settings-icon path {
+            fill: var(--text-dark);
+        }
+
+        /* Content styles */
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .course-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .course-section {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+
+            .logo-text {
+                font-size: 12px;
+            }
+
+            .datetime {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-strip">
+        <div class="logo-container">
+            <img src="favicon_white.svg" alt="UNIVERSITAS AI Logo">
+            <span class="logo-text">// UNIVERSITAS AI</span>
+        </div>
+        <div class="controls-container">
+            <svg class="settings-icon" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+            </svg>
+            <div class="datetime" id="datetime"></div>
+        </div>
+    </div>
+    <div class="settings-dropdown">
+        <div class="dropdown-item">
+            <label>
+                Time Format:
+                <input type="checkbox" id="clockFormat"> 24-hour
+            </label>
+        </div>
+        <div class="dropdown-item">
+            <label>
+                Mode:
+                <input type="checkbox" id="darkMode"> Dark
+            </label>
+        </div>
+        <div class="dropdown-item">
+            <label>
+                Theme:
+                <select id="themeSelect" class="theme-select">
+                    <option value="default">Default</option>
+                    <option value="home">Home</option>
+                    <option value="office">Office</option>
+                    <option value="cafe">Cafe</option>
+                    <option value="beach">Beach</option>
+                    <option value="mountains">Mountains</option>
+                    <option value="forest">Forest</option>
+                    <option value="desert">Desert</option>
+                    <option value="urban">Urban</option>
+                    <option value="library">Library</option>
+                    <option value="abstract">Abstract</option>
+                </select>
+            </label>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>iOS App Development & Publishing Course</h1>
+        
+        <section class="course-section">
+            <h2>Course Overview</h2>
+            <p>Welcome to our comprehensive iOS app development and publishing course. This program is designed to take you from a beginner to a published app developer, focusing on SwiftUI and modern iOS development practices.</p>
+        </section>
+
+        <section class="course-section">
+            <h2>Course Modules</h2>
+            <ul>
+                <li>Introduction to iOS Development</li>
+                <li>SwiftUI Fundamentals</li>
+                <li>iOS App Architecture</li>
+                <li>Data Management and Persistence</li>
+                <li>Networking and API Integration</li>
+                <li>User Interface Design</li>
+                <li>App Store Guidelines and Submission Process</li>
+                <li>Marketing Your App</li>
+            </ul>
+        </section>
+
+        <section class="course-section">
+            <h2>Getting Started</h2>
+            <p>To begin your journey in iOS app development, make sure you have the following:</p>
+            <ul>
+                <li>A Mac computer running the latest version of macOS</li>
+                <li>Xcode (latest version) installed from the Mac App Store</li>
+                <li>An Apple ID (for testing on physical devices and App Store submission)</li>
+            </ul>
+        </section>
+    </div>
+
+    <script>
+        const datetimeElement = document.getElementById('datetime');
+        const settingsIcon = document.querySelector('.settings-icon');
+        const settingsDropdown = document.querySelector('.settings-dropdown');
+        const clockFormatCheckbox = document.getElementById('clockFormat');
+        const darkModeCheckbox = document.getElementById('darkMode');
+        const themeSelect = document.getElementById('themeSelect');
+        let is24HourFormat = false;
+
+        function updateDateTime() {
+            const now = new Date();
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            let hours = now.getHours();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            if (!is24HourFormat) {
+                hours = hours % 12;
+                hours = hours ? hours : 12; // the hour '0' should be '12'
+            }
+
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeString = is24HourFormat ? `${hours}:${minutes}` : `${hours}:${minutes}${ampm}`;
+            
+            datetimeElement.textContent = `${days[now.getDay()]} ${months[now.getMonth()]} ${now.getDate()} ${timeString}`;
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime(); // Initial call
+
+        settingsIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            settingsDropdown.classList.toggle('show');
+        });
+
+        clockFormatCheckbox.addEventListener('change', (e) => {
+            is24HourFormat = e.target.checked;
+            localStorage.setItem('clockFormat', is24HourFormat);
+            updateDateTime();
+        });
+
+        darkModeCheckbox.addEventListener('change', (e) => {
+            document.body.classList.toggle('dark-mode', e.target.checked);
+            localStorage.setItem('darkMode', e.target.checked);
+        });
+
+        themeSelect.addEventListener('change', (e) => {
+            const theme = e.target.value;
+            document.body.className = theme === 'default' ? '' : `theme-${theme}`;
+            localStorage.setItem('theme', theme);
+        });
+
+        // Load saved preferences
+        const savedClockFormat = localStorage.getItem('clockFormat');
+        if (savedClockFormat !== null) {
+            is24HourFormat = savedClockFormat === 'true';
+            clockFormatCheckbox.checked = is24HourFormat;
+        }
+
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode !== null) {
+            darkModeCheckbox.checked = savedDarkMode === 'true';
+            document.body.classList.toggle('dark-mode', savedDarkMode === 'true');
+        }
+
+     const savedTheme = localStorage.getItem('theme');
+        if (savedTheme && savedTheme !== 'default') {
+            document.body.className = `theme-${savedTheme}`;
+            themeSelect.value = savedTheme;
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!settingsIcon.contains(e.target) && !settingsDropdown.contains(e.target)) {
+                settingsDropdown.classList.remove('show');
+            }
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        settingsDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Update content based on dark mode
+        function updateContentForDarkMode(isDarkMode) {
+            const courseSections = document.querySelectorAll('.course-section');
+            courseSections.forEach(section => {
+                if (isDarkMode) {
+                    section.style.color = 'var(--text-dark)';
+                } else {
+                    section.style.color = 'var(--text-light)';
+                }
+            });
+        }
+
+        // Initial update based on saved dark mode preference
+        updateContentForDarkMode(document.body.classList.contains('dark-mode'));
+
+        // Update content when dark mode is toggled
+        darkModeCheckbox.addEventListener('change', (e) => {
+            updateContentForDarkMode(e.target.checked);
+        });
+
+        // Keyboard accessibility for settings dropdown
+        settingsIcon.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                settingsDropdown.classList.toggle('show');
+            }
+        });
+
+        // Error handling for localStorage
+        function safelySetItem(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (e) {
+                console.warn('Local storage is not available:', e);
+            }
+        }
+
+        function safelyGetItem(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (e) {
+                console.warn('Local storage is not available:', e);
+                return null;
+            }
+        }
+
+        // Replace localStorage calls with safe versions
+        clockFormatCheckbox.addEventListener('change', (e) => {
+            is24HourFormat = e.target.checked;
+            safelySetItem('clockFormat', is24HourFormat);
+            updateDateTime();
+        });
+
+        darkModeCheckbox.addEventListener('change', (e) => {
+            document.body.classList.toggle('dark-mode', e.target.checked);
+            safelySetItem('darkMode', e.target.checked);
+            updateContentForDarkMode(e.target.checked);
+        });
+
+        themeSelect.addEventListener('change', (e) => {
+            const theme = e.target.value;
+            document.body.className = theme === 'default' ? '' : `theme-${theme}`;
+            safelySetItem('theme', theme);
+        });
+
+        // Performance optimization: Debounce the datetime update
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        const debouncedUpdateDateTime = debounce(updateDateTime, 1000);
+
+        // Replace setInterval with requestAnimationFrame for better performance
+        function updateDateTimeLoop() {
+            debouncedUpdateDateTime();
+            requestAnimationFrame(updateDateTimeLoop);
+        }
+
+        requestAnimationFrame(updateDateTimeLoop);
+
+        // Initial update
+        updateDateTime();
+    </script>
+</body>
+</html>
