@@ -48,20 +48,18 @@
         }
 
         /* Top strip styles */
-        .top-strip {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 10px;
-            z-index: 1001;
-        }
+     /* Day mode header with blue gradient */
+.top-strip {
+    background: linear-gradient(135deg, var(--primary-color-dark), var(--primary-color-light));
+    transition: background-color 0.3s ease;
+}
+
+/* Night mode header with white color */
+body.dark-mode .top-strip,
+body[class*="theme-"] .top-strip {
+    background: white;
+    color: var(--text-dark);
+}
 
         .logo-container {
             display: flex;
@@ -162,6 +160,13 @@
 
         body.dark-mode .settings-icon path {
             fill: var(--text-dark);
+        }
+
+        /* Night mode heading color */
+        body.dark-mode h1, 
+        body.dark-mode h2, 
+        body.dark-mode h3 {
+            color: white; /* Adjust as necessary for night mode */
         }
 
         /* Content styles */
