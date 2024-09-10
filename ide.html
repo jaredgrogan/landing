@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Code Editor</title>
+    <link rel="stylesheet" href="style-uni.css">
+    <link rel="icon" href="/favicon8.svg" type="image/svg+xml">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        #app {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #editor-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        header {
+            flex: 0 0 auto;
+            margin-bottom: 20px;
+        }
+        .main-content {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .controls {
+            flex: 0 0 auto;
+            margin-bottom: 20px;
+        }
+        .tabs {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .tab-content {
+            flex: 1 1 auto;
+            overflow: auto;
+        }
+        .code-area, .output-area, .ai-response {
+            height: 100%;
+            width: 100%;
+            resize: none;
+        }
+        footer {
+            flex: 0 0 auto;
+            margin-top: 20px;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+        }
+        .CodeMirror {
+            height: 100%;
+            font-family: monospace;
+        }
+        .chat-bubble {
+            max-width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+        .chat-bubble.user {
+            align-self: flex-end;
+            background-color: #4f46e5;
+            color: white;
+        }
+        .chat-bubble.ai {
+            align-self: flex-start;
+            background-color: #e5e7eb;
+            color: black;
+        }
+        .typing-indicator {
+            align-self: flex-start;
+            font-style: italic;
+            color: #6b7280;
+        }
+        .ai-response {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #f3f4f6;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="bg-gray-100 dark:bg-gray-900">
+        <div id="editor-container">
+            <header>
+                <div class="flex items-center justify-between">
+                    <div class="logo">
+                        <div class="logo-icon">U</div>
+                        <div>
+                            <div class="title">Universitas AI</div>
+                        </div>
+                    </div>
+                    <div id="current-date-time"></div>
+                    <div class="flex items-center space-x-2">
+                        <button id="theme-toggle" class="btn btn-icon" title="Toggle theme">
+                            <i data-lucide="moon"></i>
+                        </button>
+                        <button id="save-btn" class="btn btn-gradient">
+                            <i data-lucide="save"></i> Save
+                        </button>
+                        <button id="share-btn" class="btn btn-gradient">
+                            <i data-lucide="share"></i> Share
+                        </button>
+                    </div>
+                </div>
+            </header>
+            <div class="main-content">
+                <div class="controls flex space-x-4 mb-4">
+                    <select id="language-select" class="select flex-grow">
+                        <option value="" disabled selected>Select language</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="htmlmixed">HTML</option>
+                        <option value="css">CSS</option>
+                    </select>
+                    <div class="popover">
+                        <button id="frameworks-btn" class="btn btn-outline">
+                            Frameworks <i data-lucide="plus"></i>
+                        </button>
+                        <div id="frameworks-popover" class="popover-content hidden">
+                            <h4>Select Frameworks</h4>
+                            <!-- Frameworks will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    <select id="font-size-select" class="select">
+                        <option value="" disabled selected>Font size</option>
+                        <option value="12px">12px</option>
+                        <option value="14px">14px</option>
+                        <option value="16px">16px</option>
+                        <option value="18px">18px</option>
+                    </select>
+                    <button id="minimap-toggle" class="btn btn-icon" title="Toggle minimap">
+                        <i data-lucide="folder-open"></i>
+                    </button>
+                </div>
+                <div class="tabs">
+                    <div class="tab-list">
+                        <button class="tab active" data-tab="code">Code</button>
+                        <button class="tab" data-tab="output">Output</button>
+                        <button class="tab" data-tab="ai">AI Engineer</button>
+                    </div>
+                    <div id="code-tab" class="tab-content active">
+                        <textarea id="code-editor" class="code-area" placeholder="// Enter your code here"></textarea>
+                    </div>
+                    <div id="output-tab" class="tab-content">
+                        <pre id="output-area" class="output-area"></pre>
+                    </div>
+                    <div id="ai-tab" class="tab-content">
+                        <div class="flex flex-col h-full">
+                            <div class="flex space-x-2 mb-2">
+                                <input id="ai-input" type="text" class="input flex-grow" placeholder="Natural Language Programming with Herakles AI...">
+                                <button id="ai-chat-btn" class="btn btn-gradient">
+                                    <i data-lucide="message-square"></i> Chat
+                                </button>
+                            </div>
+                            <pre id="ai-response" class="ai-response"></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mt-4">
+                    <button id="run-btn" class="btn btn-gradient">
+                        <i data-lucide="play"></i> Run Code
+                    </button>
+                    <div class="popover">
+                        <button id="settings-btn" class="btn btn-outline">
+                            <i data-lucide="settings"></i> Settings
+                        </button>
+                        <div id="settings-popover" class="popover-content hidden">
+                            <h4>Editor Settings</h4>
+                            <div class="flex items-center space-x-2">
+                                <input type="checkbox" id="auto-save" class="switch">
+                                <label for="auto-save">Auto-save</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                © 2024 UNIVERSITAS AI.
+            </footer>
+        </div>
+    </div>
+    <script src="script-99-24.js"></script>
+</body>
+</html>
