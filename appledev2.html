@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSITAS AI - iOS App Development & Publishing Course</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('BerkeleyMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --primary-color: #0070c9;
+            --secondary-color: #47a9ff;
+            --background-light: #f5f7fa;
+            --background-dark: #1a1a1a;
+            --text-light: #333;
+            --text-dark: #f0f0f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background: linear-gradient(135deg, var(--background-light) 0%, #c3cfe2 100%);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            padding-top: 30px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Top strip styles */
+        .top-strip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            z-index: 1001;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            height: 20px;
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-family: 'Berkeley Mono', monospace;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .controls-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .datetime {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .settings-icon {
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+
+        .settings-dropdown {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1002;
+        }
+
+        .settings-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            margin-bottom: 10px;
+        }
+
+        .theme-select {
+            width: 100%;
+            padding: 5px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Theme background images */
+        body.theme-home { background-image: url('home.jpg'); }
+        body.theme-office { background-image: url('office.jpg'); }
+        body.theme-cafe { background-image: url('cafe.jpg'); }
+        body.theme-beach { background-image: url('bwbeach.jpg'); }
+        body.theme-mountains { background-image: url('mountains.jpg'); }
+        body.theme-forest { background-image: url('forest.jpg'); }
+        body.theme-desert { background-image: url('desert.jpg'); }
+        body.theme-urban { background-image: url('urban.jpg'); }
+        body.theme-library { background-image: url('library.jpg'); }
+        body.theme-abstract { background-image: url('abstract2024.jpg'); }
+
+        body[class*="theme-"] {
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50 0%, var(--background-dark) 100%);
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .top-strip,
+        body.dark-mode .settings-dropdown {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode .logo-text,
+        body.dark-mode .datetime,
+        body.dark-mode .settings-icon {
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .settings-icon path {
+            fill: var(--text-dark);
+        }
+
+        /* Content styles */
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .course-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .course-section {
+            background: rgba(0, 0, 0, 0.6);
+            color: var(--text-dark);
+        }
+
+        /* Navigation styles */
+        .nav-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .nav-section {
+            background: rgba(0, 0, 0, 0.6);
+            color: var(--text-dark);
+        }
+
+        .nav-section ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .nav-section li {
+            margin-bottom: 10px;
+        }
+
+        /* Herakles AI Chat Console styles */
+        .chat-console {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            color: var(--text-dark);
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            margin-right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 5px;
+            color: var(--text-dark);
+        }
+
+        .chat-input button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .chat-bubble {
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .chat-bubble.user {
+            background: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .chat-bubble.ai {
+            background: var(--secondary-color);
+            color: white;
+            align-self: flex-start;
+        }
+
+        .typing-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 20px;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: var(--text-dark);
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: typing 1s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Code editor styles */
+        .code-editor {
+            font-family: 'Berkeley Mono', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* SwiftUI preview styles */
+        .swiftui-preview {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+
+            .logo-text {
+                font-size: 12px;
+            }
+
+            .datetime {
+                font-size: 12px;
+            }
+
+            .chat-console {
+                width: 100%;
+                height: 50%;
+                bottom: 0;
+                right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-strip">
+        <div class="logo-container">
+            <img src="favicon_black.svg" alt="UNIVERSITAS AI Logo" id="logo-img">
+            <span class="logo-text">// UNIVERSITAS AI</span>
+        </div>
+        <div class="controls-container">
+            <svg class="settings-icon" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+            </svg>
+            <div class="datetime" id="datetime"></div>
+        </div>
+    </div>
+    <div class="settings-dropdown">
+        <div class="dropdown-item">
+            <label>
+                Time Format:
+                <input type="checkbox" id="clockFormat"> 24-hour
+            </label>
+        </div>
+        <div class="dropdown-item">
+            <label>
+    Mode:
+                <input type="checkbox" id="darkMode"> Dark
+            </label>
+        </div>
+        <div class="dropdown-item">
+            <label>
+                Theme:
+                <select id="themeSelect" class="theme-select">
+                    <option value="default">Default</option>
+                    <option value="home">Home</option>
+                    <option value="office">Office</option>
+                    <option value="cafe">Cafe</option>
+                    <option value="beach">Beach</option>
+                    <option value="mountains">Mountains</option>
+                    <option value="forest">Forest</option>
+                    <option value="desert">Desert</option>
+                    <option value="urban">Urban</option>
+                    <option value="library">Library</option>
+                    <option value="abstract">Abstract</option>
+                </select>
+            </label>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>iOS App Development & Publishing Course</h1>
+        
+        <section class="nav-section">
+            <h2>Course Navigation</h2>
+            <ul>
+                <li><a href="#course-structure">Course Structure</a></li>
+                <li><a href="#swift-fundamentals">Swift Fundamentals</a></li>
+                <li><a href="#swiftui-basics">SwiftUI Basics</a></li>
+                <li><a href="#xcode-essentials">Xcode Essentials</a></li>
+                <li><a href="#app-architecture">App Architecture</a></li>
+                <li><a href="#data-management">Data Management</a></li>
+                <li><a href="#networking">Networking</a></li>
+                <li><a href="#ui-design">UI Design</a></li>
+                <li><a href="#app-store-submission">App Store Submission</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+        </section>
+
+        <section id="course-structure" class="course-section">
+            <h2>Course Structure</h2>
+            <p>This course is designed to take you from a beginner to a published iOS app developer. Here's how the course is structured:</p>
+            <ul>
+                <li>Each module focuses on a specific aspect of iOS development</li>
+                <li>Hands-on coding exercises and projects reinforce learning</li>
+                <li>Quizzes and challenges test your knowledge</li>
+                <li>Real-world app development scenarios prepare you for actual work</li>
+            </ul>
+        </section>
+
+        <section id="swift-fundamentals" class="course-section">
+            <h2>Swift Fundamentals</h2>
+            <p>Learn the basics of Swift programming language:</p>
+            <ul>
+                <li>Variables and Constants</li>
+                <li>Data Types</li>
+                <li>Control Flow</li>
+                <li>Functions and Closures</li>
+                <li>Classes and Structures</li>
+            </ul>
+            <div class="code-editor">
+                <pre>
+// Example Swift code
+let greeting = "Hello, Swift!"
+print(greeting)
+
+func greet(name: String) -> String {
+    return "Hello, \(name)!"
+}
+
+let personalGreeting = greet(name: "Developer")
+print(personalGreeting)
+                </pre>
+            </div>
+        </section>
+
+        <section id="swiftui-basics" class="course-section">
+            <h2>SwiftUI Basics</h2>
+            <p>Dive into building user interfaces with SwiftUI:</p>
+            <ul>
+                <li>Views and Modifiers</li>
+                <li>Layout and Stacks</li>
+                <li>State and Binding</li>
+                <li>Lists and Navigation</li>
+            </ul>
+            <div class="code-editor">
+                <pre>
+import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        Text("Hello, SwiftUI!")
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+    }
+}
+                </pre>
+            </div>
+            <div class="swiftui-preview">
+                [SwiftUI Preview: A blue rounded rectangle with white text "Hello, SwiftUI!"]
+            </div>
+        </section>
+
+        <section id="xcode-essentials" class="course-section">
+            <h2>Xcode Essentials</h2>
+            <p>Master the primary development environment for iOS:</p>
+            <ul>
+                <li>Xcode Interface</li>
+                <li>Project Structure</li>
+                <li>Building and Running</li>
+                <li>Debugging Techniques</li>
+            </ul>
+            <h3>Key Xcode Commands</h3>
+            <ul>
+                <li>⌘ + B: Build</li>
+                <li>⌘ + R: Run</li>
+                <li>⌘ + .: Stop</li>
+                <li>⌘ + /: Comment/Uncomment</li>
+                <li>⌃ + I: Re-indent code</li>
+            </ul>
+        </section>
+
+        <!-- More sections for other course topics -->
+
+        <section id="resources" class="course-section">
+            <h2>Resources</h2>
+            <p>Additional learning materials to support your iOS development journey:</p>
+            <ul>
+                <li><a href="#">Swift Language Guide</a></li>
+                <li><a href="#">SwiftUI Documentation</a></li>
+                <li><a href="#">iOS Human Interface Guidelines</a></li>
+                <li><a href="#">App Store Review Guidelines</a></li>
+                <li><a href="#">WWDC Videos</a></li>
+            </ul>
+        </section>
+    </div>
+
+    <div class="chat-console" id="chatConsole" style="display: none;">
+        <div class="chat-header">
+            <h3>Herakles AI</h3>
+            <button id="minimizeChat">-</button>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div id="typingIndicator" class="typing-indicator hidden">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Ask Herakles...">
+            <button id="sendMessage">Send</button>
+        </div>
+    </div>
+
+    <button class="chat-toggle" id="chatToggle">AI</button>
+
+    <script>
+        const datetimeElement = document.getElementById('datetime');
+        const settingsIcon = document.querySelector('.settings-icon');
+        const settingsDropdown = document.querySelector('.settings-dropdown');
+        const clockFormatCheckbox = document.getElementById('clockFormat');
+        const darkModeCheckbox = document.getElementById('darkMode');
+        const themeSelect = document.getElementById('themeSelect');
+        const logoImg = document.getElementById('logo-img');
+        const chatConsole = document.getElementById('chatConsole');
+        const chatToggle = document.getElementById('chatToggle');
+        const minimizeChat = document.getElementById('minimizeChat');
+        const chatBody = document.getElementById('chatBody');
+        const userInput = document.getElementById('userInput');
+        const sendMessage = document.getElementById('sendMessage');
+        const typingIndicator = document.getElementById('typingIndicator');
+        let is24HourFormat = false;
+
+        function updateDateTime() {
+            const now = new Date();
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            let hours = now.getHours();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            if (!is24HourFormat) {
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+            }
+
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeString = is24HourFormat ? `${hours}:${minutes}` : `${hours}:${minutes}${ampm}`;
+            
+            datetimeElement.textContent = `${days[now.getDay()]} ${months[now.getMonth()]} ${now.getDate()} ${timeString}`;
+        }
+
+        function updateLogoColor(isDarkMode) {
+            logoImg.src = isDarkMode ? 'favicon_white.svg' : 'favicon_black.svg';
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        settingsIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            settingsDropdown.classList.toggle('show');
+        });
+
+        clockFormatCheckbox.addEventListener('change', (e) => {
+            is24HourFormat = e.target.checked;
+            localStorage.setItem('clockFormat', is24HourFormat);
+            updateDateTime();
+        });
+
+        darkModeCheckbox.addEventListener('change', (e) => {
+            document.body.classList.toggle('dark-mode', e.target.checked);
+            localStorage.setItem('darkMode', e.target.checked);
+            updateLogoColor(e.target.checked);
+        });
+
+        themeSelect.addEventListener('change', (e) => {
+            const theme = e.target.value;
+            document.body.className = theme === 'default' ? '' : `theme-${theme}`;
+            localStorage.setItem('theme', theme);
+        });
+
+        chatToggle.addEventListener('click', () => {
+            chatConsole.style.display = chatConsole.style.display === 'none' ? 'flex' : 'none';
+        });
+
+        minimizeChat.addEventListener('click', () => {
+            chatConsole.style.display = 'none';
+        });
+
+        sendMessage.addEventListener('click', sendUserMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendUserMessage();
+            }
+        });
+
+        async function sendUserMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                appendMessage('You', message);
+                userInput.value = '';
+                showTypingIndicator();
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: message }),
+                    });
+                    const data = await response.json();
+                    hideTypingIndicator();
+                    appendMessage('Herakles', data.response);
+                } catch (error) {
+                    hideTypingIndicator();
+                    appendMessage('Herakles', 'Error connecting to the server. Please try again later.');
+                }
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-bubble', sender.toLowerCase());
+            messageElement.textContent = `${sender}: ${text}`;
+            chatBody.appendChild(messageElement);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            typingIndicator.classList.remove('hidden');
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.classList.add('hidden');
+        }
+
+        // Load saved preferences
+        const savedClockFormat = localStorage.getItem('clockFormat');
+        if (savedClockFormat !== null) {
+            is24HourFormat = savedClockFormat === 'true';
+            clockFormatCheckbox.checked = is24HourFormat;
+        }
+
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode !== null) {
+            const isDarkMode = savedDarkMode === 'true';
+            darkModeCheckbox.checked = isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            updateLogoColor(isDarkMode);
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme && savedTheme !== 'default') {
+            document.body.className = `theme-${savedTheme}`;
+            themeSelect.value = savedTheme;
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!settingsIcon.contains(e.target) && !settingsDropdown.contains(e.target)) {
+                settingsDropdown.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
