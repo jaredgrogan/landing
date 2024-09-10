@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cinema Film Explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Berkeley Mono', monospace;
+        }
+
+        body {
+            background-color: #1e1e1e;
+            background-image: url('abstract2024.jpeg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: space-between;
+        }
+
+        h1 {
+            margin-top: 2rem;
+            font-size: 2.5rem;
+            color: #fff;
+            padding-bottom: 10px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Glassmorphic Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 10px;
+            align-items: center;
+        }
+
+        .time {
+            font-size: 14px;
+            color: #fff;
+        }
+
+        /* Background Switcher */
+        .bg-switcher {
+            position: fixed;
+            top: 40px;
+            right: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .bg-switcher label {
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .bg-switcher select {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: none;
+            padding: 5px;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+
+        /* Navigation */
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Panel Styles */
+        .film-section {
+            display: none;
+        }
+
+        .film-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .film-panel h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .panel-content {
+            display: none;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 1rem;
+        }
+
+        .film-panel.active .panel-content {
+            display: block;
+        }
+
+        /* Gradient bar for panels */
+        .gradient-bar {
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #ff5f6d, #ffc371);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        /* Text to Image Console */
+        .text-to-image {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            margin: 2rem 0;
+            width: 100%;
+        }
+
+        .text-to-image input {
+            width: 90%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .text-to-image button {
+            padding: 1rem;
+            background-color: #ff5f6d;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .text-to-image img {
+            margin-top: 1rem;
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .text-to-image button:hover {
+            background-color: #ff5f6d;
+        }
+
+        .export-share {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .export-share button {
+            padding: 0.5rem 1rem;
+            background-color: #ff5f6d;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .film-panel h2 {
+                font-size: 1.2rem;
+            }
+
+            .text-to-image input {
+                width: 100%;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1rem;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body onload="updateTime()">
+    <!-- Glassmorphic Header -->
+    <div class="header">
+        <div class="time" id="timeDisplay"></div>
+    </div>
+
+    <h1>Cinema Film Explorer</h1>
+
+    <!-- Minimalist Navigation -->
+    <div class="navigation">
+        <a href="#black-white-negative" class="nav-link" onclick="showSection('blackWhiteNegative')">B&W Negative</a>
+        <a href="#black-white-reversal" class="nav-link" onclick="showSection('blackWhiteReversal')">B&W Reversal</a>
+        <a href="#color-negative" class="nav-link" onclick="showSection('colorNegative')">Color Negative</a>
+        <a href="#color-reversal" class="nav-link" onclick="showSection('colorReversal')">Color Reversal</a>
+    </div>
+
+    <!-- Background Image Switcher -->
+    <div class="bg-switcher">
+        <label for="bgSelect">Change Background:</label>
+        <select id="bgSelect" onchange="changeBackground()">
+            <option value="abstract2024.jpeg">Abstract 2024</option>
+            <option value="malibu.jpeg">Malibu</option>
+            <option value="palms.jpeg">Palms</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <!-- Black & White Negative Stock -->
+        <div id="blackWhiteNegative" class="film-section">
+            <div class="film-panel" onclick="togglePanel(this)">
+                <h2>Kodak Double X 5222/7222 (Black & White Negative Stock)</h2>
+                <div class="gradient-bar"></div>
+                <p class="tooltip">A gritty, high-contrast black-and-white film stock used in iconic films like Raging Bull.<span class="tooltiptext">Iconic for its noir look and deep blacks.</span></p>
+                <div class="panel-content">
+                    <p><strong>Year of Release:</strong> 1959</p>
+                    <p><strong>Notable Films:</strong> Raging Bull, Schindler's List</p>
+                    <p><strong>Best Feature:</strong> Deep blacks, rich grain, classic noir look.</p>
+                    <p><strong>Prompt for Image:</strong> "A cinematic black-and-white scene inspired by Kodak Double X 5222 film -- high contrast -- gritty texture -- deep blacks -- classic Hollywood -- urban street in the 1960s -- low-key lighting -- noir aesthetic"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Film Suggestions -->
+        <div class="film-suggestions">
+            <h3>Suggested Films:</h3>
+            <ul>
+                <li><strong>20th Century:</strong> Citizen Kane, Casablanca, 2001: A Space Odyssey, The Godfather, Raging Bull</li>
+                <li><strong>21st Century:</strong> The Revenant, Her, Joker, Mad Max: Fury Road, Blade Runner 2049</li>
+            </ul>
+        </div>
+
+        <!-- Component Explaining Reversal vs Negative Stocks -->
+        <div class="tooltip">
+            <h3>Difference Between Reversal and Negative Stocks:</h3>
+            <p>Reversal film creates a positive image directly, perfect for projection. Negative film produces a negative image, which is ideal for making multiple prints.</p>
+            <span class="tooltiptext">Reversal = Positive Image, Negative = Multiprint Option.</span>
+        </div>
+
+        <!-- Text to Image Console -->
+        <div class="text-to-image">
+            <h2>Test the Look</h2>
+            <input type="text" id="imagePrompt" placeholder="Enter a prompt for the film look" value="A classic Hollywood black-and-white scene with dramatic lighting">
+            <button onclick="generateImage()">Generate Image</button>
+            <img id="generatedImage" src="default-bw-cinema.jpg" alt="Generated Image" style="display:block;">
+            <div class="export-share">
+                <button onclick="exportImage()">Export Image</button>
+                <button onclick="shareImage('email')">Share via Email</button>
+                <button onclick="shareImage('messenger')">Share via Messenger</button>
+                <button onclick="shareImage('social')">Share via Social Media</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2024 Cognitive Cloud.
+    </footer>
+
+    <script>
+        // Function to update the time in the header
+        function updateTime() {
+            const now = new Date();
+            const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+            document.getElementById('timeDisplay').textContent = now.toLocaleDateString('en-US', options);
+            setTimeout(updateTime, 1000); // Update time every second
+        }
+
+        // Function to show the selected film section
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.film-section');
+            sections.forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        // Function to toggle film panel content
+        function togglePanel(panel) {
+            panel.classList.toggle('active');
+        }
+
+        // Function to generate and display image from text prompt
+        function generateImage() {
+            const prompt = document.getElementById('imagePrompt').value;
+            // Placeholder image generation - replace with API call
+            document.getElementById('generatedImage').src = 'https://placekitten.com/600/400'; // Simulated result
+            document.getElementById('generatedImage').style.display = 'block';
+        }
+
+        // Change the background image
+        function changeBackground() {
+            const bgSelect = document.getElementById('bgSelect').value;
+            document.body.style.backgroundImage = `url('${bgSelect}')`;
+        }
+
+        // Export the generated image (placeholder)
+        function exportImage() {
+            alert('Image exported!');
+        }
+
+        // Share the generated image (placeholder)
+        function shareImage(method) {
+            alert(`Shared via ${method}!`);
+        }
+    </script>
+</body>
+
+</html>
