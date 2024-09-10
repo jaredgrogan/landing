@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI - My Projects</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <!-- Berkeley Mono Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400&display=swap">
+
+    <!-- Styles -->
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Berkeley Mono', monospace;
+            overflow-x: hidden;
+        }
+        #gradient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-left {
+            display: flex;
+            align-items: center;
+        }
+        .favicon {
+            width: 20px;
+            height: 20px;
+            margin: 10px;
+        }
+        .top-left-text {
+            font-size: 14px;
+            color: white;
+            font-weight: bold;
+        }
+        .right-header {
+            display: flex;
+            align-items: center;
+            padding-right: 10px;
+        }
+        .gear-icon {
+            margin-right: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            position: fixed;
+            right: calc(10px + 160px); /* Positioned 10px left of the time component */
+        }
+        .gear-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        .top-time {
+            color: white;
+            font-size: 14px;
+            padding-right: 10px;
+        }
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: calc(100vh - 140px);
+            padding: 50px 20px 60px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 1rem 2rem 2rem 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: white;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .input-container {
+            display: flex;
+            margin-bottom: 1rem;
+            gap: 5px;
+        }
+        input[type="text"], input[type="date"] {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            box-shadow: 0 4px 16px rgba(31, 38, 135, 0.37);
+        }
+        input[type="text"]::placeholder,
+        .chat-prompt::placeholder {
+            color: white;
+        }
+        button.add-button {
+    background-color: rgba(255, 255, 255, 0.15); /* Glassmorphic background */
+    border-radius: 10px;
+    color: white; /* White text */
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: background-color 0.3s;
+}
+
+button.add-button:hover {
+    background-color: rgba(255, 255, 255, 0.25); /* Slightly lighter on hover */
+}
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 16px rgba(31, 38, 135, 0.37);
+        }
+        .task-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .task-name {
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .task-due-date {
+            margin-left: 10px;
+            font-style: italic;
+            color: lightgray;
+        }
+        .task-actions {
+            display: flex;
+            align-items: center;
+        }
+        .task-actions button {
+            margin-left: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+        }
+        select {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='white' d='M0 2l4 4 4-4z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 8px 8px;
+        }
+        .chevron-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+        }
+        .chevron-buttons button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: 16px;
+            color: white;
+        }
+        .chevron-buttons button:hover {
+            color: lightgray;
+        }
+        .delete-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.5rem;
+        }
+        .delete-button svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            color: white;
+            font-weight: normal;
+        }
+        .list-header span {
+            margin-right: 4ch;
+        }
+        .list-header span:last-child {
+            margin-right: 0;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .chat-messages {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .ai-message {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-style: italic;
+            color: #e0e0e0;
+        }
+        .loading-indicator {
+            text-align: center;
+            color: white;
+            font-style: italic;
+        }
+        .chat-input {
+            display: flex;
+            align-items: center;
+        }
+        .chat-prompt {
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            resize: none;
+            overflow: auto;
+            max-height: 100px;
+        }
+        .chat-prompt:focus {
+            outline: none;
+        }
+        .chat-actions {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+        .send-button, .mic-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            margin-right: 10px;
+        }
+        .send-button svg, .mic-button svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        .mic-button.recording {
+            background-color: red;
+            animation: pulse 1s infinite;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .paperclip-icon {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        .paperclip-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        #settings-panel select {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='white' d='M0 2l4 4 4-4z
