@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Chat Console</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="newconsole.css">
+</head>
+<body class="light-mode" id="app">
+    <div class="header-container">
+        <a href="index.html">
+            <img src="favicon5.svg" alt="Favicon">
+        </a>
+    </div>
+
+    <div class="nav-header">
+        <ul id="navMenu">
+            <li>
+                <a href="javascript:void(0)" id="navMenuItem">Menu</a>
+                <ul>
+                    <li><a href="product.html" id="navAppsItem">Apps</a></li>
+                    <li><a href="tutorials.html" id="navLearnItem">Learn</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="language-select">
+        <select id="languageSelect" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="it">Italiano</option>
+            <option value="de">Deutsch</option>
+            <option value="pt">Português</option>
+            <option value="ar">العربية</option>
+        </select>
+    </div>
+
+    <div class="toggle-container">
+        <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+            <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div class="chat-container">
+        <div class="response-suggestions">
+            <select id="categorySelect">
+                <option value="summarize">Summarize</option>
+                <option value="explain">Explain</option>
+                <option value="analyze">Analyze</option>
+                <option value="actions">Actions</option>
+                <option value="translate">Translate</option>
+                <option value="webSearch">Web Search</option>
+                <option value="more">More</option>
+            </select>
+
+            <select id="actionSelect">
+                <!-- Summarize Options -->
+                <option value="summarize">Summarize</option>
+                <option value="bullets">Bullets</option>
+                
+                <!-- Explain Options -->
+                <option value="explainConcepts">Explain Concepts</option>
+                <option value="stepByStep">Step by Step</option>
+                <option value="glossary">Glossary</option>
+                
+                <!-- Analyze Options -->
+                <option value="evaluate">Evaluate</option>
+                <option value="improvements">Improvements</option>
+                <option value="extractDetails">Extract Details</option>
+
+                <!-- Actions Options -->
+                <option value="nextActions">Next Actions</option>
+                <option value="actionPlan">Action Plan</option>
+
+                <!-- Translate Options -->
+                <option value="en">In English</option>
+                <option value="es">En Español</option>
+                <option value="fr">En Français</option>
+                <option value="it">In Italiano</option>
+                <option value="de">Auf Deutsch</option>
+                <option value="pt">Em Português</option>
+                <option value="ar">بالعربية</option>
+
+                <!-- Web Search Options -->
+                <option value="search">Web Search</option>
+
+                <!-- More Options -->
+                <option value="resources">Resources</option>
+                <option value="quiz">Quiz</option>
+            </select>
+        </div>
+
+        <div id="chatBox" class="dropzone">
+            <div class="chat-bubble ai" id="aiGreeting">
+                Hi, how can I assist you today?
+            </div>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button class="send-message-btn" id="sendMessageBtn">
+                &#x27A4;
+            </button>
+        </div>
+
+        <button class="new-chat-btn" id="newChatBtn">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Chat History</h2>
+            <button id="closeSidebarBtn">&times;</button>
+        </div>
+        <div id="chatList"></div>
+    </div>
+
+    <button id="sidebarToggle" class="sidebar-toggle">
+        <i class="fas fa-history"></i>
+    </button>
+
+    <footer style="text-align: center; font-family: 'Courier New', monospace; padding: 20px;">
+        &copy; 2024 UNIVERSITAS AI
+    </footer>
+
+    <script>
+        const suggestions = {
+            summarize: {
+                summarize: "Summarize the following content as requested.",
+                bullets: "Summarize the following content in bullet points.",
+            },
+            explain: {
+                explainConcepts: "Explain the following concepts clearly and concisely.",
+                stepByStep: "Explain the following in a detailed step-by-step format.",
+                glossary: "Provide a glossary-style explanation of the terms involved.",
+            },
+            analyze: {
+                evaluate: "Evaluate the following based on key criteria.",
+                improvements: "Suggest improvements based on the following information.",
+                extractDetails: "Extract critical details from the following content.",
+            },
+            actions: {
+                nextActions: "Propose the next actions based on the provided input.",
+                actionPlan: "Develop a detailed action plan based on the provided context.",
+            },
+            translate: {
+                en: "Translate the following into English.",
+                es: "Translate the following into Spanish.",
+                fr: "Translate the following into French.",
+                it: "Translate the following into Italian.",
+                de: "Translate the following into German.",
+                pt: "Translate the following into Portuguese.",
+                ar: "Translate the following into Arabic.",
+            },
+            webSearch: {
+                search: "Perform a web search using the following query.",
+            },
+            more: {
+                resources: "Provide additional resources or references based on the following.",
+                quiz: "Generate an interactive Socratic-style quiz based on the following.",
+            }
+        };
+
+        function frameUserInput(userInput, selectedCategory, selectedAction) {
+            const categorySuggestions = suggestions[selectedCategory] || {};
+            const autoSuggestion = categorySuggestions[selectedAction] || "";
+            return `${autoSuggestion}\n\nUser Input: ${userInput}`;
+        }
+
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const chatBox = document.getElementById('chatBox');
+            const message = messageInput.value.trim();
+            
+            const selectedCategory = document.getElementById('categorySelect').value;
+            const selectedAction = document.getElementById('actionSelect').value;
+
+            if (message) {
+                const framedInput = frameUserInput(message, selectedCategory, selectedAction);
+
+                const userBubble = document.createElement('div');
+                userBubble.classList.add('chat-bubble', 'user');
+                userBubble.textContent = message;
+                chatBox.appendChild(userBubble);
+                messageInput.value = '';
+
+                chatBox.scrollTop = chatBox.scrollHeight;
+                showTypingIndicator();
+
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: framedInput }), // Sending the framed input to the server
+                    });
+
+                    const data = await response.json();
+                    hideTypingIndicator();
+
+                    const aiBubble = document.createElement('div');
+                    aiBubble.classList.add('chat-bubble', 'ai');
+                    aiBubble.textContent = data.response; // Displaying the AI's response
+                    chatBox.appendChild(aiBubble);
+
+                    chatBox.scrollTop = chatBox.scrollHeight;
+
+                } catch (error) {
+                    hideTypingIndicator();
+                    const aiBubble = document.createElement('div');
+                    aiBubble.classList.add('chat-bubble', 'ai');
+                    aiBubble.textContent = 'Error connecting to the server. Please try again later.';
+                    chatBox.appendChild(aiBubble);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            }
+        }
+
+        document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
+
+        function showTypingIndicator() {
+            const typingIndicator = document.createElement('div');
+            typingIndicator.classList.add('chat-bubble', 'ai');
+            typingIndicator.id = 'typingIndicator';
+            typingIndicator.textContent = 'Herakles AI is typing...';
+            document.getElementById('chatBox').appendChild(typingIndicator);
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+    </script>
+</body>
+</html>
