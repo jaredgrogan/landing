@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSITAS AI - iOS App Development & Publishing Course</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('BerkeleyMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --primary-color: #0070c9;
+            --secondary-color: #47a9ff;
+            --background-light: #f5f7fa;
+            --background-dark: #1a1a1a;
+            --text-light: #333;
+            --text-dark: #f0f0f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background: linear-gradient(135deg, var(--background-light) 0%, #c3cfe2 100%);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            padding-top: 30px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Top strip styles */
+        .top-strip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(135deg, #0070c9, #47a9ff); /* Day mode gradient */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            z-index: 1001;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Night mode white header */
+        body.dark-mode .top-strip {
+            background: white;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            height: 20px;
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-family: 'Berkeley Mono', monospace;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .controls-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .datetime {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .settings-icon {
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+
+        .settings-dropdown {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1002;
+        }
+
+        .settings-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            margin-bottom: 10px;
+        }
+
+        .theme-select {
+            width: 100%;
+            padding: 5px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Theme background images */
+        body.theme-home { background-image: url('home.jpeg'); }
+        body.theme-office { background-image: url('office.jpeg'); }
+        body.theme-cafe { background-image: url('cafe.jpeg'); }
+        body.theme-beach { background-image: url('bwbeach.jpeg'); }
+        body.theme-mountains { background-image: url('mountains.jpeg'); }
+        body.theme-forest { background-image: url('forest.jpeg'); }
+        body.theme-desert { background-image: url('desert.jpeg'); }
+        body.theme-urban { background-image: url('urban.jpeg'); }
+        body.theme-library { background-image: url('library.jpeg'); }
+        body.theme-abstract { background-image: url('abstract2024.jpeg'); }
+
+        body[class*="theme-"] {
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50 0%, var(--background-dark) 100%);
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .settings-dropdown {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode .logo-text,
+        body.dark-mode .datetime,
+        body.dark-mode .settings-icon {
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .settings-icon path {
+            fill: var(--text-dark);
+        }
+
+        /* Footer styles */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: var(--text-light);
+            background-color: var(--background-dark);
+        }
+
+        body.dark-mode footer {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+
+            .logo-text {
+                font-size: 12px;
+            }
+
+            .datetime {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-strip">
+        <div class="logo-container">
+            <img src="favicon_gold.svg" alt="UNIVERSITAS AI Logo" id="logo-img">
+            <span class="logo-text">// UNIVERSITAS AI</span>
+        </div>
+        <div class="controls-container">
+            <svg class="settings-icon" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+            </svg>
+            <div class="datetime" id="datetime"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>iOS App Development & Publishing Course</h1>
+        <!-- Course content goes here -->
+    </div>
+
+    <footer>
+        Copyright 2024 UNIVERSITAS AI
+    </footer>
+
+    <script>
+        const datetimeElement = document.getElementById('datetime');
+        const settingsIcon = document.querySelector('.settings-icon');
+        const settingsDropdown = document.querySelector('.settings-dropdown');
+        const clockFormatCheckbox = document.getElementById('clockFormat');
+        const darkModeCheckbox = document.getElementById('darkMode');
+        const themeSelect = document.getElementById('themeSelect');
+        const logoImg = document.getElementById('logo-img');
+        const chatConsole = document.getElementById('chatConsole');
+        const chatToggle = document.getElementById('chatToggle');
+        const minimizeChat = document.getElementById('minimizeChat');
+        const chatBody = document.getElementById('chatBody');
+        const userInput = document.getElementById('userInput');
+        const sendMessage = document.getElementById('sendMessage');
+        const typingIndicator = document.getElementById('typingIndicator');
+        let is24HourFormat = false;
+
+        function updateDateTime() {
+            const now = new Date();
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            let hours = now.getHours();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            if (!is24HourFormat) {
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+            }
+
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeString = is24HourFormat ? `${hours}:${minutes}` : `${hours}:${minutes}${ampm}`;
+            
+            datetimeElement.textContent = `${days[now.getDay()]} ${months[now.getMonth()]} ${now.getDate()} ${timeString}`;
+        }
+
+        function updateLogoColor(isDarkMode) {
+            logoImg.src = isDarkMode ? 'favicon_white.svg' : 'favicon_gold.svg';
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        settingsIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            settingsDropdown.classList.toggle('show');
+        });
+
+        clockFormatCheckbox.addEventListener('change', (e) => {
+            is24HourFormat = e.target.checked;
+            localStorage.setItem('clockFormat', is24HourFormat);
+            updateDateTime();
+        });
+
+        darkModeCheckbox.addEventListener('change', (e) => {
+            document.body.classList.toggle('dark-mode', e.target.checked);
+            localStorage.setItem('darkMode', e.target.checked);
+            updateLogoColor(e.target.checked);
+        });
+
+        themeSelect.addEventListener('change', (e) => {
+            const theme = e.target.value;
+            document.body.className = theme === 'default' ? '' : `theme-${theme}`;
+            localStorage.setItem('theme', theme);
+        });
+
+        chatToggle.addEventListener('click', () => {
+            chatConsole.style.display = chatConsole.style.display === 'none' ? 'flex' : 'none';
+        });
+
+        minimizeChat.addEventListener('click', () => {
+            chatConsole.style.display = 'none';
+        });
+
+        sendMessage.addEventListener('click', sendUserMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendUserMessage();
+            }
+        });
+
+        async function sendUserMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                appendMessage('You', message);
+                userInput.value = '';
+                showTypingIndicator();
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: message }),
+                    });
+                    const data = await response.json();
+                    hideTypingIndicator();
+                    appendMessage('Herakles', data.response);
+                } catch (error) {
+                    hideTypingIndicator();
+                    appendMessage('Herakles', 'Error connecting to the server. Please try again later.');
+                }
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-bubble', sender.toLowerCase());
+            messageElement.textContent = `${sender}: ${text}`;
+            chatBody.appendChild(messageElement);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            typingIndicator.classList.remove('hidden');
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.classList.add('hidden');
+        }
+
+        // Load saved preferences
+        const savedClockFormat = localStorage.getItem('clockFormat');
+        if (savedClockFormat !== null) {
+            is24HourFormat = savedClockFormat === 'true';
+            clockFormatCheckbox.checked = is24HourFormat;
+        }
+
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode !== null) {
+            const isDarkMode = savedDarkMode === 'true';
+            darkModeCheckbox.checked = isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            updateLogoColor(isDarkMode);
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme && savedTheme !== 'default') {
+            document.body.className = `theme-${savedTheme}`;
+            themeSelect.value = savedTheme;
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!settingsIcon.contains(e.target) && !settingsDropdown.contains(e.target)) {
+                settingsDropdown.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
