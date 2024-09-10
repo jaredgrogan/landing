@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSITAS AI - Page and Herakles AI Console</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400&display=swap">
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('BerkeleyMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Berkeley Mono', monospace;
+            background-color: #f0f0f0;
+        }
+
+        /* Glassmorphic header */
+        .header {
+            height: 30px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-sizing: border-box;
+        }
+
+        /* Logo and title */
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .header-left span {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+            color: white;
+        }
+
+        /* Date and Time */
+        .header-right {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .date-time {
+            text-align: right;
+        }
+
+        /* Chat Console */
+        .chat-console {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 370px;
+            height: 400px;
+            background: linear-gradient(90deg, #005fcb, #007eff);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .glassmorphic-header {
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glassmorphic-header h3 {
+            font-size: 14px;
+            color: white;
+        }
+
+        .glassmorphic-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            margin-right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 5px;
+            color: white;
+        }
+
+        .chat-input button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            fill: white;
+        }
+
+        .mic-button {
+            background: none;
+            border: none;
+            fill: white;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+
+        .mic-button.active {
+            fill: red;
+            animation: pulse 1s infinite;
+        }
+
+        .paperclip-icon {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .paperclip-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        /* Hidden file input */
+        #fileInput {
+            display: none;
+        }
+
+        /* Send button SVG icon */
+        .send-button svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        /* Chat Toggle */
+        .chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Glassmorphic Header -->
+    <div class="header">
+        <div class="header-left">
+            <img src="favicon_white.svg" alt="Logo">
+            <span>// UNIVERSITAS AI</span>
+        </div>
+        <div class="header-right">
+            <span id="dateTime" class="date-time"></span>
+        </div>
+    </div>
+
+    <!-- Chat Console -->
+    <div class="chat-console" id="chatConsole" style="display: none;">
+        <div class="glassmorphic-header">
+            <h3>Herakles AI</h3>
+            <button class="minimize-button" id="minimizeChat">×</button> <!-- Minimize/X button -->
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-input">
+            <!-- Paperclip Icon for File Upload -->
+            <div class="paperclip-icon" onclick="openFileUploadPopup()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M21.58 12.58l-9-9a6.53 6.53 0 00-9.19 9.19l1.2 1.2a.75.75 0 001.06-1.06l-1.2-1.2a5 5 0 017.08-7.08l9 9a5 5 0 01-7.08 7.08l-4.94-4.94a2.5 2.5 0 013.53-3.53l.88.88a.75.75 0 001.06-1.06l-.88-.88a4 4 0 00-5.65 5.65l4.94 4.94a6.5 6.5 0 009.19-9.19z"/>
+                </svg>
+            </div>
+            <input type="file" id="fileInput" />
+            <!-- Mic button for transcription -->
+            <button class="mic-button" id="micButton">
+                <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1M19 10V12C19 15.31 16.31 18 13 18H11C7.69 18 5 15.31 5 12V10H3V12C3 16.42 6.58 20 11 20V23H13V20C17.42 20 21 16.42 21 12V10H19Z"/></svg>
+            </button>
+            <input type="text" id="userInput" placeholder="Ask Herakles...">
+            <!-- Send button with SVG icon -->
+            <button class="send-button" id="sendMessage">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 21l21-9-21-9v7l15 2-15 2v7z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button class="chat-toggle" id="chatToggle">AI</button>
+
+    <script>
+        // Function to format and display the current date and time
+        function updateTime() {
+            const date = new Date();
+            const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+            const dayName = days[date.getDay()];
+            const monthName = months[date.getMonth()];
+            const day = date.getDate();
+            const hours = date.getHours();
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;  // Convert 24-hour to 12-hour format
+
+            const formattedTime = `${dayName} ${monthName} ${day}  ${formattedHours}:${minutes}${ampm}`;
+
+            document.getElementById('dateTime').textContent = formattedTime;
+        }
+
+        // Update the time immediately, then every minute
+        updateTime();
+        setInterval(updateTime, 60000);
+
+        // Herakles AI Identity Prompt
+        const heraklesIdentityPrompt = `
+You are Herakles AI, an intelligent and friendly assistant for "Universitas Pro," by "Universitas AI," a Cognitive Cloud Company. Your mission is to be a "Cognitive Computer" for users, helping them with productivity, research, learning, and task management. You guide users in managing their to-do lists, projects, and learning paths. You excel at composing text from voice, translating languages, and helping with self-paced learning. You provide semantic search with "Document Chat," allowing users to interact with documents for research. Additionally, you assist with natural language code generation in JavaScript, Python, and Swift UI. You explain, summarize, and teach complex topics with clarity, helping users discover new knowledge. You offer friendly, professional, and approachable assistance, supporting students, researchers, and knowledge workers alike. Your goal is to empower users to "Discover the Universe" through AI-powered interactions. Remember, your tone should be consistent: helpful, knowledgeable, and approachable, maintaining your identity across tasks and interactions.
+        `;
+
+        // Initialize Herakles AI
+        function initializeHeraklesAI() {
+            return {
+                role: "system",
+                content: heraklesIdentityPrompt
+            };
+        }
+
+        // Chat Console Interactions
+        const chatConsole = document.getElementById('chatConsole');
+        const chatToggle = document.getElementById('chatToggle');
+        const minimizeChat = document.getElementById('minimizeChat');
+        const sendMessageButton = document.getElementById('sendMessage');
+        const userInput = document.getElementById('userInput');
+        const micButton = document.getElementById('micButton');
+        const fileInput = document.getElementById('fileInput');
+        let recognition;
+
+        // Open file upload popup
+        function openFileUploadPopup() {
+            fileInput.click();
+        }
+
+        // Check for browser support for SpeechRecognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+        } else {
+            alert('Your browser does not support speech recognition.');
+        }
+
+        // Toggle Chat Console
+        chatToggle.addEventListener('click', () => {
+            chatConsole.style.display = chatConsole.style.display === 'none' ? 'flex' : 'none';
+        });
+
+        // Minimize Chat
+        minimizeChat.addEventListener('click', () => {
+            chatConsole.style.display = 'none';
+        });
+
+        // Start/Stop Mic Button for Speech Recognition
+        micButton.addEventListener('click', () => {
+            if (micButton.classList.contains('active')) {
+                recognition.stop();
+                micButton.classList.remove('active');
+            } else {
+                recognition.start();
+                micButton.classList.add('active');
+            }
+        });
+
+        // Handle Speech Recognition Results
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            userInput.value = transcript;
+            micButton.classList.remove('active');
+        };
+
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error detected: ' + event.error);
+            micButton.classList.remove('active');
+        };
+
+        // Get Herakles AI Response
+        async function getHeraklesAIResponse(userInput) {
+            const prompt = initializeHeraklesAI();
+            const userQuery = {
+                role: "user",
+                content: userInput
+            };
+
+            const messages = [prompt, userQuery];
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        messages: messages
+                    }),
+                });
+
+                const data = await response.json();
+                return data.response;
+            } catch (error) {
+                console.error('Error:', error);
+                return 'Herakles AI is currently unavailable. Please try again later.';
+            }
+        }
+
+        // Send Message to Herakles AI
+        sendMessageButton.addEventListener('click', async function() {
+            const message = userInput.value.trim();
+            if (message) {
+                const userBubble = document.createElement('div');
+                userBubble.classList.add('chat-bubble', 'user');
+                userBubble.textContent = message;
+                document.getElementById('chatBody').appendChild(userBubble);
+                userInput.value = '';
+
+                try {
+                    const aiResponse = await getHeraklesAIResponse(message);
+
+                    const aiBubble = document.createElement('div');
+                    aiBubble.classList.add('chat-bubble', 'ai');
+                    aiBubble.textContent = aiResponse;
+                    document.getElementById('chatBody').appendChild(aiBubble);
+
+                } catch (error) {
+                    const aiBubble = document.createElement('div');
+                    aiBubble.classList.add('chat-bubble', 'ai');
+                    aiBubble.textContent = 'Error connecting to the server. Please try again later.';
+                    document.getElementById('chatBody').appendChild(aiBubble);
+                }
+            }
+        });
+    </script>
+    
+</body>
+</html>
