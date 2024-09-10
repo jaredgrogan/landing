@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.js"></script>
     <style>
         html, body {
             margin: 0;
@@ -100,6 +101,41 @@
             padding: 10px;
             background-color: #f3f4f6;
             border-radius: 5px;
+        }
+    .night-mode {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        .night-mode .CodeMirror {
+            background-color: #2a2a2a;
+        }
+
+        .btn {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn:hover {
+            filter: brightness(1.2);
+        }
+
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
         }
     </style>
 </head>
