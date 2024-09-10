@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSITAS AI - iOS App Development & Publishing Course</title>
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header styles */
+        header {
+            background: rgba(0, 112, 201, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin-right: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #f0f0f0;
+        }
+
+        /* Main content styles */
+        main {
+            padding: 2rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .course-content {
+            flex: 1;
+            min-width: 60%;
+        }
+
+        section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            color: #0070c9;
+            margin-bottom: 1rem;
+        }
+
+        /* Chat interface styles */
+        .chat-interface {
+            flex: 0 0 35%;
+            margin-left: 2rem;
+            position: sticky;
+            top: 100px;
+            align-self: flex-start;
+        }
+
+        .chat-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: #0070c9;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .chat-bubble {
+            max-width: 80%;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            clear: both;
+        }
+
+        .user {
+            background-color: #e1f5fe;
+            float: right;
+        }
+
+        .ai {
+            background-color: #f0f0f0;
+            float: left;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background-color: #f9f9f9;
+        }
+
+        #messageInput {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-right: 0.5rem;
+        }
+
+        #sendButton, #micButton {
+            background-color: #0070c9;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #micButton {
+            background-color: #fff;
+            border: 1px solid #0070c9;
+        }
+
+        #micButton svg {
+            fill: #0070c9;
+        }
+
+        #micButton.recording {
+            background-color: #ff0000;
+            animation: pulse 1s infinite;
+        }
+
+        #micButton.recording svg {
+            fill: #fff;
+        }
+
+        .typing-indicator {
+            display: flex;
+            padding: 0.5rem;
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #606060;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            animation: typing 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes typing {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        section {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+
+            .chat-interface {
+                margin-left: 0;
+                margin-top: 2rem;
+                position: static;
+            }
+        }
+
+        /* Dark mode styles */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+                color: #f0f0f0;
+            }
+
+            section {
+                background: rgba(40, 40, 40, 0.8);
+            }
+
+            h2 {
+                color: #4da3ff;
+            }
+
+            .chat-container {
+                background-color: #2a2a2a;
+            }
+
+            .chat-bubble.user {
+                background-color: #1c4a6e;
+            }
+
+            .chat-bubble.ai {
+                background-color: #3a3a3a;
+            }
+
+            .chat-input {
+                background-color: #2a2a2a;
+            }
+
+            #messageInput {
+                background-color: #3a3a3a;
+                color: #f0f0f0;
+                border-color: #4a4a4a;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>UNIVERSITAS AI - iOS App Development & Publishing Course</h1>
+            <nav>
+                <ul>
+                    <li><a href="#course-structure">Course Structure</a></li>
+                    <li><a href="#interactive-features">Interactive Features</a></li>
+                    <li><a href="#llm-integration">LLM Integration</a></li>
+                    <li><a href="#project-management">Project Management</a></li>
+                    <li><a href="#app-store-prep">App Store Preparation</a></li>
+                    <li><a href="#community">Community</a></li>
+                    <li><a href="#progress-tracking">Progress Tracking</a></li>
+                    <li><a href="#resource-library">Resource Library</a></li>
+                    <li><a href="#publishing-workflow">Publishing Workflow</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="course-content">
+            <section id="course-structure">
+                <h2>Course Structure: Path to App Store Success</h2>
+                <p>Our laser-focused course is designed to take you from concept to published app in the App Store. While we primarily focus on iOS, we'll touch on other platforms to give you a well-rounded understanding.</p>
+                <details>
+                    <summary>Course Modules</summary>
+                    <ul>
+                        <li>App Ideation and Market Research</li>
+                        <li>SwiftUI Essentials for Rapid Development</li>
+                        <li>iOS App Architecture for Scalability</li>
+                        <li>Data Management and API Integration</li>
+                        <li>UI/UX Design for App Store Success</li>
+                        <li>App Store Optimization (ASO) Techniques</li>
+                        <li>Monetization Strategies</li>
+                        <li>Cross-Platform Considerations (Brief Overview)</li>
+                    </ul>
+                </details>
+            </section>
+
+            <section id="interactive-features">
+                <h2>Interactive Features: Build As You Learn</h2>
+                <div class="feature-box">
+                    <h3>SwiftUI Playground</h3>
+                    <p>Real-time coding with instant preview. Perfect your UI before full implementation.</p>
+                </div>
+                <div class="feature-box">
+                    <h3>Virtual Device Tester</h3>
+                    <p>Test your app on various iOS devices and versions to ensure compatibility.</p>
+                </div>
+            </section>
+
+            <section id="llm-integration">
+                <h2>AI-Powered Learning Assistant</h2>
+                <p>Our LLM integration accelerates your journey to app publication:</p>
+                <ul>
+                    <li>Code Generation: Get SwiftUI snippets tailored to your app's needs</li>
+                    <li>Debug Buddy: AI-assisted error resolution and optimization tips</li>
+                    <li>ASO Advisor: Get AI suggestions for your App Store listing</li>
+                    <li>Personalized Learning: Adaptive course content based on your progress</li>
+                </ul>
+            </section>
+
+            <section id="project-management">
+                <h2>Project Management: From Concept to App Store</h2>
+                <p>Utilize our integrated tools to manage your app development lifecycle:</p>
+                <ul>
+                    <li>Milestone Tracker: Set and monitor development goals</li>
+                    <li>Version Control: Built-in Git integration</li>
+                    <li>Asset Manager: Organize your app's images, icons, and sounds</li>
+                    <li>Team Collaboration: Invite beta testers and co-developers</li>
+                </ul>
+            </section>
+
+            <section id="app-store-prep">
+                <h2>App Store Preparation: Your Launch Pad</h2>
+                <p>Navigate the submission process with confidence:</p>
+                <div class="checklist">
+                    <h3>Submission Checklist</h3>
+                    <ul>
+                        <li>App Icon Set</li>
+                        <li>Screenshots for All Devices</li>
+                        <li>App Preview Video</li>
+                        <li>Compelling App Description</li>
+                        <li>Keyword Optimization</li>
+                        <li>Privacy Policy</li>
+                        <li>Age Rating Assessment</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="community">
+                <h2>Community: Learn, Share, Grow</h2>
+                <p>Connect with fellow app creators:</p>
+                <ul>
+                    <li>Forums: Discuss development challenges and solutions</li>
+                    <li>Code Review Exchange: Get feedback on your app's code</li>
+                    <li>Success Stories: Learn from those who've successfully published</li>
+                    <li>Mentorship Program: Connect with experienced iOS developers</li>
+                </ul>
+            </section>
+
+            <section id="progress-tracking">
+                <h2>Progress Tracking: Your Path to Publication</h2>
+                <div class="progress-tracker">
+                    <h3>Your App Development Journey</h3>
+                    <ul>
+                        <li>Concept Validation</li>
+                        <li>MVP Development</li>
+                        <li>Core Features Implementation</li>
+                        <li>UI/UX Refinement</li>
+                        <li>Testing & Debugging</li>
+                        <li>App Store Preparation</li>
+                        <li>Submission & Review</li>
+                        <li>Launch & Beyond</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="resource-library">
+                <h2>Resource Library: Your Development Toolkit</h2>
+                <details>
+                    <summary>Quick Access Resources</summary>
+                    <ul>
+                        <li><a href="#" class="resource-link">SwiftUI Cheat Sheet</a></li>
+                        <li><a href="#" class="resource-link">App Store Guidelines Summary</a></li>
+                        <li><a href="#" class="resource-link">ASO Best Practices</a></li>
+                        <li><a href="#" class="resource-link">Common App Architectures</a></li>
+                    </ul>
+                </details>
+                <details>
+                    <summary>Developer Tools</summary>
+                    <ul>
+                        <li><a href="#" class="tool-link">Xcode Shortcuts</a></li>
+                        <li><a href="#" class="tool-link">Asset Catalog Creator</a></li>
+                        <li><a href="#" class="tool-link">Localization Helper</a></li>
+                    </ul>
+                </details>
+            </section>
+
+<section id="publishing-workflow">
+                    <h2>Publishing Workflow: Your App's Journey to Users</h2>
+                    <div class="workflow-steps">
+                        <div class="step">1. Final Testing</div>
+                        <div class="step">2. App Store Connect Setup</div>
+                        <div class="step">3. Metadata Preparation</div>
+                        <div class="step">4. Binary Upload</div>
+                        <div class="step">5. Submission</div>
+                        <div class="step">6. Review Process</div>
+                        <div class="step">7. Approval & Release</div>
+                        <div class="step">8. Post-Launch Monitoring</div>
+                    </div>
+                    <p>Our guided workflow ensures you navigate each step of the publishing process with confidence, maximizing your chances of a smooth launch.</p>
+                </section>
+            </div>
+        </div>
+
+        <div class="chat-interface">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h3>iOS Development Chat Assistant</h3>
+                </div>
+                <div id="chatBox" class="chat-box"></div>
+                <div id="typingIndicator" class="typing-indicator hidden">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Type your message here...">
+                    <button id="micButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1 1.93c-3.94-.49-7-3.85-7-7.93h2c0 3.31 2.69 6 6 6s6-2.69 6-6h2c0 4.08-3.06 7.44-7 7.93V20h4v2H8v-2h4v-4.07z"/>
+                        </svg>
+                    </button>
+                    <button id="sendButton">➤</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 UNIVERSITAS AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript code
+        const chatBox = document.getElementById('chatBox');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const micButton = document.getElementById('micButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        let recognition;
+
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                messageInput.value = transcript;
+            };
+
+            recognition.onend = function() {
+                micButton.classList.remove('recording');
+            };
+        }
+
+        micButton.addEventListener('click', () => {
+            if (recognition) {
+                if (micButton.classList.contains('recording')) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                    micButton.classList.add('recording');
+                }
+            } else {
+                alert('Speech recognition is not supported in your browser.');
+            }
+        });
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                const userBubble = document.createElement('div');
+                userBubble.classList.add('chat-bubble', 'user');
+                userBubble.textContent = message;
+                chatBox.appendChild(userBubble);
+                messageInput.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                showTypingIndicator();
+
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: message }),
+                    });
+                    const data = await response.json();
+                    hideTypingIndicator();
+                    const aiBubble = document.createElement('div');
+                    aiBubble.classList.add('chat-bubble', 'ai');
+                    aiBubble.textContent = data.response;
+                    chatBox.appendChild(aiBubble);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                } catch (error) {
+                    hideTypingIndicator();
+                    const aiBubble = document.createElement('div');
+                    aiBubble.classList.add('chat-bubble', 'ai');
+                    aiBubble.textContent = 'Error connecting to the server. Please try again later.';
+                    chatBox.appendChild(aiBubble);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            }
+        }
+
+        function showTypingIndicator() {
+            typingIndicator.classList.remove('hidden');
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.classList.add('hidden');
+        }
+
+        // Additional JavaScript for course interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Collapsible sections
+            document.querySelectorAll('details').forEach(detail => {
+                detail.addEventListener('toggle', function() {
+                    if (this.open) {
+                        const summary = this.querySelector('summary');
+                        summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
