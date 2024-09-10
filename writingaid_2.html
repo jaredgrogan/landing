@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Voice and Text-based AI interaction">
+  <title>Cognitive Cloud Interaction Console</title>
+  <style>
+    body {
+      font-family: 'Source Sans Pro', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      justify-content: space-between;
+      background-color: #f9f9f9;
+    }
+
+    #root {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .voice-input, .text-input, .export-options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .mic-button {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #007bff;
+      color: white;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+    }
+
+    .progress-bar {
+      height: 5px;
+      background-color: #4caf50;
+      margin: 10px 0;
+      transition: width 0.5s;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #282828;
+      color: #fff;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+
+    textarea {
+      width: 80%;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    select {
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <footer>
+    <p>Copyright © 2024 Cognitive Cloud. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Frontend code using vanilla JS to manage voice and text inputs, and communicate with the backend
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const root = document.getElementById("root");
+      const apiKey = "<YOUR_OPENAI_API_KEY>"; // Replace with your API key from the environment
+      const elevenLabsApiKey = "<YOUR_11_LABS_API_KEY>"; // Replace with your Eleven Labs API key
+
+      // Mic Button Component
+      const micButton = document.createElement("button");
+      micButton.classList.add("mic-button");
+      micButton.textContent = "🎤";
+      root.appendChild(micButton);
+
+      // Progress bar for recording
+      const progressBar = document.createElement("div");
+      progressBar.classList.add("progress-bar");
+      root.appendChild(progressBar);
+
+      // Real-time transcription area
+      const transcriptArea = document.createElement("p");
+      transcriptArea.textContent = "Transcription will appear here.";
+      root.appendChild(transcriptArea);
+
+      // Text Input Area
+      const textArea = document.createElement("textarea");
+      textArea.placeholder = "Type your input here...";
+      root.appendChild(textArea);
+
+      // Submit Button
+      const submitButton = document.createElement("button");
+      submitButton.textContent = "Submit";
+      root.appendChild(submitButton);
+
+      // Refined Output Area
+      const refinedOutput = document.createElement("p");
+      refinedOutput.textContent = "Your refined output will appear here.";
+      root.appendChild(refinedOutput);
+
+      // Export Options
+      const exportOptions = document.createElement("div");
+      exportOptions.classList.add("export-options");
+
+      const exportDropdown = document.createElement("select");
+      const pdfOption = document.createElement("option");
+      pdfOption.value = "pdf";
+      pdfOption.textContent = "Export as PDF";
+      exportDropdown.appendChild(pdfOption);
+
+      const docxOption = document.createElement("option");
+      docxOption.value = "docx";
+      docxOption.textContent = "Export as DOCX";
+      exportDropdown.appendChild(docxOption);
+
+      const markdownOption = document.createElement("option");
+      markdownOption.value = "markdown";
+      markdownOption.textContent = "Export as Markdown";
+      exportDropdown.appendChild(markdownOption);
+
+      exportOptions.appendChild(exportDropdown);
+
+      const shareButton = document.createElement("button");
+      shareButton.textContent = "Share via Email";
+      exportOptions.appendChild(shareButton);
+
+      root.appendChild(exportOptions);
+
+      // Event Listener for Submit Button (Text Interaction)
+      submitButton.addEventListener("click", async () => {
+        const inputText = textArea.value;
+
+        // Send the input text to the backend for LLM processing
+        try {
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              text: inputText,
+            }),
+          });
+
+          const data = await response.json();
+          refinedOutput.textContent = data.message;
+        } catch (error) {
+          console.error("Error interacting with LLM:", error);
+          refinedOutput.textContent = "Error processing input.";
+        }
+      });
+
+      // Placeholder event for mic button (voice input)
+      micButton.addEventListener("click", () => {
+        alert("Voice input functionality will be here (Whisper integration).");
+      });
+
+      // Placeholder event for Export functionality
+      exportDropdown.addEventListener("change", (event) => {
+        alert(`You selected to export as ${event.target.value}`);
+      });
+
+      // Placeholder event for Share button
+      shareButton.addEventListener("click", () => {
+        alert("Sharing functionality will be implemented here.");
+      });
+    });
+  </script>
+</body>
+</html>
