@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI SaaS Onboarding</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 50px 0;
+            background-color: #e9ecef;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-around;
+            margin: 50px 0;
+        }
+
+        .step {
+            background-color: #fff;
+            padding: 20px;
+            width: 25%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .step:hover {
+            transform: translateY(-5px);
+        }
+
+        .step h2 {
+            margin-bottom: 15px;
+        }
+
+        .footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .steps {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .step {
+                width: 80%;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <a href="/" class="logo">AI SaaS</a>
+        <ul class="nav-links">
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Support</a></li>
+        </ul>
+        <button class="btn-primary" id="loginButton">Login</button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Welcome to AI SaaS</h1>
+        <p>Get started with your AI-powered solutions</p>
+        <button class="btn-primary" id="signupButton">Sign Up</button>
+    </section>
+
+    <!-- Steps Section -->
+    <section class="steps">
+        <div class="step">
+            <h2>Step 1</h2>
+            <p>Create an account to access AI tools</p>
+        </div>
+        <div class="step">
+            <h2>Step 2</h2>
+            <p>Configure your settings and preferences</p>
+        </div>
+        <div class="step">
+            <h2>Step 3</h2>
+            <p>Start using our AI platform</p>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>&copy; 2024 AI SaaS</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById("loginButton").addEventListener("click", function() {
+            alert("Login functionality coming soon!");
+        });
+
+        document.getElementById("signupButton").addEventListener("click", function() {
+            alert("Sign-up functionality coming soon!");
+        });
+    </script>
+</body>
+</html>
