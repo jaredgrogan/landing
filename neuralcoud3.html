@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud Virtual Browser</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f0f4f8;
+            --text-color: #333;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .browser-header {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .url-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            background: var(--secondary-color);
+            border-radius: 10px 0 0 10px;
+            font-size: 16px;
+        }
+
+        .go-button {
+            padding: 12px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .go-button svg {
+            margin-right: 5px;
+        }
+
+        .browser-frame {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .ai-actions, .auto-suggestions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ai-button, .auto-suggestion-button {
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .ai-button:hover, .auto-suggestion-button:hover {
+            background-color: #3a7bd5;
+        }
+
+        .history-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            max-height: 80vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.2);
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .toggle-history {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+
+            .browser-frame {
+                height: 50vh;
+            }
+
+            .ai-actions, .auto-suggestions {
+                flex-direction: column;
+            }
+
+            .ai-button, .auto-suggestion-button {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="browser-header">
+            <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
+            <button class="go-button" id="goButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 16 16 12 12 8"></polyline>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                Go
+            </button>
+        </div>
+        <iframe id="browserFrame" class="browser-frame" src="about:blank"></iframe>
+        <div class="ai-actions">
+            <button class="ai-button" data-action="summarize">Summarize</button>
+            <button class="ai-button" data-action="extract">Extract Data</button>
+            <button class="ai-button" data-action="qa">Q&A</button>
+            <button class="ai-button" data-action="explain">Explain</button>
+        </div>
+        <div class="auto-suggestions">
+            <button class="auto-suggestion-button" data-action="howto">How to Guide</button>
+            <button class="auto-suggestion-button" data-action="analyze">Analyze</button>
+            <button class="auto-suggestion-button" data-action="related">Related Topics</button>
+            <button class="auto-suggestion-button" data-action="bullets">Bullet Points</button>
+        </div>
+    </div>
+
+    <button class="toggle-history" id="toggleHistory">H</button>
+    <div class="history-panel" id="historyPanel"></div>
+
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const goButton = document.getElementById('goButton');
+        const browserFrame = document.getElementById('browserFrame');
+        const aiButtons = document.querySelectorAll('.ai-button');
+        const autoSuggestionButtons = document.querySelectorAll('.auto-suggestion-button');
+        const toggleHistory = document.getElementById('toggleHistory');
+        const historyPanel = document.getElementById('historyPanel');
+
+        let sessionHistory = [];
+
+        function loadUrl(url) {
+            if (!url) url = urlInput.value.trim();
+            if (url) {
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    url = 'https://' + url;
+                }
+                const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
+                browserFrame.src = proxyUrl;
+                addToHistory(url);
+            }
+        }
+
+        function addToHistory(url) {
+            sessionHistory.unshift(url);
+            updateHistoryPanel();
+        }
+
+        function updateHistoryPanel() {
+            historyPanel.innerHTML = sessionHistory.map(url => `
+                <div class="history-item" onclick="loadUrl('${url}')">${url}</div>
+            `).join('');
+        }
+
+        urlInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                loadUrl();
+            }
+        });
+
+        goButton.addEventListener('click', () => loadUrl());
+
+        toggleHistory.addEventListener('click', () => {
+            historyPanel.style.display = historyPanel.style.display === 'none' ? 'block' : 'none';
+        });
+
+        async function getIFrameContent() {
+            try {
+                const iframeDocument = browserFrame.contentDocument || browserFrame.contentWindow.document;
+                return iframeDocument.body.innerText || iframeDocument.body.textContent;
+            } catch (error) {
+                console.error('Failed to get iframe content:', error);
+                return null;
+            }
+        }
+
+        async function sendToAI(action) {
+            const content = await getIFrameContent();
+            if (!content) return;
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: content, action: action })
+                });
+                const data = await response.json();
+                alert(data.response); // For simplicity, using alert. In production, use a modal or a dedicated response area.
+            } catch (error) {
+                console.error('Error sending to AI:', error);
+                alert('Error processing AI request.');
+            }
+        }
+
+        aiButtons.forEach(button => {
+            button.addEventListener('click', () => sendToAI(button.dataset.action));
+        });
+
+        autoSuggestionButtons.forEach(button => {
+            button.addEventListener('click', () => sendToAI(button.dataset.action));
+        });
+
+        browserFrame.addEventListener('load', function() {
+            urlInput.value = this.contentWindow.location.href.replace(/^.*?proxy\?url=/, '');
+        });
+
+        // Initial load
+        loadUrl('https://www.example.com');
+    </script>
+</body>
+</html>
