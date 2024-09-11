@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud Virtual Browser</title>
+    <style>
+        /* ... (keep the existing styles) ... */
+
+        .response-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 30vh;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .close-response {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ... (keep the existing structure) ... -->
+    </div>
+
+    <button class="toggle-history" id="toggleHistory">H</button>
+    <div class="history-panel" id="historyPanel"></div>
+
+    <div class="response-panel" id="responsePanel">
+        <button class="close-response" id="closeResponse">&times;</button>
+        <div id="responseContent"></div>
+    </div>
+
+    <script>
+        // ... (keep the existing variable declarations) ...
+        const responsePanel = document.getElementById('responsePanel');
+        const responseContent = document.getElementById('responseContent');
+        const closeResponse = document.getElementById('closeResponse');
+
+        // ... (keep the existing functions like loadUrl, addToHistory, etc.) ...
+
+        async function sendToAI(action) {
+            const content = await getIFrameContent();
+            if (!content) return;
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: `${action}: ${content}`,
+                        service: 'openai' // You can change this to 'openai-vision' if needed
+                    })
+                });
+                const data = await response.json();
+                showResponse(data.response);
+            } catch (error) {
+                console.error('Error sending to AI:', error);
+                showResponse('Error processing AI request.');
+            }
+        }
+
+        function showResponse(message) {
+            responseContent.textContent = message;
+            responsePanel.style.display = 'block';
+        }
+
+        closeResponse.addEventListener('click', () => {
+            responsePanel.style.display = 'none';
+        });
+
+        aiButtons.forEach(button => {
+            button.addEventListener('click', () => sendToAI(button.dataset.action));
+        });
+
+        autoSuggestionButtons.forEach(button => {
+            button.addEventListener('click', () => sendToAI(button.dataset.action));
+        });
+
+        // ... (keep the rest of the existing script) ...
+    </script>
+</body>
+</html>
