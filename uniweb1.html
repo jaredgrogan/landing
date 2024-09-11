@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collapsible AI Chat</title>
+    <style>
+        body {
+            background-color: #000;
+            font-family: 'Berkeley Mono', monospace;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Chat Box Styling */
+        #chatBox {
+            position: fixed;
+            bottom: 60px;
+            left: 20px;
+            width: 300px;
+            height: 400px;
+            border-radius: 10px;
+            background-color: #1e1e1e;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 10px;
+            overflow-y: scroll;
+        }
+
+        .chat-bubble {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .user {
+            background-color: #444;
+            align-self: flex-end;
+        }
+
+        .ai {
+            background-color: #333;
+            align-self: flex-start;
+        }
+
+        /* Button to toggle chat */
+        #toggleButton {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #1e1e1e;
+            border: 1px solid #fff;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #toggleButton svg {
+            fill: #fff;
+            width: 24px;
+            height: 24px;
+        }
+
+        #messageInput {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        #messageInput:focus {
+            outline: none;
+        }
+
+        #typingIndicator {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="chatBox">
+    <!-- Chat bubbles will appear here -->
+</div>
+
+<input type="text" id="messageInput" placeholder="Type your message here..." />
+
+<div id="typingIndicator">AI is typing...</div>
+
+<!-- Collapsible button -->
+<div id="toggleButton">
+    <!-- World Wide Web SVG icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0zm0 22c-5.522 0-10-4.478-10-10S6.478 2 12 2s10 4.478 10 10-4.478 10-10 10z"/>
+        <path d="M12 4C9.794 4 8 9.373 8 12s1.794 8 4 8 4-5.373 4-8-1.794-8-4-8zm0 14c-1.5 0-3-3.134-3-6s1.5-6 3-6 3 3.134 3 6-1.5 6-3 6z"/>
+        <circle cx="12" cy="12" r="2"/>
+    </svg>
+</div>
+
+<footer>COPYRIGHT 2024 UNIVERSITAS AI</footer>
+
+<script>
+    const toggleButton = document.getElementById('toggleButton');
+    const chatBox = document.getElementById('chatBox');
+    const messageInput = document.getElementById('messageInput');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    toggleButton.addEventListener('click', function () {
+        if (chatBox.style.display === 'none') {
+            chatBox.style.display = 'flex';
+        } else {
+            chatBox.style.display = 'none';
+        }
+    });
+
+    async function sendMessage() {
+        const message = messageInput.value.trim();
+        if (message) {
+            const userBubble = document.createElement('div');
+            userBubble.classList.add('chat-bubble', 'user');
+            userBubble.textContent = message;
+            chatBox.appendChild(userBubble);
+            messageInput.value = '';
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+            showTypingIndicator();
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message }),
+                });
+
+                const data = await response.json();
+                hideTypingIndicator();
+
+                const aiBubble = document.createElement('div');
+                aiBubble.classList.add('chat-bubble', 'ai');
+                aiBubble.textContent = data.response;
+                chatBox.appendChild(aiBubble);
+
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+            } catch (error) {
+                hideTypingIndicator();
+                const aiBubble = document.createElement('div');
+                aiBubble.classList.add('chat-bubble', 'ai');
+                aiBubble.textContent = 'Error connecting to the server. Please try again later.';
+                chatBox.appendChild(aiBubble);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+    }
+
+    function showTypingIndicator() {
+        typingIndicator.style.display = 'block';
+    }
+
+    function hideTypingIndicator() {
+        typingIndicator.style.display = 'none';
+    }
+
+    // Enter key sends message
+    messageInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+</script>
+
+</body>
+</html>
