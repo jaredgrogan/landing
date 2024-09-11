@@ -8,16 +8,9 @@
   ],
   "routes": [
     { "src": "/api/proxy", "dest": "/api/proxy.js" },
-    { "src": "/api/chat", "dest": "/server.js" },
+    { "src": "/api/chat", "dest": "/api/chat.js" },
     { "src": "^/(.+\\.(jpg|jpeg|png|gif|svg|ico))$", "dest": "/$1" },
-    { "src": "/neuralcloud", "dest": "/neuralcloud.html" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/server.js" }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "github": {
-    "silent": true
-  }
+  ]
 }
