@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniWeb3 - Virtual Browser with AI Actions</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #virtualBrowser {
+            width: 80vw;
+            height: 80vh;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #browserHeader {
+            display: flex;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        #urlInput {
+            flex-grow: 1;
+            padding: 8px 12px;
+            border: 1px solid #d0d0d0;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        #urlInput:focus {
+            border-color: #2196F3;
+        }
+
+        #webFrame {
+            flex-grow: 1;
+            border: none;
+        }
+
+        #aiActions {
+            padding: 8px 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+
+        #aiActions:hover {
+            background-color: #1976D2;
+        }
+
+        #actionSelect {
+            display: none;
+            position: absolute;
+            top: calc(10vh + 50px);
+            right: 11vw;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        #actionSelect button {
+            display: block;
+            width: 100%;
+            padding: 10px 20px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+
+        #actionSelect button:hover {
+            background-color: #f0f0f0;
+        }
+
+        #aiResponse {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            max-width: 300px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="virtualBrowser">
+        <div id="browserHeader">
+            <input type="text" id="urlInput" placeholder="Enter URL...">
+            <button id="aiActions">AI Actions</button>
+        </div>
+        <iframe id="webFrame"></iframe>
+    </div>
+
+    <div id="actionSelect">
+        <button data-action="summarize">Summarize</button>
+        <button data-action="extract">Extract Data</button>
+        <button data-action="qa">Q&A</button>
+        <button data-action="explain">Explain</button>
+    </div>
+
+    <div id="aiResponse"></div>
+
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const webFrame = document.getElementById('webFrame');
+        const aiActionsButton = document.getElementById('aiActions');
+        const actionSelect = document.getElementById('actionSelect');
+        const aiResponse = document.getElementById('aiResponse');
+
+        urlInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                const proxyURL = `/api/proxy?url=${encodeURIComponent(urlInput.value)}`;
+                webFrame.src = proxyURL;
+            }
+        });
+
+        aiActionsButton.addEventListener('click', function () {
+            actionSelect.style.display = actionSelect.style.display === 'none' ? 'block' : 'none';
+        });
+
+        actionSelect.addEventListener('click', async function (e) {
+            if (e.target.tagName === 'BUTTON') {
+                const action = e.target.getAttribute('data-action');
+                const content = await getIFrameContent();
+
+                if (content) {
+                    sendToAI(content, action);
+                    actionSelect.style.display = 'none';
+                }
+            }
+        });
+
+        async function getIFrameContent() {
+            try {
+                const iframeDocument = webFrame.contentDocument || webFrame.contentWindow.document;
+                return iframeDocument.body.innerText || iframeDocument.body.textContent;
+            } catch (error) {
+                console.error('Failed to get iframe content:', error);
+                return null;
+            }
+        }
+
+        async function sendToAI(content, action) {
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: content,
+                        action: action
+                    })
+                });
+                const data = await response.json();
+                showAIResponse(data.response);
+            } catch (error) {
+                console.error('Error sending to AI:', error);
+                showAIResponse('Error processing AI request.');
+            }
+        }
+
+        function showAIResponse(message) {
+            aiResponse.textContent = message;
+            aiResponse.style.display = 'block';
+            setTimeout(() => {
+                aiResponse.style.display = 'none';
+            }, 5000);
+        }
+
+        // Close action select when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!aiActionsButton.contains(e.target) && !actionSelect.contains(e.target)) {
+                actionSelect.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
