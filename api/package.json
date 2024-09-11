@@ -1,0 +1,11 @@
+{
+  "name": "proxy-server",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node api/proxy.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "request": "^2.88.2"
+  }
+}
