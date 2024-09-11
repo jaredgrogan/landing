@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Browser with Proxy and AI Actions</title>
+    <style>
+        body {
+            background-color: #000;
+            font-family: 'Berkeley Mono', monospace;
+            color: #fff;
+        }
+
+        /* Virtual Browser */
+        #virtualBrowser {
+            position: fixed;
+            bottom: 60px;
+            left: 20px;
+            width: 400px;
+            height: 500px;
+            display: none;
+            flex-direction: column;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        #urlInput {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            width: 90%;
+        }
+
+        #urlInput:focus {
+            outline: none;
+        }
+
+        iframe {
+            width: 100%;
+            height: 70%;
+            margin-top: 10px;
+            background-color: #fff;
+        }
+
+        /* AI Action Button */
+        #aiActions {
+            background-color: #444;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* Dropdown for AI Actions */
+        #actionSelect {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        #actionSelect button {
+            background-color: #444;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* Toggle Button */
+        #toggleBrowser {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #1e1e1e;
+            border: 1px solid #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #toggleBrowser svg {
+            fill: #fff;
+            width: 24px;
+            height: 24px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Virtual Browser Popup -->
+<div id="virtualBrowser">
+    <!-- URL Input -->
+    <input type="text" id="urlInput" placeholder="Enter URL..." />
+    <iframe id="webFrame"></iframe>
+    
+    <!-- AI Actions Button -->
+    <button id="aiActions">Select AI Action</button>
+
+    <!-- AI Action Choices -->
+    <div id="actionSelect">
+        <button data-action="summarize">Summarize</button>
+        <button data-action="extract">Extract Data</button>
+        <button data-action="qa">QA</button>
+        <button data-action="explain">Explain</button>
+    </div>
+</div>
+
+<!-- Toggle Button for Browser -->
+<div id="toggleBrowser">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0zm0 22c-5.522 0-10-4.478-10-10S6.478 2 12 2s10 4.478 10 10-4.478 10-10 10z"/>
+        <path d="M12 4C9.794 4 8 9.373 8 12s1.794 8 4 8 4-5.373 4-8-1.794-8-4-8zm0 14c-1.5 0-3-3.134-3-6s1.5-6 3-6 3 3.134 3 6-1.5 6-3 6z"/>
+        <circle cx="12" cy="12" r="2"/>
+    </svg>
+</div>
+
+<footer>COPYRIGHT 2024 UNIVERSITAS AI</footer>
+
+<script>
+    const urlInput = document.getElementById('urlInput');
+    const webFrame = document.getElementById('webFrame');
+    const toggleBrowser = document.getElementById('toggleBrowser');
+    const virtualBrowser = document.getElementById('virtualBrowser');
+    const aiActionsButton = document.getElementById('aiActions');
+    const actionSelect = document.getElementById('actionSelect');
+
+    // Toggle the virtual browser
+    toggleBrowser.addEventListener('click', function () {
+        virtualBrowser.style.display = (virtualBrowser.style.display === 'none') ? 'flex' : 'none';
+    });
+
+    // Load URL using the proxy server
+    urlInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            const proxyURL = `/proxy?url=${encodeURIComponent(urlInput.value)}`;
+            webFrame.src = proxyURL;
+        }
+    });
+
+    // Show AI actions dropdown
+    aiActionsButton.addEventListener('click', function () {
+        actionSelect.style.display = (actionSelect.style.display === 'none') ? 'block' : 'none';
+    });
+
+    // Handle AI Action selection
+    actionSelect.addEventListener('click', async function (e) {
+        const action = e.target.getAttribute('data-action');
+        const content = await getIFrameContent();
+
+        if (content) {
+            sendToAI(content, action);
+        }
+    });
+
+    // Extract content from the iframe
+    async function getIFrameContent() {
+        try {
+            const iframeDocument = webFrame.contentDocument || webFrame.contentWindow.document;
+            return iframeDocument.body.innerText || iframeDocument.body.textContent;
+        } catch (error) {
+            console.error('Failed to get iframe content:', error);
+            return null;
+        }
+    }
+
+    // Send content and action to the OpenAI API
+    async function sendToAI(content, action) {
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: content,
+                    action: action
+                })
+            });
+            const data = await response.json();
+            console.log('AI Response:', data.response);
+        } catch (error) {
+            console.error('Error sending to AI:', error);
+        }
+    }
+</script>
+
+</body>
+</html>
