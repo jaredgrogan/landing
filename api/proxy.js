@@ -1,14 +1,10 @@
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
 
 const app = express();
 
 app.use(cors());
-app.use(helmet());
-app.use(morgan('combined'));
 
 app.use('/', (req, res, next) => {
   let targetUrl = req.query.url;
@@ -26,9 +22,9 @@ app.use('/', (req, res, next) => {
     changeOrigin: true,
     secure: false,
     ws: true,
-    xfwd: true,
     followRedirects: true,
     pathRewrite: (path, req) => {
+      // Keep the original path for Vercel sites
       return req.url.replace(/^\/api\/proxy/, '') || '/';
     },
     router: (req) => {
@@ -39,17 +35,32 @@ app.use('/', (req, res, next) => {
       delete proxyRes.headers['x-frame-options'];
       delete proxyRes.headers['content-security-policy'];
 
-      // Cache static assets
-      if (proxyRes.headers['content-type'] && proxyRes.headers['content-type'].includes('text/css')) {
-        proxyRes.headers['cache-control'] = 'public, max-age=86400';
+      // Handle HTML responses for Vercel sites
+      if (proxyRes.headers['content-type'] && proxyRes.headers['content-type'].includes('text/html')) {
+        let body = '';
+        proxyRes.on('data', (chunk) => {
+          body += chunk;
+        });
+        proxyRes.on('end', () => {
+          body = body.replace(/<base[^>]*>/i, `<base href="${targetUrl}">`);
+          body = body.replace(/<head>/i, `<head><script>
+            (function() {
+              var originalPushState = history.pushState;
+              history.pushState = function(state, title, url) {
+                originalPushState.apply(this, arguments);
+                window.dispatchEvent(new Event('popstate'));
+              };
+            })();
+          </script>`);
+          res.end(body);
+        });
       }
     },
     onError: (err, req, res) => {
       console.error('Proxy Error:', err);
       res.status(500).json({
         error: 'Proxy error',
-        message: err.message,
-        stack: process.env.NODE_ENV === 'production' ? undefined : err.stack
+        message: err.message
       });
     }
   });
