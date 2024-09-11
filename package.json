@@ -1,18 +1,29 @@
 {
-  "name": "Universitas Pro",
+  "name": "universitas-pro",
   "version": "1.0.0",
-  "description": "Your Cognitive Computer",
+  "description": "Your Cognitive Computer with Virtual Browser",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "start-proxy": "node api/proxy.js"  
+    "start-proxy": "node api/proxy.js"
   },
   "dependencies": {
-    "express": "^4.17.1", 
-    "axios": "^0.21.1",     
-    "react": "^17.0.2",     
-    "react-dom": "^17.0.2", 
-    "react-beautiful-dnd": "^13.1.0", 
-    "request": "^2.88.2"
-  }
+    "axios": "^0.21.1",
+    "express": "^4.18.2",
+    "form-data": "^4.0.0",
+    "fs": "0.0.1-security",
+    "http-proxy-middleware": "^2.0.6",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-beautiful-dnd": "^13.1.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/universitas-pro.git"
+  },
+  "author": "Your Name",
+  "license": "MIT"
 }
