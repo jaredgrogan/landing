@@ -5,14 +5,14 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "start-proxy": "node api/proxy.js"  // Added script to run the proxy server
+    "start-proxy": "node api/proxy.js"  
   },
   "dependencies": {
-    "express": "^4.17.1",  // Already present, used for both server and proxy
-    "axios": "^0.21.1",     // Existing dependency
-    "react": "^17.0.2",     // Existing dependency
-    "react-dom": "^17.0.2", // Existing dependency
-    "react-beautiful-dnd": "^13.1.0", // Existing dependency
-    "request": "^2.88.2"    // Added this from api/package.json to handle proxy requests
+    "express": "^4.17.1", 
+    "axios": "^0.21.1",     
+    "react": "^17.0.2",     
+    "react-dom": "^17.0.2", 
+    "react-beautiful-dnd": "^13.1.0", 
+    "request": "^2.88.2"
   }
 }
