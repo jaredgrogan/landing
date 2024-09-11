@@ -21,8 +21,6 @@ app.use('/', (req, res, next) => {
     xfwd: true,
     followRedirects: true,
     pathRewrite: (path, req) => {
-      const url = new URL(targetUrl);
-      // Keep the original path for Vercel sites
       return req.url.replace(/^\/api\/proxy/, '') || '/';
     },
     router: (req) => {
@@ -32,27 +30,6 @@ app.use('/', (req, res, next) => {
       proxyRes.headers['Access-Control-Allow-Origin'] = '*';
       delete proxyRes.headers['x-frame-options'];
       delete proxyRes.headers['content-security-policy'];
-
-      // Handle HTML responses for Vercel sites
-      if (proxyRes.headers['content-type'] && proxyRes.headers['content-type'].includes('text/html')) {
-        let body = '';
-        proxyRes.on('data', (chunk) => {
-          body += chunk;
-        });
-        proxyRes.on('end', () => {
-          body = body.replace(/<base[^>]*>/i, `<base href="${targetUrl}">`);
-          body = body.replace(/<head>/i, `<head><script>
-            (function() {
-              var originalPushState = history.pushState;
-              history.pushState = function(state, title, url) {
-                originalPushState.apply(this, arguments);
-                window.dispatchEvent(new Event('popstate'));
-              };
-            })();
-          </script>`);
-          res.end(body);
-        });
-      }
     },
     onError: (err, req, res) => {
       console.error('Proxy Error:', err);
