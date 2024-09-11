@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Admin - Proxy Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f4f8;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-top: 0;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Proxy Control</h1>
+        <label class="switch">
+            <input type="checkbox" id="proxyToggle">
+            <span class="slider"></span>
+        </label>
+        <p id="status">Proxy is OFF</p>
+    </div>
+
+    <script>
+        const toggle = document.getElementById('proxyToggle');
+        const status = document.getElementById('status');
+
+        toggle.addEventListener('change', async () => {
+            const isEnabled = toggle.checked;
+            try {
+                const response = await fetch('/api/toggle-proxy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ enabled: isEnabled }),
+                });
+                const data = await response.json();
+                status.textContent = `Proxy is ${isEnabled ? 'ON' : 'OFF'}`;
+            } catch (error) {
+                console.error('Error toggling proxy:', error);
+                status.textContent = 'Error toggling proxy';
+            }
+        });
+    </script>
+</body>
+</html>
