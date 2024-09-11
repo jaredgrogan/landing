@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chariot AI Lotto</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #app {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a237e, #4a148c);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #scratchCard {
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(45deg, #7986cb, #3f51b5);
+            border: 4px solid #9fa8da;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        #reward {
+            display: none;
+            background: rgba(63, 81, 181, 0.9);
+            border: 2px solid #9fa8da;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        button {
+            background: #3f51b5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #303f9f;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <canvas id="particleCanvas"></canvas>
+        <h1>Chariot AI Lotto</h1>
+        <canvas id="scratchCard"></canvas>
+        <button id="blowButton">Blow to Reveal</button>
+        <div id="reward"></div>
+    </div>
+
+    <script>
+        const particleCanvas = document.getElementById('particleCanvas');
+        const scratchCard = document.getElementById('scratchCard');
+        const blowButton = document.getElementById('blowButton');
+        const rewardDiv = document.getElementById('reward');
+
+        const pctx = particleCanvas.getContext('2d');
+        const sctx = scratchCard.getContext('2d');
+
+        // Set canvas sizes
+        particleCanvas.width = window.innerWidth;
+        particleCanvas.height = window.innerHeight;
+        scratchCard.width = 300;
+        scratchCard.height = 200;
+
+        // Particle system
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.size > 0.2) this.size -= 0.1;
+            }
+
+            draw() {
+                pctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                pctx.beginPath();
+                pctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                pctx.fill();
+            }
+        }
+
+        function initializeParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle(Math.random() * particleCanvas.width, Math.random() * particleCanvas.height));
+            }
+        }
+
+        function animateParticles() {
+            pctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                if (particles[i].size <= 0.2) {
+                    particles.splice(i, 1);
+                    i--;
+                    particles.push(new Particle(Math.random() * particleCanvas.width, Math.random() * particleCanvas.height));
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        // Initialize scratch card
+        function initializeScratchCard() {
+            const gradient = sctx.createLinearGradient(0, 0, scratchCard.width, scratchCard.height);
+            gradient.addColorStop(0, '#7986cb');
+            gradient.addColorStop(1, '#3f51b5');
+            sctx.fillStyle = gradient;
+            sctx.fillRect(0, 0, scratchCard.width, scratchCard.height);
+
+            sctx.fillStyle = '#ffffff';
+            sctx.font = 'bold 24px Arial';
+            sctx.textAlign = 'center';
+            sctx.fillText('Scratch here!', scratchCard.width / 2, scratchCard.height / 2);
+        }
+
+        // Scratch functionality
+        let isScratching = false;
+
+        scratchCard.addEventListener('mousedown', startScratching);
+        scratchCard.addEventListener('mousemove', scratch);
+        scratchCard.addEventListener('mouseup', stopScratching);
+        scratchCard.addEventListener('mouseleave', stopScratching);
+
+        scratchCard.addEventListener('touchstart', startScratching);
+        scratchCard.addEventListener('touchmove', scratch);
+        scratchCard.addEventListener('touchend', stopScratching);
+
+        function startScratching(e) {
+            isScratching = true;
+            scratch(e);
+        }
+
+        function stopScratching() {
+            isScratching = false;
+        }
+
+        function scratch(e) {
+            if (!isScratching) return;
+
+            const rect = scratchCard.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+            sctx.globalCompositeOperation = 'destination-out';
+            sctx.beginPath();
+            sctx.arc(x, y, 15, 0, 2 * Math.PI);
+            sctx.fill();
+
+            checkScratchProgress();
+        }
+
+        function checkScratchProgress() {
+            const imageData = sctx.getImageData(0, 0, scratchCard.width, scratchCard.height);
+            const scratchedPixels = imageData.data.filter((x, i) => i % 4 === 3 && x === 0).length;
+            const totalPixels = scratchCard.width * scratchCard.height;
+
+            if (scratchedPixels / totalPixels > 0.7) {
+                revealReward();
+            }
+        }
+
+        function revealReward() {
+            const rewards = ['10% Discount on Chariot Coins', 'Free Layer 2 Transaction', '$5 in Chariot Tokens', 'Exclusive NFT Access'];
+            const reward = rewards[Math.floor(Math.random() * rewards.length)];
+            rewardDiv.innerHTML = `<h2>Congratulations!</h2><p>Your reward: ${reward}</p>`;
+            rewardDiv.style.display = 'block';
+            scratchCard.style.display = 'none';
+            blowButton.style.display = 'none';
+        }
+
+        // Blow to reveal functionality (simulated)
+        blowButton.addEventListener('click', () => {
+            revealReward();
+        });
+
+        // Mouse interaction with particles
+        particleCanvas.addEventListener('mousemove', (e) => {
+            const rect = particleCanvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            for (let i = 0; i < particles.length; i++) {
+                const dx = mouseX - particles[i].x;
+                const dy = mouseY - particles[i].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 50) {
+                    particles[i].x += dx / distance * 3;
+                    particles[i].y += dy / distance * 3;
+                }
+            }
+        });
+
+        // Add particles on click
+        particleCanvas.addEventListener('click', (e) => {
+            const rect = particleCanvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            for (let i = 0; i < 10; i++) {
+                particles.push(new Particle(mouseX, mouseY));
+            }
+        });
+
+        // Initialize and start animation
+        initializeParticles();
+        initializeScratchCard();
+        animateParticles();
+
+        // Resize handling
+        window.addEventListener('resize', () => {
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
