@@ -324,6 +324,8 @@
                             <option value="mountains">Mountains</option>
                             <option value="abstract">Abstract</option>
                             <option value="abstract">Light</option>
+                            <option value="silicon">Silicon</option>
+                            <option value="sanfrancisco">San Francisco</option>
                             <option value="alpine">Alpine</option>
                             <option value="slideshow">Slideshow</option>
                         </select>
@@ -478,7 +480,7 @@
             switch(theme) {
                 case 'default':
                     document.body.style.backgroundImage = 'none';
-                    document.body.style.backgroundColor = 'parthenon.jpeg';
+                    document.body.style.backgroundColor = 'url("parthenon.jpeg")';
                     break;
                 case 'office':
                     document.body.style.backgroundImage = 'url("office.jpeg")';
@@ -507,6 +509,12 @@
                  case 'light':
                     document.body.style.backgroundImage = 'url("abstract_2.jpeg")';
                     break;
+                case 'silicon':
+                    document.body.style.backgroundImage = 'url("euv.jpeg")';
+                    break;
+                case 'sanfrancisco':
+                    document.body.style.backgroundImage = 'url("goldengate.jpeg")';
+                    break;
                 case 'alpine':
                     document.body.style.backgroundImage = 'url("alpine.jpeg")';
                     break;
@@ -514,7 +522,7 @@
         }
 
         function startSlideshow() {
-            const themes = ['office', 'home', 'beach', 'palms', 'loft', 'abstract', 'comic'];
+            const themes = ['classic', 'office', 'home', 'beach', 'palms', 'loft', 'island', 'mountains', 'abstract', 'light', 'silicon', 'sanfrancisco'];
             let currentIndex = 0;
 
             function changeBackground() {
