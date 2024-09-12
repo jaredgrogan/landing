@@ -313,13 +313,17 @@
                     <a href="#" onclick="toggleSubDropdown('themeOptions')">Theme</a>
                     <div id="themeOptions" class="sub-dropdown">
                         <select id="themeSelect" onchange="setTheme()">
-                            <option value="default">Default</option>
+                            <option value="default">Classic</option>
                             <option value="office">Office</option>
                             <option value="home">Home</option>
                             <option value="beach">Beach</option>
                             <option value="palms">Palms</option>
+            
                             <option value="loft">Loft</option>
+                            <option value="island">Island</option>
+                            <option value="mountains">Mountains</option>
                             <option value="abstract">Abstract</option>
+                            <option value="abstract">Light</option>
                             <option value="alpine">Alpine</option>
                             <option value="slideshow">Slideshow</option>
                         </select>
@@ -474,7 +478,7 @@
             switch(theme) {
                 case 'default':
                     document.body.style.backgroundImage = 'none';
-                    document.body.style.backgroundColor = 'black';
+                    document.body.style.backgroundColor = 'parthenon.jpeg';
                     break;
                 case 'office':
                     document.body.style.backgroundImage = 'url("office.jpeg")';
@@ -491,8 +495,17 @@
                 case 'loft':
                     document.body.style.backgroundImage = 'url("loft.jpeg")';
                     break;
+                case 'island':
+                    document.body.style.backgroundImage = 'url("island.jpeg")';
+                    break;
+                case 'mountains':
+                    document.body.style.backgroundImage = 'url("mountains.jpeg")';
+                    break;
                 case 'abstract':
                     document.body.style.backgroundImage = 'url("abstract2024.jpeg")';
+                    break;
+                 case 'light':
+                    document.body.style.backgroundImage = 'url("abstract_2.jpeg")';
                     break;
                 case 'alpine':
                     document.body.style.backgroundImage = 'url("alpine.jpeg")';
