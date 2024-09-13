@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phi Harmonics Exploration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .controls {
+            margin: 20px 0;
+        }
+
+        .slider-container, .harmonics-container {
+            margin: 10px 0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        .harmonic-checkboxes {
+            display: flex;
+            justify-content: space-between;
+            max-width: 400px;
+            margin: 10px 0;
+        }
+
+        .harmonic-checkboxes label {
+            font-weight: normal;
+        }
+
+        #plot {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #555;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Explore Phi Harmonics</h1>
+
+    <div class="container">
+
+        <div class="controls">
+            <div class="slider-container">
+                <label for="nValue">Power of Phi (n): </label>
+                <input type="range" id="nValue" min="-5" max="5" step="0.1" value="1" oninput="updateNValue(this.value)">
+                <span id="nValueDisplay">1</span>
+            </div>
+
+            <div class="harmonics-container">
+                <label>Select Harmonics:</label>
+                <div class="harmonic-checkboxes">
+                    <label><input type="checkbox" id="phiCheckbox" checked> Phi (Φ)</label>
+                    <label><input type="checkbox" id="invPhiCheckbox" checked> 1/Phi (1/Φ)</label>
+                    <label><input type="checkbox" id="phiSquareCheckbox" checked> Phi² (Φ²)</label>
+                    <label><input type="checkbox" id="invPhiSquareCheckbox" checked> 1/Phi² (1/Φ²)</label>
+                </div>
+            </div>
+        </div>
+
+        <div id="plot">
+            Waveform and Frequency Plot Here
+        </div>
+
+        <button onclick="fetchWaveform()">Generate Plot</button>
+
+    </div>
+
+    <script>
+        function updateNValue(value) {
+            document.getElementById('nValueDisplay').innerText = value;
+        }
+
+        function fetchWaveform() {
+            const n = document.getElementById('nValue').value;
+            const phiChecked = document.getElementById('phiCheckbox').checked;
+            const invPhiChecked = document.getElementById('invPhiCheckbox').checked;
+            const phiSquareChecked = document.getElementById('phiSquareCheckbox').checked;
+            const invPhiSquareChecked = document.getElementById('invPhiSquareCheckbox').checked;
+
+            // Simulating a request to the backend with user selections
+            alert(`Fetching waveform for n = ${n}, Phi: ${phiChecked}, 1/Phi: ${invPhiChecked}, Phi²: ${phiSquareChecked}, 1/Phi²: ${invPhiSquareChecked}`);
+
+            // Placeholder for actual plotting logic.
+            document.getElementById('plot').innerHTML = `<strong>Generating plot for Phi Harmonics...</strong>`;
+        }
+    </script>
+
+</body>
+</html>
