@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>137 Labs | Engineering the Future of Intelligent Systems</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00bcd4;
+            --secondary-color: #0f1a30;
+            --accent-color: #ff4081;
+        }
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--secondary-color);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: rgba(26, 39, 64, 0.8);
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        header.scrolled {
+            background-color: rgba(26, 39, 64, 1);
+        }
+
+        .logo {
+            float: left;
+            font-size: 1.5em;
+            color: var(--primary-color);
+        }
+
+        nav {
+            float: right;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        section {
+            padding: 100px 60px;
+            text-align: center;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            background-image: url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 26, 48, 0.7);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .content-section {
+            background-color: #16233b;
+            margin: 20px auto;
+            padding: 60px;
+            border-radius: 10px;
+            max-width: 1200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .cta {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 15px 30px;
+            font-size: 1.5em;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .cta:hover {
+            background-color: #008ba3;
+            transform: translateY(-3px);
+        }
+
+        footer {
+            background-color: #1a2740;
+            color: #ffffff;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .tech-showcase {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .tech-item {
+            flex-basis: calc(33% - 40px);
+            margin: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .tech-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .parallax-content {
+            background-color: rgba(15, 26, 48, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                text-align: center;
+            }
+
+            .logo {
+                float: none;
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            nav {
+                float: none;
+            }
+
+            nav a {
+                display: block;
+                margin: 10px 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 40px 20px;
+            }
+
+            .tech-item {
+                flex-basis: 100%;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<header id="header">
+    <div class="logo">137 Labs</div>
+    <nav>
+        <a href="#about">About</a>
+        <a href="#technology">Technology</a>
+        <a href="#invest">Invest</a>
+        <a href="#contact">Contact</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1 data-aos="fade-up">Science Beyond the Known</h1>
+        <p data-aos="fade-up" data-aos-delay="200">Revolutionizing the future through precision, elegance, and the fundamental laws of physics.</p>
+        <a href="#invest" class="cta" data-aos="fade-up" data-aos-delay="400">Join Our Vision</a>
+    </div>
+</section>
+
+<section id="about" class="content-section" data-aos="fade-up">
+    <h2>Our Vision: Precision and Elegance Through Universal Constants</h2>
+    <p>137 Labs is at the forefront of a technological revolution, harnessing the efficiencies of the universe itself. We develop integrated, elegant systems rooted in the fundamental laws of physics—unlocking new possibilities in AI, computation, and energy storage.</p>
+</section>
+
+<section id="technology" class="content-section">
+    <h2 data-aos="fade-up">Cutting-Edge Technologies</h2>
+    <div class="tech-showcase">
+        <div class="tech-item" data-aos="fade-up">
+            <div class="tech-icon">🧠</div>
+            <h3>The Byblos Chip</h3>
+            <p>Revolutionizing AI hardware with A-A-B logic gates and waveform logic, ensuring superior performance in real-time decision-making and pattern recognition.</p>
+        </div>
+        <div class="tech-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="tech-icon">〰️</div>
+            <h3>Waveform Logic</h3>
+            <p>Encoding multiple states into a single waveform, advancing data compression and computation density beyond traditional binary systems.</p>
+        </div>
+        <div class="tech-item" data-aos="fade-up" data-aos-delay="400">
+            <div class="tech-icon">🔋</div>
+            <h3>Waveform-Based Energy Storage</h3>
+            <p>Utilizing waveform-based oscillatory cycles for improved energy density and efficiency in electric vehicles, grid storage, and renewable energy solutions.</p>
+        </div>
+    </div>
+</section>
+
+<div class="parallax" style="background-image: url('/api/placeholder/1920/1080');">
+    <div class="parallax-content">
+        <h2 data-aos="fade-up">Transforming Industries</h2>
+        <p data-aos="fade-up" data-aos-delay="200">From autonomous vehicles to AI-driven robotics and telecommunications, 137 Labs is shaping the future of technology across sectors.</p>
+    </div>
+</div>
+
+<section id="invest" class="content-section" data-aos="fade-up">
+    <h2>Invest in 137 Labs | Powering the Future</h2>
+    <p>Join us as we build the intelligent systems of tomorrow. With our cutting-edge innovations in AI hardware and energy, 137 Labs is on a clear path to becoming a unicorn by 2030.</p>
+    <p>Our groundbreaking technologies offer unparalleled opportunities for growth and impact across multiple industries. By investing in 137 Labs, you're not just funding a company—you're shaping the future of technology and sustainable energy.</p>
+    <a href="#contact" class="cta">Contact Us to Invest</a>
+</section>
+
+<section id="contact" class="content-section" data-aos="fade-up">
+    <h2>Get in Touch</h2>
+    <p>Ready to be part of the future? Contact our investor relations team to learn more about opportunities with 137 Labs.</p>
+    <form id="contact-form">
+        <input type="text" placeholder="Name" required>
+        <input type="email" placeholder="Email" required>
+        <textarea placeholder="Message" required></textarea>
+        <button type="submit" class="cta">Send Message</button>
+    </form>
+</section>
+
+<footer>
+    <div class="footer-links">
+        <a href="#about">About Us</a> | 
+        <a href="#technology">Our Technology</a> | 
+        <a href="#invest">Invest</a> | 
+        <a href="#contact">Contact</a>
+    </div>
+    <p>© 2024 137 Labs. All rights reserved.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true
+    });
+
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Form submission handling
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Thank you for your message. Our team will get back to you soon!');
+        this.reset();
+    });
+</script>
+</body>
+</html>
