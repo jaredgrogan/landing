@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud Virtual Browser</title>
+    <style>
+        /* Indigo-Cobalt Background Gradient */
+        body {
+            background: linear-gradient(135deg, #001f3f 0%, #005f9e 100%);
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Buttons Hover Effects */
+        .ai-button, .nav-button {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .ai-button:hover, .nav-button:hover {
+            background-color: #3a7bd5; /* Lighter hover effect */
+        }
+
+        /* Tooltips */
+        button[data-tooltip] {
+            position: relative;
+        }
+
+        button[data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        button[data-tooltip]:hover::after {
+            opacity: 1;
+        }
+
+        /* Gradient Text Animation */
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .ai-thinking {
+            font-size: 24px;
+            color: white;
+            background: linear-gradient(270deg, #1e90ff, #ff6347);
+            background-size: 400% 400%;
+            animation: gradientText 5s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Browser Header -->
+        <div class="browser-header">
+            <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
+            <button class="go-button" id="goButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 16 16 12 12 8"></polyline>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                Go
+            </button>
+        </div>
+
+        <!-- Browser Navigation -->
+        <div class="browser-navigation">
+            <button class="nav-button" id="backButton" data-tooltip="Go back to the previous page">Back</button>
+            <button class="nav-button" id="forwardButton" data-tooltip="Go forward to the next page">Forward</button>
+            <button class="nav-button" id="refreshButton" data-tooltip="Reload the current page">Refresh</button>
+        </div>
+
+        <!-- Browser Frame -->
+        <iframe id="browserFrame" class="browser-frame" src="about:blank"></iframe>
+
+        <!-- AI Action Buttons -->
+        <div class="ai-actions">
+            <button class="ai-button" data-action="summarize" data-tooltip="Summarize the main content of the page">Summarize</button>
+            <button class="ai-button" data-action="extract" data-tooltip="Extract key data from the content">Extract Data</button>
+            <button class="ai-button" data-action="qa" data-tooltip="Ask questions about the content">Q&A</button>
+            <button class="ai-button" data-action="explain" data-tooltip="Get a detailed explanation of the content">Explain</button>
+            <button class="ai-button" id="podcastButton" data-tooltip="Convert this page to a podcast">Podcast</button>
+        </div>
+
+        <!-- AI Thinking Indicator -->
+        <div class="ai-thinking" id="aiThinking">NeuralCloud is thinking...</div>
+
+        <!-- Result Display -->
+        <div class="result-display" id="resultDisplay"></div>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const goButton = document.getElementById('goButton');
+        const browserFrame = document.getElementById('browserFrame');
+        const aiThinking = document.getElementById('aiThinking');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const podcastButton = document.getElementById('podcastButton');
+
+        // Load URL in iframe
+        function loadUrl() {
+            const url = urlInput.value.trim();
+            if (url) {
+                const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
+                browserFrame.src = proxyUrl;
+            }
+        }
+
+        urlInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                loadUrl();
+            }
+        });
+
+        goButton.addEventListener('click', loadUrl);
+
+        // Browser navigation controls
+        const backButton = document.getElementById('backButton');
+        const forwardButton = document.getElementById('forwardButton');
+        const refreshButton = document.getElementById('refreshButton');
+
+        backButton.addEventListener('click', () => {
+            if (browserFrame.contentWindow.history.length > 1) {
+                browserFrame.contentWindow.history.back();
+            }
+        });
+
+        forwardButton.addEventListener('click', () => {
+            if (browserFrame.contentWindow.history.length > 1) {
+                browserFrame.contentWindow.history.forward();
+            }
+        });
+
+        refreshButton.addEventListener('click', () => {
+            browserFrame.contentWindow.location.reload();
+        });
+
+        // AI Podcast Button Functionality
+        podcastButton.addEventListener('click', async () => {
+            const content = document.body.innerText; // Get the page content
+            try {
+                // Send content to your back-end for GPT-4 to generate a script and 11 Labs to create audio
+                const response = await fetch('/api/podcast', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ content })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate podcast');
+                }
+
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+
+                // Optionally allow users to download the podcast
+                const downloadLink = document.createElement('a');
+                downloadLink.href = audioUrl;
+                downloadLink.download = 'podcast.mp3';
+                downloadLink.textContent = 'Download Podcast';
+                document.body.appendChild(downloadLink);
+            } catch (error) {
+                console.error('Error generating podcast:', error);
+                alert('Failed to generate podcast.');
+            }
+        });
+
+        // Fixing "Method not allowed" error
+        // Ensure server is properly handling CORS and allowing GET methods
+    </script>
+</body>
+</html>
