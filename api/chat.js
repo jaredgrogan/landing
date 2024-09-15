@@ -4,12 +4,10 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const { message, image, service, analysisType } = req.body;
-
       if (!message) {
         console.error('No message provided');
         return res.status(400).json({ error: 'Message is required' });
       }
-
       console.log('Received message:', message);
       console.log('Received service:', service);
       if (image) {
@@ -31,19 +29,16 @@ export default async function handler(req, res) {
           },
         }
       );
-
       console.log('Decrypt response status:', decryptResponse.status);
       console.log('Decrypt response data:', decryptResponse.data);
 
       // Use the decrypted key directly from the response
       const decryptedApiKey = decryptResponse.data;  // Since the response is a string
-
       if (!decryptedApiKey) {
         throw new Error('Decryption failed or key not found in the response.');
       }
 
       let aiResponse;
-
       switch (service) {
         case 'openai-vision':
           if (!image) {
@@ -52,7 +47,7 @@ export default async function handler(req, res) {
           aiResponse = await axios.post(
             'https://api.openai.com/v1/chat/completions',
             {
-              model: "gpt-4",
+              model: "gpt-4-vision-preview",
               messages: [
                 {
                   role: "user",
@@ -77,9 +72,8 @@ export default async function handler(req, res) {
             }
           );
           break;
+
         case 'openai':
-        default:
-          // This is the original GPT-3.5 implementation
           aiResponse = await axios.post(
             'https://api.openai.com/v1/chat/completions',
             {
@@ -94,16 +88,40 @@ export default async function handler(req, res) {
             }
           );
           break;
-        // Add cases for other AI services (anthropic, perplexity, etc.) here if needed
+
+        case 'perplexity':
+          aiResponse = await axios.post(
+            'https://api.perplexity.ai/chat/completions',
+            {
+              model: process.env.PERPLEXITY_MODEL_ID || 'mixtral-8x7b-instruct',
+              messages: [{ role: 'user', content: message }],
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${decryptedApiKey}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+          break;
+
+        default:
+          throw new Error('Invalid service specified');
       }
 
-      console.log('OpenAI response status:', aiResponse.status);
-      console.log('OpenAI response data:', aiResponse.data);
+      console.log('AI response status:', aiResponse.status);
+      console.log('AI response data:', aiResponse.data);
 
-      // Herakles configuration (assuming this is how it was set up before)
-      const heraklesResponse = aiResponse.data.choices[0].message.content;
+      // Extract the response content based on the service
+      let responseContent;
+      if (service === 'perplexity') {
+        responseContent = aiResponse.data.choices[0].message.content;
+      } else {
+        // OpenAI response format
+        responseContent = aiResponse.data.choices[0].message.content;
+      }
 
-      res.json({ response: heraklesResponse });
+      res.json({ response: responseContent });
     } catch (error) {
       console.error('Error in /api/chat:', error.message);
       console.error('Stack trace:', error.stack);
