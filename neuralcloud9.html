@@ -126,6 +126,27 @@
             justify-content: space-around;
         }
 
+        /* Settings Icon */
+        #settingsIcon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        /* Settings Menu */
+        #settingsMenu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* History Panel */
         #historyPanel {
             display: none;
             background-color: rgba(255, 255, 255, 0.9);
@@ -151,6 +172,33 @@
         }
 
         #historyPanel ul li:hover {
+            color: #3a7bd5;
+        }
+
+        /* Playlist Panel */
+        #playlistPanel {
+            display: none;
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 300px;
+        }
+
+        #playlistPanel ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #playlistPanel ul li {
+            margin: 5px 0;
+            cursor: pointer;
+            color: #1e1e1e;
+        }
+
+        #playlistPanel ul li:hover {
             color: #3a7bd5;
         }
 
@@ -195,6 +243,14 @@
 </head>
 <body>
     <div class="container">
+        <!-- Settings Icon -->
+        <div id="settingsIcon">⚙️</div>
+        <div id="settingsMenu">
+            <p><strong>Settings</strong></p>
+            <p>Theme: <button id="themeToggle">Toggle Theme</button></p>
+            <p>AI Model: <button id="aiModelToggle">Toggle AI Model</button></p>
+        </div>
+
         <!-- Browser Header -->
         <div class="browser-header">
             <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
@@ -233,7 +289,7 @@
         </div>
 
         <!-- AI Thinking Indicator -->
-        <div class="ai-thinking" id="aiThinking">AI is processing your request...</div>
+        <div class="ai-thinking" id="aiThinking">NeuralCloud is thinking...</div>
 
         <!-- Result Display -->
         <div class="result-display" id="resultDisplay"></div>
@@ -242,8 +298,17 @@
         <div id="loadingIndicator"></div>
 
         <!-- History Panel -->
+        <button class="ai-button" id="toggleHistory">Toggle History</button>
         <div id="historyPanel">
             <ul id="historyList"></ul>
+        </div>
+
+        <!-- Playlist Panel -->
+        <button class="ai-button" id="togglePlaylist">Playlist</button>
+        <div id="playlistPanel">
+            <ul id="playlistList"></ul>
+            <input type="text" id="playlistInput" placeholder="Enter URL">
+            <button id="addToPlaylist" class="ai-button">Add to Playlist</button>
         </div>
 
         <!-- Export Options -->
@@ -264,7 +329,12 @@
         const loadingIndicator = document.getElementById('loadingIndicator');
         const historyPanel = document.getElementById('historyPanel');
         const historyList = document.getElementById('historyList');
+        const playlistPanel = document.getElementById('playlistPanel');
+        const playlistInput = document.getElementById('playlistInput');
+        const playlistList = document.getElementById('playlistList');
+        const addToPlaylist = document.getElementById('addToPlaylist');
         let browsingHistory = [];
+        let playlist = [];
 
         // Load URL in iframe and track history
         function loadUrl() {
@@ -416,13 +486,69 @@
             link.click();
         });
 
-        // Show loading indicator during page loads
+        // Loading indicator during page load
         browserFrame.addEventListener('loadstart', () => {
             loadingIndicator.style.display = 'block';
         });
 
         browserFrame.addEventListener('loadend', () => {
             loadingIndicator.style.display = 'none';
+        });
+
+        // Toggle History Panel
+        const toggleHistory = document.getElementById('toggleHistory');
+        toggleHistory.addEventListener('click', () => {
+            historyPanel.style.display = historyPanel.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Playlist Management
+        const togglePlaylist = document.getElementById('togglePlaylist');
+        togglePlaylist.addEventListener('click', () => {
+            playlistPanel.style.display = playlistPanel.style.display === 'none' ? 'block' : 'none';
+        });
+
+        addToPlaylist.addEventListener('click', () => {
+            const url = playlistInput.value.trim();
+            if (url) {
+                playlist.push(url);
+                const li = document.createElement('li');
+                li.textContent = url;
+                li.addEventListener('click', () => {
+                    loadUrl(url);
+                });
+                playlistList.appendChild(li);
+                playlistInput.value = '';
+            }
+        });
+
+        function autoSurf() {
+            playlist.forEach((url, index) => {
+                setTimeout(() => {
+                    loadUrl(url);
+                }, index * 5000); // 5-second delay between each URL
+            });
+        }
+
+        // Settings Menu Toggle
+        const settingsIcon = document.getElementById('settingsIcon');
+        const settingsMenu = document.getElementById('settingsMenu');
+        const themeToggle = document.getElementById('themeToggle');
+        const aiModelToggle = document.getElementById('aiModelToggle');
+        let darkTheme = true;
+        let gpt4Enabled = false;
+
+        settingsIcon.addEventListener('click', () => {
+            settingsMenu.style.display = settingsMenu.style.display === 'none' ? 'block' : 'none';
+        });
+
+        themeToggle.addEventListener('click', () => {
+            document.body.style.background = darkTheme ? 'linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            darkTheme = !darkTheme;
+        });
+
+        aiModelToggle.addEventListener('click', () => {
+            alert(gpt4Enabled ? 'Switching to GPT-3.5' : 'Switching to GPT-4');
+            gpt4Enabled = !gpt4Enabled;
         });
     </script>
 </body>
