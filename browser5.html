@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Head content -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud Virtual Browser</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f0f4f8;
+            --text-color: #333;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --button-color: #154C62; /* 20% darker than background color */
+            --button-hover-color: #103B4E; /* 10% darker than --button-color */
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a5f7a 0%, #3a8fb7 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            display: flex;
+        }
+
+        .main-content {
+            flex: 1;
+            margin: 0 20px;
+        }
+
+        .side-panel {
+            width: 250px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 80vh;
+            transition: width 0.3s ease;
+        }
+
+        .side-panel.collapsed {
+            width: 50px;
+            overflow: hidden;
+        }
+
+        .panel-content {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .side-panel.collapsed .panel-content {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .panel-toggle {
+            background: var(--button-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .panel-toggle:hover {
+            background: var(--button-hover-color);
+        }
+
+        .browser-header {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .url-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            background: var(--secondary-color);
+            border-radius: 10px 0 0 10px;
+            font-size: 16px;
+        }
+
+        .go-button {
+            padding: 12px 20px;
+            background: var(--button-color);
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .go-button:hover {
+            background: var(--button-hover-color);
+        }
+
+        .browser-frame {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .ai-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ai-button {
+            padding: 10px 20px;
+            background: var(--button-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s, transform 0.1s;
+            position: relative;
+        }
+
+        .ai-button:hover {
+            background: var(--button-hover-color);
+            transform: translateY(-2px);
+        }
+
+        .ai-thinking {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+            background: linear-gradient(270deg, #4a90e2, #00416A);
+            background-size: 200% 200%;
+            animation: gradientAnimation 2s ease infinite, pulse 1.5s ease-in-out infinite;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            min-height: 100px;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 16.9px;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-right: 10px;
+        }
+
+        .nav-button {
+            background: var(--button-color);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .nav-button:hover {
+            background: var(--button-hover-color);
+        }
+
+        /* Rest of your styles remain the same */
+
+        /* Media queries */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+                flex-direction: column;
+            }
+
+            .browser-frame {
+                height: 50vh;
+            }
+
+            .ai-actions {
+                flex-direction: column;
+            }
+
+            .ai-button {
+                width: 100%;
+            }
+
+            .side-panel {
+                width: 100%;
+                max-height: 30vh;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Side Panel -->
+        <div class="side-panel" id="historyPanel">
+            <button class="panel-toggle" id="historyToggle" data-tooltip="Toggle History Panel">
+                <!-- SVG Icon -->
+            </button>
+            <div class="panel-content" id="historyContent">
+                <h3 class="white-header">Browsing History</h3>
+                <ul id="historyList"></ul>
+                <h3 class="white-header">NeuralCloud Memories</h3>
+                <ul id="memoriesList"></ul>
+                <button id="exportButton" class="ai-button">Export Memories</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Browser Header -->
+            <div class="browser-header">
+                <div class="navigation-buttons">
+                    <button class="nav-button" id="backButton" data-tooltip="Go Back">
+                        <!-- SVG Icon -->
+                    </button>
+                    <button class="nav-button" id="forwardButton" data-tooltip="Go Forward">
+                        <!-- SVG Icon -->
+                    </button>
+                    <button class="nav-button" id="refreshButton" data-tooltip="Refresh">
+                        <!-- SVG Icon -->
+                    </button>
+                </div>
+                <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
+                <button class="go-button" id="goButton" data-tooltip="Go to URL">Go</button>
+            </div>
+            <div class="loading-bar" id="loadingBar"></div>
+            <iframe id="browserFrame" class="browser-frame" src="about:blank"></iframe>
+            <div id="pageLoadingIndicator" class="page-loading-indicator">Loading...</div>
+            <!-- AI Actions -->
+            <div class="ai-actions">
+                <button class="ai-button" data-action="summarize" data-tooltip="Summarize the page content">Summarize</button>
+                <button class="ai-button" data-action="extract" data-tooltip="Extract key data from the page">Extract Data</button>
+                <button class="ai-button" data-action="explain" data-tooltip="Explain the page content">Explain</button>
+                <button class="ai-button" data-action="analyze" data-tooltip="Analyze the page content">Analyze</button>
+                <button class="ai-button" data-action="podcast" data-tooltip="Convert page to podcast-style text">Podcast</button>
+                <button class="ai-button" id="voiceSynthesis" data-tooltip="Synthesize voice">
+                    <!-- SVG Icon -->
+                </button>
+            </div>
+            <div class="ai-thinking" id="aiThinking">NeuralCloud is thinking...</div>
+            <div class="result-display" id="resultDisplay"></div>
+        </div>
+
+        <!-- Search Panel -->
+        <div class="side-panel" id="searchPanel">
+            <button class="panel-toggle" id="searchToggle" data-tooltip="Toggle Search Panel">
+                <!-- SVG Icon -->
+            </button>
+            <div class="panel-content" id="searchContent">
+                <input type="text" id="searchInput" placeholder="Search with Perplexity...">
+                <div id="autoSuggestions"></div>
+                <div id="searchToggles"></div>
+                <div id="searchProgress"></div>
+                <h3 class="white-header">Search History</h3>
+                <ul id="searchHistoryList"></ul>
+                <div id="searchResultDisplay"></div>
+                <h3 class="white-header">NeuralCloud Memories</h3>
+                <ul id="searchMemoriesList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const goButton = document.getElementById('goButton');
+        const browserFrame = document.getElementById('browserFrame');
+        const aiButtons = document.querySelectorAll('.ai-button');
+        const aiThinking = document.getElementById('aiThinking');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const backButton = document.getElementById('backButton');
+        const forwardButton = document.getElementById('forwardButton');
+        const refreshButton = document.getElementById('refreshButton');
+        const loadingBar = document.getElementById('loadingBar');
+        const historyPanel = document.getElementById('historyPanel');
+        const historyToggle = document.getElementById('historyToggle');
+        const historyList = document.getElementById('historyList');
+        const memoriesList = document.getElementById('memoriesList');
+        const exportButton = document.getElementById('exportButton');
+        const searchPanel = document.getElementById('searchPanel');
+        const searchToggle = document.getElementById('searchToggle');
+        const searchInput = document.getElementById('searchInput');
+        const autoSuggestions = document.getElementById('autoSuggestions');
+        const searchToggles = document.getElementById('searchToggles');
+        const searchProgress = document.getElementById('searchProgress');
+        const searchHistoryList = document.getElementById('searchHistoryList');
+        const searchMemoriesList = document.getElementById('searchMemoriesList');
+        const searchResultDisplay = document.getElementById('searchResultDisplay');
+        const pageLoadingIndicator = document.getElementById('pageLoadingIndicator');
+
+        let history = [];
+        let memories = [];
+        let searchHistory = [];
+
+        function loadUrl(url) {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            urlInput.value = url;
+            browserFrame.src = `/api/proxy?url=${encodeURIComponent(url)}`;
+            addToHistory(url);
+            startLoading();
+            showLoadingIndicator();
+        }
+
+        // Rest of your JavaScript code remains the same
+
+        // Initial load
+        loadUrl('https://www.universitas.pro');
+    </script>
+</body>
+</html>
