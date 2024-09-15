@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>NeuralCloud Virtual Browser</title>
+    <style>
+        :root {
+            --primary-dark: #00416A;
+            --primary-light: #00CCCB;
+            --accent: #FFD700;
+            --bg-gradient-start: #1A3A4A;
+            --bg-gradient-end: #2C5364;
+            --text-primary: #FFFFFF;
+            --text-secondary: #E0E0E0;
+            --text-disabled: #A0A0A0;
+            --button-gradient: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+            --button-hover-gradient: linear-gradient(135deg, #005483, #00E6E6);
+            --input-bg: #FFFFFF;
+            --input-text: #333333;
+            --input-border: var(--primary-light);
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --error: #F44336;
+            --info: #2196F3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: var(--accent);
+        }
+
+        .browser-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        button {
+            background: var(--button-gradient);
+            color: var(--text-primary);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--button-hover-gradient);
+        }
+
+        #urlInput {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid var(--input-border);
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #browserFrame {
+            width: 100%;
+            height: 60vh;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--input-bg);
+        }
+
+        .history-section {
+            margin-top: 20px;
+        }
+
+        #historyList {
+            list-style-type: none;
+            max-height: 150px;
+            overflow-y: auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+            display: none;
+        }
+
+        #historyList li {
+            padding: 5px 0;
+            cursor: pointer;
+        }
+
+        #historyList li:hover {
+            color: var(--accent);
+        }
+
+        .ai-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        #resultDisplay {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            min-height: 100px;
+        }
+
+        [title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .browser-controls {
+                flex-direction: column;
+            }
+
+            .navigation-buttons {
+                justify-content: space-between;
+            }
+
+            #browserFrame {
+                height: 50vh;
+            }
+
+            .ai-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NeuralCloud Virtual Browser</h1>
+        </header>
+        <nav class="browser-controls">
+            <div class="navigation-buttons">
+                <button id="backButton" title="Go Back">←</button>
+                <button id="forwardButton" title="Go Forward">→</button>
+                <button id="refreshButton" title="Refresh">↻</button>
+            </div>
+            <input type="text" id="urlInput" placeholder="Enter URL...">
+            <button id="goButton">Go</button>
+        </nav>
+        <main>
+            <iframe id="browserFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation" allow="camera *; microphone *"></iframe>
+        </main>
+        <aside class="history-section">
+            <button id="toggleHistory">History ▼</button>
+            <ul id="historyList"></ul>
+        </aside>
+        <section class="ai-actions">
+            <button class="ai-button" data-action="summarize">Summarize</button>
+            <button class="ai-button" data-action="extract">Extract Data</button>
+            <button class="ai-button" data-action="analyze">Analyze</button>
+            <button class="ai-button" data-action="translate">Translate</button>
+            <button class="ai-button" data-action="sentiment">Sentiment Analysis</button>
+            <button class="ai-button" data-action="keywords">Extract Keywords</button>
+            <button class="ai-button" data-action="questions">Generate Questions</button>
+            <button class="ai-button" data-action="facts">Fact Check</button>
+            <button class="ai-button" data-action="citations">Generate Citations</button>
+            <button class="ai-button" data-action="related">Find Related Content</button>
+        </section>
+        <section id="resultDisplay"></section>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const goButton = document.getElementById('goButton');
+        const browserFrame = document.getElementById('browserFrame');
+        const backButton = document.getElementById('backButton');
+        const forwardButton = document.getElementById('forwardButton');
+        const refreshButton = document.getElementById('refreshButton');
+        const toggleHistory = document.getElementById('toggleHistory');
+        const historyList = document.getElementById('historyList');
+        const aiButtons = document.querySelectorAll('.ai-button');
+        const resultDisplay = document.getElementById('resultDisplay');
+
+        let history = [];
+        let currentHistoryIndex = -1;
+
+        function loadUrl(url) {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            browserFrame.src = `/api/proxy?url=${encodeURIComponent(url)}`;
+            urlInput.value = url;
+            addToHistory(url);
+        }
+
+        function addToHistory(url) {
+            history = history.slice(0, currentHistoryIndex + 1);
+            history.push(url);
+            currentHistoryIndex = history.length - 1;
+            updateHistoryList();
+        }
+
+        function updateHistoryList() {
+            historyList.innerHTML = '';
+            history.forEach((url, index) => {
+                const li = document.createElement('li');
+                li.textContent = url;
+                li.addEventListener('click', () => {
+                    currentHistoryIndex = index;
+                    loadUrl(url);
+                });
+                historyList.appendChild(li);
+            });
+        }
+
+        function goBack() {
+            if (currentHistoryIndex > 0) {
+                currentHistoryIndex--;
+                loadUrl(history[currentHistoryIndex]);
+            }
+        }
+
+        function goForward() {
+            if (currentHistoryIndex < history.length - 1) {
+                currentHistoryIndex++;
+                loadUrl(history[currentHistoryIndex]);
+            }
+        }
+
+        async function getIFrameContent() {
+            try {
+                const response = await fetch(`/api/proxy?url=${encodeURIComponent(browserFrame.src)}&getContent=true`);
+                if (!response.ok) throw new Error('Failed to fetch content');
+                return await response.text();
+            } catch (error) {
+                console.error('Failed to get iframe content:', error);
+                return null;
+            }
+        }
+
+        async function sendToAI(action) {
+            const content = await getIFrameContent();
+            if (!content) {
+                resultDisplay.textContent = 'Unable to retrieve content. Please ensure the page has loaded.';
+                return;
+            }
+
+            resultDisplay.textContent = 'Processing...';
+
+            try {
+                const response = await fetch('/api/ai', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action, content })
+                });
+
+                if (!response.ok) {
+                    throw new Error('AI request failed');
+                }
+
+                const data = await response.json();
+                resultDisplay.textContent = data.result;
+            } catch (error) {
+                console.error('Error sending to AI:', error);
+                resultDisplay.textContent = 'An error occurred while processing your request. Please try again.';
+            }
+        }
+
+        urlInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                loadUrl(urlInput.value);
+            }
+        });
+
+        goButton.addEventListener('click', () => loadUrl(urlInput.value));
+        backButton.addEventListener('click', goBack);
+        forwardButton.addEventListener('click', goForward);
+        refreshButton.addEventListener('click', () => browserFrame.contentWindow.location.reload());
+
+        toggleHistory.addEventListener('click', () => {
+            historyList.style.display = historyList.style.display === 'none' ? 'block' : 'none';
+            toggleHistory.textContent = historyList.style.display === 'none' ? 'History ▼' : 'History ▲';
+        });
+
+        aiButtons.forEach(button => {
+            button.addEventListener('click', () => sendToAI(button.dataset.action));
+        });
+
+        window.addEventListener('message', (event) => {
+            if (event.origin !== window.location.origin) return;
+            
+            if (event.data.type === 'navigationRequest') {
+                loadUrl(event.data.url);
+            }
+        });
+
+        // Initial load
+        loadUrl('https://example.com');
+    </script>
+</body>
+</html>
