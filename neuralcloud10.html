@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud Virtual Browser</title>
+    <style>
+        :root {
+            --primary-color: #1e1e1e;
+            --secondary-color: #f0f4f8;
+            --accent-color: #4a90e2;
+            --text-color: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            position: relative;
+        }
+
+        /* Settings Icon */
+        #settingsIcon {
+            position: absolute;
+            top: -10px;
+            right: -20px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        #settingsIcon img {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Settings Menu */
+        #settingsMenu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            z-index: 100;
+        }
+
+        .browser-header {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .url-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            background: var(--secondary-color);
+            border-radius: 10px 0 0 10px;
+            font-size: 16px;
+        }
+
+        .go-button {
+            padding: 12px 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .go-button svg {
+            margin-right: 5px;
+        }
+
+        .browser-frame {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .ai-actions, .export-actions {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .ai-button, .nav-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .ai-button:hover, .nav-button:hover {
+            background-color: #333333;
+        }
+
+        .ai-thinking {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+            color: var(--accent-color);
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: none;
+            color: white;
+        }
+
+        .browser-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        /* Playlist Panel */
+        #playlistPanel {
+            display: none;
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 300px;
+            z-index: 100;
+        }
+
+        #playlistPanel ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #playlistPanel ul li {
+            margin: 5px 0;
+            cursor: pointer;
+            color: #1e1e1e;
+        }
+
+        #playlistPanel ul li:hover {
+            color: #3a7bd5;
+        }
+
+        #loadingIndicator {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Settings Icon -->
+        <div id="settingsIcon">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png" alt="Settings Icon">
+        </div>
+        <div id="settingsMenu">
+            <p><strong>Settings</strong></p>
+            <p>Theme:
+                <select id="themeSelector">
+                    <option value="default">Default</option>
+                    <option value="home">Home.jpeg</option>
+                    <option value="beach">Beach.jpeg</option>
+                    <option value="island">Island.jpeg</option>
+                    <option value="alpine">Alpine.jpeg</option>
+                    <option value="loft">Loft.jpeg</option>
+                    <option value="palms">Palms.jpeg</option>
+                </select>
+            </p>
+        </div>
+
+        <!-- Browser Header -->
+        <div class="browser-header">
+            <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
+            <button class="go-button" id="goButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 16 16 12 12 8"></polyline>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                Go
+            </button>
+        </div>
+
+        <!-- Browser Navigation -->
+        <div class="browser-navigation">
+            <button class="nav-button" id="backButton">Back</button>
+            <button class="nav-button" id="forwardButton">Forward</button>
+            <button class="nav-button" id="refreshButton">Refresh</button>
+        </div>
+
+        <!-- Browser Frame -->
+        <iframe id="browserFrame" class="browser-frame" src="about:blank"></iframe>
+
+        <!-- AI Action Buttons -->
+        <div class="ai-actions">
+            <button class="ai-button" data-action="summarize">Summarize</button>
+            <button class="ai-button" data-action="extract">Extract Data</button>
+            <button class="ai-button" data-action="qa">Q&A</button>
+            <button class="ai-button" data-action="explain">Explain</button>
+            <button class="ai-button" id="voicePlaybackButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18V6l10 6-10 6z"></path>
+                </svg>
+                Play Voice
+            </button>
+            <button class="ai-button" id="podcastButton">Podcast</button>
+        </div>
+
+        <!-- AI Thinking Indicator -->
+        <div class="ai-thinking" id="aiThinking">NeuralCloud is thinking...</div>
+
+        <!-- Result Display -->
+        <div class="result-display" id="resultDisplay"></div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator"></div>
+
+        <!-- Playlist Panel -->
+        <button class="ai-button" id="togglePlaylist">Playlist</button>
+        <div id="playlistPanel">
+            <ul id="playlistList"></ul>
+            <input type="text" id="playlistInput" placeholder="Enter URL">
+            <button id="addToPlaylist" class="ai-button">Add to Playlist</button>
+            <button id="autoSurf" class="ai-button">Auto-Surf</button>
+        </div>
+
+        <!-- Export Options -->
+        <div class="export-actions">
+            <button class="ai-button" id="exportPDFButton">Export to PDF</button>
+            <button class="ai-button" id="exportTXTButton">Export to TXT</button>
+        </div>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const goButton = document.getElementById('goButton');
+        const browserFrame = document.getElementById('browserFrame');
+        const aiButtons = document.querySelectorAll('.ai-button');
+        const aiThinking = document.getElementById('aiThinking');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const voicePlaybackButton = document.getElementById('voicePlaybackButton');
+        const podcastButton = document.getElementById('podcastButton');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const settingsIcon = document.getElementById('settingsIcon');
+        const settingsMenu = document.getElementById('settingsMenu');
+        const themeSelector = document.getElementById('themeSelector');
+        const playlistPanel = document.getElementById('playlistPanel');
+        const playlistInput = document.getElementById('playlistInput');
+        const playlistList = document.getElementById('playlistList');
+        const addToPlaylist = document.getElementById('addToPlaylist');
+        const autoSurfButton = document.getElementById('autoSurf');
+        let playlist = [];
+
+        // Theme Selector
+        themeSelector.addEventListener('change', (event) => {
+            const selectedTheme = event.target.value;
+            document.body.style.backgroundImage = `url('${selectedTheme}.jpeg')`;
+        });
+
+        // Load URL in iframe
+        function loadUrl() {
+            const url = urlInput.value.trim();
+            if (url) {
+                const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
+                browserFrame.src = proxyUrl;
+            }
+        }
+
+        urlInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                loadUrl();
+            }
+        });
+
+        goButton.addEventListener('click', loadUrl);
+
+        // Browser navigation controls
+        document.getElementById('backButton').addEventListener('click', () => {
+            browserFrame.contentWindow.history.back();
+        });
+
+        document.getElementById('forwardButton').addEventListener('click', () => {
+            browserFrame.contentWindow.history.forward();
+        });
+
+        document.getElementById('refreshButton').addEventListener('click', () => {
+            browserFrame.contentWindow.location.reload();
+        });
+
+        // AI Action Handlers
+        async function getIFrameContent() {
+            try {
+                const iframeDocument = browserFrame.contentDocument || browserFrame.contentWindow.document;
+                return iframeDocument.body.innerText || iframeDocument.body.textContent;
+            } catch (error) {
+                console.error('Failed to get iframe content:', error);
+                return null;
+            }
+        }
+
+        async function sendToAI(action) {
+            const content = await getIFrameContent();
+            if (!content) return;
+
+            aiThinking.style.display = 'block';
+            resultDisplay.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: `${action}: ${content}`,
+                        service: 'openai'
+                    })
+                });
+                const data = await response.json();
+
+                aiThinking.style.display = 'none';
+                resultDisplay.style.display = 'block';
+                resultDisplay.textContent = data.response;
+            } catch (error) {
+                console.error('Error sending to AI:', error);
+                aiThinking.style.display = 'none';
+                resultDisplay.style.display = 'block';
+                resultDisplay.textContent = 'Error processing AI request.';
+            }
+        }
+
+        aiButtons.forEach(button => {
+            button.addEventListener('click', () => sendToAI(button.dataset.action));
+        });
+
+        // Voice Synthesis Integration
+        voicePlaybackButton.addEventListener('click', async () => {
+            const text = resultDisplay.textContent.trim();
+            if (!text) {
+                alert('No text available for voice synthesis');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/voice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch audio');
+                }
+
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+
+                // Optional download link for audio file
+                const downloadLink = document.createElement('a');
+                downloadLink.href = audioUrl;
+                downloadLink.download = 'result.mp3';
+                downloadLink.textContent = 'Download MP3';
+                resultDisplay.appendChild(downloadLink);
+            } catch (error) {
+                console.error('Error playing voice:', error);
+                alert('Voice playback failed. Try again.');
+            }
+        });
+
+        // Podcast Feature
+        podcastButton.addEventListener('click', async () => {
+            const content = resultDisplay.textContent.trim();
+            if (!content) {
+                alert('No content available for podcast');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/podcast', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ content })
+                });
+
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+            } catch (error) {
+                console.error('Error generating podcast:', error);
+                alert('Podcast generation failed.');
+            }
+        });
+
+        // Playlist Management
+        document.getElementById('togglePlaylist').addEventListener('click', () => {
+            playlistPanel.style.display = playlistPanel.style.display === 'none' ? 'block' : 'none';
+        });
+
+        addToPlaylist.addEventListener('click', () => {
+            const url = playlistInput.value.trim();
+            if (url) {
+                playlist.push(url);
+                const li = document.createElement('li');
+                li.textContent = url;
+                li.addEventListener('click', () => {
+                    loadUrl(url);
+                });
+                playlistList.appendChild(li);
+                playlistInput.value = '';
+            }
+        });
+
+        autoSurfButton.addEventListener('click', () => {
+            playlist.forEach((url, index) => {
+                setTimeout(() => {
+                    loadUrl(url);
+                }, index * 5000); // 5 seconds delay between each site
+            });
+        });
+
+        // Show loading indicator during page load
+        browserFrame.addEventListener('loadstart', () => {
+            loadingIndicator.style.display = 'block';
+        });
+
+        browserFrame.addEventListener('loadend', () => {
+            loadingIndicator.style.display = 'none';
+        });
+
+        // Toggle Settings Menu
+        settingsIcon.addEventListener('click', () => {
+            settingsMenu.style.display = settingsMenu.style.display === 'none' ? 'block' : 'none';
+        });
+
+    </script>
+</body>
+</html>
