@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud Virtual Browser</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --button-color: #2a6f8a;
+            --bg-color: #4d8fa7;
+            --console-color: #4d8fa7;
+            --url-input-color: #5eabc3;  /* 20% lighter than console background */
+            --bg-gradient: linear-gradient(135deg, #3a7f9a 0%, #5a9cb4 100%);
+            --text-color: #333;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-gradient);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: var(--console-color);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            display: flex;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .browser-header {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .url-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            background: var(--url-input-color);
+            border-radius: 10px 0 0 10px;
+            font-size: 16px;
+            color: white;
+        }
+
+        .go-button {
+            padding: 12px 20px;
+            background: var(--button-color);
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .go-button:hover {
+            background: #377d98;
+        }
+
+        .browser-frame {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .ai-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ai-button {
+            padding: 10px 20px;
+            background: var(--button-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s, transform 0.1s;
+            position: relative;
+        }
+
+        .ai-button:hover {
+            background: #377d98;
+            transform: translateY(-2px);
+        }
+
+        .ai-thinking {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+            color: white;
+            font-size: 18.2px;
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            min-height: 100px;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 16.9px;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-right: 10px;
+        }
+
+        .nav-button {
+            background: var(--button-color);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .nav-button:hover {
+            background: #377d98;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .back-triangle {
+            border-width: 7px 10px 7px 0;
+            border-color: transparent white transparent transparent;
+        }
+
+        .forward-triangle {
+            border-width: 7px 0 7px 10px;
+            border-color: transparent transparent transparent white;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .refresh-icon.spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        .history-panel {
+            width: 250px;
+            background: var(--console-color);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--glass-border);
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 80vh;
+            transition: width 0.3s ease;
+        }
+
+        .history-panel.collapsed {
+            width: 50px;
+        }
+
+        .history-content {
+            transition: opacity 0.3s ease;
+        }
+
+        .history-panel.collapsed .history-content {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .history-toggle, .memories-toggle, .export-button {
+            background: var(--button-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .history-toggle:hover, .memories-toggle:hover, .export-button:hover {
+            background: #377d98;
+        }
+
+        .history-list, .memories-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .history-item, .memory-item {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            color: white;
+        }
+
+        .history-item:hover, .memory-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .loading-bar {
+            height: 3px;
+            background-color: #4a90e2;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .loading-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(--50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--secondary-color);
+            font-size: 12px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            background: var(--url-input-color);
+            color: white;
+        }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+                flex-direction: column;
+            }
+
+            .browser-frame {
+                height: 50vh;
+            }
+
+            .ai-actions {
+                flex-direction: column;
+            }
+
+            .ai-button {
+                width: 100%;
+            }
+
+            .history-panel {
+                width: 100%;
+                max-height: 30vh;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="history-panel" id="historyPanel">
+            <button class="history-toggle" id="historyToggle" data-tooltip="Toggle History Panel">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 3v18h18"></path>
+                    <path d="M12 8v4l3 3"></path>
+                </svg>
+            </button>
+            <div class="history-content" id="historyContent">
+                <input type="text" id="searchInput" placeholder="Search history and memories..." data-tooltip="Search history and memories">
+                <div class="history-section">
+                    <h3>Browsing History</h3>
+                    <ul class="history-list" id="historyList"></ul>
+                </div>
+                <div class="memories-section">
+                    <h3>NeuralCloud Memories</h3>
+                    <ul class="memories-list" id="memoriesList"></ul>
+                </div>
+                <button class="export-button" id="exportButton" data-tooltip="Export memories">Export</button>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="browser-header">
+                <div class="navigation-buttons">
+                    <button class="nav-button" id="backButton" data-tooltip="Go Back">
+                        <div class="triangle back-triangle"></div>
+                    </button>
+                    <button class="nav-button" id="forwardButton" data-tooltip="Go Forward">
+                        <div class="triangle forward-triangle"></div>
+                    </button>
+                    <button class="nav-button" id="refreshButton" data-tooltip="Refresh">
+                        <svg class="refresh-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                        </svg>
+                    </button>
+                </div>
+                <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
+                <button class="go-button" id="goButton" data-tooltip="Go to URL">Go</button>
+            </div>
+            <div class="loading-bar" id="loadingBar"></div>
+            <iframe id="browserFrame" class="browser-frame" src="about:blank"></iframe>
+            <div class="loading-display" id="loadingDisplay">Loading...</div>
+            <div class="ai-actions">
+                <button class="ai-button" data-action="summarize" data-tooltip="Summarize the page content">Summarize</button>
+                <button class="ai-button" data-action="extract" data-tooltip="Extract key data from the page">Extract Data</button>
+                <button class="ai-button" data-action="explain" data-tooltip="Explain the page content">Explain</button>
+                <button class="ai-button" data-action="analyze" data-tooltip="Analyze the page content">Analyze</button>
+                <button class="ai-button" data-action="podcast" data-tooltip="Convert page to podcast-style text">Podcast</button>
+                <button class="ai-button" id="voiceSynthesis" data-tooltip="Synthesize voice">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="ai-thinking" id="aiThinking">NeuralCloud is thinking...</div>
+            <div class="result-display" id="resultDisplay"></div>
+            <div class="copyright">Copyright 2024 Neuralcloud.ai</div>
+        </div>
+    </div>
+
+   <script>
+    const urlInput = document.getElementById('urlInput');
+    const goButton = document.getElementById('goButton');
+    const browserFrame = document.getElementById('browserFrame');
+    const aiButtons = document.querySelectorAll('.ai-button');
+    const aiThinking = document.getElementById('aiThinking');
+    const resultDisplay = document.getElementById('resultDisplay');
+    const backButton = document.getElementById('backButton');
+    const forwardButton = document.getElementById('forwardButton');
+    const refreshButton = document.getElementById('refreshButton');
+    const loadingBar = document.getElementById('loadingBar');
+    const historyPanel = document.getElementById('historyPanel');
+    const historyToggle = document.getElementById('historyToggle');
+    const historyList = document.getElementById('historyList');
+    const memoriesToggle = document.getElementById('memoriesToggle');
+    const memoriesList = document.getElementById('memoriesList');
+    const voiceSynthesisButton = document.getElementById('voiceSynthesis');
+    const loadingDisplay = document.getElementById('loadingDisplay');
+    const exportButton = document.getElementById('exportButton');
+    const searchInput = document.getElementById('searchInput');
+
+    let history = [];
+    let memories = [];
+
+    function loadUrl(url) {
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+        urlInput.value = url;
+        browserFrame.src = `/api/proxy?url=${encodeURIComponent(url)}`;
+        addToHistory(url);
+        startLoading();
+        showLoadingDisplay();
+    }
+
+    function startLoading() {
+        loadingBar.style.width = '0%';
+        loadingBar.style.display = 'block';
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 10;
+            if (progress >= 100) {
+                clearInterval(interval);
+                loadingBar.style.width = '100%';
+                setTimeout(() => {
+                    loadingBar.style.display = 'none';
+                }, 200);
+            } else {
+                loadingBar.style.width = `${progress}%`;
+            }
+        }, 200);
+    }
+
+    function showLoadingDisplay() {
+        loadingDisplay.style.display = 'block';
+    }
+
+    function hideLoadingDisplay() {
+        loadingDisplay.style.display = 'none';
+    }
+
+    function addToHistory(url) {
+        history.unshift(url);
+        updateHistoryList();
+    }
+
+    function updateHistoryList() {
+        historyList.innerHTML = '';
+        history.forEach((url, index) => {
+            const li = document.createElement('li');
+            li.textContent = url;
+            li.classList.add('history-item');
+            li.addEventListener('click', () => loadUrl(url));
+            historyList.appendChild(li);
+        });
+    }
+
+    function addToMemories(action, url, content) {
+        memories.unshift({ action, url, content });
+        updateMemoriesList();
+    }
+
+    function updateMemoriesList() {
+        memoriesList.innerHTML = '';
+        memories.forEach((memory, index) => {
+            const li = document.createElement('li');
+            li.classList.add('memory-item');
+            li.innerHTML = `
+                <div class="memory-header">${memory.action} - ${memory.url}</div>
+                <div class="memory-content">${memory.content}</div>
+            `;
+            li.addEventListener('click', () => {
+                li.querySelector('.memory-content').style.display = 
+                    li.querySelector('.memory-content').style.display === 'none' ? 'block' : 'none';
+            });
+            memoriesList.appendChild(li);
+        });
+    }
+
+    urlInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            loadUrl(urlInput.value);
+        }
+    });
+
+    goButton.addEventListener('click', () => loadUrl(urlInput.value));
+    backButton.addEventListener('click', () => browserFrame.contentWindow.history.back());
+    forwardButton.addEventListener('click', () => browserFrame.contentWindow.history.forward());
+    refreshButton.addEventListener('click', () => {
+        const refreshIcon = refreshButton.querySelector('.refresh-icon');
+        refreshIcon.classList.add('spinning');
+        browserFrame.contentWindow.location.reload();
+        setTimeout(() => {
+            refreshIcon.classList.remove('spinning');
+        }, 1000);
+    });
+
+    historyToggle.addEventListener('click', () => {
+        historyPanel.classList.toggle('collapsed');
+        historyToggle.innerHTML = historyPanel.classList.contains('collapsed') ? 
+            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>' : 
+            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M12 8v4l3 3"></path></svg>';
+    });
+
+    async function getIFrameContent() {
+        try {
+            const response = await fetch(`/api/proxy?url=${encodeURIComponent(browserFrame.src)}&getContent=true`);
+            if (!response.ok) throw new Error('Failed to fetch content');
+            return await response.text();
+        } catch (error) {
+            console.error('Failed to get iframe content:', error);
+            return null;
+        }
+    }
+
+    async function sendToAI(action) {
+        const content = await getIFrameContent();
+        if (!content) {
+            resultDisplay.textContent = 'Unable to retrieve content. Please ensure the page has loaded.';
+            return;
+        }
+
+        aiThinking.style.display = 'block';
+        resultDisplay.style.display = 'none';
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: `${action}: ${content}`,
+                    service: 'openai'
+                })
+            });
+            const data = await response.json();
+            
+            aiThinking.style.display = 'none';
+            resultDisplay.style.display = 'block';
+            resultDisplay.textContent = data.response;
+            addToMemories(action, browserFrame.src, data.response);
+        } catch (error) {
+            console.error('Error sending to AI:', error);
+            aiThinking.style.display = 'none';
+            resultDisplay.style.display = 'block';
+            resultDisplay.textContent = 'Error processing AI request.';
+        }
+    }
+
+    aiButtons.forEach(button => {
+        button.addEventListener('click', () => sendToAI(button.dataset.action));
+    });
+
+    voiceSynthesisButton.addEventListener('click', async () => {
+        const content = await getIFrameContent();
+        if (!content) return;
+
+        aiThinking.style.display = 'block';
+        resultDisplay.style.display = 'none';
+
+        try {
+            const response = await fetch('/api/voice-synthesis', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ content })
+            });
+
+            if (!response.ok) {
+                throw new Error('Voice synthesis request failed');
+            }
+
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            
+            aiThinking.style.display = 'none';
+            resultDisplay.style.display = 'block';
+            
+            const audioElement = document.createElement('audio');
+            audioElement.src = audioUrl;
+            audioElement.controls = true;
+            resultDisplay.innerHTML = '';
+            resultDisplay.appendChild(audioElement);
+        } catch (error) {
+            console.error('Error in voice synthesis:', error);
+            aiThinking.style.display = 'none';
+            resultDisplay.style.display = 'block';
+            resultDisplay.textContent = 'Error in voice synthesis. Please try again.';
+        }
+    });
+
+    browserFrame.addEventListener('load', () => {
+        hideLoadingDisplay();
+        loadingBar.style.width = '100%';
+        setTimeout(() => {
+            loadingBar.style.display = 'none';
+        }, 200);
+    });
+
+    exportButton.addEventListener('click', () => {
+        const content = memories.map(memory => `${memory.action} - ${memory.url}\n\n${memory.content}\n\n---\n\n`).join('');
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'neuralcloud_memories.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        
+        // Search in history
+        const historyItems = historyList.querySelectorAll('.history-item');
+        historyItems.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+
+        // Search in memories
+        const memoryItems = memoriesList.querySelectorAll('.memory-item');
+        memoryItems.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+
+    // Initial load
+    loadUrl('https://www.universitas.pro');
+</script>
+</body>
+</html>
