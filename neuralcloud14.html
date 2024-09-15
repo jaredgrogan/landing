@@ -358,6 +358,7 @@ const exportTXTButton = document.getElementById('exportTXTButton');
 const mobileMenuToggle = document.getElementById('mobileMenuToggle');
 const mobileMenuContent = document.getElementById('mobileMenuContent');
 const actions = document.querySelector('.actions');
+const loadingIndicator = document.getElementById('loadingIndicator');
 
 // Settings and theme selection
 settingsIcon.addEventListener('click', () => {
@@ -404,16 +405,32 @@ buttons.forEach(button => {
 });
 
 // Browser navigation functionality
-goButton.addEventListener('click', () => {
-    const url = urlInput.value;
+async function navigateToUrl(url) {
     if (url) {
-        browserFrame.src = url.startsWith('http') ? url : `https://${url}`;
+        loadingIndicator.style.display = 'block';
+        const fullUrl = url.startsWith('http') ? url : `https://${url}`;
+        try {
+            const response = await fetch(`/api/proxy?url=${encodeURIComponent(fullUrl)}`);
+            const html = await response.text();
+            const blob = new Blob([html], { type: 'text/html' });
+            const blobUrl = URL.createObjectURL(blob);
+            browserFrame.src = blobUrl;
+        } catch (error) {
+            console.error('Error fetching URL:', error);
+            resultDisplay.textContent = 'Error loading page. Please try again.';
+        } finally {
+            loadingIndicator.style.display = 'none';
+        }
     }
+}
+
+goButton.addEventListener('click', () => {
+    navigateToUrl(urlInput.value.trim());
 });
 
 urlInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-        goButton.click();
+        navigateToUrl(urlInput.value.trim());
     }
 });
 
@@ -431,30 +448,102 @@ refreshButton.addEventListener('click', () => {
 
 // AI action buttons functionality
 aiButtons.forEach(button => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
         const action = button.getAttribute('data-action');
         aiThinking.style.display = 'block';
         resultDisplay.style.display = 'none';
 
-        // Simulating AI processing
-        setTimeout(() => {
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: `${action}: ${await getIFrameContent()}`,
+                    service: 'openai'
+                })
+            });
+            const data = await response.json();
+
             aiThinking.style.display = 'none';
             resultDisplay.style.display = 'block';
-            resultDisplay.textContent = `${action.charAt(0).toUpperCase() + action.slice(1)} action completed.`;
-        }, 2000);
+            resultDisplay.textContent = data.response;
+        } catch (error) {
+            console.error('Error processing AI request:', error);
+            aiThinking.style.display = 'none';
+            resultDisplay.style.display = 'block';
+            resultDisplay.textContent = 'Error processing AI request. Please try again.';
+        }
     });
 });
 
+async function getIFrameContent() {
+    try {
+        const iframeDocument = browserFrame.contentDocument || browserFrame.contentWindow.document;
+        return iframeDocument.body.innerText || iframeDocument.body.textContent;
+    } catch (error) {
+        console.error('Failed to get iframe content:', error);
+        return null;
+    }
+}
+
 // Voice playback button functionality
-voicePlaybackButton.addEventListener('click', () => {
-    // Implement voice playback functionality here
-    console.log('Voice playback started');
+voicePlaybackButton.addEventListener('click', async () => {
+    const text = resultDisplay.textContent.trim();
+    if (!text) {
+        alert('No text available for voice synthesis');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/voice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text: text })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch audio');
+        }
+
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioUrl);
+        audio.play();
+    } catch (error) {
+        console.error('Error playing voice:', error);
+        alert('Voice playback failed. Try again.');
+    }
 });
 
 // Podcast button functionality
-podcastButton.addEventListener('click', () => {
-    // Implement podcast generation functionality here
-    console.log('Podcast generation started');
+podcastButton.addEventListener('click', async () => {
+    const content = resultDisplay.textContent.trim();
+    if (!content) {
+        alert('No content available for podcast');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/podcast', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content })
+        });
+
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioUrl);
+        audio.play();
+    } catch (error) {
+        console.error('Error generating podcast:', error);
+        alert('Podcast generation failed.');
+    }
 });
 
 // Playlist functionality
@@ -477,7 +566,7 @@ autoSurfButton.addEventListener('click', () => {
     let index = 0;
     const surf = () => {
         if (index < urls.length) {
-            browserFrame.src = urls[index];
+            navigateToUrl(urls[index]);
             index++;
             setTimeout(surf, 5000); // Change URL every 5 seconds
         }
@@ -486,14 +575,46 @@ autoSurfButton.addEventListener('click', () => {
 });
 
 // Export buttons functionality
-exportPDFButton.addEventListener('click', () => {
-    // Implement PDF export functionality here
-    console.log('Exporting to PDF');
+exportPDFButton.addEventListener('click', async () => {
+    try {
+        const response = await fetch('/api/export-pdf', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: await getIFrameContent() })
+        });
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'export.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('Error exporting to PDF:', error);
+        alert('PDF export failed. Please try again.');
+    }
 });
 
-exportTXTButton.addEventListener('click', () => {
-    // Implement TXT export functionality here
-    console.log('Exporting to TXT');
+exportTXTButton.addEventListener('click', async () => {
+    try {
+        const content = await getIFrameContent();
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'export.txt';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('Error exporting to TXT:', error);
+        alert('TXT export failed. Please try again.');
+    }
 });
 
 // Mobile menu functionality
@@ -511,36 +632,9 @@ actions.querySelectorAll('.button').forEach(button => {
 document.querySelectorAll('.button, #settingsIcon, #mobileMenuToggle').forEach(element => {
     element.style.transition = 'all 0.3s ease';
 });
-// Browser navigation functionality
-goButton.addEventListener('click', () => {
-    navigateToUrl();
-});
 
-urlInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        navigateToUrl();
-    }
-});
-
-function navigateToUrl() {
-    const url = urlInput.value.trim();
-    if (url) {
-        const fullUrl = url.startsWith('http') ? url : `https://${url}`;
-        browserFrame.src = `/api/proxy?url=${encodeURIComponent(fullUrl)}`;
-    }
-}
-
-backButton.addEventListener('click', () => {
-    browserFrame.contentWindow.history.back();
-});
-
-forwardButton.addEventListener('click', () => {
-    browserFrame.contentWindow.history.forward();
-});
-
-refreshButton.addEventListener('click', () => {
-    browserFrame.contentWindow.location.reload();
-});
+// Initialize iframe
+browserFrame.src = 'about:blank';
 
     </script>
 </body>
