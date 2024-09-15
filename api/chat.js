@@ -112,7 +112,7 @@ export default async function handler(req, res) {
       console.log('AI response status:', aiResponse.status);
       console.log('AI response data:', aiResponse.data);
 
-      // Extract the response content based on the service
+     // Extract the response content based on the service
       let responseContent;
       if (service === 'perplexity') {
         responseContent = aiResponse.data.choices[0].message.content;
@@ -121,6 +121,10 @@ export default async function handler(req, res) {
         responseContent = aiResponse.data.choices[0].message.content;
       }
 
+      // Log the response content for debugging
+      console.log('Response content:', responseContent);
+
+      // Send the response back to the client
       res.json({ response: responseContent });
     } catch (error) {
       console.error('Error in /api/chat:', error.message);
