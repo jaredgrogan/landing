@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud Virtual Browser</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f0f4f8;
+            --text-color: #333;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .browser-header {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .url-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            background: var(--secondary-color);
+            border-radius: 10px 0 0 10px;
+            font-size: 16px;
+        }
+
+        .go-button {
+            padding: 12px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .go-button:hover {
+            background-color: #3a7bd5;
+        }
+
+        .browser-frame {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .ai-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ai-button {
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .ai-button:hover {
+            background-color: #3a7bd5;
+            transform: translateY(-2px);
+        }
+
+        .ai-thinking {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+            color: #4a90e2;
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            min-height: 100px;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-right: 10px;
+        }
+
+        .nav-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .nav-button:hover {
+            background-color: #3a7bd5;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .back-triangle {
+            border-width: 7px 10px 7px 0;
+            border-color: transparent white transparent transparent;
+        }
+
+        .forward-triangle {
+            border-width: 7px 0 7px 10px;
+            border-color: transparent transparent transparent white;
+        }
+
+        .refresh-icon {
+            width: 16px;
+            height: 16px;
+            border: 2px solid white;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite paused;
+        }
+
+        .nav-button:hover .refresh-icon {
+            animation-play-state: running;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--secondary-color);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+
+            .browser-frame {
+                height: 50vh;
+            }
+
+            .ai-actions {
+                flex-direction: column;
+            }
+
+            .ai-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="browser-header">
+            <div class="navigation-buttons">
+                <button class="nav-button" id="backButton" title="Go Back">
+                    <div class="triangle back-triangle"></div>
+                </button>
+                <button class="nav-button" id="forwardButton" title="Go Forward">
+                    <div class="triangle forward-triangle"></div>
+                </button>
+                <button class="nav-button" id="refreshButton" title="Refresh">
+                    <div class="refresh-icon"></div>
+                </button>
+            </div>
+            <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
+            <button class="go-button" id="goButton">
+                Go
+            </button>
+        </div>
+        <iframe id="browserFrame" class="browser-frame" src="about:blank"></iframe>
+        <div class="ai-actions">
+            <button class="ai-button" data-action="summarize">Summarize</button>
+            <button class="ai-button" data-action="extract">Extract Data</button>
+            <button class="ai-button" data-action="analyze">Analyze</button>
+            <button class="ai-button" data-action="qa">Q&A</button>
+            <button class="ai-button" data-action="explain">Explain</button>
+        </div>
+        <div class="ai-thinking" id="aiThinking">AI is processing your request...</div>
+        <div class="result-display" id="resultDisplay"></div>
+        <div class="copyright">Copyright 2024 Neuralcloud.ai</div>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const goButton = document.getElementById('goButton');
+        const browserFrame = document.getElementById('browserFrame');
+        const aiButtons = document.querySelectorAll('.ai-button');
+        const aiThinking = document.getElementById('aiThinking');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const backButton = document.getElementById('backButton');
+        const forwardButton = document.getElementById('forwardButton');
+        const refreshButton = document.getElementById('refreshButton');
+
+        function loadUrl() {
+            const url = urlInput.value.trim();
+            if (url) {
+                const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
+                browserFrame.src = proxyUrl;
+            }
+        }
+
+        urlInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                loadUrl();
+            }
+        });
+
+        goButton.addEventListener('click', loadUrl);
+        backButton.addEventListener('click', () => browserFrame.contentWindow.history.back());
+        forwardButton.addEventListener('click', () => browserFrame.contentWindow.history.forward());
+        refreshButton.addEventListener('click', () => browserFrame.contentWindow.location.reload());
+
+        async function getIFrameContent() {
+            try {
+                const iframeDocument = browserFrame.contentDocument || browserFrame.contentWindow.document;
+                return iframeDocument.body.innerText || iframeDocument.body.textContent;
+            } catch (error) {
+                console.error('Failed to get iframe content:', error);
+                return null;
+            }
+        }
+
+        async function sendToAI(action) {
+            const content = await getIFrameContent();
+            if (!content) return;
+
+            aiThinking.style.display = 'block';
+            resultDisplay.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: `${action}: ${content}`,
+                        service: 'openai'
+                    })
+                });
+                const data = await response.json();
+                
+                aiThinking.style.display = 'none';
+                resultDisplay.style.display = 'block';
+                resultDisplay.textContent = data.response;
+            } catch (error) {
+                console.error('Error sending to AI:', error);
+                aiThinking.style.display = 'none';
+                resultDisplay.style.display = 'block';
+                resultDisplay.textContent = 'Error processing AI request.';
+            }
+        }
+
+        aiButtons.forEach(button => {
+            button.addEventListener('click', () => sendToAI(button.dataset.action));
+        });
+
+        // Initial load
+        loadUrl();
+    </script>
+</body>
+</html>
