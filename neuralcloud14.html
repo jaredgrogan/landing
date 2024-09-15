@@ -332,169 +332,216 @@
         });
 
        <script>
-        // Settings and theme selection
-        const settingsIcon = document.getElementById('settingsIcon');
-        const settingsMenu = document.getElementById('settingsMenu');
-        const themeSelector = document.getElementById('themeSelector');
+// DOM Elements
+const settingsIcon = document.getElementById('settingsIcon');
+const settingsMenu = document.getElementById('settingsMenu');
+const themeSelector = document.getElementById('themeSelector');
+const urlInput = document.getElementById('urlInput');
+const goButton = document.getElementById('goButton');
+const browserFrame = document.getElementById('browserFrame');
+const backButton = document.getElementById('backButton');
+const forwardButton = document.getElementById('forwardButton');
+const refreshButton = document.getElementById('refreshButton');
+const aiButtons = document.querySelectorAll('.button[data-action]');
+const aiThinking = document.getElementById('aiThinking');
+const resultDisplay = document.getElementById('resultDisplay');
+const voicePlaybackButton = document.getElementById('voicePlaybackButton');
+const podcastButton = document.getElementById('podcastButton');
+const togglePlaylistButton = document.getElementById('togglePlaylist');
+const playlistPanel = document.getElementById('playlistPanel');
+const playlistInput = document.getElementById('playlistInput');
+const addToPlaylistButton = document.getElementById('addToPlaylist');
+const autoSurfButton = document.getElementById('autoSurf');
+const playlistList = document.getElementById('playlistList');
+const exportPDFButton = document.getElementById('exportPDFButton');
+const exportTXTButton = document.getElementById('exportTXTButton');
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const mobileMenuContent = document.getElementById('mobileMenuContent');
+const actions = document.querySelector('.actions');
 
-        settingsIcon.addEventListener('click', () => {
-            settingsMenu.style.display = settingsMenu.style.display === 'none' ? 'block' : 'none';
-        });
+// Settings and theme selection
+settingsIcon.addEventListener('click', () => {
+    settingsMenu.style.display = settingsMenu.style.display === 'none' ? 'block' : 'none';
+});
 
-        themeSelector.addEventListener('change', (e) => {
-            const selectedTheme = e.target.value;
-            if (selectedTheme === 'default') {
-                document.body.style.backgroundImage = 'var(--primary-gradient)';
-            } else {
-                document.body.style.backgroundImage = `url('${selectedTheme}.jpeg')`;
-            }
-            document.body.style.backgroundSize = 'cover';
-            document.body.style.backgroundAttachment = 'fixed';
-        });
+themeSelector.addEventListener('change', (e) => {
+    const selectedTheme = e.target.value;
+    if (selectedTheme === 'default') {
+        document.body.style.backgroundImage = 'var(--primary-gradient)';
+    } else {
+        document.body.style.backgroundImage = `url('${selectedTheme}.jpeg')`;
+    }
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundAttachment = 'fixed';
+});
 
-        // Close settings menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!settingsIcon.contains(e.target) && !settingsMenu.contains(e.target)) {
-                settingsMenu.style.display = 'none';
-            }
-        });
+// Close settings menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!settingsIcon.contains(e.target) && !settingsMenu.contains(e.target)) {
+        settingsMenu.style.display = 'none';
+    }
+});
 
-        // Tooltip functionality
-        const buttons = document.querySelectorAll('.button');
-        buttons.forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                const tooltip = button.getAttribute('data-tooltip');
-                if (tooltip) {
-                    const tooltipElement = document.createElement('div');
-                    tooltipElement.classList.add('tooltip');
-                    tooltipElement.textContent = tooltip;
-                    button.appendChild(tooltipElement);
-                }
-            });
+// Tooltip functionality
+const buttons = document.querySelectorAll('.button');
+buttons.forEach(button => {
+    button.addEventListener('mouseenter', () => {
+        const tooltip = button.getAttribute('data-tooltip');
+        if (tooltip) {
+            const tooltipElement = document.createElement('div');
+            tooltipElement.classList.add('tooltip');
+            tooltipElement.textContent = tooltip;
+            button.appendChild(tooltipElement);
+        }
+    });
 
-            button.addEventListener('mouseleave', () => {
-                const tooltip = button.querySelector('.tooltip');
-                if (tooltip) {
-                    button.removeChild(tooltip);
-                }
-            });
-        });
+    button.addEventListener('mouseleave', () => {
+        const tooltip = button.querySelector('.tooltip');
+        if (tooltip) {
+            button.removeChild(tooltip);
+        }
+    });
+});
 
-        // Browser navigation functionality
-        const urlInput = document.getElementById('urlInput');
-        const goButton = document.getElementById('goButton');
-        const browserFrame = document.getElementById('browserFrame');
-        const backButton = document.getElementById('backButton');
-        const forwardButton = document.getElementById('forwardButton');
-        const refreshButton = document.getElementById('refreshButton');
+// Browser navigation functionality
+goButton.addEventListener('click', () => {
+    const url = urlInput.value;
+    if (url) {
+        browserFrame.src = url.startsWith('http') ? url : `https://${url}`;
+    }
+});
 
-        goButton.addEventListener('click', () => {
-            const url = urlInput.value;
-            if (url) {
-                browserFrame.src = url;
-            }
-        });
+urlInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        goButton.click();
+    }
+});
 
-        urlInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                goButton.click();
-            }
-        });
+backButton.addEventListener('click', () => {
+    browserFrame.contentWindow.history.back();
+});
 
-        backButton.addEventListener('click', () => {
-            browserFrame.contentWindow.history.back();
-        });
+forwardButton.addEventListener('click', () => {
+    browserFrame.contentWindow.history.forward();
+});
 
-        forwardButton.addEventListener('click', () => {
-            browserFrame.contentWindow.history.forward();
-        });
+refreshButton.addEventListener('click', () => {
+    browserFrame.contentWindow.location.reload();
+});
 
-        refreshButton.addEventListener('click', () => {
-            browserFrame.contentWindow.location.reload();
-        });
+// AI action buttons functionality
+aiButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const action = button.getAttribute('data-action');
+        aiThinking.style.display = 'block';
+        resultDisplay.style.display = 'none';
 
-        // AI action buttons functionality
-        const aiButtons = document.querySelectorAll('.button[data-action]');
-        const aiThinking = document.getElementById('aiThinking');
-        const resultDisplay = document.getElementById('resultDisplay');
+        // Simulating AI processing
+        setTimeout(() => {
+            aiThinking.style.display = 'none';
+            resultDisplay.style.display = 'block';
+            resultDisplay.textContent = `${action.charAt(0).toUpperCase() + action.slice(1)} action completed.`;
+        }, 2000);
+    });
+});
 
-        aiButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const action = button.getAttribute('data-action');
-                aiThinking.style.display = 'block';
-                resultDisplay.style.display = 'none';
+// Voice playback button functionality
+voicePlaybackButton.addEventListener('click', () => {
+    // Implement voice playback functionality here
+    console.log('Voice playback started');
+});
 
-                // Simulating AI processing
-                setTimeout(() => {
-                    aiThinking.style.display = 'none';
-                    resultDisplay.style.display = 'block';
-                    resultDisplay.textContent = `${action.charAt(0).toUpperCase() + action.slice(1)} action completed.`;
-                }, 2000);
-            });
-        });
+// Podcast button functionality
+podcastButton.addEventListener('click', () => {
+    // Implement podcast generation functionality here
+    console.log('Podcast generation started');
+});
 
-        // Voice playback button functionality
-        const voicePlaybackButton = document.getElementById('voicePlaybackButton');
-        voicePlaybackButton.addEventListener('click', () => {
-            // Implement voice playback functionality here
-            console.log('Voice playback started');
-        });
+// Playlist functionality
+togglePlaylistButton.addEventListener('click', () => {
+    playlistPanel.style.display = playlistPanel.style.display === 'none' ? 'block' : 'none';
+});
 
-        // Podcast button functionality
-        const podcastButton = document.getElementById('podcastButton');
-        podcastButton.addEventListener('click', () => {
-            // Implement podcast generation functionality here
-            console.log('Podcast generation started');
-        });
+addToPlaylistButton.addEventListener('click', () => {
+    const url = playlistInput.value.trim();
+    if (url) {
+        const li = document.createElement('li');
+        li.textContent = url;
+        playlistList.appendChild(li);
+        playlistInput.value = '';
+    }
+});
 
-        // Playlist functionality
-        const togglePlaylistButton = document.getElementById('togglePlaylist');
-        const playlistPanel = document.getElementById('playlistPanel');
-        const playlistInput = document.getElementById('playlistInput');
-        const addToPlaylistButton = document.getElementById('addToPlaylist');
-        const autoSurfButton = document.getElementById('autoSurf');
-        const playlistList = document.getElementById('playlistList');
+autoSurfButton.addEventListener('click', () => {
+    const urls = Array.from(playlistList.children).map(li => li.textContent);
+    let index = 0;
+    const surf = () => {
+        if (index < urls.length) {
+            browserFrame.src = urls[index];
+            index++;
+            setTimeout(surf, 5000); // Change URL every 5 seconds
+        }
+    };
+    surf();
+});
 
-        togglePlaylistButton.addEventListener('click', () => {
-            playlistPanel.style.display = playlistPanel.style.display === 'none' ? 'block' : 'none';
-        });
+// Export buttons functionality
+exportPDFButton.addEventListener('click', () => {
+    // Implement PDF export functionality here
+    console.log('Exporting to PDF');
+});
 
-        addToPlaylistButton.addEventListener('click', () => {
-            const url = playlistInput.value.trim();
-            if (url) {
-                const li = document.createElement('li');
-                li.textContent = url;
-                playlistList.appendChild(li);
-                playlistInput.value = '';
-            }
-        });
+exportTXTButton.addEventListener('click', () => {
+    // Implement TXT export functionality here
+    console.log('Exporting to TXT');
+});
 
-        autoSurfButton.addEventListener('click', () => {
-            const urls = Array.from(playlistList.children).map(li => li.textContent);
-            let index = 0;
-            const surf = () => {
-                if (index < urls.length) {
-                    browserFrame.src = urls[index];
-                    index++;
-                    setTimeout(surf, 5000); // Change URL every 5 seconds
-                }
-            };
-            surf();
-        });
+// Mobile menu functionality
+mobileMenuToggle.addEventListener('click', () => {
+    mobileMenuContent.style.display = mobileMenuContent.style.display === 'none' ? 'block' : 'none';
+});
 
-        // Export buttons functionality
-        const exportPDFButton = document.getElementById('exportPDFButton');
-        const exportTXTButton = document.getElementById('exportTXTButton');
+// Clone action buttons for mobile menu
+actions.querySelectorAll('.button').forEach(button => {
+    const clone = button.cloneNode(true);
+    mobileMenuContent.appendChild(clone);
+});
 
-        exportPDFButton.addEventListener('click', () => {
-            // Implement PDF export functionality here
-            console.log('Exporting to PDF');
-        });
+// Add smooth transitions
+document.querySelectorAll('.button, #settingsIcon, #mobileMenuToggle').forEach(element => {
+    element.style.transition = 'all 0.3s ease';
+});
+// Browser navigation functionality
+goButton.addEventListener('click', () => {
+    navigateToUrl();
+});
 
-        exportTXTButton.addEventListener('click', () => {
-            // Implement TXT export functionality here
-            console.log('Exporting to TXT');
-        });
+urlInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        navigateToUrl();
+    }
+});
+
+function navigateToUrl() {
+    const url = urlInput.value.trim();
+    if (url) {
+        const fullUrl = url.startsWith('http') ? url : `https://${url}`;
+        browserFrame.src = `/api/proxy?url=${encodeURIComponent(fullUrl)}`;
+    }
+}
+
+backButton.addEventListener('click', () => {
+    browserFrame.contentWindow.history.back();
+});
+
+forwardButton.addEventListener('click', () => {
+    browserFrame.contentWindow.history.forward();
+});
+
+refreshButton.addEventListener('click', () => {
+    browserFrame.contentWindow.location.reload();
+});
+
     </script>
 </body>
 </html>
