@@ -544,7 +544,16 @@ exportTXTButton.addEventListener('click', async () => {
     }
 });
 
-// Initial load
+// Corrected function
+function loadUrl(initialUrl) {
+    const url = initialUrl || urlInput.value.trim();
+    if (url) {
+        const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
+        browserFrame.src = proxyUrl;
+    }
+}
+
+// Corrected initial load
 loadUrl('https://www.universitas.pro');
 
     </script>
