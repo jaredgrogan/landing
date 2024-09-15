@@ -1,16 +1,25 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "server.js", "use": "@vercel/node" },
-    { "src": "api/**/*.js", "use": "@vercel/node" },
-    { "src": "*.html", "use": "@vercel/static" },
-    { "src": "*.{jpg,jpeg,png,gif,svg,ico}", "use": "@vercel/static" }
-  ],
+  "builds": [],
   "routes": [
-    { "src": "/api/proxy", "dest": "/api/proxy.js" },
-    { "src": "/api/chat", "dest": "/api/chat.js" },
-    { "src": "^/(.+\\.(jpg|jpeg|png|gif|svg|ico))$", "dest": "/$1" },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/server.js" }
+    {
+      "src": "/api/proxy",
+      "dest": "/api/proxy.js"
+    },
+    {
+      "src": "/api/chat",
+      "dest": "/api/chat.js"
+    },
+    {
+      "src": "^/(.+\\.(jpg|jpeg|png|gif|svg|ico))$",
+      "dest": "/$1"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
   ]
 }
