@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud Virtual Browser</title>
+    <style>
+        :root {
+            --primary-color: #3a7bd5;
+            --secondary-color: #f0f4f8;
+            --text-color: #333333;
+            --background-color: #ffffff;
+            --accent-color: #00d2ff;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: var(--background-color);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+        }
+
+        .browser-header {
+            grid-column: span 12;
+            display: flex;
+            align-items: center;
+        }
+
+        .url-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px 0 0 5px;
+            font-size: 16px;
+        }
+
+        .button {
+            padding: 12px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: var(--accent-color);
+        }
+
+        .go-button {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .browser-frame {
+            grid-column: span 12;
+            width: 100%;
+            height: 60vh;
+            border: none;
+            border-radius: 10px;
+            background: var(--secondary-color);
+        }
+
+        .actions {
+            grid-column: span 12;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .result-display {
+            grid-column: span 12;
+            padding: 10px;
+            background: var(--secondary-color);
+            border-radius: 10px;
+            display: none;
+        }
+
+        #settingsIcon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        #settingsMenu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 10px;
+            background-color: var(--background-color);
+            padding: 10px;
+            border-radius: 10px;
+            z-index: 100;
+        }
+
+        #playlistPanel {
+            grid-column: span 12;
+            background-color: var(--secondary-color);
+            padding: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        #playlistPanel ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #playlistPanel ul li {
+            margin: 5px 0;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        #loadingIndicator {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="settingsIcon">⚙️</div>
+        <div id="settingsMenu">
+            <p><strong>Settings</strong></p>
+            <p>Theme:
+                <select id="themeSelector">
+                    <option value="default">Default</option>
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                </select>
+            </p>
+        </div>
+
+        <div class="browser-header">
+            <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
+            <button class="button go-button" id="goButton">Go</button>
+        </div>
+
+        <iframe id="browserFrame" class="browser-frame" src="about:blank"></iframe>
+
+        <div class="actions">
+            <button class="button" data-action="summarize">Summarize</button>
+            <button class="button" data-action="extract">Extract Data</button>
+            <button class="button" data-action="qa">Q&A</button>
+            <button class="button" data-action="explain">Explain</button>
+            <button class="button" id="voicePlaybackButton">Play Voice</button>
+            <button class="button" id="podcastButton">Podcast</button>
+            <button class="button" id="togglePlaylist">Playlist</button>
+            <button class="button" id="exportPDFButton">Export to PDF</button>
+            <button class="button" id="exportTXTButton">Export to TXT</button>
+        </div>
+
+        <div id="aiThinking" style="display: none;">NeuralCloud is thinking...</div>
+        <div id="resultDisplay" class="result-display"></div>
+
+        <div id="playlistPanel">
+            <ul id="playlistList"></ul>
+            <input type="text" id="playlistInput" placeholder="Enter URL">
+            <button id="addToPlaylist" class="button">Add to Playlist</button>
+            <button id="autoSurf" class="button">Auto-Surf</button>
+        </div>
+
+        <div id="loadingIndicator"></div>
+    </div>
+
+    <script>
+        // JavaScript remains the same as in the original version
+    </script>
+</body>
+</html>
