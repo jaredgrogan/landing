@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud Virtual Browser</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6e8efb, #a777e3);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+            --button-bg: rgba(255, 255, 255, 0.2);
+            --button-hover: rgba(255, 255, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--primary-gradient);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 15px;
+        }
+
+        .browser-header {
+            grid-column: span 12;
+            display: flex;
+            align-items: center;
+        }
+
+        .url-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px 0 0 5px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .button {
+            padding: 10px 15px;
+            background: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        .go-button {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .browser-frame {
+            grid-column: span 12;
+            width: 100%;
+            height: 50vh;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .browser-navigation {
+            grid-column: span 12;
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions {
+            grid-column: span 12;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .result-display {
+            grid-column: span 12;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            display: none;
+        }
+
+        #settingsIcon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        #settingsMenu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            z-index: 100;
+        }
+
+        #playlistPanel {
+            grid-column: span 12;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        #playlistPanel ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #playlistPanel ul li {
+            margin: 5px 0;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        #loadingIndicator {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid var(--text-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #mobileMenu {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .actions {
+                display: none;
+            }
+
+            #mobileMenu {
+                display: block;
+                grid-column: span 12;
+            }
+
+            #mobileMenuContent {
+                display: none;
+                background: var(--glass-bg);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                border: 1px solid var(--glass-border);
+                padding: 15px;
+                margin-top: 10px;
+            }
+
+            #mobileMenuContent .button {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg id="settingsIcon" viewBox="0 0 24 24">
+            <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+        </svg>
+        <div id="settingsMenu">
+            <p><strong>Settings</strong></p>
+            <p>Theme:
+                <select id="themeSelector">
+                    <option value="default">Default</option>
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                </select>
+            </p>
+        </div>
+
+        <div class="browser-header">
+            <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
+            <button class="button go-button" id="goButton">Go</button>
+        </div>
+
+        <div class="browser-navigation">
+            <button class="button" id="backButton">Back</button>
+            <button class="button" id="forwardButton">Forward</button>
+            <button class="button" id="refreshButton">Refresh</button>
+        </div>
+
+        <iframe id="browserFrame" class="browser-frame" src="about:blank"></iframe>
+
+        <div class="actions">
+            <button class="button" data-action="summarize">Summarize</button>
+            <button class="button" data-action="extract">Extract Data</button>
+            <button class="button" data-action="qa">Q&A</button>
+            <button class="button" data-action="explain">Explain</button>
+            <button class="button" id="voicePlaybackButton">Play Voice</button>
+            <button class="button" id="podcastButton">Podcast</button>
+            <button class="button" id="togglePlaylist">Playlist</button>
+            <button class="button" id="exportPDFButton">Export to PDF</button>
+            <button class="button" id="exportTXTButton">Export to TXT</button>
+        </div>
+
+        <div id="mobileMenu">
+            <button class="button" id="mobileMenuToggle">Menu</button>
+            <div id="mobileMenuContent">
+                <!-- Mobile menu buttons will be dynamically added here -->
+            </div>
+        </div>
+
+        <div id="aiThinking" style="display: none;">NeuralCloud is thinking...</div>
+        <div id="resultDisplay" class="result-display"></div>
+
+        <div id="playlistPanel">
+            <ul id="playlistList"></ul>
+            <input type="text" id="playlistInput" placeholder="Enter URL">
+            <button id="addToPlaylist" class="button">Add to Playlist</button>
+            <button id="autoSurf" class="button">Auto-Surf</button>
+        </div>
+
+        <div id="loadingIndicator"></div>
+    </div>
+
+    <script>
+        // Include all the original JavaScript here
+
+        // Add this new code for the mobile menu
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenuContent = document.getElementById('mobileMenuContent');
+        const actions = document.querySelector('.actions');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenuContent.style.display = mobileMenuContent.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Clone action buttons for mobile menu
+        actions.querySelectorAll('.button').forEach(button => {
+            const clone = button.cloneNode(true);
+            mobileMenuContent.appendChild(clone);
+        });
+
+        // Add smooth transitions
+        document.querySelectorAll('.button, #settingsIcon, #mobileMenuToggle').forEach(element => {
+            element.style.transition = 'all 0.3s ease';
+        });
+    </script>
+</body>
+</html>
