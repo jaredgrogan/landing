@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud Virtual Browser</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* CSS will be updated in the next step */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="history-panel" id="historyPanel">
+            <button class="history-toggle" id="historyToggle">History Panel ▼</button>
+            <div class="history-content" id="historyContent">
+                <div class="history-section">
+                    <button class="history-toggle" id="historyToggle">Browsing History ▼</button>
+                    <ul class="history-list" id="historyList"></ul>
+                </div>
+                <div class="memories-section">
+                    <button class="memories-toggle" id="memoriesToggle">NeuralCloud Memories ▼</button>
+                    <ul class="memories-list" id="memoriesList"></ul>
+                </div>
+                <button class="export-button" id="exportButton">Export</button>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="browser-header">
+                <div class="navigation-buttons">
+                    <button class="nav-button" id="backButton" title="Go Back">
+                        <div class="triangle back-triangle"></div>
+                    </button>
+                    <button class="nav-button" id="forwardButton" title="Go Forward">
+                        <div class="triangle forward-triangle"></div>
+                    </button>
+                    <button class="nav-button" id="refreshButton" title="Refresh">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                        </svg>
+                    </button>
+                </div>
+                <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
+                <button class="go-button" id="goButton">Go</button>
+            </div>
+            <div class="loading-bar" id="loadingBar"></div>
+            <iframe id="browserFrame" class="browser-frame" src="about:blank"></iframe>
+            <div class="loading-display" id="loadingDisplay">Loading...</div>
+            <div class="ai-actions">
+                <button class="ai-button" data-action="summarize">Summarize</button>
+                <button class="ai-button" data-action="extract">Extract Data</button>
+                <button class="ai-button" data-action="explain">Explain</button>
+                <button class="ai-button" data-action="analyze">Analyze</button>
+                <button class="ai-button" data-action="podcast">Podcast</button>
+                <button class="ai-button" id="voiceSynthesis">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="ai-thinking" id="aiThinking">NeuralCloud is thinking...</div>
+            <div class="result-display" id="resultDisplay"></div>
+            <div class="copyright">Copyright 2024 Neuralcloud.ai</div>
+        </div>
+    </div>
+    <script>
+        // JavaScript will be updated in the next step
+    </script>
+</body>
+</html>
