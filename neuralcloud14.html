@@ -333,16 +333,10 @@
 
        <script>
 // DOM Elements
-const settingsIcon = document.getElementById('settingsIcon');
-const settingsMenu = document.getElementById('settingsMenu');
-const themeSelector = document.getElementById('themeSelector');
 const urlInput = document.getElementById('urlInput');
 const goButton = document.getElementById('goButton');
 const browserFrame = document.getElementById('browserFrame');
-const backButton = document.getElementById('backButton');
-const forwardButton = document.getElementById('forwardButton');
-const refreshButton = document.getElementById('refreshButton');
-const aiButtons = document.querySelectorAll('.button[data-action]');
+const aiButtons = document.querySelectorAll('.ai-button');
 const aiThinking = document.getElementById('aiThinking');
 const resultDisplay = document.getElementById('resultDisplay');
 const voicePlaybackButton = document.getElementById('voicePlaybackButton');
@@ -355,129 +349,25 @@ const autoSurfButton = document.getElementById('autoSurf');
 const playlistList = document.getElementById('playlistList');
 const exportPDFButton = document.getElementById('exportPDFButton');
 const exportTXTButton = document.getElementById('exportTXTButton');
-const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-const mobileMenuContent = document.getElementById('mobileMenuContent');
-const actions = document.querySelector('.actions');
-const loadingIndicator = document.getElementById('loadingIndicator');
-
-// Settings and theme selection
-settingsIcon.addEventListener('click', () => {
-    settingsMenu.style.display = settingsMenu.style.display === 'none' ? 'block' : 'none';
-});
-
-themeSelector.addEventListener('change', (e) => {
-    const selectedTheme = e.target.value;
-    if (selectedTheme === 'default') {
-        document.body.style.backgroundImage = 'var(--primary-gradient)';
-    } else {
-        document.body.style.backgroundImage = `url('${selectedTheme}.jpeg')`;
-    }
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundAttachment = 'fixed';
-});
-
-// Close settings menu when clicking outside
-document.addEventListener('click', (e) => {
-    if (!settingsIcon.contains(e.target) && !settingsMenu.contains(e.target)) {
-        settingsMenu.style.display = 'none';
-    }
-});
-
-// Tooltip functionality
-const buttons = document.querySelectorAll('.button');
-buttons.forEach(button => {
-    button.addEventListener('mouseenter', () => {
-        const tooltip = button.getAttribute('data-tooltip');
-        if (tooltip) {
-            const tooltipElement = document.createElement('div');
-            tooltipElement.classList.add('tooltip');
-            tooltipElement.textContent = tooltip;
-            button.appendChild(tooltipElement);
-        }
-    });
-
-    button.addEventListener('mouseleave', () => {
-        const tooltip = button.querySelector('.tooltip');
-        if (tooltip) {
-            button.removeChild(tooltip);
-        }
-    });
-});
 
 // Browser navigation functionality
-async function navigateToUrl(url) {
+function loadUrl() {
+    const url = urlInput.value.trim();
     if (url) {
-        loadingIndicator.style.display = 'block';
-        const fullUrl = url.startsWith('http') ? url : `https://${url}`;
-        try {
-            const response = await fetch(`/api/proxy?url=${encodeURIComponent(fullUrl)}`);
-            const html = await response.text();
-            const blob = new Blob([html], { type: 'text/html' });
-            const blobUrl = URL.createObjectURL(blob);
-            browserFrame.src = blobUrl;
-        } catch (error) {
-            console.error('Error fetching URL:', error);
-            resultDisplay.textContent = 'Error loading page. Please try again.';
-        } finally {
-            loadingIndicator.style.display = 'none';
-        }
+        const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
+        browserFrame.src = proxyUrl;
     }
 }
 
-goButton.addEventListener('click', () => {
-    navigateToUrl(urlInput.value.trim());
-});
-
-urlInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        navigateToUrl(urlInput.value.trim());
+urlInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        loadUrl();
     }
 });
 
-backButton.addEventListener('click', () => {
-    browserFrame.contentWindow.history.back();
-});
+goButton.addEventListener('click', loadUrl);
 
-forwardButton.addEventListener('click', () => {
-    browserFrame.contentWindow.history.forward();
-});
-
-refreshButton.addEventListener('click', () => {
-    browserFrame.contentWindow.location.reload();
-});
-
-// AI action buttons functionality
-aiButtons.forEach(button => {
-    button.addEventListener('click', async () => {
-        const action = button.getAttribute('data-action');
-        aiThinking.style.display = 'block';
-        resultDisplay.style.display = 'none';
-
-        try {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: `${action}: ${await getIFrameContent()}`,
-                    service: 'openai'
-                })
-            });
-            const data = await response.json();
-
-            aiThinking.style.display = 'none';
-            resultDisplay.style.display = 'block';
-            resultDisplay.textContent = data.response;
-        } catch (error) {
-            console.error('Error processing AI request:', error);
-            aiThinking.style.display = 'none';
-            resultDisplay.style.display = 'block';
-            resultDisplay.textContent = 'Error processing AI request. Please try again.';
-        }
-    });
-});
-
+// AI functionality
 async function getIFrameContent() {
     try {
         const iframeDocument = browserFrame.contentDocument || browserFrame.contentWindow.document;
@@ -488,7 +378,42 @@ async function getIFrameContent() {
     }
 }
 
-// Voice playback button functionality
+async function sendToAI(action) {
+    const content = await getIFrameContent();
+    if (!content) return;
+
+    aiThinking.style.display = 'block';
+    resultDisplay.style.display = 'none';
+
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: `${action}: ${content}`,
+                service: 'openai'
+            })
+        });
+        const data = await response.json();
+
+        aiThinking.style.display = 'none';
+        resultDisplay.style.display = 'block';
+        resultDisplay.textContent = data.response;
+    } catch (error) {
+        console.error('Error sending to AI:', error);
+        aiThinking.style.display = 'none';
+        resultDisplay.style.display = 'block';
+        resultDisplay.textContent = 'Error processing AI request.';
+    }
+}
+
+aiButtons.forEach(button => {
+    button.addEventListener('click', () => sendToAI(button.dataset.action));
+});
+
+// Voice playback functionality
 voicePlaybackButton.addEventListener('click', async () => {
     const text = resultDisplay.textContent.trim();
     if (!text) {
@@ -519,7 +444,7 @@ voicePlaybackButton.addEventListener('click', async () => {
     }
 });
 
-// Podcast button functionality
+// Podcast functionality
 podcastButton.addEventListener('click', async () => {
     const content = resultDisplay.textContent.trim();
     if (!content) {
@@ -566,7 +491,8 @@ autoSurfButton.addEventListener('click', () => {
     let index = 0;
     const surf = () => {
         if (index < urls.length) {
-            navigateToUrl(urls[index]);
+            urlInput.value = urls[index];
+            loadUrl();
             index++;
             setTimeout(surf, 5000); // Change URL every 5 seconds
         }
@@ -574,15 +500,16 @@ autoSurfButton.addEventListener('click', () => {
     surf();
 });
 
-// Export buttons functionality
+// Export functionality
 exportPDFButton.addEventListener('click', async () => {
     try {
+        const content = await getIFrameContent();
         const response = await fetch('/api/export-pdf', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ content: await getIFrameContent() })
+            body: JSON.stringify({ content })
         });
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -617,24 +544,8 @@ exportTXTButton.addEventListener('click', async () => {
     }
 });
 
-// Mobile menu functionality
-mobileMenuToggle.addEventListener('click', () => {
-    mobileMenuContent.style.display = mobileMenuContent.style.display === 'none' ? 'block' : 'none';
-});
-
-// Clone action buttons for mobile menu
-actions.querySelectorAll('.button').forEach(button => {
-    const clone = button.cloneNode(true);
-    mobileMenuContent.appendChild(clone);
-});
-
-// Add smooth transitions
-document.querySelectorAll('.button, #settingsIcon, #mobileMenuToggle').forEach(element => {
-    element.style.transition = 'all 0.3s ease';
-});
-
-// Initialize iframe
-browserFrame.src = 'about:blank';
+// Initial load
+loadUrl('https://www.universitas.pro');
 
     </script>
 </body>
