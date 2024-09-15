@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindo.ai</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #ffebee);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            width: 400px;
+            max-width: 90%;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        select {
+            padding: 12px;
+            width: 100%;
+            font-size: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(6px);
+            cursor: pointer;
+        }
+
+        option {
+            padding: 8px;
+            font-size: 1rem;
+        }
+
+        .dropdown-wrapper {
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            background-color: #4caf50;
+            color: white;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #388e3c;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Kindo.ai</h1>
+
+        <div class="dropdown-wrapper">
+            <label for="llm-select">Choose an LLM Model:</label>
+            <select id="llm-select">
+                <option value="GPT-4 Turbo">GPT-4 Turbo</option>
+                <option value="GPT-4o">GPT-4o</option>
+                <option value="GPT-4o mini">GPT-4o mini</option>
+                <option value="GPT-3.5 Turbo">GPT-3.5 Turbo</option>
+                <option value="Claude 3.5 Sonnet">Claude 3.5 Sonnet</option>
+                <option value="Claude 3 Opus">Claude 3 Opus</option>
+                <option value="Claude 3 Sonnet">Claude 3 Sonnet</option>
+                <option value="Claude 3 Haiku">Claude 3 Haiku</option>
+                <option value="Command R">Command R</option>
+                <option value="Gemini 1.5 Pro">Gemini 1.5 Pro</option>
+                <option value="Gemini 1.5 Flash">Gemini 1.5 Flash</option>
+                <option value="Llama 3.1 70B">Llama 3.1 70B</option>
+                <option value="Llama 3 70B">Llama 3 70B</option>
+                <option value="Granite 13B Chat v2">Granite 13B Chat v2</option>
+                <option value="Mixtral">Mixtral</option>
+                <option value="Qwen 2 72B Instruct">Qwen 2 72B Instruct</option>
+                <option value="WhiteRabbitNeo 33B v1.7">WhiteRabbitNeo 33B v1.7</option>
+            </select>
+        </div>
+
+        <a href="#" class="button">Submit</a>
+
+        <footer>
+            <p>© 2024 Kindo.ai. All rights reserved.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
