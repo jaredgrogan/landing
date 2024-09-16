@@ -86,7 +86,7 @@ async function handleOpenAIText(message, apiKey) {
   return axios.post(
     'https://api.openai.com/v1/chat/completions',
     {
-      model: process.env.OPENAI_MODEL_ID || 'gpt-3.5-turbo',
+      model: process.env.OPENAI_VISION_MODEL || 'gpt-4',
       messages: [{ role: 'user', content: message }],
     },
     {
@@ -148,8 +148,8 @@ async function handlePerplexity(message, apiKey) {
   return axios.post(
     'https://api.perplexity.ai/chat/completions',
     {
-      model: 'mixtral-8x7b-instruct',
-      messages: [{ role: 'user', content: message }],
+ body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"system","content":"Be precise and concise."},{"role":"user","content":"How many stars are there in our galaxy?"}],"max_tokens":"Optional","temperature":0.2,"top_p":0.9,"return_citations":true,"search_domain_filter":["perplexity.ai"],"return_images":false,"return_related_questions":false,"search_recency_filter":"month","top_k":0,"stream":false,"presence_penalty":0,"frequency_penalty":1}'
+};
     },
     {
       headers: {
