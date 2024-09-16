@@ -2,16 +2,16 @@
 
 const cors = require('cors');
 const axios = require('axios');
+const FormData = require('form-data');
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if(!origin) return callback(null, true);
-    const allowedOrigins = ['http://localhost:3000', 'https://your-vercel-app.vercel.app'];
-    if (allowedOrigins.indexOf(origin) === -1) {
-      var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+    const allowedOrigins = ['http://localhost:3000', 'https://your-vercel-app.vercel.app', 'https://www.universitas.pro'];
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-    return callback(null, true);
   },
   methods: ['POST', 'OPTIONS']
 };
@@ -37,15 +37,10 @@ export default async function handler(req, res) {
 
       console.log('Received request:', { message, analysisType, image: !!image, service });
 
-      // API Gateway call to decrypt the API keys
       const decryptResponse = await axios.post(
         process.env.API_GATEWAY_URL,
         {},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        { headers: { 'Content-Type': 'application/json' } }
       );
 
       console.log('Decrypt response status:', decryptResponse.status);
@@ -79,19 +74,16 @@ export default async function handler(req, res) {
 
       res.json({ 
         response: aiResponse.data.choices ? aiResponse.data.choices[0].message.content : aiResponse.data.output,
-        image: aiResponse.data.image // Include image data if present
+        image: aiResponse.data.image
       });
     } catch (error) {
-      console.error('Error in /api/chat:', error.message);
-      console.error('Stack trace:', error.stack);
+      console.error('Error in /api/chat:', error);
       res.status(500).json({
         error: 'An error occurred while processing your request',
-        details: error.message,
-        stack: error.stack,
+        details: error.message
       });
     }
   } else {
-    console.error('Invalid request method:', req.method);
     res.status(405).json({ error: 'Method not allowed' });
   }
 }
@@ -160,113 +152,3 @@ async function handlePerplexity(message, image, apiKey) {
     }
   );
 }
-
-// Client-side JavaScript (to be included in your HTML file)
-
-const urlInput = document.getElementById('urlInput');
-const goButton = document.getElementById('goButton');
-const browserFrame = document.getElementById('browserFrame');
-const aiButtons = document.querySelectorAll('.ai-button');
-const aiThinking = document.getElementById('aiThinking');
-const resultDisplay = document.getElementById('resultDisplay');
-
-function loadUrl() {
-  const url = urlInput.value.trim();
-  if (url) {
-    const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
-    browserFrame.src = proxyUrl;
-  }
-}
-
-urlInput.addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    loadUrl();
-  }
-});
-
-goButton.addEventListener('click', loadUrl);
-
-async function getIFrameContent() {
-  return new Promise((resolve, reject) => {
-    try {
-      browserFrame.onload = () => {
-        try {
-          const iframeContent = browserFrame.contentWindow.document.body.innerText || 
-                                browserFrame.contentWindow.document.body.textContent;
-          resolve(iframeContent);
-        } catch (error) {
-          // If we can't access the content directly, use a server-side proxy
-          fetch(`/api/proxy?url=${encodeURIComponent(browserFrame.src)}&getContent=true`)
-            .then(response => response.text())
-            .then(resolve)
-            .catch(reject);
-        }
-      };
-    } catch (error) {
-      reject(error);
-    }
-  });
-}
-
-async function sendToAI(action) {
-  const content = await getIFrameContent();
-  if (!content) {
-    displayError('Unable to retrieve content. Please ensure the page has loaded.');
-    return;
-  }
-
-  aiThinking.style.display = 'block';
-  resultDisplay.style.display = 'none';
-
-  try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message: `${action}: ${content}`,
-        service: 'openai' // or 'perplexity' for Perplexity requests
-      })
-    });
-    
-    if (!response.ok) {
-      throw new Error('API request failed');
-    }
-
-    const data = await response.json();
-    
-    aiThinking.style.display = 'none';
-    resultDisplay.style.display = 'block';
-    
-    if (data && data.response) {
-      if (typeof data.response === 'string') {
-        resultDisplay.textContent = data.response;
-      } else if (data.image) {
-        // Handle image response
-        const img = document.createElement('img');
-        img.src = data.image;
-        resultDisplay.innerHTML = '';
-        resultDisplay.appendChild(img);
-      }
-    } else {
-      throw new Error('Received an unexpected response format.');
-    }
-  } catch (error) {
-    console.error('Error sending to AI:', error);
-    displayError('An error occurred while processing your request. Please try again.');
-  }
-}
-
-function displayError(message) {
-  aiThinking.style.display = 'none';
-  resultDisplay.style.display = 'block';
-  resultDisplay.textContent = message;
-}
-
-aiButtons.forEach(button => {
-  button.addEventListener('click', () => sendToAI(button.dataset.action));
-});
-
-// Initial load
-loadUrl('https://www.example.com');
