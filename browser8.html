@@ -6,17 +6,372 @@
     <title>NeuralCloud Virtual Browser</title>
     <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
     <style>
-        /* ... (keep existing styles) ... */
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f0f4f8;
+            --text-color: #333;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a5f7a 0%, #3a8fb7 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            display: flex;
+        }
+
+        .main-content {
+            flex: 1;
+            margin: 0 20px;
+        }
+
+        .side-panel {
+            width: 250px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 80vh;
+            transition: width 0.3s ease;
+        }
+
+        .side-panel.collapsed {
+            width: 50px;
+            overflow: hidden;
+        }
+
+        .panel-content {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .side-panel.collapsed .panel-content {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .panel-toggle {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .panel-toggle:hover {
+            background: #3a7bd5;
+        }
+
+        .browser-header {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .url-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            background: var(--secondary-color);
+            border-radius: 10px 0 0 10px;
+            font-size: 16px;
+        }
+
+        .go-button {
+            padding: 12px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .go-button:hover {
+            background: #3a7bd5;
+        }
+
+        .browser-frame {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .ai-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ai-button {
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s, transform 0.1s;
+            position: relative;
+        }
+
+        .ai-button:hover {
+            background: #3a7bd5;
+            transform: translateY(-2px);
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .ai-thinking {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+            background: linear-gradient(270deg, #4a90e2, #00416A);
+            background-size: 200% 200%;
+            animation: gradientAnimation 2s ease infinite, pulse 1.5s ease-in-out infinite;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            min-height: 100px;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 16.9px;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-right: 10px;
+        }
+
+        .nav-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .nav-button:hover {
+            background: #3a7bd5;
+        }
+
+        .loading-bar {
+            height: 3px;
+            background-color: var(--primary-color);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .page-loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .white-header {
+            color: white;
+            font-weight: bold;
+        }
+
+        #searchInput, #searchResultDisplay {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            background: var(--secondary-color);
+        }
+
+        #searchResultDisplay {
+            min-height: 100px;
+            color: var(--text-color);
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+            display: none;
+        }
+
+        #autoSuggestions {
+            margin-bottom: 10px;
+        }
+
+        .suggestion {
+            padding: 5px;
+            cursor: pointer;
+            background: var(--glass-bg);
+            margin-bottom: 2px;
+            border-radius: 3px;
+        }
+
+        .suggestion:hover {
+            background: var(--glass-border);
+        }
+
+        #searchToggles {
+            margin-bottom: 10px;
+        }
+
+        #searchToggles label {
+            margin-right: 10px;
+            color: white;
+        }
+
+        #searchProgress {
+            height: 5px;
+            background-color: var(--primary-color);
+            width: 0;
+            transition: width 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+                flex-direction: column;
+            }
+
+            .browser-frame {
+                height: 50vh;
+            }
+
+            .ai-actions {
+                flex-direction: column;
+            }
+
+            .ai-button {
+                width: 100%;
+            }
+
+            .side-panel {
+                width: 100%;
+                max-height: 30vh;
+                margin-bottom: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="side-panel" id="historyPanel">
-            <!-- ... (keep existing history panel content) ... -->
+            <button class="panel-toggle" id="historyToggle" data-tooltip="Toggle History Panel">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                </svg>
+            </button>
+            <div class="panel-content" id="historyContent">
+                <h3 class="white-header">Browsing History</h3>
+                <ul id="historyList"></ul>
+                <h3 class="white-header">NeuralCloud Memories</h3>
+                <ul id="memoriesList"></ul>
+                <button id="exportButton" class="ai-button">Export Memories</button>
+            </div>
         </div>
         <div class="main-content">
             <div class="browser-header">
-                <!-- ... (keep existing browser header content) ... -->
+                <div class="navigation-buttons">
+                    <button class="nav-button" id="backButton" data-tooltip="Go Back">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="nav-button" id="forwardButton" data-tooltip="Go Forward">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="nav-button" id="refreshButton" data-tooltip="Refresh">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                        </svg>
+                    </button>
+                </div>
+                <input type="text" class="url-input" id="urlInput" placeholder="Enter URL...">
+                <button class="go-button" id="goButton" data-tooltip="Go to URL">Go</button>
             </div>
             <div class="loading-bar" id="loadingBar"></div>
             <iframe id="browserFrame" class="browser-frame" src="about:blank"></iframe>
@@ -38,7 +393,23 @@
             <div class="result-display" id="resultDisplay"></div>
         </div>
         <div class="side-panel" id="searchPanel">
-            <!-- ... (keep existing search panel content) ... -->
+            <button class="panel-toggle" id="searchToggle" data-tooltip="Toggle Search Panel">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </button>
+         <div class="panel-content" id="searchContent">
+                <input type="text" id="searchInput" placeholder="Search with Perplexity...">
+                <div id="autoSuggestions"></div>
+                <div id="searchToggles"></div>
+                <div id="searchProgress"></div>
+                <h3 class="white-header">Search History</h3>
+                <ul id="searchHistoryList"></ul>
+                <div id="searchResultDisplay"></div>
+                <h3 class="white-header">NeuralCloud Memories</h3>
+                <ul id="searchMemoriesList"></ul>
+            </div>
         </div>
     </div>
 
@@ -213,7 +584,7 @@
             }
         }
 
-    async function searchPerplexity(query) {
+        async function searchPerplexity(query) {
             try {
                 updateSearchProgress(0);
                 const response = await fetch('/api/chat', {
