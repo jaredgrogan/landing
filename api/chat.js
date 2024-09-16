@@ -84,7 +84,7 @@ export default async function handler(req, res) {
           aiResponse = await axios.post(
             'https://api.openai.com/v1/chat/completions',
             {
-              model: process.env.OPENAI_MODEL_ID || 'gpt-4',
+              model: process.env.OPENAI_VISION_MODEL || 'gpt-4',
               messages: [{ role: 'user', content: message }],
             },
             {
