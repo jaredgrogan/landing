@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
       // Log environment variables (ensure sensitive data is handled appropriately)
       console.log('API Gateway URL:', process.env.API_GATEWAY_URL);
-      console.log('OpenAI Model ID:', process.env.OPENAI_MODEL_ID);
+      console.log('OpenAI Model ID:', process.env.OPENAI_VISION_MODEL);
 
       // API Gateway call to decrypt the API keys
       const decryptResponse = await axios.post(
