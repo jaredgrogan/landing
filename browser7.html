@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function searchPerplexity(query) {
         try {
             updateSearchProgress(0);
-            const response = await fetch('/api/chat', {
+            const response = await fetch('/api/chat.js', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
