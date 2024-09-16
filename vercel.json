@@ -1,10 +1,24 @@
 {
   "version": 2,
+  "builds": [
+    { "src": "next.config.js", "use": "@vercel/next" },
+    { "src": "api/*.js", "use": "@vercel/node" }
+  ],
   "routes": [
     { "src": "/api/proxy", "dest": "/api/proxy.js" },
     { "src": "/api/chat", "dest": "/api/chat.js" },
     { "src": "^/(.+\\.(jpg|jpeg|png|gif|svg|ico))$", "dest": "/$1" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/server.js" }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs16.x",
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
 }
