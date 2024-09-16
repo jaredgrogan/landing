@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
       // Log environment variables (ensure sensitive data is handled appropriately)
       console.log('API Gateway URL:', process.env.API_GATEWAY_URL);
-      console.log('OpenAI Model ID:', process.env.OPENAI_VISION_MODEL);
+      console.log('OpenAI Model ID:', process.env.OPENAI_MODEL_ID);
 
       // API Gateway call to decrypt the API keys
       const decryptResponse = await axios.post(
@@ -86,7 +86,7 @@ async function handleOpenAIText(message, apiKey) {
   return axios.post(
     'https://api.openai.com/v1/chat/completions',
     {
-      model: process.env.OPENAI_VISION_MODEL || 'gpt-4',
+      model: process.env.OPENAI_MODEL_ID || 'gpt-4-turbo-2024-04-09',
       messages: [{ role: 'user', content: message }],
     },
     {
@@ -106,7 +106,7 @@ async function handleOpenAIVision(message, image, analysisType, apiKey) {
   return axios.post(
     'https://api.openai.com/v1/chat/completions',
     {
-      model: 'gpt-4',
+      model: 'gpt-4-turbo-2024-04-09',
       messages: [
         {
           role: 'system',
