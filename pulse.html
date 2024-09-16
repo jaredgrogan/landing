@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Universitas Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon10.svg" type="image/svg+xml">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .glassmorphic-box {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100px;
+      height: 100px;
+    }
+
+    .logo svg {
+      width: 100px;
+      height: 100px;
+    }
+
+    /* Pulse animation */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .logo svg {
+      animation: pulse 2s infinite;
+    }
+
+    .dark-mode .glassmorphic-box {
+      background: rgba(30, 30, 30, 0.15);
+    }
+
+    /* SVG style for dark mode */
+    .dark-mode .logo svg {
+      fill: white;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <!-- Logo inside Glassmorphic Box -->
+  <div class="glassmorphic-box">
+    <div class="logo">
+      <!-- Inline SVG for the logo -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="4" fill="none"></circle>
+        <text x="50%" y="55%" text-anchor="middle" font-size="48" fill="currentColor" font-family="Courier New" dy=".3em">U</text>
+      </svg>
+    </div>
+  </div>
+
+  <script>
+    const app = document.getElementById('app');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+
+    let isDarkMode = false;
+
+    // Day/Night mode toggle
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+      }
+    }
+
+    // Add event listener to dark mode toggle button
+    darkModeBtn?.addEventListener('click', toggleDarkMode);
+  </script>
+</body>
+
+</html>
