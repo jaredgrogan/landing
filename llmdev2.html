@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Web Application</title>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            color: #333;
+        }
+        #root {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .app-container {
+            display: flex;
+            flex: 1;
+        }
+        .top-bar {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .nav-item:hover {
+            background-color: #2c3e50;
+        }
+        .nav-item i {
+            margin-right: 10px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+            .main-content {
+                order: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('modelSelection');
+
+            const renderContent = () => {
+                return (
+                    <div className="card">
+                        <h2>{activeTab}</h2>
+                        <p>Content for {activeTab} goes here.</p>
+                    </div>
+                );
+            };
+
+            return (
+                <div id="root">
+                    <div className="top-bar">
+                        <h1>LLM Web Application</h1>
+                        <div>User: John Doe</div>
+                    </div>
+                    <div className="app-container">
+                        <Sidebar setActiveTab={setActiveTab} />
+                        <main className="main-content">
+                            {renderContent()}
+                        </main>
+                    </div>
+                </div>
+            );
+        }
+
+        function Sidebar({ setActiveTab }) {
+            const navItems = [
+                { name: 'Model Selection', icon: 'model_training', key: 'modelSelection' },
+                { name: 'Data Upload', icon: 'upload_file', key: 'dataUpload' },
+                { name: 'Training Interface', icon: 'school', key: 'trainingInterface' },
+                { name: 'Inference Playground', icon: 'psychology', key: 'inferencePlayground' },
+                { name: 'Advanced LLM Features', icon: 'science', key: 'advancedLLM' },
+                { name: 'Plugin Management', icon: 'extension', key: 'pluginManagement' },
+                { name: 'Pipeline Builder', icon: 'account_tree', key: 'pipelineBuilder' },
+                { name: 'Performance Dashboard', icon: 'dashboard', key: 'performanceDashboard' },
+                { name: 'Documentation', icon: 'description', key: 'documentation' },
+            ];
+
+            return (
+                <nav className="sidebar">
+                    {navItems.map(item => (
+                        <div key={item.key} className="nav-item" onClick={() => setActiveTab(item.key)}>
+                            <i className="material-icons">{item.icon}</i>
+                            {item.name}
+                        </div>
+                    ))}
+                </nav>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
