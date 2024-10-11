@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', () => {
     const texts = [
         "The Age of AI",
@@ -7,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "to learn and thrive.",
         "// Discover the Universe",
         "Universitas Pro",
-        "Coming 10.10.2024",
+        "Coming 11.11.2024",
         "Your Cognitive Computer."
     ];
     let index = 0;
