@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     { "src": "next.config.js", "use": "@vercel/next" },
-    { "src": "api/*.js", "use": "@vercel/node" }
+    { "src": "api/chat.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/proxy", "dest": "/api/proxy.js" },
@@ -15,7 +15,7 @@
     "NODE_ENV": "production"
   },
   "functions": {
-    "api/*.js": {
+    "api/chat.js": {
       "runtime": "nodejs16.x",
       "memory": 1024,
       "maxDuration": 10
