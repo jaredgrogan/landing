@@ -86,7 +86,7 @@ async function handleOpenAIText(message, apiKey) {
   return axios.post(
     'https://api.openai.com/v1/chat/completions',
     {
-      model: process.env.OPENAI_MODEL_ID || 'gpt-4-turbo-2024-04-09',
+      model: process.env.OPENAI_MODEL_ID || 'gpt-4-turbo',
       messages: [{ role: 'user', content: message }],
     },
     {
@@ -106,7 +106,7 @@ async function handleOpenAIVision(message, image, analysisType, apiKey) {
   return axios.post(
     'https://api.openai.com/v1/chat/completions',
     {
-      model: 'gpt-4-turbo-2024-04-09',
+      model: 'gpt-4-turbo',
       messages: [
         {
           role: 'system',
