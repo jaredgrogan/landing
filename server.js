@@ -1,6 +1,6 @@
-const axios = require('axios');
-const FormData = require('form-data');
-const fs = require('fs');
+const axios = import('axios');
+const FormData = import('form-data');
+const fs = import('fs');
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
