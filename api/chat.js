@@ -1,8 +1,8 @@
 // api/chat.js (Server-side code)
 
-const cors = require('cors');
-const axios = require('axios');
-const FormData = require('form-data');
+const cors = import('cors');
+const axios = import('axios');
+const FormData = import('form-data');
 
 const corsOptions = {
   origin: function (origin, callback) {
