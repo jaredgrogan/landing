@@ -1,6 +1,7 @@
 {
   "name": "Universitas Pro",
   "version": "1.0.0",
+  "type": "module",
   "description": "Your Cognitive Computer",
   "main": "server.js",
   "scripts": {
