@@ -1,50 +1,16 @@
-
-
 {
-  "name": "universitas-pro",
-  "version": "1.1.0",
-  "description": "Your Cognitive Computer with Virtual Browser and NeuralCloud",
+  "name": "Universitas Pro",
+  "version": "1.0.0",
+  "description": "Your Cognitive Computer",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "start-proxy": "node api/proxy.js",
-    "dev": "nodemon server.js",
-    "lint": "eslint .",
-    "test": "jest",
-    "build": "next build"
+    "start": "node server.js"
   },
   "dependencies": {
-    "axios": "^0.27.2",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "form-data": "^4.0.0",
-    "fs-extra": "^10.1.0",
-    "http-proxy-middleware": "^2.0.6",
-    "https": "^1.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-beautiful-dnd": "^13.1.0",
-    "helmet": "^5.1.1",
-    "morgan": "^1.10.0",
-    "dotenv": "^16.0.3",
-    "next": "^12.3.1"
-  },
-  "devDependencies": {
-    "eslint": "^8.26.0",
-    "jest": "^29.2.2",
-    "nodemon": "^2.0.20"
-  },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/universitas-pro.git"
-  },
-  "author": "Your Name",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/yourusername/universitas-pro/issues"
-  },
-  "homepage": "https://universitas.pro"
+    "express": "^4.17.1",
+    "axios": "^0.21.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-beautiful-dnd": "^13.1.0"
+  }
 }
